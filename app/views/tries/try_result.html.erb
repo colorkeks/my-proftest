@@ -1,0 +1,56 @@
+<div class="container">
+  <div class="row">
+        <div class="col-lg-12 answer-content">
+          <h2>Поздравляем !</h2>
+
+          <div> вы решили <%= @percent %>% теста (<%= @current.to_i %> из <%= @max %> возможных баллов)</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-12 answer-content">
+          <%i=1%>
+          <% @try.task_results.each do |task_result| %>
+              <div class="row">
+                <div class="col-lg-12 question-content">
+                  <div class="question-number">Вопрос №<%=i%> </div>
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <p>
+                        <%= task_result.text %>
+                      </p>
+                    </div>
+                    <div class="col-lg-6">
+                      <audio controls style="width: 100%">
+                        <source src="media/audio.mp4" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                      </audio>
+                    </div>
+                  </div>
+              <table class="table table-striped">
+                <th>Вариант:</th>
+                <th>Истинность:</th>
+                <% task_result.user_answers.each do |user_answer| %>
+                    <tr>
+                      <td><%= user_answer.text %></td>
+                      <td><%= user_answer.correct %></td>
+                    </tr>
+                <% end %>
+              </table>
+              <table class="table table-striped">
+                <th>Ответ:</th>
+                <th>Истинность:</th>
+                <% task_result.user_answers.where(:user_reply => true).each do |reply| %>
+                    <tr>
+                      <td><%= reply.text %></td>
+                      <td><%= reply.correct %></td>
+                    </tr>
+                <% end %>
+              </table>
+              </div>
+              </div>
+              <%i=i+1%>
+          <% end %>
+        </div>
+  </div>
+</div>

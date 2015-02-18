@@ -1,0 +1,207 @@
+body {
+  background-color: #F6F5F3; }
+
+.progress {
+  height: 8px;
+  margin-bottom: 5px;
+  background-color: #E0E0E0; }
+
+.progress-bar-success {
+  background-color: #B2B2B2; }
+
+#show-q-btns {
+  font-size: 12px;
+  margin-bottom: 10px;
+  cursor: pointer; }
+
+#show-q-btns:hover {
+  text-decoration: underline; }
+
+#q-btns {
+  padding: 10px 15px; }
+  #q-btns .btn-xs {
+    width: 30px;
+    margin-bottom: 2px;
+    padding: 1px 4px;
+    color: gray; }
+  #q-btns .btn-xs.disabled {
+    opacity: 1; }
+  #q-btns .right-answer {
+    background-color: #d7ffd5;
+    color: #1a8020;
+    border: 1px solid #429747; }
+  #q-btns .wrong-answer {
+    background-color: #fff1e3;
+    color: #ca2a23;
+    border: 1px solid #dc4b3f; }
+  #q-btns .partly-right {
+    background-color: #fffad9;
+    color: #b28113;
+    border: 1px solid #c89721; }
+  #q-btns .legend {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #4d4d4d; }
+    #q-btns .legend .btn-xs {
+      margin-left: 10px;
+      padding: 0;
+      width: 25px;
+      line-height: 1.4; }
+
+.test-title {
+  margin: 5px 0 5px 0; }
+
+.question-content {
+  margin-top: 20px;
+  border: 1px solid lightgrey;
+  padding: 15px 25px 25px 25px;
+  background-color: #ffffff;
+  font-size: 16px; }
+  .question-content .question-number {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    font-weight: bold;
+    font-size: 18px;
+    border-bottom: 1px solid #e6e6e6; }
+
+.question-description {
+  font-weight: bold;
+  font-size: 16px;
+  margin-top: 10px;
+  padding: 30px 0 15px 0; }
+
+.answer:first-child {
+  border-top: 1px dashed #bdbdbd; }
+
+.answer:last-child {
+  margin-bottom: 20px; }
+
+.answer:hover {
+  background-color: #ffffd6; }
+
+.answer.selected {
+  background-color: #e0ffda;
+  color: #006900; }
+
+.answer.association {
+  cursor: pointer; }
+
+.answer {
+  font-size: 17px;
+  padding: 5px 10px;
+  border-bottom: 1px dashed #bdbdbd;
+  min-height: 50px; }
+  .answer label {
+    font-weight: normal;
+    cursor: pointer;
+    padding-bottom: 0; }
+  .answer input[type='radio'], .answer input[type='checkbox'] {
+    margin: 10px 10px 0 0;
+    height: 0.9em;
+    width: 0.9em; }
+  .answer input[type='text'] {
+    margin-top: 2px; }
+  .answer .sequence {
+    margin-top: 7px; }
+  .answer select {
+    margin-top: 10px; }
+  .answer .text {
+    margin-top: 7px; }
+
+.connected-elements {
+  border-bottom: 1px dashed #006900;
+  border-left: 1px dashed #006900;
+  border-right: 1px dashed #006900;
+  background-color: #e0ffda;
+  color: #004e00; }
+  .connected-elements .text {
+    width: 45%; }
+  .connected-elements .equal {
+    margin-left: 4%;
+    line-height: 40px; }
+  .connected-elements .btn {
+    margin-top: 5px; }
+
+.connected-elements:hover {
+  background-color: #e0ffda; }
+
+.connected-elements:first-child {
+  border-top: 1px dashed #006900; }
+
+.q-btns {
+  margin-top: 10px; }
+
+.up-down-btns a {
+  font-size: 13px;
+  /*color: gray;*/
+  padding-right: 10px;
+  display: inline-block; }
+
+.select-answer {
+  width: 435px;
+  margin-top: -8px; }
+
+.test-case {
+  padding: 15px;
+  border: 2px dotted #cdcdcd;
+  background-color: #fefefe;
+  border-radius: 2px;
+  margin: 20px 0; }
+  .test-case .title {
+    font-size: 23px; }
+  .test-case .detail {
+    color: #6c6c6c;
+    font-style: italic;
+    font-size: 13px; }
+  .test-case hr {
+    margin: 15px 0 5px 0; }
+  .test-case .try .title {
+    font-size: 15px;
+    text-decoration: underline;
+    color: #6b6b6b; }
+  .test-case .run-test {
+    margin-top: 10px; }
+
+.q-timer {
+  text-align: right;
+  margin-bottom: 10px;
+  margin-top: -10px; }
+
+.navbar-inverse {
+  background-color: #376991;
+  border-color: #376991;
+  box-shadow: 0 0 2px 2px #c9c9c9; }
+  .navbar-inverse .navbar-brand {
+    color: #f6f6f6; }
+  .navbar-inverse .navbar-nav > li > a {
+    color: #f6f6f6; }
+  .navbar-inverse .navbar-nav > li > a:hover {
+    background-color: #3c7ca7; }
+
+audio, video {
+  margin: 10px 0; }
+
+.sub-menu {
+  margin: -15px -20px 25px -20px;
+  text-align: center; }
+  .sub-menu .item {
+    display: inline-block;
+    border-bottom: 2px solid #bababa;
+    text-align: center;
+    padding: 7px 20px;
+    width: 31%;
+    margin: 0 5px;
+    text-transform: uppercase;
+    background-color: #ffffff;
+    cursor: pointer;
+    color: gray; }
+  .sub-menu .item:hover {
+    background-color: #fafafa; }
+  .sub-menu .selected {
+    border-bottom: 2px solid #337ab7;
+    color: #337ab7;
+    background-color: #ffffff;
+    font-weight: bold; }
+
+.pagination {
+  margin: 10px 0; }

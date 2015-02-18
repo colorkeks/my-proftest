@@ -1,0 +1,17 @@
+<%= form_for @test, :html => { :class => 'form-horizontal' } do |f| %>
+    <div class="form-group">
+      <%= f.label :title, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :title, :class => 'form-control' %>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.label :description, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :description, :class => 'form-control' %>
+      </div>
+    </div>
+      <%= f.hidden_field :admin_id, :value => @admin_id %>
+
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+<% end %>

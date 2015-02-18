@@ -1,0 +1,84 @@
+<div class="container">
+
+  <div class="row">
+    <div class="col-lg-12">
+      <!-- Блок навигации по тесту с отметкой правильности выполненных тестовых заданий -->
+      <div class="row">
+        <div class="col-lg-12">
+          <h3 class="text-center test-title"><%= @test.title %></h3>
+
+          <div style="color: #5f5f5f; height: 22px">
+            <i class="pull-left"><span class="glyphicon glyphicon-time"></span> Таймера пока нету</i>
+            <i class="pull-right">Вопрос № N/A из N/A</i>
+          </div>
+
+          <div class="progress" title="50/150">
+            <div class="progress-bar progress-bar-success"
+                 role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"
+                 style="width: 50%;">
+              <span class="sr-only">40% Complete (success)</span>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col-lg-12 question-content">
+        <div class="question-number">Вопрос № N/A</div>
+        <div class="row">
+          <div class="col-lg-12">
+            <p>
+              <%= @sorted_task_result.text %>
+            </p>
+          </div>
+          <div class="col-lg-6">
+            <audio controls style="width: 100%">
+              <source src="media/audio.mp4" type="audio/mpeg">
+              Your browser does not support the audio element.
+            </audio>
+          </div>
+        </div>
+
+        <!-- Блок вариантов ответа на тестовое задание -->
+        <div class="row">
+          <div class="col-lg-12 answer-content">
+            <div class="question-description">
+              Выберите один вариант ответ, который считаете правильным:
+            </div>
+          </div>
+        </div>
+
+
+        <br>
+
+        <div class="row">
+          <div class="col-lg-12 answer-content">
+            <%= form_tag({controller: 'tries', action: 'check_user_answer'}, method: 'POST') do %>
+                <% @sorted_task_result.user_answers.each do |answer| %>
+                    <div class="answer">
+                      <label>
+                        <% if @sorted_task_result.task.task_type == 'Multi choice' %>
+                            <%= check_box_tag 'user_answers[]', answer.id %> <%= answer.text %>
+                        <% elsif @sorted_task_result.task.task_type == 'Single choice' %>
+                            <%= radio_button_tag 'user_answers', answer.id %> <%= answer.text %>
+                        <% else %>
+                            <%= text_field_tag 'user_answers', nil, :autocomplete => :off, :class => 'form-control' %>
+                            <%= hidden_field_tag 'answer_id', answer.id %>
+                        <% end %>
+                      </label>
+                    </div>
+                    <br>
+                <% end %>
+                <%= hidden_field_tag 'task_result_id', @sorted_task_result.id %>
+                <%= submit_tag('Ответить', :class => 'btn btn-primary') %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,44 @@
+<%- model_class = TaskResult -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:point) %></th>
+      <th><%= model_class.human_attribute_name(:text) %></th>
+      <th><%= model_class.human_attribute_name(:status) %></th>
+      <th><%= model_class.human_attribute_name(:task_id) %></th>
+      <th><%= model_class.human_attribute_name(:try_id) %></th>
+      <th><%= model_class.human_attribute_name(:created_at) %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @task_results.each do |task_result| %>
+      <tr>
+        <td><%= link_to task_result.id, task_result_path(task_result) %></td>
+        <td><%= task_result.point %></td>
+        <td><%= task_result.text %></td>
+        <td><%= task_result.status %></td>
+        <td><%= task_result.task_id %></td>
+        <td><%= task_result.try_id %></td>
+        <td><%=l task_result.created_at %></td>
+        <td>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_task_result_path(task_result), :class => 'btn btn-default btn-xs' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      task_result_path(task_result),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-xs btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_task_result_path,
+            :class => 'btn btn-primary' %>

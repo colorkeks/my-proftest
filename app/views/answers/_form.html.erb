@@ -1,0 +1,29 @@
+<%= form_for @answer, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="form-group">
+    <%= f.label :correct, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.check_box :correct, :class => 'form-control' %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :text, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :text, :class => 'form-control' %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :point, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :point, :class => 'form-control' %>
+    </div>
+  </div>
+  <div class="form-group">
+      <%= f.hidden_field :task_id, :class => 'form-control' %>
+  </div>
+
+  
+  <%= f.submit nil, :class => 'btn btn-primary' %>
+  <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+            task_path(@answer.task_id), :class => 'btn btn-default' %>
+ 
+<% end %>
