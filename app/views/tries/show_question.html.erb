@@ -9,7 +9,7 @@
 
           <div style="color: #5f5f5f; height: 22px">
             <i class="pull-left"><span class="glyphicon glyphicon-time"></span> Таймера пока нету</i>
-            <i class="pull-right">Вопрос <%= @current_task + 1 %> из <%= @tasks_count %></i>
+            <i class="pull-right">Задание <%= @current_task + 1 %> из <%= @tasks_count %></i>
           </div>
 
           <div class="progress" title="50/150">
@@ -28,25 +28,33 @@
 
     <div class="row">
       <div class="col-lg-12 question-content">
-        <div class="question-number">Вопрос № <%= @current_task + 1 %></div>
+        <div class="question-number">Задание № <%= @current_task + 1 %></div>
         <div class="row">
-          <div class="col-lg-6">
-            <p>
-              <%= @sorted_task_result.text %>
-            </p>
-          </div>
-          <div class="col-lg-6">
-              <% @sorted_task_result.task.task_contents.each do |content| %>
-                <% if content.file_content_content_type =~ %r(audio) %>
-                    <%= audio_tag(content.file_content.url(:original), controls: true)%>
-                <% elsif content.file_content_content_type =~ %r(image) %>
-                    <%= image_tag content.file_content.url(:medium), alt: content.file_content.url(:medium)%>
-                <% elsif content.file_content_content_type =~ %r(video) %>
-                    <%= video_tag(content.file_content.url(:original), size: '100%x100%',controls: true, autobuffer: true ) %>
-                <% else %>
-                <% end %>
-              <% end%>
-          </div>
+          <% if @sorted_task_result.task.task_contents.detect{|i| i.file_content_content_type}.nil?  %>
+              <div class="col-lg-12">
+                <p>
+                  <%= @sorted_task_result.text %>
+                </p>
+              </div>
+          <% else %>
+              <div class="col-lg-6">
+                <p>
+                  <%= @sorted_task_result.text %>
+                </p>
+              </div>
+              <div class="col-lg-6" style="text-align: center">
+                <% @sorted_task_result.task.task_contents.each do |content| %>
+                    <% if content.file_content_content_type =~ %r(audio) %>
+                        <div style="margin: 0 auto;"><%= audio_tag(content.file_content.url(:original), controls: true, style: 'margin-top:0;')%></div>
+                    <% elsif content.file_content_content_type =~ %r(image) %>
+                        <div style="margin: 0 auto;"><%= image_tag content.file_content.url(:small), alt: content.file_content.url(:medium),style: 'margin-top:0;'%></div>
+                    <% elsif content.file_content_content_type =~ %r(video) %>
+                        <div style="margin: 0 auto;"><%= video_tag(content.file_content.url(:original), size: '100%x100%',controls: true, autobuffer: true,style: 'margin:0;' ) %></div>
+                    <% else %>
+                    <% end %>
+                <% end%>
+              </div>
+          <% end %>
         </div>
 
         <!-- Блок вариантов ответа на тестовое задание -->
