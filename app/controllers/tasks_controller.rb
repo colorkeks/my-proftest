@@ -12,14 +12,19 @@ class TasksController < ApplicationController
   def show
   end
 
-  def create_answer
-    @answer =Answer.new
-    @task_id = params[:id]
-  end
-
   # GET /tasks/new
   def new
+    @task_contents =TaskContent.new
+    @answer =Answer.new
     @task = Task.new
+    @test_id = params[:task][:test_id]
+    @type = params[:task][:task_type]
+
+    @task.task_contents.build
+
+    5.times.each do
+      @task.answers.build
+    end
   end
 
   # GET /tasks/1/edit
@@ -33,7 +38,7 @@ class TasksController < ApplicationController
 
     respond_to do |format|
       if @task.save
-        format.html { redirect_to @task.test_id, notice: 'Task was successfully created.' }
+        format.html { redirect_to test_path(@task.test_id), notice: 'Task was successfully created.' }
         format.json { render :show, status: :created, location: @task }
       else
         format.html { render :new }
@@ -75,6 +80,8 @@ class TasksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def task_params
-      params.require(:task).permit(:text, :task_type, :point, :test_id)
+      params.require(:task).permit(:text, :hint, :task_type, :point, :test_id,
+                    answers_attributes: [ :id, :task_id, :text, :correct, :point],
+                    task_contents_attributes: [:id,:file_content, :task_id])
     end
 end

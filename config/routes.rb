@@ -32,6 +32,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :task_contents
+
   resources :admins
 
   resources :answers

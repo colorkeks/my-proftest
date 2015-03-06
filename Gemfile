@@ -29,6 +29,11 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'spring',        group: :development
 
 gem 'devise'
+gem 'dropzonejs-rails'
+gem 'paperclip', :git => 'git://github.com/thoughtbot/paperclip.git'
+gem 'wysiwyg-rails'
+gem 'simple_form'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

@@ -24,11 +24,13 @@ class TriesController < ApplicationController
   def show_question
     @try = Try.find(params[:id])
     @test = Test.find_by_id(@try.test_id)
-    @sorted_task_result = TaskResult.where(:status => 'ответ не дан', :try_id => params[:id]).order('RANDOM()').first
+    @current_task = @try.task_results.where(:status => 'правильно').count + @try.task_results.where(:status => 'не правильно').count + @try.task_results.where(:status => 'частично правильно').count
+    @tasks_count =@try.task_results.count
+    @sorted_task_result = @try.task_results.where(:status => 'ответ не дан').order('RANDOM()').first
 
-      if @sorted_task_result.nil?
-        redirect_to try_result_try_path
-      end
+    if @sorted_task_result.nil?
+      redirect_to try_result_try_path
+    end
   end
 
   def try_result
@@ -55,47 +57,72 @@ class TriesController < ApplicationController
 
   def check_user_answer
     @task_result = TaskResult.find(params[:task_result_id])
-    percent_points = 0
 
     # Если мультичойс
-    if @task_result.task.task_type == 'Multi choice'
+    count_true = 0
+    percent_points = 0
+    if @task_result.task_type == 'Множественный выбор'
       params[:user_answers].each do |id|
         @user_answer = UserAnswer.find(id)
         @user_answer.user_reply = true
         @user_answer.save!
-        percent_points = percent_points + @user_answer.point
       end
-      @task_result.point = (@task_result.point.to_f/100.0)*percent_points.to_f
-      if percent_points == 100
+
+      @task_result.user_answers.where(:correct => true).each do |user_answer|
+        count_true = count_true + 1
+      end
+      coefficient = @task_result.point.to_f/count_true
+
+      @task_result.user_answers.each do |user_answer|
+        if user_answer.correct == true
+          user_answer.point = coefficient.to_f
+        else
+          user_answer.point = -coefficient.to_f
+        end
+        user_answer.save!
+      end
+
+      params[:user_answers].each do |id|
+        @user_answer = UserAnswer.find(id)
+        percent_points = percent_points + @user_answer.point.to_f
+        p @user_answer.point.to_f
+        p '=========='
+      end
+
+      if percent_points.round  == @task_result.point
         @task_result.status = 'правильно'
       elsif percent_points <= 0
         @task_result.status = 'не правильно'
         @task_result.point = 0
       else
         @task_result.status = 'частично правильно'
+        @task_result.point = percent_points
       end
-    # если открытый вопрос
-    elsif @task_result.task.task_type == 'Оpen Question'
-      @user_answer = UserAnswer.find(params[:answer_id])
+    # если синглчойс
+    elsif @task_result.task_type == 'Единичный выбор'
+      @user_answer = UserAnswer.find(params[:user_answers])
       @user_answer.user_reply = true
-      p @user_answer.text
-      p params[:user_answers]
-      p @user_answer.text <=> params[:user_answers]
-      if @user_answer.text.include? params[:user_answers]
+      (@user_answer.correct == true)? (@task_result.status = 'правильно') :
+                                      (@task_result.status = 'не правильно'; @task_result.point = 0)
+      @user_answer.save!
+    # если открытый вопрос
+    elsif @task_result.task_type == 'Открытый вопрос'
+      i = 0
+      @task_result.user_answers.each do |user_answer|
+        user_answer.user_reply = params[:user_answer]
+        if user_answer.text.mb_chars.downcase.to_s == params[:user_answer].mb_chars.downcase.to_s
+          i = i + 1
+        end
+        user_answer.save!
+      end
+      if i > 0
         @task_result.status = 'правильно'
       else
         @task_result.status = 'не правильно'
         @task_result.point = 0
       end
-    # если синглчойс
-    elsif @task_result.task.task_type == 'Single choice'
-      @user_answer = UserAnswer.find(params[:user_answers])
-      @user_answer.user_reply = true
-      (@user_answer.correct == true)? (@task_result.status = 'правильно') :
-                                      (@task_result.status = 'не правильно'; @task_result.point = 0)
     end
     @task_result.save!
-    @user_answer.save!
     respond_to do |format|
       if @task_result.save
         format.html { redirect_to show_question_try_path }
@@ -112,7 +139,7 @@ class TriesController < ApplicationController
     @test = Test.find_by_id(@try.test_id)
 
     Task.all.where(:test_id => @test.id).each do |task|
-          @task_result = @try.task_results.build(:point => task.point, :text => task.text, :status => 'ответ не дан', :task_id => task.id, :try_id => @try.id)
+          @task_result = @try.task_results.build(:point => task.point, :text => task.text,:hint => task.hint, :task_type => task.task_type, :status => 'ответ не дан', :task_id => task.id, :try_id => @try.id)
         Answer.all.where(:task_id => task.id).each do |answer|
           @task_result.user_answers.build(:user_reply => false,:correct => answer.correct, :text => answer.text, :point => answer.point, :task_id => task.id, :task_result_id => @task_result.id)
         end
@@ -148,7 +175,7 @@ class TriesController < ApplicationController
   def destroy
     @try.destroy
     respond_to do |format|
-      format.html { redirect_to user_path(@try.user_id), notice: 'Try was successfully destroyed.' }
+      format.html { redirect_to tries_path, notice: 'Try was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

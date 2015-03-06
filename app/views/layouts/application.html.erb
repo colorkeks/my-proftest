@@ -60,9 +60,11 @@
           </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <% if params[:controller] != 'tries'%>
-          <li><a href="users/<%=current_user.id%>"><%=current_user.first_name + ' ' + current_user.last_name%></a></li>
-          <% end%>
+          <% if params[:controller] != 'tries' && current_user%>
+            <% if current_user.first_name%>
+          <li><a href="/users/<%=current_user.id%>"><%=current_user.first_name + ' ' + current_user.last_name%></a></li>
+              <% end %>
+          <% end %>
         </ul>
       </div>
     </div>

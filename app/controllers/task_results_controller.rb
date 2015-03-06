@@ -69,6 +69,6 @@ class TaskResultsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def task_result_params
-      params.require(:task_result).permit(:point, :text, :status, :task_id, :try_id)
+      params.require(:task_result).permit(:point, :text, :task_type, :hint, :status, :task_id, :try_id)
     end
 end

@@ -10,6 +10,8 @@ class TestsController < ApplicationController
   # GET /tests/1
   # GET /tests/1.json
   def show
+    @task = Task.new
+    @test_id = params[:id]
   end
 
   def create_task

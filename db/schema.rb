@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150217104217) do
+ActiveRecord::Schema.define(version: 20150227080226) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 20150217104217) do
   end
 
   create_table "answers", force: true do |t|
-    t.boolean  "correct"
+    t.boolean  "correct",    default: false
     t.text     "text"
     t.integer  "point"
     t.integer  "task_id"
@@ -32,9 +32,21 @@ ActiveRecord::Schema.define(version: 20150217104217) do
     t.datetime "updated_at"
   end
 
+  create_table "task_contents", force: true do |t|
+    t.string   "file_content_file_name"
+    t.string   "file_content_content_type"
+    t.integer  "file_content_file_size"
+    t.datetime "file_content_updated_at"
+    t.integer  "task_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "task_results", force: true do |t|
     t.float    "point"
+    t.string   "task_type"
     t.text     "text"
+    t.text     "hint"
     t.string   "status"
     t.integer  "task_id"
     t.integer  "try_id"
@@ -44,6 +56,7 @@ ActiveRecord::Schema.define(version: 20150217104217) do
 
   create_table "tasks", force: true do |t|
     t.text     "text"
+    t.text     "hint"
     t.string   "task_type"
     t.integer  "point"
     t.integer  "test_id"
@@ -69,10 +82,10 @@ ActiveRecord::Schema.define(version: 20150217104217) do
   end
 
   create_table "user_answers", force: true do |t|
-    t.boolean  "user_reply"
+    t.string   "user_reply"
     t.boolean  "correct"
     t.text     "text"
-    t.integer  "point"
+    t.float    "point"
     t.integer  "task_id"
     t.integer  "task_result_id"
     t.datetime "created_at"
