@@ -22,13 +22,15 @@ class TasksController < ApplicationController
 
     @task.task_contents.build
 
-    5.times.each do
+    2.times.each do
       @task.answers.build
     end
   end
 
   # GET /tasks/1/edit
   def edit
+    @type = @task.task_type
+    @task.task_contents.build
   end
 
   # POST /tasks
@@ -74,14 +76,13 @@ class TasksController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_task
-      @answers = Answer.all.where(:task_id => params[:id])
       @task = Task.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def task_params
       params.require(:task).permit(:text, :hint, :task_type, :point, :test_id,
-                    answers_attributes: [ :id, :task_id, :text, :correct, :point],
+                    answers_attributes: [ :id, :task_id, :text, :correct, :point, :_destroy],
                     task_contents_attributes: [:id,:file_content, :task_id])
     end
 end

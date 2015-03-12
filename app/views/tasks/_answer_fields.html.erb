@@ -1,0 +1,18 @@
+<tr id="<%= f.object_id %>" class="fields">
+  <% if @type == 'Множественный выбор' %>
+      <td style="width: 20px;"><%= f.check_box :correct %></td>
+      <td style="width: 600px;"><%= f.text_area :text, :class => 'edit' %></td>
+  <% elsif @type == 'Единичный выбор' %>
+      <td style="width: 20px;"><%= f.radio_button :correct, true, :class => 'radio-btn' %></td>
+      <td style="width: 600px;"><%= f.text_area :text, :class => 'edit' %></td>
+  <% else %>
+      <td style="width: 600px;"><%= f.text_area :text, :class => 'edit' %></td>
+  <% end %>
+  <td><%= link_to_remove_fields 'Удалить', f %></td>
+
+</tr>
+
+<%= f.hidden_field :task_id, as: :hidden, :value => @task.id %>
+<% if params[:action]=='edit'%>
+    <%= f.hidden_field :correct, as: :hidden, :class => 'radio_correct' %>
+<% end %>

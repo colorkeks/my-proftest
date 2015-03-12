@@ -32,45 +32,23 @@
       </div>
 
       <div class="col-sm-12">
-        <table class="table table-striped">
+        <table class="table table-striped answer_table">
           <thead>
           </thead>
           <tbody>
           <%= f.fields_for :answers do |ff| %>
-              <tr id='<%= ff.object_id %>'>
-                <% if @type == 'Множественный выбор' %>
-                    <td style="width: 20px;"><%= ff.check_box :correct %></td>
-                    <td style="width: 600px;"><%= ff.text_area :text, :class => 'edit', :value => 'Введите вариант ответа' %></td>
-                    <td>
-                      <div id="<%= ff.object_id %>" class="btn btn-default delete_nested_form">Удалить</div>
-                    </td>
-                <% elsif @type == 'Единичный выбор' %>
-                    <td style="width: 20px;"><%= ff.radio_button :correct, true, :class => 'radio-btn' %></td>
-                    <td style="width: 600px;"><%= ff.text_area :text, :class => 'edit', :value => 'Введите вариант ответа' %></td>
-                    <td>
-                      <div id="<%= ff.object_id %>" class="btn btn-default delete_nested_form">Удалить</div>
-                    </td>
-                <% else %>
-                    <td style="width: 600px;"><%= ff.text_area :text, :class => 'edit', :value => 'Введите вариант ответа' %></td>
-                    <td>
-                      <div id="<%= ff.object_id %>" class="btn btn-default delete_nested_form">Удалить</div>
-                    </td>
-                <% end %>
-
-              </tr>
-              <%#= answer_form.input :position %>
-              <%= ff.hidden_field :task_id, as: :hidden, :value => @task.id %>
+              <%= render 'answer_fields', :f => ff %>
           <% end %>
           </tbody>
         </table>
+        <p><%= link_to_add_fields 'Добавить вариант ответа', f, :answers %></p>
       </div>
 
       <%= f.submit 'Создать Задание', class: 'btn btn-primary' %>
+      <%= link_to t('.back', :default => t("helpers.links.Назад")),
+                  test_path(@test_id), :class => 'btn btn-default' %>
     </div>
 <% end %>
-
-<%#= form_for(TaskContent.new, url: task_contents_path, html: {multipart: true, class: "dropzone", style: 'height:100%;'}) do |ff| %>
-<%# end %>
 
 <script>
     init_wysiwyg();

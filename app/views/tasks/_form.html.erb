@@ -1,32 +1,74 @@
-<%= form_for @task, :html => { :class => 'form-horizontal' } do |f| %>
-  <div class="form-group">
-    <%= f.label :text, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :text, :class => 'form-control' %>
-    </div>
-  </div>
-  <div class="form-group">
-    <%= f.label :task_type, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.select :task_type,options_for_select(['Единичный выбор','Множественный выбор','Открытый вопрос']),{},{:class => 'form-control'}%>
-    </div>
-  </div>
-  <div class="form-group">
-    <%= f.label :point, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :point, :class => 'form-control' %>
-    </div>
-  </div>
-  <div class="form-group">
-    <%= f.label :test_id, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.hidden_field :test_id, :class => 'form-control' %>
-    </div>
-  </div>
+<%= simple_form_for @task, :html => {:class => 'form-horizontal'} do |f| %>
+    <div class="row">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="page-header">
+            <h2>Задание №<%= @task.id %> : <%= @task.task_type %></h2>
+            <h4>Кол-во баллов:  <%= f.number_field :point, :style => 'width: 50px;' %></h4>
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <div class="col-sm-6">
+            <%= f.text_area :text, :class => 'edit' %>
+          </div>
 
-  
-  <%= f.submit nil, :class => 'btn btn-primary' %>
-  <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-            tests_path, :class => 'btn btn-default' %>
+          <div class="col-sm-6">
+            <h3 style="margin-top: 0;">Загрузка картинки, аудио или видео:</h3>
+            <%= f.fields_for :task_contents do |ff| %>
+                <%= ff.file_field :file_content %>
+                <%= ff.hidden_field :task_id, :value => @task.id %>
+            <% end %>
+            <br>
+            <table class="table table-stripped">
+              <tbody>
+              <% @task.task_contents.where(:id != nil).each do |content| %>
+                <tr>
+                  <td><%= content.file_content_file_name %></td>
+                  <td><%= content.file_content_content_type %></td>
+                  <td>
+                    <%= link_to t('.destroy', :default => t("helpers.links.удалить")),
+                                task_content_path(content),
+                                :method => :delete,
+                                :data => {:confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?'))},
+                                :class => 'btn btn-xs btn-danger' %>
+                  </td>
+                </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <% if @task.task_type == 'Множественный выбор' %>
+            <h3><%= f.text_area :hint, :class => 'edit' %></h3>
+        <% elsif @task.task_type == 'Единичный выбор' %>
+            <h3><%= f.text_area :hint, :class => 'edit' %></h3>
+        <% else %>
+            <h3><%= f.text_area :hint, :class => 'edit' %></h3>
+        <% end %>
+      </div>
 
+      <div class="col-sm-12">
+        <table class="table table-striped answer_table">
+          <thead>
+          </thead>
+          <tbody>
+          <%= f.fields_for :answers, @task.answers.order('id ASC') do |ff| %>
+              <%= render 'answer_fields', :f => ff %>
+          <% end %>
+          </tbody>
+        </table>
+        <p><%= link_to_add_fields 'Добавить вариант ответа', f, :answers %></p>
+      </div>
+
+      <%= f.submit 'Сохранить', class: 'btn btn-primary' %>
+      <%= link_to t('.back', :default => t("helpers.links.Назад")),
+                  test_path(@task.test_id), :class => 'btn btn-default' %>
+    </div>
 <% end %>
+
+<script>
+    init_wysiwyg();
+    init_nested_form();
+</script>

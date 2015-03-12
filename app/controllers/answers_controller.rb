@@ -56,7 +56,7 @@ class AnswersController < ApplicationController
   def destroy
     @answer.destroy
     respond_to do |format|
-      format.html { redirect_to task_path(@answer.task_id), notice: 'Answer was successfully destroyed.' }
+      format.html { redirect_to edit_task_path(@answer.task_id), notice: 'Answer was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
