@@ -12,7 +12,6 @@
 
 </tr>
 
-<%= f.hidden_field :task_id, as: :hidden, :value => @task.id %>
 <% if params[:action]=='edit'%>
     <%= f.hidden_field :correct, as: :hidden, :class => 'radio_correct' %>
 <% end %>

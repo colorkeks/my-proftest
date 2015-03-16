@@ -29,8 +29,8 @@ class TasksController < ApplicationController
 
   # GET /tasks/1/edit
   def edit
+    @test_id = @task.test_id
     @type = @task.task_type
-    @task.task_contents.build
   end
 
   # POST /tasks
@@ -83,6 +83,6 @@ class TasksController < ApplicationController
     def task_params
       params.require(:task).permit(:text, :hint, :task_type, :point, :test_id,
                     answers_attributes: [ :id, :task_id, :text, :correct, :point, :_destroy],
-                    task_contents_attributes: [:id,:file_content, :task_id])
+                    task_contents_attributes: [:id,:file_content, :task_id, :_destroy])
     end
 end

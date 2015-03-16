@@ -1,64 +1,85 @@
 <div class="row">
-<div class="col-sm-12">
-      <div class="page-header">
-        <h2>Задание №<%= @task.id%> : <%= @task.task_type %></h2>
-        <h4>Кол-во баллов:  <%= @task.point%></h4>
-      </div>
+  <div class="col-sm-12">
+    <div class="page-header">
+      <h2>Задание №<%= @task.id %> : <%= @task.task_type %></h2>
+      <h4>Кол-во баллов:  <%= @task.point %></h4>
     </div>
+  </div>
   <div class="row">
-    <% if @task.task_contents.detect{|i| i.file_content_content_type}.nil?  %>
+    <% if @task.task_contents.detect { |i| i.file_content_content_type }.nil? %>
         <div class="col-lg-12">
           <p>
             <%= @task.text %>
           </p>
         </div>
     <% else %>
-        <div class="col-lg-6">
-          <p>
-            <%= @task.text %>
-          </p>
-        </div>
-        <div class="col-lg-6" style="text-align: center">
-          <% @task.task_contents.each do |content| %>
-              <% if content.file_content_content_type =~ %r(audio) %>
-                  <div style="margin: 0 auto;"><%= audio_tag(content.file_content.url(:original), controls: true, style: 'margin-top:0;')%></div>
-              <% elsif content.file_content_content_type =~ %r(image) %>
-                  <div style="margin: 0 auto;"><%= image_tag content.file_content.url(:small), alt: content.file_content.url(:medium),style: 'margin-top:0;'%></div>
-              <% elsif content.file_content_content_type =~ %r(video) %>
-                  <div style="margin: 0 auto;"><%= video_tag(content.file_content.url(:original), size: '100%x100%',controls: true, autobuffer: true,style: 'margin:0;' ) %></div>
-              <% else %>
+        <% if @task.task_contents.count <= 1 %>
+            <div class="col-lg-6">
+              <div>
+                <h4><%= @task.text %></h4>
+              </div>
+            </div>
+            <div class="col-lg-6" style="text-align: center">
+              <% @task.task_contents.each do |content| %>
+                  <% if content.file_content_content_type =~ %r(audio) %>
+                      <div style="margin: 0 auto;"><%= audio_tag(content.file_content.url(:original), controls: true, style: 'margin-top:0;') %></div>
+                  <% elsif content.file_content_content_type =~ %r(image) %>
+                      <div style="margin: 0 auto;"><%= image_tag content.file_content.url(:small), alt: content.file_content.url(:medium), style: 'margin-top:0;' %></div>
+                  <% elsif content.file_content_content_type =~ %r(video) %>
+                      <div style="margin: 0 auto;"><%= video_tag(content.file_content.url(:original), size: '100%x100%', controls: true, autobuffer: true, style: 'margin:0;') %></div>
+                  <% else %>
+                  <% end %>
               <% end %>
-          <% end%>
-        </div>
+            </div>
+        <% else %>
+            <div class="col-lg-12">
+              <div style="text-align: center; width: 100%; min-height: 200px;">
+               <h4><%= @task.text %></h4>
+              </div>
+            </div>
+            <div class="row">
+                <% @task.task_contents.each do |content| %>
+                    <div class="col-lg-4">
+                      <% if content.file_content_content_type =~ %r(audio) %>
+                          <div style=""><%= audio_tag(content.file_content.url(:original), controls: true, style: 'margin-top:0;')%></div>
+                      <% elsif content.file_content_content_type =~ %r(image) %>
+                          <div style=""><%= image_tag content.file_content.url(:small), alt: content.file_content.url(:medium),style: 'margin-top:0;'%></div>
+                      <% elsif content.file_content_content_type =~ %r(video) %>
+                          <div style=""><%= video_tag(content.file_content.url(:original), size: '100%x100%',controls: true, autobuffer: true,style: 'margin:0;' ) %></div>
+                      <% end %>
+                    </div>
+                <% end %>
+            </div>
+        <% end %>
     <% end %>
   </div>
-    <div class="col-sm-12">
-      <h3><%= @task.hint%></h3>
-    </div>
+  <div class="col-sm-12">
+    <h3><%= @task.hint %></h3>
+  </div>
 
-    <div class="col-sm-12">
-      <table class="table table-striped">
-        <thead>
-        </thead>
-        <tbody>
-        <% @task.answers.order('id ASC').each do |answer| %>
-            <tr>
-              <% if @task.task_type == 'Множественный выбор' %>
-                  <td style="width: 20px;"><%= check_box_tag :correct %></td>
-                  <td><%= answer.text %></td>
-              <% elsif @task.task_type == 'Открытый вопрос'%>
-                  <td><%= answer.text %></td>
-              <% else %>
-                  <td style="width: 20px;"><%= radio_button_tag :correct, nil %></td>
-                  <td><%= answer.text %></td>
-              <% end %>
+  <div class="col-sm-12">
+    <table class="table table-striped">
+      <thead>
+      </thead>
+      <tbody>
+      <% @task.answers.order('id ASC').each do |answer| %>
+          <tr>
+            <% if @task.task_type == 'Множественный выбор' %>
+                <td style="width: 20px;"><%= check_box_tag :correct %></td>
+                <td><%= answer.text %></td>
+            <% elsif @task.task_type == 'Открытый вопрос' %>
+                <td><%= answer.text %></td>
+            <% else %>
+                <td style="width: 20px;"><%= radio_button_tag :correct, nil %></td>
+                <td><%= answer.text %></td>
+            <% end %>
 
-            </tr>
-        <% end %>
-        </tbody>
-      </table>
-    </div>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
 
-    <%= link_to t('.back', :default => t("helpers.links.Назад")),
-                test_path(@task.test_id), :class => 'btn btn-primary' %>
+  <%= link_to t('.back', :default => t("helpers.links.Назад")),
+              test_path(@task.test_id), :class => 'btn btn-primary' %>
 </div>

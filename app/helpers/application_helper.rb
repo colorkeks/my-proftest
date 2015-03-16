@@ -8,6 +8,10 @@ module ApplicationHelper
     fields = f.fields_for(association, new_object, :child_index => "new_#{association}") do |builder|
       render(association.to_s.singularize + "_fields", :f => builder)
     end
-    link_to_function(name, "add_fields(this, \"#{association}\", \"#{escape_javascript(fields)}\")", :class => 'btn btn-default')
+    if association == :answers
+      link_to_function(name, "add_answers_fields(this, \"#{association}\", \"#{escape_javascript(fields)}\")", :class => 'btn btn-default')
+    else
+      link_to_function(name, "add_task_contents_fields(this, \"#{association}\", \"#{escape_javascript(fields)}\")", :class => 'btn btn-default')
+    end
   end
 end

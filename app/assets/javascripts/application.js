@@ -70,10 +70,21 @@ function remove_fields(link) {
     $(link).closest(".fields").hide();
 }
 
-function add_fields(link, association, content) {
+function add_answers_fields(link, association, content) {
     var new_id = new Date().getTime();
     var regexp = new RegExp("new_" + association, "g")
     $(link).parent().before($('.answer_table').append(content.replace(regexp, new_id)));
+    $('.radio-btn').off();
+    $(".edit").off();
+    init_wysiwyg();
+    init_nested_form();
+
+}
+
+function add_task_contents_fields(link, association, content) {
+    var new_id = new Date().getTime();
+    var regexp = new RegExp("new_" + association, "g")
+    $(link).parent().before($('.task_contents_table').append(content.replace(regexp, new_id)));
     $('.radio-btn').off();
     $(".edit").off();
     init_wysiwyg();
