@@ -5,7 +5,7 @@
       <!-- Блок навигации по тесту с отметкой правильности выполненных тестовых заданий -->
       <div class="row">
         <div class="col-lg-12">
-          <h3 class="text-center test-title"><%= @test.title %></h3>
+          <h3 class="text-center test-title"><%= @test.title.html_safe %></h3>
 
           <div style="color: #5f5f5f; height: 22px">
             <i class="pull-left"><span class="glyphicon glyphicon-time"></span> Таймера пока нету</i>
@@ -33,7 +33,7 @@
           <% if @sorted_task_result.task.task_contents.count <= 1 %>
               <div class="col-lg-6">
                 <div>
-                  <h4><%= @sorted_task_result.text %></h4>
+                  <h4><%= @sorted_task_result.text.html_safe %></h4>
                 </div>
               </div>
               <div class="col-lg-6" style="text-align: center">
@@ -51,7 +51,7 @@
           <% else %>
               <div class="col-lg-12">
                 <div style="text-align: center; width: 100%; min-height: 200px;">
-                  <h4><%= @sorted_task_result.text %></h4>
+                  <h4><%= @sorted_task_result.text.html_safe %></h4>
                 </div>
               </div>
               <div class="row">
@@ -74,7 +74,7 @@
         <div class="row">
           <div class="col-lg-12 answer-content">
             <div class="question-description">
-              <%= @sorted_task_result.hint %>
+              <%= @sorted_task_result.hint.html_safe %>
             </div>
           </div>
         </div>
@@ -89,7 +89,7 @@
                     <% @sorted_task_result.user_answers.each do |answer| %>
                         <div class="answer">
                           <label>
-                            <%= check_box_tag 'user_answers[]', answer.id %> <%= answer.text %>
+                            <%= check_box_tag 'user_answers[]', answer.id %> <%= answer.text.html_safe %>
                           </label>
                         </div>
                     <% end %>
@@ -97,7 +97,7 @@
                     <% @sorted_task_result.user_answers.each do |answer| %>
                         <div class="answer">
                           <label>
-                            <%= radio_button_tag 'user_answers', answer.id %> <%= answer.text %>
+                            <%= radio_button_tag 'user_answers', answer.id %> <%= answer.text.html_safe %>
                           </label>
                         </div>
                     <% end %>

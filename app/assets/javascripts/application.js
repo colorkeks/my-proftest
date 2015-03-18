@@ -47,7 +47,9 @@ function init_dropzone(){
 }
 function init_wysiwyg() {
     tinymce.init({
-        selector: ".edit"
+        selector: ".edit",
+        statusbar: false,
+        menubar: false
     });
 
 //    $('.edit').editable({

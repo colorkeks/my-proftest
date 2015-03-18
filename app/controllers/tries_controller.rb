@@ -1,4 +1,5 @@
 class TriesController < ApplicationController
+  include ActionView::Helpers::TextHelper
   before_action :set_try, only: [:show, :edit, :update, :destroy]
   before_filter :authenticate_user!
   # GET /tries
@@ -110,7 +111,7 @@ class TriesController < ApplicationController
       i = 0
       @task_result.user_answers.each do |user_answer|
         user_answer.user_reply = params[:user_answer]
-        if user_answer.text.mb_chars.downcase.to_s == params[:user_answer].mb_chars.downcase.to_s
+        if strip_tags(user_answer.text).mb_chars.downcase.to_s == params[:user_answer].mb_chars.downcase.to_s
           i = i + 1
         end
         user_answer.save!
@@ -131,6 +132,8 @@ class TriesController < ApplicationController
       end
     end
   end
+
+
 
   # POST /tries
   # POST /tries.json
