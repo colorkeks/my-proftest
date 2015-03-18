@@ -14,7 +14,8 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require dropzone
-//= require froala_editor.min.js
+///= require froala_editor.min.js
+//= require tinymce-jquery
 //= require turbolinks
 //= require_tree .
 
@@ -45,16 +46,20 @@ function init_dropzone(){
     });
 }
 function init_wysiwyg() {
-    $('.edit').editable({
-        buttons: ['bold', 'italic', 'underline', 'formatBlock', 'sep', 'indent', 'outdent',
-            'insertOrderedList', 'insertUnorderedList', 'insertImage', 'blockStyle'],
-        // How many colors on a line.
-        colorsStep: 6,
-        inlineMode: true,
-        alwaysVisible: true,
-        paragraphy: false,
-        placeholder: 'Введите вариант ответа'
+    tinymce.init({
+        selector: ".edit"
     });
+
+//    $('.edit').editable({
+//        buttons: ['bold', 'italic', 'underline', 'formatBlock', 'sep', 'indent', 'outdent',
+//            'insertOrderedList', 'insertUnorderedList', 'insertImage', 'blockStyle'],
+//        // How many colors on a line.
+//        colorsStep: 6,
+//        inlineMode: true,
+//        alwaysVisible: true,
+//        paragraphy: false,
+//        placeholder: 'Введите вариант ответа'
+//    });
 }
 function init_nested_form(){
     $('.radio-btn').click(function(){
