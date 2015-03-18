@@ -52,6 +52,20 @@ function init_wysiwyg() {
         menubar: false
     });
 
+    tinymce.init({
+        selector: ".edit_answer",
+        statusbar: false,
+        menubar: false,
+        setup: function (ed) {
+            ed.on('init', function(args) {
+                var id = ed.id;
+                var height = 50;
+
+                document.getElementById(id + '_ifr').style.height = height + 'px';
+            });
+        }
+    });
+
 //    $('.edit').editable({
 //        buttons: ['bold', 'italic', 'underline', 'formatBlock', 'sep', 'indent', 'outdent',
 //            'insertOrderedList', 'insertUnorderedList', 'insertImage', 'blockStyle'],

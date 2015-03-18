@@ -40,26 +40,15 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-12">
-        <% if params[:action] == 'edit'%>
-            <% if @type == 'Множественный выбор' %>
-                <h3><%= f.text_area :hint, :class => 'edit' %></h3>
-            <% elsif @type == 'Единичный выбор' %>
-                <h3><%= f.text_area :hint, :class => 'edit' %></h3>
+      <div class="row">
+          <div class="col-sm-6">
+            <% if params[:action] == 'edit' %>>
+                <h3><%= f.text_area :hint, :class => 'edit_answer' %></h3>
             <% else %>
-                <h3><%= f.text_area :hint, :class => 'edit' %></h3>
+                <h3><%= f.text_area :hint, :class => 'edit_answer', :value => '<h2>Введите правильный вариант ответа:</h2>' %></h3>
             <% end %>
-        <%else%>
-            <% if @type == 'Множественный выбор' %>
-                <h3><%= f.text_area :hint, :class => 'edit', :value => 'Выберите правильные варианты ответа:' %></h3>
-            <% elsif @type == 'Единичный выбор' %>
-                <h3><%= f.text_area :hint, :class => 'edit', :value => 'Выберите правильный вариант ответа:' %></h3>
-            <% else %>
-                <h3><%= f.text_area :hint, :class => 'edit', :value => 'Введите правильный вариант ответа:' %></h3>
-            <% end %>
-        <%end%>
+          </div>
       </div>
-
       <div class="col-sm-12">
         <table class="table table-striped answer_table">
           <thead>

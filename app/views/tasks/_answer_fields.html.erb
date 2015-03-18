@@ -1,12 +1,12 @@
 <tr id="<%= f.object_id %>" class="fields">
   <% if @type == 'Множественный выбор' %>
       <td style="width: 20px;"><%= f.check_box :correct %></td>
-      <td style="width: 600px;"><%= f.text_area :text, :class => 'edit' %></td>
+      <td style="width: 600px;"><%= f.text_area :text, :class => 'edit_answer' %></td>
   <% elsif @type == 'Единичный выбор' %>
       <td style="width: 20px;"><%= f.radio_button :correct, true, :class => 'radio-btn' %></td>
-      <td style="width: 600px;"><%= f.text_area :text, :class => 'edit' %></td>
+      <td style="width: 600px;"><%= f.text_area :text, :class => 'edit_answer' %></td>
   <% else %>
-      <td style="width: 600px;"><%= f.text_area :text, :class => 'edit' %></td>
+      <td style="width: 600px;"><%= f.text_area :text, :class => 'edit_answer' %></td>
   <% end %>
   <td><%= link_to_remove_fields 'Удалить', f %></td>
 
