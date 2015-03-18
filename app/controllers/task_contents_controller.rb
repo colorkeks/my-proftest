@@ -24,11 +24,6 @@ class TaskContentsController < ApplicationController
     @task_content = TaskContent.find(params[:id])
     @task_content.file_content = nil
     @task_content.destroy
-
-    respond_to do |format|
-      format.html { redirect_to edit_task_path(@task_content.task_id), notice: 'Task was successfully destroyed.' }
-      format.json { head :no_content }
-    end
   end
 
   private
