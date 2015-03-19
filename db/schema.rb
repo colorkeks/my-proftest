@@ -24,9 +24,11 @@ ActiveRecord::Schema.define(version: 20150227080226) do
   end
 
   create_table "answers", force: true do |t|
-    t.boolean  "correct",    default: false
+    t.boolean  "correct",            default: false
     t.text     "text"
     t.integer  "point"
+    t.integer  "serial_number"
+    t.integer  "answer_association"
     t.integer  "task_id"
     t.datetime "created_at"
     t.datetime "updated_at"

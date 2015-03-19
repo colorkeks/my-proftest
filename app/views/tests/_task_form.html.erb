@@ -1,7 +1,13 @@
 <div class="modal-body">
-  <%= link_to "Единичный выбор", new_task_path(:task => {:task_type => 'Единичный выбор', :test_id => @test_id}), :class => 'btn btn-primary' %>
-  <%= link_to "Множественный выбор", new_task_path(:task => {:task_type => 'Множественный выбор', :test_id => @test_id}), :class => 'btn btn-primary' %>
-  <%= link_to "Открытый вопрос", new_task_path(:task => {:task_type => 'Открытый вопрос', :test_id => @test_id}), :class => 'btn btn-primary' %>
+  <div style="margin: 15px;">
+      <%= link_to "Единичный выбор", new_task_path(:task => {:task_type => 'Единичный выбор', :test_id => @test_id}), :class => 'btn btn-primary' %>
+      <%= link_to "Множественный выбор", new_task_path(:task => {:task_type => 'Множественный выбор', :test_id => @test_id}), :class => 'btn btn-primary' %>
+      <%= link_to "Открытый вопрос", new_task_path(:task => {:task_type => 'Открытый вопрос', :test_id => @test_id}), :class => 'btn btn-primary' %>
+  </div>
+  <div style="margin: 15px;">
+      <%= link_to "Последовательность", new_task_path(:task => {:task_type => 'Последовательность', :test_id => @test_id}), :class => 'btn btn-primary' %>
+      <%= link_to "Сопоставление", new_task_path(:task => {:task_type => 'Сопоставление', :test_id => @test_id}), :class => 'btn btn-primary' %>
+  </div>
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>

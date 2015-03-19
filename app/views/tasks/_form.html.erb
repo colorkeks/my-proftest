@@ -26,14 +26,14 @@
             <h3 style="margin-top: 0;">Загрузка картинки, аудио или видео:</h3>
             <table class="table table-striped task_contents_table">
               <thead>
-                <th style="min-width: 280px">Название/Файл</th>
-                <th>Тип</th>
-                <th>Действия</th>
+              <th style="min-width: 280px">Название/Файл</th>
+              <th>Тип</th>
+              <th>Действия</th>
               </thead>
               <tbody>
-            <%= f.fields_for :task_contents do |ff| %>
-               <%= render 'task_content_fields', :f => ff%>
-            <% end %>
+              <%= f.fields_for :task_contents do |ff| %>
+                  <%= render 'task_content_fields', :f => ff%>
+              <% end %>
               </tbody>
             </table>
             <p><%= link_to_add_fields 'Добавить контент', f, :task_contents%></p>
@@ -41,33 +41,34 @@
         </div>
       </div>
       <div class="row">
+        <div class="col-sm-6">
+          <% if params[:action] == 'edit' %>>
+              <h3><%= f.text_area :hint, :class => 'edit_hint' %></h3>
+          <% else %>
+              <h3><%= f.text_area :hint, :class => 'edit_hint', :value => '<h2>Введите правильный вариант ответа:</h2>' %></h3>
+          <% end %>
+        </div>
+      </div>
+      <div class="row">
           <div class="col-sm-6">
-            <% if params[:action] == 'edit' %>>
-                <h3><%= f.text_area :hint, :class => 'edit_answer' %></h3>
-            <% else %>
-                <h3><%= f.text_area :hint, :class => 'edit_answer', :value => '<h2>Введите правильный вариант ответа:</h2>' %></h3>
-            <% end %>
+            <table class="table table-striped answer_table">
+              <thead>
+              </thead>
+              <tbody>
+              <% if params[:action] == 'edit' %>
+                  <%= f.fields_for :answers, @task.answers.order('id ASC') do |ff| %>
+                      <%= render 'answer_fields', :f => ff %>
+                  <% end %>
+              <% else %>
+                  <%= f.fields_for :answers do |ff| %>
+                      <%= render 'answer_fields', :f => ff %>
+                  <% end %>
+              <% end %>
+              </tbody>
+            </table>
+            <p><%= link_to_add_fields 'Добавить вариант ответа', f, :answers %></p>
           </div>
       </div>
-      <div class="col-sm-12">
-        <table class="table table-striped answer_table">
-          <thead>
-          </thead>
-          <tbody>
-          <% if params[:action] == 'edit' %>
-              <%= f.fields_for :answers, @task.answers.order('id ASC') do |ff| %>
-                  <%= render 'answer_fields', :f => ff %>
-              <% end %>
-          <% else %>
-              <%= f.fields_for :answers do |ff| %>
-                  <%= render 'answer_fields', :f => ff %>
-              <% end %>
-          <% end %>
-          </tbody>
-        </table>
-        <p><%= link_to_add_fields 'Добавить вариант ответа', f, :answers %></p>
-      </div>
-
       <%= f.submit 'Сохранить', class: 'btn btn-primary' %>
       <%= link_to t('.back', :default => t("helpers.links.Назад")),
                   test_path(@test_id), :class => 'btn btn-default' %>

@@ -53,7 +53,7 @@ function init_wysiwyg() {
     });
 
     tinymce.init({
-        selector: ".edit_answer",
+        selector: ".edit_hint",
         statusbar: false,
         menubar: false,
         setup: function (ed) {
@@ -96,6 +96,7 @@ function add_answers_fields(link, association, content) {
     var regexp = new RegExp("new_" + association, "g")
     $(link).parent().before($('.answer_table').append(content.replace(regexp, new_id)));
     $('.radio-btn').off();
+    $(".edit_hint").off();
     $(".edit").off();
     init_wysiwyg();
     init_nested_form();
@@ -107,6 +108,7 @@ function add_task_contents_fields(link, association, content) {
     var regexp = new RegExp("new_" + association, "g")
     $(link).parent().before($('.task_contents_table').append(content.replace(regexp, new_id)));
     $('.radio-btn').off();
+    $(".edit_hint").off();
     $(".edit").off();
     init_wysiwyg();
     init_nested_form();
