@@ -42,7 +42,7 @@
       </div>
       <div class="row">
         <div class="col-sm-6">
-          <% if params[:action] == 'edit' %>>
+          <% if params[:action] == 'edit' %>
               <h3><%= f.text_area :hint, :class => 'edit_hint' %></h3>
           <% else %>
               <h3><%= f.text_area :hint, :class => 'edit_hint', :value => '<h2>Введите правильный вариант ответа:</h2>' %></h3>
