@@ -37,6 +37,7 @@ class TasksController < ApplicationController
   # POST /tasks.json
   def create
     @task = Task.new(task_params)
+    @test_id = @task.test_id
 
     respond_to do |format|
       if @task.save
