@@ -66,12 +66,12 @@
           <tr>
             <% if @task.task_type == 'Множественный выбор' %>
                 <td style="width: 20px;"><%= check_box_tag :correct %></td>
-                <td><%= answer.text.html_safe %></td>
+                <td><%= answer.text %></td>
             <% elsif @task.task_type == 'Открытый вопрос' %>
-                <td><%= answer.text.html_safe %></td>
+                <td><%= answer.text %></td>
             <% else %>
                 <td style="width: 20px;"><%= radio_button_tag :correct, nil %></td>
-                <td><%= answer.text.html_safe %></td>
+                <td><%= answer.text %></td>
             <% end %>
 
           </tr>

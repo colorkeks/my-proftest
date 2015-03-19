@@ -89,7 +89,7 @@
                     <% @sorted_task_result.user_answers.each do |answer| %>
                         <div class="answer">
                           <label>
-                            <%= check_box_tag 'user_answers[]', answer.id %> <%= answer.text.html_safe %>
+                            <%= check_box_tag 'user_answers[]', answer.id %> <%= answer.text %>
                           </label>
                         </div>
                     <% end %>
@@ -97,7 +97,7 @@
                     <% @sorted_task_result.user_answers.each do |answer| %>
                         <div class="answer">
                           <label>
-                            <%= radio_button_tag 'user_answers', answer.id %> <%= answer.text.html_safe %>
+                            <%= radio_button_tag 'user_answers', answer.id %> <%= answer.text %>
                           </label>
                         </div>
                     <% end %>
