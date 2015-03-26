@@ -1,15 +1,14 @@
 <tr class="fields">
+  <td></td><!-- не удалять это нужно для нумерации -->
   <% if @type == 'Множественный выбор' %>
       <td style="width: 50px;"><%= f.check_box :correct %></td>
-      <td style="width: 400px;"><%= f.text_field :text, :class => 'form-control', :style => 'width:300px;' %></td>
   <% elsif @type == 'Единичный выбор' %>
       <td style="width: 50px;"><%= f.radio_button :correct, true, :class => 'radio-btn' %></td>
-      <td style="width: 400px;"><%= f.text_field :text, :class => 'form-control', :style => 'width:300px;' %></td>
-  <% else %>
-      <td style="width: 400px;"><%= f.text_field :text, :class => 'form-control', :style => 'width:300px;' %></td>
+  <% elsif @type = 'Последовательность' %>
+      <%= f.hidden_field :serial_number, :class => 'serial_number' %>
   <% end %>
+  <td style="width: 400px;"><%= f.text_field :text, :class => 'form-control', :style => 'width:300px;' %></td>
   <td><%= link_to_remove_fields 'Удалить', f %></td>
-
 </tr>
 
 <% if params[:action]=='edit'%>

@@ -144,7 +144,7 @@ class TriesController < ApplicationController
     Task.all.where(:test_id => @test.id).each do |task|
           @task_result = @try.task_results.build(:point => task.point, :text => task.text,:hint => task.hint, :task_type => task.task_type, :status => 'ответ не дан', :task_id => task.id, :try_id => @try.id)
         Answer.all.where(:task_id => task.id).each do |answer|
-          @task_result.user_answers.build(:user_reply => false,:correct => answer.correct, :text => answer.text, :point => answer.point, :task_id => task.id, :task_result_id => @task_result.id)
+          @task_result.user_answers.build(:user_reply => false,:correct => answer.correct, :text => answer.text, :serial_number => answer.serial_number, :point => answer.point, :task_id => task.id, :task_result_id => @task_result.id)
         end
     end
 

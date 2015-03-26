@@ -4,6 +4,7 @@ class CreateUserAnswers < ActiveRecord::Migration
       t.string :user_reply
       t.boolean :correct
       t.text :text
+      t.integer :serial_number
       t.float :point
       t.integer :task_id
       t.integer :task_result_id

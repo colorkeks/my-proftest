@@ -20,31 +20,6 @@
 //= require_tree .
 
 
-function init_dropzone(){
-    Dropzone.autoDiscover = false;
-    myDropzone = new Dropzone(".dropzone", { // Make the whole body a dropzone
-        maxFilesize: 64, // макс размер в MB
-        //acceptedFiles: ".jpeg,.jpg,.png,.gif,.JPEG,.JPG,.PNG,.GIF",
-        acceptedMimeTypes: null,
-        autoProcessQueue: false, // автозагрузка в бд
-        autoQueue: true,
-        url: "/task_content",
-        previewsContainer: null,
-        paramName: "task_content[file_content]", // парамс
-        addRemoveLinks: true, // удаление выбранных картинок
-        dictFallbackMessage: "Ваш браузер не поддерживает drag and drop загрузки",
-        dictFallbackText: "Please use the fallback form below to upload your files like in the olden days.",
-        dictFileTooBig: "Файл Слишком большой ({{filesize}}MiB). Максимальный размер: {{maxFilesize}}MiB.",
-        dictInvalidFileType: "Невозможно загрузить файл с таким типом",
-        dictResponseError: "Server responded with {{statusCode}} code.",
-        dictCancelUpload: "Отмена загрузки",
-        dictCancelUploadConfirmation: "Вы хотите отменить эту загрузку ?",
-        dictRemoveFile: "Убрать файл",
-        dictRemoveFileConfirmation: null,
-        dictMaxFilesExceeded: "Вы не можете загружать больше файлов"
-
-    });
-}
 function init_wysiwyg() {
     tinymce.init({
         selector: ".edit",
@@ -89,10 +64,12 @@ function init_nested_form(){
 function remove_fields(link) {
     $(link).prev("input[type=hidden]").val("true");
     $(link).closest(".fields").hide();
+    row_index();
 }
 
 function add_answers_fields(link, association, content) {
-    var new_id = new Date().getTime();
+    var new_id = (parseInt($(".answer_table tr:visible:last td:first ").text()) + 1);
+    new_id = new_id || 1
     var regexp = new RegExp("new_" + association, "g")
     $(link).parent().before($('.answer_table').append(content.replace(regexp, new_id)));
     $('.radio-btn').off();
@@ -100,17 +77,21 @@ function add_answers_fields(link, association, content) {
     $(".edit").off();
     init_wysiwyg();
     init_nested_form();
+    row_index();
 
+}
+
+function row_index(index){
+    $(".answer_table tr:visible td:first-child").each (function(index){
+        $(this).text(index + 1)
+    })
+    $(".answer_table tr:visible .serial_number").each (function(index){
+        $(this).val(index + 1)
+    })
 }
 
 function add_task_contents_fields(link, association, content) {
     var new_id = new Date().getTime();
     var regexp = new RegExp("new_" + association, "g")
     $(link).parent().before($('.task_contents_table').append(content.replace(regexp, new_id)));
-    $('.radio-btn').off();
-    $(".edit_hint").off();
-    $(".edit").off();
-    init_wysiwyg();
-    init_nested_form();
-
 }

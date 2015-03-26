@@ -101,6 +101,14 @@
                           </label>
                         </div>
                     <% end %>
+                <% elsif @sorted_task_result.task_type == 'Последовательность' %>
+                    <% @sorted_task_result.user_answers.each do |answer| %>
+                        <div class="answer">
+                          <label>
+                            <%= answer.text %>
+                          </label>
+                        </div>
+                    <% end %>
                 <% else %>
                     <div class="answer">
                       <label>

@@ -3,12 +3,8 @@
       <div class="row">
         <div class="col-sm-12">
           <div class="page-header">
-            <h2>Задание №<%= @task.id %> : <%= @task.task_type %></h2>
-            <% if params[:action] == 'edit' %>
-                <h4>Кол-во баллов:  <%= f.number_field :point, :style => 'width: 50px;' %></h4>
-            <% else%>
-                <h4>Кол-во баллов:  <%= f.number_field :point, :style => 'width: 50px;', :value => 10 %></h4>
-            <% end%>
+                <h2>Задание <%= params[:action] == 'edit' ? ('№' + @task.id.to_s) : ':' %>  <%= @type %></h2>
+                <h4>Кол-во баллов:  <%= f.number_field :point, :style => 'width: 50px;', params[:action] == 'edit' ? nil : :value =>  1 %></h4>
           </div>
         </div>
         <div class="col-sm-12">
@@ -16,7 +12,7 @@
             <% if params[:action] == 'edit' %>
                 <%= f.text_area :text, :class => 'edit' %>
             <% else %>
-                <%= f.text_area :text, :class => 'edit', :value => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit' %>
+                <%= f.text_area :text, :class => 'edit', :value => '<h3>Lorem ipsum dolor sit amet, consectetur adipiscing elit</h3>' %>
                 <%= f.hidden_field :test_id, :value => @test_id %>
                 <%= f.hidden_field :task_type, :value => @type %>
             <% end %>
@@ -45,7 +41,8 @@
           <% if params[:action] == 'edit' %>
               <h3><%= f.text_area :hint, :class => 'edit_hint' %></h3>
           <% else %>
-              <h3><%= f.text_area :hint, :class => 'edit_hint', :value => '<h2>Введите правильный вариант ответа:</h2>' %></h3>
+              <h3><%= f.text_area :hint, :class => 'edit_hint', :value => (@type == 'Последовательность')?
+                                           '<h2>Расставьте очередность:</h2>' : '<h2>Введите правильный вариант ответа:</h2>' %></h3>
           <% end %>
         </div>
       </div>
@@ -55,15 +52,9 @@
               <thead>
               </thead>
               <tbody>
-              <% if params[:action] == 'edit' %>
-                  <%= f.fields_for :answers, @task.answers.order('id ASC') do |ff| %>
+                  <%= f.fields_for :answers, (params[:action] == 'edit' ? @task.answers.order('id ASC') : nil) do |ff| %>
                       <%= render 'answer_fields', :f => ff %>
                   <% end %>
-              <% else %>
-                  <%= f.fields_for :answers do |ff| %>
-                      <%= render 'answer_fields', :f => ff %>
-                  <% end %>
-              <% end %>
               </tbody>
             </table>
             <p><%= link_to_add_fields 'Добавить вариант ответа', f, :answers %></p>
@@ -78,4 +69,5 @@
 <script>
     init_wysiwyg();
     init_nested_form();
+    row_index();
 </script>
