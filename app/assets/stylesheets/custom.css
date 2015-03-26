@@ -89,7 +89,7 @@ body {
 .answer {
   font-size: 17px;
   padding: 5px 10px;
-  border-bottom: 1px dashed #bdbdbd;
+  border-bottom: 1px solid #ddd;
   min-height: 50px; }
   .answer label {
     font-weight: normal;

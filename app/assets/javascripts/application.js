@@ -90,6 +90,22 @@ function row_index(index){
     })
 }
 
+function upper_downer(){
+    $('.upper').click(function(eventObject){
+        var curr_tr = $(this).parent().parent();
+        var prev_tr = $(curr_tr).prev();
+        prev_tr.insertAfter(curr_tr);
+        row_index();
+    });
+    $('.downer').click(function(eventObject) {
+        var curr_tr = $(this).parent().parent();
+        var next_tr = $(curr_tr).next();
+        next_tr.insertBefore(curr_tr);
+        row_index();
+    });
+}
+
+
 function add_task_contents_fields(link, association, content) {
     var new_id = new Date().getTime();
     var regexp = new RegExp("new_" + association, "g")

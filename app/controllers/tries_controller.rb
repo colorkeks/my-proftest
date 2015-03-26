@@ -86,11 +86,9 @@ class TriesController < ApplicationController
       params[:user_answers].each do |id|
         @user_answer = UserAnswer.find(id)
         percent_points = percent_points + @user_answer.point.to_f
-        p @user_answer.point.to_f
-        p '=========='
       end
 
-      if percent_points.round  == @task_result.point
+      if percent_points  == @task_result.point
         @task_result.status = 'правильно'
       elsif percent_points <= 0
         @task_result.status = 'не правильно'
@@ -122,6 +120,32 @@ class TriesController < ApplicationController
         @task_result.status = 'не правильно'
         @task_result.point = 0
       end
+    elsif @task_result.task_type == 'Последовательность'
+      params[:user_answers].each do |arr|
+        @user_answer = UserAnswer.find(arr.first)
+        @user_answer.user_reply = arr.second[0].to_i
+        if @user_answer.answer.serial_number == arr.second[0].to_i
+          @user_answer.correct = true
+        end
+        @user_answer.save!
+      end
+      i = 0
+      @task_result.user_answers.order(:user_reply).each do |user_answer|
+        if  user_answer.correct == true
+          i = i + 1
+        else
+          break
+        end
+      end
+      if i == @task_result.user_answers.count
+        @task_result.status = 'правильно'
+      elsif i == 0
+        @task_result.status = 'не правильно'
+        @task_result.point = 0
+      else
+        @task_result.status = 'частично правильно'
+        @task_result.point = @task_result.point/i
+      end
     end
     @task_result.save!
     respond_to do |format|
@@ -144,7 +168,7 @@ class TriesController < ApplicationController
     Task.all.where(:test_id => @test.id).each do |task|
           @task_result = @try.task_results.build(:point => task.point, :text => task.text,:hint => task.hint, :task_type => task.task_type, :status => 'ответ не дан', :task_id => task.id, :try_id => @try.id)
         Answer.all.where(:task_id => task.id).each do |answer|
-          @task_result.user_answers.build(:user_reply => false,:correct => answer.correct, :text => answer.text, :serial_number => answer.serial_number, :point => answer.point, :task_id => task.id, :task_result_id => @task_result.id)
+          @task_result.user_answers.build(:user_reply => false,:correct => answer.correct, :text => answer.text, :serial_number => answer.serial_number, :point => answer.point, :task_id => task.id, :answer_id => answer.id, :task_result_id => @task_result.id)
         end
     end
 

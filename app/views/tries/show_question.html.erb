@@ -58,11 +58,11 @@
                 <% @sorted_task_result.task.task_contents.each do |content| %>
                     <div class="col-lg-4">
                       <% if content.file_content_content_type =~ %r(audio) %>
-                          <div style=""><%= audio_tag(content.file_content.url(:original), controls: true, style: 'margin-top:0;')%></div>
+                          <div style=""><%= audio_tag(content.file_content.url(:original), controls: true, style: 'margin-top:0;') %></div>
                       <% elsif content.file_content_content_type =~ %r(image) %>
-                          <div style=""><%= image_tag content.file_content.url(:small), alt: content.file_content.url(:medium),style: 'margin-top:0;'%></div>
+                          <div style=""><%= image_tag content.file_content.url(:small), alt: content.file_content.url(:medium), style: 'margin-top:0;' %></div>
                       <% elsif content.file_content_content_type =~ %r(video) %>
-                          <div style=""><%= video_tag(content.file_content.url(:original), size: '100%x100%',controls: true, autobuffer: true,style: 'margin:0;' ) %></div>
+                          <div style=""><%= video_tag(content.file_content.url(:original), size: '100%x100%', controls: true, autobuffer: true, style: 'margin:0;') %></div>
                       <% end %>
                     </div>
                 <% end %>
@@ -85,37 +85,50 @@
         <div class="row">
           <div class="col-lg-12 answer-content">
             <%= form_tag({controller: 'tries', action: 'check_user_answer'}, method: 'POST') do %>
-                <% if @sorted_task_result.task_type == 'Множественный выбор' %>
-                    <% @sorted_task_result.user_answers.each do |answer| %>
-                        <div class="answer">
-                          <label>
-                            <%= check_box_tag 'user_answers[]', answer.id %> <%= answer.text %>
-                          </label>
-                        </div>
-                    <% end %>
-                <% elsif @sorted_task_result.task_type == 'Единичный выбор' %>
-                    <% @sorted_task_result.user_answers.each do |answer| %>
-                        <div class="answer">
-                          <label>
-                            <%= radio_button_tag 'user_answers', answer.id %> <%= answer.text %>
-                          </label>
-                        </div>
-                    <% end %>
-                <% elsif @sorted_task_result.task_type == 'Последовательность' %>
-                    <% @sorted_task_result.user_answers.each do |answer| %>
-                        <div class="answer">
-                          <label>
-                            <%= answer.text %>
-                          </label>
-                        </div>
-                    <% end %>
-                <% else %>
-                    <div class="answer">
-                      <label>
-                        <%= text_field_tag 'user_answer', nil, :autocomplete => :off, :class => 'form-control' %>
-                      </label>
-                    </div>
-                <% end %>
+                <table class="table answer_table">
+                  <thead>
+                  </thead>
+                  <tbody>
+                  <% if  @sorted_task_result.task_type == 'Открытый вопрос' %>
+                          <tr class="answer">
+                            <td style="width: 50px; text-align: center; display: none"></td>
+                            <td>
+                            <label>
+                              <%= text_field_tag 'user_answer', nil, :autocomplete => :off, :class => 'form-control' %>
+                            </label>
+                            </td>
+                          </tr>
+                  <% else %>
+                      <% @sorted_task_result.user_answers.order('RANDOM()').each do |answer| %>
+                          <tr class="answer">
+                            <td style="width: 50px; text-align: center; <%= (@sorted_task_result.task_type == ('Последовательность')) ? '' : 'display:none' %>"></td>
+                            <td>
+                              <% if @sorted_task_result.task_type == 'Множественный выбор' %>
+                                  <label>
+                                    <%= check_box_tag 'user_answers[]', answer.id %> <%= answer.text %>
+                                  </label>
+                              <% elsif @sorted_task_result.task_type == 'Единичный выбор' %>
+                                  <label>
+                                    <%= radio_button_tag 'user_answers', answer.id %> <%= answer.text %>
+                                  </label>
+                              <% elsif @sorted_task_result.task_type == 'Последовательность' %>
+                                  <label>
+                                    <%= answer.text %>
+                                  </label>
+                                  <%= hidden_field_tag 'user_answers[' + answer.id.to_s + '][]', '', :class => 'serial_number' %>
+                              <% end %>
+                            </td>
+                            <% if @sorted_task_result.task_type == 'Последовательность' %>
+                                <td>
+                                  <div class="btn btn-default upper">вверх</div>
+                                  <div class="btn btn-default downer">вниз</div>
+                                </td>
+                            <% end %>
+                          </tr>
+                      <% end %>
+                  <% end %>
+                  </tbody>
+                </table>
                 <br>
                 <%= hidden_field_tag 'task_result_id', @sorted_task_result.id %>
                 <%= submit_tag('Ответить', :class => 'btn btn-primary') %>
@@ -126,3 +139,8 @@
     </div>
   </div>
 </div>
+
+<script>
+    row_index();
+    upper_downer();
+</script>

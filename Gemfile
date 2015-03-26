@@ -34,7 +34,7 @@ gem 'paperclip', :git => 'git://github.com/thoughtbot/paperclip.git'
 gem 'wysiwyg-rails'
 gem 'tinymce-rails'
 gem 'simple_form'
-
+gem 'russian'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
