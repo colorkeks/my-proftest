@@ -67,27 +67,45 @@ function remove_fields(link) {
     row_index();
 }
 
-function add_answers_fields(link, association, content) {
-    var new_id = (parseInt($(".answer_table tr:visible:last td:first ").text()) + 1);
+function add_fields(link, association, content, table_name) {
+    var new_id = (parseInt($("." + table_name + " tr:visible:last td:first ").text()) + 1);
     new_id = new_id || 1
     var regexp = new RegExp("new_" + association, "g")
-    $(link).parent().before($('.answer_table').append(content.replace(regexp, new_id)));
+    $(link).parent().before($("." + table_name).append(content.replace(regexp, new_id)));
     $('.radio-btn').off();
     $(".edit_hint").off();
     $(".edit").off();
     init_wysiwyg();
     init_nested_form();
-    row_index();
+    row_index(table_name);
 
 }
 
-function row_index(index){
-    $(".answer_table tr:visible td:first-child").each (function(index){
-        $(this).text(index + 1)
-    })
-    $(".answer_table tr:visible .serial_number").each (function(index){
-        $(this).val(index + 1)
-    })
+function row_index(table_name, index) {
+    // это для кнопок удаления и вверз вниз
+    if (table_name == null) {
+        $(".answer_table tr:visible td:first-child").each(function (index) {
+            $(this).text(index + 1)
+        })
+        $(".associate_table tr:visible td:first-child").each(function (index) {
+            $(this).text(index + 1)
+        })
+        $(".task_contents_table tr:visible td:first-child").each(function (index) {
+            $(this).text(index + 1)
+        })
+        $(".answer_table tr:visible .serial_number").each(function (index) {
+            $(this).val(index + 1)
+        })
+    }
+    // а это для создания строк и вставки в конкретную таблицу
+    else {
+        $("." + table_name + " tr:visible td:first-child").each(function (index) {
+            $(this).text(index + 1)
+        })
+        $("." + table_name + " tr:visible .serial_number").each(function (index) {
+            $(this).val(index + 1)
+        })
+    }
 }
 
 function upper_downer(){
@@ -103,11 +121,4 @@ function upper_downer(){
         next_tr.insertBefore(curr_tr);
         row_index();
     });
-}
-
-
-function add_task_contents_fields(link, association, content) {
-    var new_id = new Date().getTime();
-    var regexp = new RegExp("new_" + association, "g")
-    $(link).parent().before($('.task_contents_table').append(content.replace(regexp, new_id)));
 }

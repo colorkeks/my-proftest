@@ -120,7 +120,10 @@ class TriesController < ApplicationController
         @task_result.status = 'не правильно'
         @task_result.point = 0
       end
+      # последовательность
     elsif @task_result.task_type == 'Последовательность'
+      i = 0
+      points = 0
       params[:user_answers].each do |arr|
         @user_answer = UserAnswer.find(arr.first)
         @user_answer.user_reply = arr.second[0].to_i
@@ -129,7 +132,6 @@ class TriesController < ApplicationController
         end
         @user_answer.save!
       end
-      i = 0
       @task_result.user_answers.order(:user_reply).each do |user_answer|
         if  user_answer.correct == true
           i = i + 1
@@ -143,8 +145,12 @@ class TriesController < ApplicationController
         @task_result.status = 'не правильно'
         @task_result.point = 0
       else
+        coefficient = @task_result.point.to_f/@task_result.user_answers.count
+        i.times.each do
+          points = points + coefficient
+        end
         @task_result.status = 'частично правильно'
-        @task_result.point = @task_result.point/i
+        @task_result.point = points
       end
     end
     @task_result.save!

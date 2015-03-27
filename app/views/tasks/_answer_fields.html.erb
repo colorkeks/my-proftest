@@ -1,10 +1,10 @@
 <tr class="fields">
-  <td></td><!-- не удалять это нужно для нумерации -->
+  <td style="<%= @type == 'Последовательность' || 'Сопоставление' ? '' : 'display:none'%>"></td>
   <% if @type == 'Множественный выбор' %>
       <td style="width: 50px;"><%= f.check_box :correct %></td>
   <% elsif @type == 'Единичный выбор' %>
       <td style="width: 50px;"><%= f.radio_button :correct, true, :class => 'radio-btn' %></td>
-  <% elsif @type = 'Последовательность' %>
+  <% elsif @type == 'Последовательность' %>
       <%= f.hidden_field :serial_number, :class => 'serial_number' %>
   <% end %>
   <td style="width: 400px;"><%= f.text_field :text, :class => 'form-control', :style => 'width:300px;' %></td>
