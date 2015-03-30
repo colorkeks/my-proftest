@@ -86,6 +86,6 @@ class TasksController < ApplicationController
       params.require(:task).permit(:text, :hint, :task_type, :point, :test_id,
                     answers_attributes: [ :id, :task_id, :text, :correct, :serial_number, :point, :_destroy],
                     task_contents_attributes: [:id,:file_content, :task_id, :_destroy],
-                    associations_attributes: [:id, :text, :serial_number, :task_id])
+                    associations_attributes: [:id, :text, :serial_number, :task_id, :_destroy])
     end
 end

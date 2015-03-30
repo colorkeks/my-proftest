@@ -22,7 +22,7 @@
   <% end %>
 </tr>
 
-<% if params[:action]=='edit'%>
+<% if params[:action]=='edit' && @type == ('Множественный выбор' ||'Единичный выбор')%>
     <%= f.hidden_field :correct, as: :hidden, :class => 'radio_correct' %>
 <% end %>
 

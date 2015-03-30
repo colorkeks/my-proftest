@@ -118,7 +118,7 @@
                                   <%= hidden_field_tag 'user_answers[' + answer.id.to_s + '][]', '', :class => 'serial_number' %>
                               <% elsif @sorted_task_result.task_type == 'Сопоставление' %>
                                     <div class="pull-right select-answer">
-                                      <%= select_tag( 'associations[' + answer.id.to_s + '][]',options_for_select(['Не выбрано']) + options_from_collection_for_select(@sorted_task_result.user_associations.shuffle, 'id', 'text'), :class => 'form-control') %>
+                                      <%= select_tag( 'associations[' + answer.id.to_s + '][]',options_for_select(['Не выбрано']) + options_from_collection_for_select(@sorted_task_result.user_associations.shuffle, 'id', 'text'), :class => 'form-control association_select') %>
                                     </div>
                                     <div class="text"><%= answer.text%></div>
                               <% end %>

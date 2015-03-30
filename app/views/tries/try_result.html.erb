@@ -53,6 +53,28 @@
                 <% end %>
               </div>
               <% if task_result.task_type =='Последовательность' %>
+              <% elsif task_result.task_type == 'Сопоставление'%>
+                  <div class="row">
+                  <div class="col-sm-12"><h3>Варианты:</h3></div>
+                  <div class="col-sm-6">
+                    <table class="table">
+                    <% task_result.user_answers.order('RANDOM()').each do |user_answer| %>
+                        <tr>
+                          <td><%= user_answer.text.html_safe %></td>
+                        </tr>
+                    <% end %>
+                    </table>
+                  </div>
+                  <div class="col-sm-6">
+                    <table class="table">
+                    <% task_result.user_associations.order('RANDOM()').each do |user_association| %>
+                        <tr>
+                          <td><%= user_association.text.html_safe %></td>
+                        </tr>
+                    <% end %>
+                    </table>
+                  </div>
+                  </div>
               <% else %>
                   <div class="col-sm-12">
                   <table class="table table-striped">
