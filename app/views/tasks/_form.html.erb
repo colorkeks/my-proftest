@@ -34,7 +34,7 @@
               <% end %>
               </tbody>
             </table>
-            <p><%= link_to_add_fields 'Добавить контент', f, :task_contents,'task_contents_table' %></p>
+            <p><%= link_to_add_fields 'Добавить контент', f, :task_contents,'task_contents_table'%></p>
           </div>
         </div>
       </div>
@@ -42,9 +42,14 @@
         <div class="col-sm-6">
           <% if params[:action] == 'edit' %>
               <h3><%= f.text_area :hint, :class => 'edit_hint' %></h3>
+          <% elsif @type == 'Последовательность' %>
+              <%= f.text_area :hint, :class => 'edit_hint', :value => '<h2>Расставьте очередность:</h2>' %>
+          <% elsif @type == 'Сопоставление'%>
+              <%= f.text_area :hint, :class => 'edit_hint', :value => '<h2>Сопоставьте строки:</h2>' %>
+          <% elsif @type == 'Открытый вопрос' %>
+              <%= f.text_area :hint, :class => 'edit_hint', :value => '<h2>Введите пропущенное слово:</h2>' %>
           <% else %>
-              <h3><%= f.text_area :hint, :class => 'edit_hint', :value => (@type == 'Последовательность') ?
-                      '<h2>Расставьте очередность:</h2>' : '<h2>Введите правильный вариант ответа:</h2>' %></h3>
+              <%= f.text_area :hint, :class => 'edit_hint', :value => '<h2>Выберите правильные(-ый) овет(-ы):</h2>' %>
           <% end %>
         </div>
       </div>
@@ -52,7 +57,7 @@
           <div class="row">
             <div class="col-sm-6">
               <h3>Ответы:</h3>
-              <table class="table table-striped answer_table">
+              <table class="table answer_table">
                 <thead>
                 </thead>
                 <tbody>
@@ -61,20 +66,20 @@
                 <% end %>
                 </tbody>
               </table>
-              <p><%= link_to_add_fields 'Добавить вариант ответа', f, :answers,'answer_table' %></p>
+              <p><%= link_to_add_fields 'Добавить вариант ответа', f, :answers,'answer_table'%></p>
             </div>
             <div class="col-sm-6">
               <h3>Сопоставления:</h3>
-              <table class="table table-striped associate_table">
+              <table class="table associate_table">
                 <thead>
                 </thead>
                 <tbody>
-                <%= f.fields_for :answers, (params[:action] == 'edit' ? @task.answers.order('id ASC') : nil) do |ff| %>
+                <%= f.fields_for :associations, (params[:action] == 'edit' ? @task.answers.order('id ASC') : nil) do |ff| %>
                     <%= render 'answer_fields', :f => ff %>
                 <% end %>
                 </tbody>
               </table>
-              <p><%= link_to_add_fields 'Добавить вариант ответа', f, :answers,'associate_table' %></p>
+              <p><%= link_to_add_fields 'Добавить ассоциацию', f, :associations,'associate_table' %></p>
             </div>
           </div>
       <% else %>
@@ -89,7 +94,7 @@
                 <% end %>
                 </tbody>
               </table>
-              <p><%= link_to_add_fields 'Добавить вариант ответа', f, :answers,'answer_table' %></p>
+              <p><%= link_to_add_fields 'Добавить вариант ответа', f, :answers,'answer_table'%></p>
             </div>
           </div>
       <% end %>
@@ -103,5 +108,6 @@
 <script>
     init_wysiwyg();
     init_nested_form();
+    upper_downer_lefter_rightter();
     row_index();
 </script>

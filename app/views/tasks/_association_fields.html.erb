@@ -1,0 +1,15 @@
+<tr class="fields">
+  <td></td>
+  <td style="width: 300px;"><%= f.text_field :text, :class => 'form-control', :style => 'width:300px;' %></td>
+  <td>
+  <td style="width: 120px">
+    <div class="btn btn-default upper"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></div>
+    <div class="btn btn-default downer"><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span></div>
+    <!--    <div class="btn btn-default lefter"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></div> -->
+    <!--   <div class="btn btn-default righter"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></div> -->
+  <td>
+    <%= link_to_remove_fields 'Удалить', f %>
+  </td>
+  <%= f.hidden_field :serial_number, :class => 'serial_number' %>
+</tr>
+

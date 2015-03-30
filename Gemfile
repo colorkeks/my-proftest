@@ -30,7 +30,7 @@ gem 'spring',        group: :development
 
 gem 'devise'
 gem 'dropzonejs-rails'
-gem 'paperclip', :git => 'git://github.com/thoughtbot/paperclip.git'
+gem 'paperclip'
 gem 'wysiwyg-rails'
 gem 'tinymce-rails'
 gem 'simple_form'

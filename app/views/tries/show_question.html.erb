@@ -83,25 +83,25 @@
         <br>
 
         <div class="row">
-          <div class="col-lg-12 answer-content">
-            <%= form_tag({controller: 'tries', action: 'check_user_answer'}, method: 'POST') do %>
+          <%= form_tag({controller: 'tries', action: 'check_user_answer'}, method: 'POST') do %>
+              <div class="col-lg-12 answer-content">
                 <table class="table answer_table">
                   <thead>
                   </thead>
                   <tbody>
                   <% if  @sorted_task_result.task_type == 'Открытый вопрос' %>
-                          <tr class="answer">
-                            <td style="width: 50px; text-align: center; display: none"></td>
-                            <td>
-                            <label>
-                              <%= text_field_tag 'user_answer', nil, :autocomplete => :off, :class => 'form-control' %>
-                            </label>
-                            </td>
-                          </tr>
+                      <tr class="answer">
+                        <td style="width: 50px; text-align: center; display: none"></td>
+                        <td>
+                          <label>
+                            <%= text_field_tag 'user_answer', nil, :autocomplete => :off, :class => 'form-control' %>
+                          </label>
+                        </td>
+                      </tr>
                   <% else %>
                       <% @sorted_task_result.user_answers.order('RANDOM()').each do |answer| %>
                           <tr class="answer">
-                            <td style="width: 50px; text-align: center; <%= (@sorted_task_result.task_type == ('Последовательность')) ? '' : 'display:none' %>"></td>
+                            <td style="width: 50px; text-align: center; <%= @sorted_task_result.task_type == 'Последовательность' ? '' : 'display:none' %>"></td>
                             <td>
                               <% if @sorted_task_result.task_type == 'Множественный выбор' %>
                                   <label>
@@ -116,12 +116,19 @@
                                     <%= answer.text %>
                                   </label>
                                   <%= hidden_field_tag 'user_answers[' + answer.id.to_s + '][]', '', :class => 'serial_number' %>
+                              <% elsif @sorted_task_result.task_type == 'Сопоставление' %>
+                                    <div class="pull-right select-answer">
+                                      <%= select_tag( 'associations[' + answer.id.to_s + '][]',options_for_select(['Не выбрано']) + options_from_collection_for_select(@sorted_task_result.user_associations.shuffle, 'id', 'text'), :class => 'form-control') %>
+                                    </div>
+                                    <div class="text"><%= answer.text%></div>
                               <% end %>
                             </td>
                             <% if @sorted_task_result.task_type == 'Последовательность' %>
                                 <td>
-                                  <div class="btn btn-default upper">вверх</div>
-                                  <div class="btn btn-default downer">вниз</div>
+                                  <div class="btn btn-default upper">
+                                    <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></div>
+                                  <div class="btn btn-default downer">
+                                    <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span></div>
                                 </td>
                             <% end %>
                           </tr>
@@ -129,11 +136,11 @@
                   <% end %>
                   </tbody>
                 </table>
-                <br>
-                <%= hidden_field_tag 'task_result_id', @sorted_task_result.id %>
-                <%= submit_tag('Ответить', :class => 'btn btn-primary') %>
-            <% end %>
-          </div>
+              </div>
+              <br>
+              <%= hidden_field_tag 'task_result_id', @sorted_task_result.id %>
+              <%= submit_tag('Ответить', :class => 'btn btn-primary') %>
+          <% end %>
         </div>
       </div>
     </div>
@@ -142,5 +149,5 @@
 
 <script>
     row_index();
-    upper_downer();
+    upper_downer_lefter_rightter();
 </script>

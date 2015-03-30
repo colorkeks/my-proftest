@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :user_associations
+
   get 'table/index'
   root to: 'table#index', as: 'table'
 
@@ -37,6 +39,8 @@ Rails.application.routes.draw do
   resources :admins
 
   resources :answers
+
+  resources :associations
 
   resources :task_results
 

@@ -1,0 +1,31 @@
+<h1>Listing user_associations</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Text</th>
+      <th>Serial number</th>
+      <th>Task</th>
+      <th>Answer</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @user_associations.each do |user_association| %>
+      <tr>
+        <td><%= user_association.text %></td>
+        <td><%= user_association.serial_number %></td>
+        <td><%= user_association.task_id %></td>
+        <td><%= user_association.answer_id %></td>
+        <td><%= link_to 'Show', user_association %></td>
+        <td><%= link_to 'Edit', edit_user_association_path(user_association) %></td>
+        <td><%= link_to 'Destroy', user_association, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New User association', new_user_association_path %>

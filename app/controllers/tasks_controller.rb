@@ -24,6 +24,7 @@ class TasksController < ApplicationController
 
     2.times.each do
       @task.answers.build
+      @task.associations.build
     end
   end
 
@@ -84,6 +85,7 @@ class TasksController < ApplicationController
     def task_params
       params.require(:task).permit(:text, :hint, :task_type, :point, :test_id,
                     answers_attributes: [ :id, :task_id, :text, :correct, :serial_number, :point, :_destroy],
-                    task_contents_attributes: [:id,:file_content, :task_id, :_destroy])
+                    task_contents_attributes: [:id,:file_content, :task_id, :_destroy],
+                    associations_attributes: [:id, :text, :serial_number, :task_id])
     end
 end

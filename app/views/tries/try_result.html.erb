@@ -54,6 +54,7 @@
               </div>
               <% if task_result.task_type =='Последовательность' %>
               <% else %>
+                  <div class="col-sm-12">
                   <table class="table table-striped">
                     <th>Варианты:</th>
                     <% task_result.user_answers.order('RANDOM()').each do |user_answer| %>
@@ -62,8 +63,10 @@
                         </tr>
                     <% end %>
                   </table>
+                  </div>
               <% end %>
               <h3>Ваш ответ:</h3>
+              <div class="col-sm-6">
               <table class="table">
                 <% if task_result.task_type == 'Открытый вопрос' %>
                     <tr>
@@ -76,6 +79,25 @@
                           <td><%= user_answer.text %></td>
                         </tr>
                     <% end %>
+                <% elsif task_result.task_type == 'Сопоставление'%>
+                    <% task_result.user_answers.order('serial_number ASC').each do |user_answer| %>
+                        <tr>
+                          <td><%= user_answer.text %></td>
+                        </tr>
+                    <% end %>
+                        </table>
+                    </div>
+                    <div class="col-sm-6">
+                        <table class="table">
+                          <% task_result.user_answers.order('serial_number ASC').each do |user_answer| %>
+                              <tr>
+                                <% if user_answer.user_association %>
+                                    <td><%= user_answer.user_association.text %></td>
+                                <% else %>
+                                    <td>Не выбрано</td>
+                                <% end %>
+                              </tr>
+                          <% end %>
                 <% else %>
                     <% task_result.user_answers.where(:user_reply => true).each do |reply| %>
                         <tr>
@@ -84,6 +106,7 @@
                     <% end %>
                 <% end %>
               </table>
+                </div>
             </div>
           </div>
           <% i=i+1 %>

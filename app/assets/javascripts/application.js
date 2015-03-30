@@ -65,6 +65,7 @@ function remove_fields(link) {
     $(link).prev("input[type=hidden]").val("true");
     $(link).closest(".fields").hide();
     row_index();
+    off_on();
 }
 
 function add_fields(link, association, content, table_name) {
@@ -72,13 +73,21 @@ function add_fields(link, association, content, table_name) {
     new_id = new_id || 1
     var regexp = new RegExp("new_" + association, "g")
     $(link).parent().before($("." + table_name).append(content.replace(regexp, new_id)));
+    off_on(table_name);
+}
+
+function off_on(table_name){
     $('.radio-btn').off();
     $(".edit_hint").off();
     $(".edit").off();
+    $('upper').off();
+    $('downer').off();
+    $('lefter').off();
+    $('righter').off();
     init_wysiwyg();
     init_nested_form();
+    upper_downer_lefter_rightter();
     row_index(table_name);
-
 }
 
 function row_index(table_name, index) {
@@ -96,6 +105,9 @@ function row_index(table_name, index) {
         $(".answer_table tr:visible .serial_number").each(function (index) {
             $(this).val(index + 1)
         })
+        $(".associate_table tr:visible .serial_number").each(function (index) {
+            $(this).val(index + 1)
+        })
     }
     // а это для создания строк и вставки в конкретную таблицу
     else {
@@ -108,7 +120,7 @@ function row_index(table_name, index) {
     }
 }
 
-function upper_downer(){
+function upper_downer_lefter_rightter(){
     $('.upper').click(function(eventObject){
         var curr_tr = $(this).parent().parent();
         var prev_tr = $(curr_tr).prev();
@@ -121,4 +133,13 @@ function upper_downer(){
         next_tr.insertBefore(curr_tr);
         row_index();
     });
+
+    $('.lefter').click(function(eventObject){
+        var curr_tr = $(this).parent().parent();
+        curr_tr.insertAfter($('.answer_table tr:visible:last'))
+    })
+    $('.righter').click(function(eventObject){
+        var curr_tr = $(this).parent().parent();
+        curr_tr.insertAfter($('.associate_table tr:visible:last'))
+    })
 }

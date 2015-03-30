@@ -1,16 +1,28 @@
 <tr class="fields">
-  <td style="<%= @type == 'Последовательность' || 'Сопоставление' ? '' : 'display:none'%>"></td>
+  <td style="<%= @type == 'Последовательность' || 'Сопоставление' ? 'display:block' : 'display:none'%>"></td>
   <% if @type == 'Множественный выбор' %>
       <td style="width: 50px;"><%= f.check_box :correct %></td>
   <% elsif @type == 'Единичный выбор' %>
       <td style="width: 50px;"><%= f.radio_button :correct, true, :class => 'radio-btn' %></td>
-  <% elsif @type == 'Последовательность' %>
+  <% end %>
+  <td style="width: 300px;"><%= f.text_field :text, :class => 'form-control', :style => 'width:300px;' %></td>
+  <td>
+  <% if @type == 'Сопоставление' %>
+      <td style="width: 120px">
+        <div class="btn btn-default upper"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></div>
+        <div class="btn btn-default downer"><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span></div>
+        <!--    <div class="btn btn-default lefter"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></div> -->
+       <!--   <div class="btn btn-default righter"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></div> -->
+      <td>
+  <% end %>
+    <%= link_to_remove_fields 'Удалить', f %>
+  </td>
+  <% if @type == 'Последовательность' || 'Сопоставление' %>
       <%= f.hidden_field :serial_number, :class => 'serial_number' %>
   <% end %>
-  <td style="width: 400px;"><%= f.text_field :text, :class => 'form-control', :style => 'width:300px;' %></td>
-  <td><%= link_to_remove_fields 'Удалить', f %></td>
 </tr>
 
 <% if params[:action]=='edit'%>
     <%= f.hidden_field :correct, as: :hidden, :class => 'radio_correct' %>
 <% end %>
+

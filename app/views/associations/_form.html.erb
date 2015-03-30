@@ -1,0 +1,14 @@
+<%= simple_form_for(@association) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :text %>
+    <%= f.input :serial_number %>
+    <%= f.input :task_id %>
+    <%= f.input :answer_id %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

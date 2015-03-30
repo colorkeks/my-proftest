@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150227080226) do
+ActiveRecord::Schema.define(version: 20150330065201) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,14 @@ ActiveRecord::Schema.define(version: 20150227080226) do
     t.boolean  "correct",       default: false
     t.text     "text"
     t.integer  "point"
+    t.integer  "serial_number"
+    t.integer  "task_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "associations", force: true do |t|
+    t.text     "text"
     t.integer  "serial_number"
     t.integer  "task_id"
     t.datetime "created_at"
@@ -90,7 +98,19 @@ ActiveRecord::Schema.define(version: 20150227080226) do
     t.float    "point"
     t.integer  "answer_id"
     t.integer  "task_id"
+    t.integer  "user_association_id"
     t.integer  "task_result_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "user_associations", force: true do |t|
+    t.text     "text"
+    t.integer  "serial_number"
+    t.integer  "task_id"
+    t.integer  "association_id"
+    t.integer  "task_result_id"
+    t.integer  "user_answer_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

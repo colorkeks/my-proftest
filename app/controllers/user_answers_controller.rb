@@ -70,6 +70,6 @@ class UserAnswersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_answer_params
-      params.require(:user_answer).permit(:user_reply,:correct, :text, :point, :task_id, :task_result_id)
+      params.require(:user_answer).permit(:user_reply,:correct, :text, :point, :task_id, :task_result_id, :user_association_id)
     end
 end
