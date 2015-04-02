@@ -672,11 +672,11 @@ Association.create([{text: 'Естественная консервация тр
                      task_id: tasks[19].id}])
 
 
-TaskContent.create([{:file_content => File.new("#{Rails.root}/vendor/assets/media/1.jpeg"),
+TaskContent.create([{:file_content => File.new("#{Rails.root}/vendor/app/assets/media/1.jpeg"),
                      :task_id => tasks[20].id},
-                    {:file_content => File.new("#{Rails.root}/vendor/assets/media/psoriaz-nogtej.jpg"),
+                    {:file_content => File.new("#{Rails.root}/vendor/app/assets/media/psoriaz-nogtej.jpg"),
                      :task_id => tasks[21].id},
-                    {:file_content => File.new("#{Rails.root}/vendor/assets/media/video.mp4"),
+                    {:file_content => File.new("#{Rails.root}/vendor/app/assets/media/video.mp4"),
                      :task_id => tasks[24].id},
-                    {:file_content => File.new("#{Rails.root}/vendor/assets/media/audio.mp3"),
+                    {:file_content => File.new("#{Rails.root}/vendor/app/assets/media/audio.mp3"),
                      :task_id => tasks[25].id}])
