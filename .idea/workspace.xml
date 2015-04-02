@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="07a2dc06-edd1-4f27-995c-3b0933370926" name="Default" comment="fix">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/assets/media/1.jpeg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/assets/media/audio.mp3" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/assets/media/psoriaz-nogtej.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/assets/media/video.mp4" />
+    <list default="true" id="07a2dc06-edd1-4f27-995c-3b0933370926" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db/seeds.rb" afterPath="$PROJECT_DIR$/db/seeds.rb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -36,8 +32,8 @@
       <file leaf-file-name="seeds.rb" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/db/seeds.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5753176" vertical-offset="11815" max-vertical-offset="12366">
-              <caret line="674" column="73" selection-start-line="674" selection-start-column="73" selection-end-line="674" selection-end-column="73" />
+            <state vertical-scroll-proportion="0.24863884" vertical-offset="11815" max-vertical-offset="12366">
+              <caret line="664" column="40" selection-start-line="664" selection-start-column="40" selection-end-line="664" selection-end-column="40" />
               <folding />
             </state>
           </provider>
@@ -833,7 +829,11 @@
       <created>1427977263353</created>
       <updated>1427977263353</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="fix">
+      <created>1427977498517</created>
+      <updated>1427977498517</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -925,11 +925,11 @@
     <MESSAGE value="Изменения для Последовательности" />
     <MESSAGE value="добавлени последовательности" />
     <MESSAGE value="fix javascript и подсчет баллов в последовательности.&#10;" />
-    <MESSAGE value="fix" />
     <MESSAGE value="Сопоставление и пара фиксов" />
     <MESSAGE value="Fix , изменение подсчета баллов" />
     <MESSAGE value="seed 3 теста. 20, 4, 2  задания соответственно. fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="seed 3 теста. 20, 4, 2  задания соответственно. fix" />
+    <MESSAGE value="fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1326,8 +1326,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/db/seeds.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5753176" vertical-offset="11815" max-vertical-offset="12366">
-          <caret line="674" column="73" selection-start-line="674" selection-start-column="73" selection-end-line="674" selection-end-column="73" />
+        <state vertical-scroll-proportion="0.24863884" vertical-offset="11815" max-vertical-offset="12366">
+          <caret line="664" column="40" selection-start-line="664" selection-start-column="40" selection-end-line="664" selection-end-column="40" />
           <folding />
         </state>
       </provider>
