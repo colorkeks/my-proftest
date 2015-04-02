@@ -3,7 +3,8 @@
     <div class="col-lg-12 answer-content">
       <h2>Поздравляем !</h2>
 
-      <div> вы решили <%= @percent.round(2) %>% теста (<%= @current.to_f.round(2) %> из <%= @max %> возможных баллов)</div>
+      <div> вы решили <%= @percent.round(2) %>% теста (<%= @current.to_f.round(2) %> из <%= @max %> возможных баллов)
+      </div>
     </div>
   </div>
 
@@ -28,15 +29,13 @@
               <div class="row">
                 <% if task_result.task.task_contents.detect { |i| i.file_content_content_type }.nil? %>
                     <div class="col-lg-12">
-                      <p>
-                        <%= task_result.text.html_safe %>
-                      </p>
+                      <h4><%= task_result.text.html_safe %></h4>
+                      <hr>
                     </div>
                 <% else %>
                     <div class="col-lg-6">
-                      <p>
-                        <%= task_result.text.html_safe %>
-                      </p>
+                      <h4><%= task_result.text.html_safe %></h4>
+                      <hr>
                     </div>
                     <div class="col-lg-6" style="text-align: center">
                       <% task_result.task.task_contents.each do |content| %>
@@ -52,84 +51,89 @@
                     </div>
                 <% end %>
               </div>
-              <% if task_result.task_type =='Последовательность' %>
-              <% elsif task_result.task_type == 'Сопоставление'%>
-                  <div class="row">
-                  <div class="col-sm-12"><h3>Варианты:</h3></div>
-                  <div class="col-sm-6">
-                    <table class="table">
-                    <% task_result.user_answers.order('RANDOM()').each do |user_answer| %>
-                        <tr>
-                          <td><%= user_answer.text.html_safe %></td>
-                        </tr>
-                    <% end %>
-                    </table>
-                  </div>
-                  <div class="col-sm-6">
-                    <table class="table">
-                    <% task_result.user_associations.order('RANDOM()').each do |user_association| %>
-                        <tr>
-                          <td><%= user_association.text.html_safe %></td>
-                        </tr>
-                    <% end %>
-                    </table>
-                  </div>
-                  </div>
-              <% else %>
-                  <div class="col-sm-12">
-                  <table class="table table-striped">
-                    <th>Варианты:</th>
-                    <% task_result.user_answers.order('RANDOM()').each do |user_answer| %>
-                        <tr>
-                          <td><%= user_answer.text.html_safe %></td>
-                        </tr>
-                    <% end %>
-                  </table>
-                  </div>
-              <% end %>
-              <h3>Ваш ответ:</h3>
-              <div class="col-sm-6">
-              <table class="table">
-                <% if task_result.task_type == 'Открытый вопрос' %>
-                    <tr>
-                      <td><%= task_result.user_answers.first.user_reply %></td>
-                    </tr>
-                <% elsif task_result.task_type == 'Последовательность' %>
-                    <% task_result.user_answers.order('user_reply ASC').each do |user_answer| %>
-                        <tr>
-                          <td width="30px;"><%= user_answer.user_reply %></td>
-                          <td><%= user_answer.text %></td>
-                        </tr>
-                    <% end %>
-                <% elsif task_result.task_type == 'Сопоставление'%>
-                    <% task_result.user_answers.order('serial_number ASC').each do |user_answer| %>
-                        <tr>
-                          <td><%= user_answer.text %></td>
-                        </tr>
-                    <% end %>
-                        </table>
+              <div class="row">
+                <div class="col-sm-12">
+                  <h3><%= (task_result.hint.html_safe) if task_result.task_type != 'Открытый вопрос' %></h3>
+                </div>
+              <% if task_result.task_type == 'Последовательность' %>
+              <% elsif task_result.task_type == 'Открытый вопрос' %>
+              <% elsif task_result.task_type == 'Сопоставление' %>
+                    <div class="col-sm-12"><h3>Варианты:</h3></div>
+                    <div class="col-sm-6">
+                      <table class="table">
+                        <% task_result.user_answers.order('RANDOM()').each do |user_answer| %>
+                            <tr>
+                              <td><h4><%= user_answer.text.html_safe %></h4></td>
+                            </tr>
+                        <% end %>
+                      </table>
                     </div>
                     <div class="col-sm-6">
+                      <table class="table">
+                        <% task_result.user_associations.order('RANDOM()').each do |user_association| %>
+                            <tr>
+                              <td><h4><%= user_association.text.html_safe %></h4></td>
+                            </tr>
+                        <% end %>
+                      </table>
+                    </div>
+              <% else %>
+                    <div class="col-sm-12">
+                      <table class="table table-striped">
+                        <th>Варианты:</th>
+                        <% task_result.user_answers.order('RANDOM()').each do |user_answer| %>
+                            <tr>
+                              <td><h4><%= user_answer.text.html_safe %></h4></td>
+                            </tr>
+                        <% end %>
+                      </table>
+                    </div>
+              <% end %>
+              </div>
+              <h3>Ваш ответ:</h3>
+
+              <div class="col-sm-6">
+                <table class="table">
+                  <% if task_result.task_type == 'Открытый вопрос' %>
+                      <tr>
+                        <td><h4><%= task_result.user_answers.first.user_reply %></h4></td>
+                      </tr>
+                  <% elsif task_result.task_type == 'Последовательность' %>
+                      <% task_result.user_answers.order('user_reply ASC').each do |user_answer| %>
+                          <tr>
+                            <td width="30px;"><h4><%= user_answer.user_reply %></h4></td>
+                            <td><h4><%= user_answer.text %></h4></td>
+                          </tr>
+                      <% end %>
+                  <% elsif task_result.task_type == 'Сопоставление' %>
+                      <% task_result.user_answers.order('serial_number ASC').each do |user_answer| %>
+                          <tr>
+                            <td><h4><%= user_answer.text %></h4></td>
+                          </tr>
+                      <% end %>
+                      </table>
+                      </div>
+                      <div class="col-sm-6">
                         <table class="table">
                           <% task_result.user_answers.order('serial_number ASC').each do |user_answer| %>
                               <tr>
                                 <% if user_answer.user_association %>
-                                    <td><%= user_answer.user_association.text %></td>
+                                    <td><h4><%= user_answer.user_association.text %></h4></td>
                                 <% else %>
-                                    <td>Не выбрано</td>
+                                    <td><h4>Не выбрано</h4></td>
                                 <% end %>
                               </tr>
                           <% end %>
-                <% else %>
-                    <% task_result.user_answers.where(:user_reply => true).each do |reply| %>
-                        <tr>
-                          <td><%= reply.text.html_safe %></td>
-                        </tr>
-                    <% end %>
-                <% end %>
-              </table>
-                </div>
-            </div>
+                  <% else %>
+                      <% task_result.user_answers.where(:user_reply => true).each do |reply| %>
+                          <tr>
+                            <td><h4><%= reply.text.html_safe %></h4></td>
+                          </tr>
+                      <% end %>
+                  <% end %>
+                  </table>
+                  </div>
+                  </div>
           </div>
           <% i=i+1 %>
       <% end %>

@@ -86,7 +86,7 @@ function off_on(table_name){
     $('righter').off();
     init_wysiwyg();
     init_nested_form();
-    upper_downer_lefter_rightter();
+    upper_downer();
     row_index(table_name);
 }
 
@@ -120,7 +120,7 @@ function row_index(table_name, index) {
     }
 }
 
-function upper_downer_lefter_rightter(){
+function upper_downer(){
     $('.upper').click(function(eventObject){
         var curr_tr = $(this).parent().parent();
         var prev_tr = $(curr_tr).prev();
@@ -134,12 +134,12 @@ function upper_downer_lefter_rightter(){
         row_index();
     });
 
-    $('.lefter').click(function(eventObject){
-        var curr_tr = $(this).parent().parent();
-        curr_tr.insertAfter($('.answer_table tr:visible:last'))
-    })
-    $('.righter').click(function(eventObject){
-        var curr_tr = $(this).parent().parent();
-        curr_tr.insertAfter($('.associate_table tr:visible:last'))
-    })
+//    $('.lefter').click(function(eventObject){
+//        var curr_tr = $(this).parent().parent();
+//        curr_tr.insertAfter($('.answer_table tr:visible:last'))
+//    })
+//    $('.righter').click(function(eventObject){
+//        var curr_tr = $(this).parent().parent();
+//        curr_tr.insertAfter($('.associate_table tr:visible:last'))
+//    })
 }
