@@ -27,15 +27,23 @@ class TriesController < ApplicationController
     @test = Test.find_by_id(@try.test_id)
     @current_task = @try.task_results.where(:status => 'правильно').count + @try.task_results.where(:status => 'не правильно').count + @try.task_results.where(:status => 'частично правильно').count
     @tasks_count =@try.task_results.count
-    @sorted_task_result = @try.task_results.where(:status => 'ответ не дан').order('RANDOM()').first
-
-    if @sorted_task_result.nil?
-      redirect_to try_result_try_path
+    @current_task_index = params[:current_task_index].nil? ? 0 : params[:current_task_index].to_i
+    @task_result = @try.task_results.find_by(:id => @try.task_results_queue[@current_task_index].to_i , :status => 'ответ не дан')
+    if @task_result.nil?
+      @try.task_results_queue.reverse.each do |id|
+        if @try.task_results.find(id).status == 'ответ не дан'
+          @task_result = @try.task_results.find(id)
+        end
+      end
+      @current_task_index = @try.task_results_queue.index(@task_result.id)
+      if @task_result.nil?
+        redirect_to try_result_try_path
+      end
     end
   end
 
   def try_result
-    @sorted_task_result = TaskResult.where(:status => 'ответ не дан', :try_id => params[:id]).order('RANDOM()').first
+    @task_result = TaskResult.where(:status => 'ответ не дан', :try_id => params[:id]).order('RANDOM()').first
     @try = Try.find(params[:id])
     max_points = 0
     user_points = 0
@@ -48,7 +56,7 @@ class TriesController < ApplicationController
     @current = user_points
     @percent = user_points*100/max_points
 
-    if @sorted_task_result != nil
+    if @task_result != nil
       redirect_to show_question_try_path
     else
       @try.rate = @percent
@@ -206,6 +214,10 @@ class TriesController < ApplicationController
         @task_result.user_associations.build(:text => association.text, :serial_number => association.serial_number, :task_id => task.id, :association_id => association.id, :task_result_id => @task_result.id, :user_answer_id => nil)
       end
     end
+    @try.save!
+    @try.task_results.order('RANDOM()').each do |task_result|
+      @try.task_results_queue << task_result.id
+    end
 
     respond_to do |format|
       if @try.save
@@ -250,7 +262,7 @@ class TriesController < ApplicationController
 
 # Never trust parameters from the scary internet, only allow the white list through.
   def try_params
-    params.require(:try).permit(:date, :rate, :user_id, :test_id)
+    params.require(:try).permit(:date, :rate,:task_results_queue, :user_id, :test_id)
   end
 
 end

@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(version: 20150330065201) do
   create_table "tries", force: true do |t|
     t.date     "date"
     t.float    "rate"
+    t.text     "task_results_queue"
     t.integer  "user_id"
     t.integer  "test_id"
     t.datetime "created_at"

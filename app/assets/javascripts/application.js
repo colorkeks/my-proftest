@@ -135,6 +135,12 @@ function disable_select(){
     });
 }
 
+function tasks_list(){
+        $('#show-q-btns').click(function () {
+            $('#q-btns').toggleClass('hide');
+        });
+}
+
 function upper_downer(){
     $('.upper').click(function(eventObject){
         var curr_tr = $(this).parent().parent();

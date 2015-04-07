@@ -20,6 +20,34 @@
             </div>
           </div>
 
+          <div class='text-center' id="show-q-btns" style="color: #5f5f5f">
+            Список вопросов
+          </div>
+          <div id="q-btns" class="hide">
+            <% @try.task_results_queue.each_with_index do |id, index| %>
+                <% if @try.task_results.find(id).status == 'правильно' %>
+                    <% status = 'right-answer disabled' %>
+                <% elsif @try.task_results.find(id).status == 'не правильно' %>
+                    <% status = 'wrong-answer disabled' %>
+                <% elsif @try.task_results.find(id).status == 'частично правильно' %>
+                    <% status = 'partly-right disabled' %>
+                <% else %>
+                    <% status = '' %>
+                <% end %>
+                <%= link_to  index + 1, {:action => 'show_question', :current_task_index => index}, :class => 'btn btn-default btn-xs ' + status%>
+
+            <% end %>
+
+            <div class="legend pull-right">
+              <div class="btn btn-default btn-xs right-answer disabled">&nbsp;</div>
+              - Верный ответ
+              <div class="btn btn-default btn-xs wrong-answer disabled">&nbsp;</div>
+              - Неверный ответ
+              <div class="btn btn-default btn-xs partly-right disabled">&nbsp;</div>
+              - Частично верный ответ
+            </div>
+          </div>
+
 
         </div>
       </div>
@@ -28,16 +56,16 @@
 
     <div class="row">
       <div class="col-lg-12 question-content">
-        <div class="question-number">Задание № <%= @current_task + 1 %></div>
+        <div class="question-number">Задание № <%= @current_task_index + 1 %></div>
         <div class="row">
-          <% if @sorted_task_result.task.task_contents.count <= 1 %>
+          <% if @task_result.task.task_contents.count <= 1 %>
               <div class="col-lg-6">
                 <div>
-                  <h4><%= @sorted_task_result.text.html_safe %></h4>
+                  <h4><%= @task_result.text.html_safe %></h4>
                 </div>
               </div>
               <div class="col-lg-6" style="text-align: center">
-                <% @sorted_task_result.task.task_contents.each do |content| %>
+                <% @task_result.task.task_contents.each do |content| %>
                     <% if content.file_content_content_type =~ %r(audio) %>
                         <div style="margin: 0 auto;"><%= audio_tag(content.file_content.url(:original), controls: true, style: 'margin-top:0;') %></div>
                     <% elsif content.file_content_content_type =~ %r(image) %>
@@ -51,11 +79,11 @@
           <% else %>
               <div class="col-lg-12">
                 <div style="text-align: center; width: 100%; min-height: 200px;">
-                  <h4><%= @sorted_task_result.text.html_safe %></h4>
+                  <h4><%= @task_result.text.html_safe %></h4>
                 </div>
               </div>
               <div class="row">
-                <% @sorted_task_result.task.task_contents.each do |content| %>
+                <% @task_result.task.task_contents.each do |content| %>
                     <div class="col-lg-4">
                       <% if content.file_content_content_type =~ %r(audio) %>
                           <div style=""><%= audio_tag(content.file_content.url(:original), controls: true, style: 'margin-top:0;') %></div>
@@ -74,7 +102,7 @@
         <div class="row">
           <div class="col-lg-12 answer-content">
             <div class="question-description">
-              <%= @sorted_task_result.hint.html_safe %>
+              <%= @task_result.hint.html_safe %>
             </div>
           </div>
         </div>
@@ -89,7 +117,7 @@
                   <thead>
                   </thead>
                   <tbody>
-                  <% if  @sorted_task_result.task_type == 'Открытый вопрос' %>
+                  <% if  @task_result.task_type == 'Открытый вопрос' %>
                       <tr class="answer">
                         <td style="width: 50px; text-align: center; display: none"></td>
                         <td>
@@ -99,31 +127,31 @@
                         </td>
                       </tr>
                   <% else %>
-                      <% @sorted_task_result.user_answers.order('RANDOM()').each do |answer| %>
+                      <% @task_result.user_answers.order('RANDOM()').each do |answer| %>
                           <tr class="answer">
-                            <td style="width: 50px; text-align: center; <%= @sorted_task_result.task_type == 'Последовательность' ? '' : 'display:none' %>"></td>
+                            <td style="width: 50px; text-align: center; <%= @task_result.task_type == 'Последовательность' ? '' : 'display:none' %>"></td>
                             <td>
-                              <% if @sorted_task_result.task_type == 'Множественный выбор' %>
+                              <% if @task_result.task_type == 'Множественный выбор' %>
                                   <label>
                                     <%= check_box_tag 'user_answers[]', answer.id %> <%= answer.text %>
                                   </label>
-                              <% elsif @sorted_task_result.task_type == 'Единичный выбор' %>
+                              <% elsif @task_result.task_type == 'Единичный выбор' %>
                                   <label>
                                     <%= radio_button_tag 'user_answers', answer.id %> <%= answer.text %>
                                   </label>
-                              <% elsif @sorted_task_result.task_type == 'Последовательность' %>
+                              <% elsif @task_result.task_type == 'Последовательность' %>
                                   <label>
                                     <%= answer.text %>
                                   </label>
                                   <%= hidden_field_tag 'user_answers[' + answer.id.to_s + '][]', '', :class => 'serial_number' %>
-                              <% elsif @sorted_task_result.task_type == 'Сопоставление' %>
-                                    <div class="pull-right select-answer">
-                                      <%= select_tag( 'associations[' + answer.id.to_s + '][]',options_for_select(['Не выбрано']) + options_from_collection_for_select(@sorted_task_result.user_associations.shuffle, 'id', 'text'), :class => 'form-control association_select') %>
-                                    </div>
-                                    <div class="text"><%= answer.text%></div>
+                              <% elsif @task_result.task_type == 'Сопоставление' %>
+                                  <div class="pull-right select-answer">
+                                    <%= select_tag('associations[' + answer.id.to_s + '][]', options_for_select(['Не выбрано']) + options_from_collection_for_select(@task_result.user_associations.shuffle, 'id', 'text'), :class => 'form-control association_select') %>
+                                  </div>
+                                  <div class="text"><%= answer.text %></div>
                               <% end %>
                             </td>
-                            <% if @sorted_task_result.task_type == 'Последовательность' %>
+                            <% if @task_result.task_type == 'Последовательность' %>
                                 <td>
                                   <div class="btn btn-default upper">
                                     <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></div>
@@ -138,8 +166,9 @@
                 </table>
               </div>
               <br>
-              <%= hidden_field_tag 'task_result_id', @sorted_task_result.id %>
+              <%= hidden_field_tag 'task_result_id', @task_result.id %>
               <%= submit_tag('Ответить', :class => 'btn btn-primary') %>
+              <%= link_to  'Отложить', {:action => 'show_question', :current_task_index => @current_task_index + 1}, :class => 'btn btn-default'%>
           <% end %>
         </div>
       </div>
@@ -151,4 +180,5 @@
     row_index();
     upper_downer();
     disable_select();
+    tasks_list();
 </script>
