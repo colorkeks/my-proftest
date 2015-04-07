@@ -123,13 +123,13 @@ function row_index(table_name, index) {
 function disable_select(){
     $('.association_select').change(function () {
         $('.association_select').each(function () {
-            $('option').removeAttr('disabled')
+            $('option').show()
         })
         $('.association_select option:selected').each(function () {
             if ($(this).text() == 'Не выбрано') {
             }
             else {
-                $('.association_select option[value="' + $(this).val() + '"]').attr('disabled', 'disabled')
+                $('.association_select option[value="' + $(this).val() + '"]').hide()
             }
         })
     });

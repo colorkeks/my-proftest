@@ -141,10 +141,10 @@ class TriesController < ApplicationController
           # если не выбрано но ассоциации как таковой нету
           if @task_result.user_associations.where(:serial_number => @user_answer.serial_number).exists?
             @user_answer.correct = false
-            @user_answer.point = -answer_points.to_f
+            @user_answer.point = 0
           else
             @user_answer.correct = true
-            @user_answer.point = answer_points.to_f
+            @user_answer.point = 0
           end
         else
           @user_association = UserAssociation.find(arr.second[0].to_i)
@@ -156,7 +156,7 @@ class TriesController < ApplicationController
             @user_association.user_answer_id = arr.first
           else # если выбрано не верно
             @user_answer.correct = false
-            @user_answer.point = -answer_points.to_f
+            @user_answer.point = - answer_points.to_f
             @user_answer.user_association_id = arr.second[0].to_i
             @user_association.user_answer_id = arr.first
           end
