@@ -120,6 +120,21 @@ function row_index(table_name, index) {
     }
 }
 
+function disable_select(){
+    $('.association_select').change(function () {
+        $('.association_select').each(function () {
+            $('option').removeAttr('disabled')
+        })
+        $('.association_select option:selected').each(function () {
+            if ($(this).text() == 'Не выбрано') {
+            }
+            else {
+                $('.association_select option[value="' + $(this).val() + '"]').attr('disabled', 'disabled')
+            }
+        })
+    });
+}
+
 function upper_downer(){
     $('.upper').click(function(eventObject){
         var curr_tr = $(this).parent().parent();

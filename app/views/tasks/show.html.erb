@@ -57,60 +57,47 @@
     <h3><%= @task.hint.html_safe %></h3>
   </div>
 
-  <% if @task.task_type == 'Сопоставление' %>
-      <div class="row">
-        <div class="col-sm-6">
-          <h3>Ответы:</h3>
-          <table class="table">
-            <thead>
-            </thead>
-            <tbody>
-            <% @task.answers.order('serial_number ASC').each do |answer| %>
-                <tr>
-                  <td><%= answer.text %></td>
-                </tr>
-            <% end %>
-            </tbody>
-          </table>
-        </div>
-        <div class="col-sm-6">
-          <h3>Сопоставления:</h3>
-          <table class="table">
-            <thead>
-            </thead>
-            <tbody>
-            <% @task.associations.order('serial_number ASC').each do |association| %>
-                <tr>
-                  <td><%= association.text %></td>
-                </tr>
-            <% end %>
-            </tbody>
-          </table>
-        </div>
-      </div>
-  <% else %>
       <div class="col-sm-12">
-        <table class="table table-striped">
+        <table class="table">
           <thead>
           </thead>
           <tbody>
           <% @task.answers.order('id ASC').each do |answer| %>
-              <tr>
+              <tr class="answer">
                 <% if @task.task_type == 'Множественный выбор' %>
                     <td style="width: 20px;"><%= check_box_tag :correct %></td>
                     <td><%= answer.text %></td>
                 <% elsif @task.task_type == 'Единичный выбор' %>
                     <td style="width: 20px;"><%= radio_button_tag :correct, nil %></td>
                     <td><%= answer.text %></td>
+                <% elsif @task.task_type == 'Сопоставление' %>
+                    <td>
+                    <label class="text"><%= answer.text%></label>
+                    <div class="pull-right select-answer">
+                      <%= select_tag( 'associations[]',options_for_select(['Не выбрано']) + options_from_collection_for_select(@task.associations.shuffle, 'id', 'text'), :class => 'form-control association_select') %>
+                    </div>
+                    </td>
                 <% else %>
-                    <td><%= answer.text %></td>
+                    <td style="width: 500px"><%= answer.text %></td>
+                <% end %>
+                <% if @task.task_type == 'Последовательность' %>
+                    <td>
+                      <div class="btn btn-default upper">
+                        <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></div>
+                      <div class="btn btn-default downer">
+                        <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span></div>
+                    </td>
                 <% end %>
               </tr>
           <% end %>
           </tbody>
         </table>
       </div>
-  <% end %>
   <%= link_to t('.back', :default => t("helpers.links.Назад")),
               test_path(@task.test_id), :class => 'btn btn-primary' %>
 </div>
+
+<script>
+    upper_downer();
+    disable_select();
+</script>
