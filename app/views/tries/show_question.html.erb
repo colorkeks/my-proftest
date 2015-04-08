@@ -167,6 +167,7 @@
               </div>
               <br>
               <%= hidden_field_tag 'task_result_id', @task_result.id %>
+              <%= hidden_field_tag 'current_task_index', @current_task_index + 1 %>
               <%= submit_tag('Ответить', :class => 'btn btn-primary') %>
               <%= link_to  'Отложить', {:action => 'show_question', :current_task_index => @current_task_index + 1}, :class => 'btn btn-default'%>
           <% end %>

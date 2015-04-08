@@ -28,14 +28,24 @@ class TriesController < ApplicationController
     @current_task = @try.task_results.where(:status => 'правильно').count + @try.task_results.where(:status => 'не правильно').count + @try.task_results.where(:status => 'частично правильно').count
     @tasks_count =@try.task_results.count
     @current_task_index = params[:current_task_index].nil? ? 0 : params[:current_task_index].to_i
-    @task_result = @try.task_results.find_by(:id => @try.task_results_queue[@current_task_index].to_i , :status => 'ответ не дан')
-    if @task_result.nil?
-      @try.task_results_queue.reverse.each do |id|
+    @try.task_results_queue.each_with_index do |id, index|
+      if index < @current_task_index
+      else
         if @try.task_results.find(id).status == 'ответ не дан'
           @task_result = @try.task_results.find(id)
+          @current_task_index = index
+          break
         end
       end
-      @current_task_index = @try.task_results_queue.index(@task_result.id)
+    end
+    if @task_result.nil?
+      @try.task_results_queue.each do |id|
+        if @try.task_results.find(id).status == 'ответ не дан'
+          @task_result = @try.task_results.find(id)
+          @current_task_index = @try.task_results_queue.index(id)
+          break
+        end
+      end
       if @task_result.nil?
         redirect_to try_result_try_path
       end
@@ -191,7 +201,7 @@ class TriesController < ApplicationController
     @task_result.save!
     respond_to do |format|
       if @task_result.save
-        format.html { redirect_to show_question_try_path }
+        format.html { redirect_to show_question_try_path(:current_task_index => params[:current_task_index]) }
       else
         format.json { render json: @try.errors, status: :unprocessable_entity }
       end
