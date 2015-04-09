@@ -5,6 +5,10 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+Role.create(:name => :Супер_Юзер)
+Role.create(:name => :Администратор)
+Role.create(:name => :Методолог)
+Role.create(:name => :Тестируемый)
 test = Test.create([{title: 'Судебно-медицинская экспертиза трупа',
                      description: 'Раздел IV'}, {title: 'Дерматовенерология', description: ''},{title: 'патологическая анатомия(пример видео и аудио)', description: ''}])
 

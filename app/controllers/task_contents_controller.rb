@@ -1,4 +1,5 @@
 class TaskContentsController < ApplicationController
+  load_and_authorize_resource
   def index
     @task_content = TaskContent.new
   end

@@ -1,6 +1,6 @@
 class UserAnswersController < ApplicationController
   before_action :set_user_answer, only: [:show, :edit, :update, :destroy]
-  before_filter :authenticate_user!
+  load_and_authorize_resource
 
   # GET /user_answers
   # GET /user_answers.json

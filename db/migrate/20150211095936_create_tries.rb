@@ -3,6 +3,7 @@ class CreateTries < ActiveRecord::Migration
     create_table :tries do |t|
       t.date :date
       t.float :rate
+      t.string :status
       t.text 'task_results_queue'
       t.integer :user_id
       t.integer :test_id

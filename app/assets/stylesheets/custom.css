@@ -51,9 +51,21 @@ body {
 .test-title {
   margin: 5px 0 5px 0; }
 
+.question-header {
+    background-color: #ffffff !important;
+    font-size: 16px;
+    border-bottom: none;
+    padding-bottom: none;
+}
+.question-header .question-number {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    font-weight: bold;
+    font-size: 18px;
+    border-bottom: 1px solid #e6e6e6; }
+
 .question-content {
-  margin-top: 20px;
-  border: 1px solid lightgrey;
+  border-top: 1px solid #e6e6e6;
   padding: 15px 25px 25px 25px;
   background-color: #ffffff;
   font-size: 16px; }
@@ -189,7 +201,7 @@ audio, video {
     border-bottom: 2px solid #bababa;
     text-align: center;
     padding: 7px 20px;
-    width: 31%;
+    width: 23%;
     margin: 0 5px;
     text-transform: uppercase;
     background-color: #ffffff;
@@ -205,3 +217,10 @@ audio, video {
 
 .pagination {
   margin: 10px 0; }
+
+table tr.sorting-row td {background-color: #8b8;}
+table tr.sorting-row td:first-child {opacity: 0.0}
+table td.sorter {background-color: #f80; width: 10px; cursor: ns-resize;}
+table tr.nodrag td.sorter {cursor: default; background-color: #ddd;}
+table.sorting-table tbody tr:not(.sorting-row) td {opacity: 0.7;}
+

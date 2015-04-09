@@ -14,7 +14,7 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require dropzone
-///= require froala_editor.min.js
+//= require jquery.rowsorter.min.js
 //= require tinymce-jquery
 //= require turbolinks
 //= require_tree .
@@ -134,6 +134,12 @@ function disable_select(){
         })
     });
 }
+function tab_selected(){
+    $('.item').click(function (e) {
+        $('.item').removeClass('selected');
+        $(this).addClass('selected');
+    })
+}
 
 function tasks_list(){
         $('#show-q-btns').click(function () {
@@ -154,6 +160,18 @@ function upper_downer(){
         next_tr.insertBefore(curr_tr);
         row_index();
     });
+    $(".answer_table").rowSorter({
+        handler: "td.sorter",
+        onDragStart: function(tbody, row, new_index, old_index){
+            $('.answer_table tr td:first-child').css('opacity','0.0')
+        },
+        onDrop: function(tbody, row, new_index, old_index) {
+            row_index();
+            $('.answer_table tr td:first-child').css('opacity','1')
+        }
+    });
+
+
 
 //    $('.lefter').click(function(eventObject){
 //        var curr_tr = $(this).parent().parent();

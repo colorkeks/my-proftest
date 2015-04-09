@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150330065201) do
+ActiveRecord::Schema.define(version: 20150409084422) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,17 @@ ActiveRecord::Schema.define(version: 20150330065201) do
     t.integer  "task_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "roles", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "roles_users", id: false, force: true do |t|
+    t.integer "role_id"
+    t.integer "user_id"
   end
 
   create_table "task_contents", force: true do |t|
@@ -84,6 +95,7 @@ ActiveRecord::Schema.define(version: 20150330065201) do
   create_table "tries", force: true do |t|
     t.date     "date"
     t.float    "rate"
+    t.string   "status",             default: "Не выполнен"
     t.text     "task_results_queue"
     t.integer  "user_id"
     t.integer  "test_id"

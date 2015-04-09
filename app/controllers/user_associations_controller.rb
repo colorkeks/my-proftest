@@ -1,6 +1,6 @@
 class UserAssociationsController < ApplicationController
   before_action :set_user_association, only: [:show, :edit, :update, :destroy]
-
+  load_and_authorize_resource
   respond_to :html
 
   def index

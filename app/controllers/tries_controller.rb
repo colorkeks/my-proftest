@@ -1,7 +1,7 @@
 class TriesController < ApplicationController
   include ActionView::Helpers::TextHelper
   before_action :set_try, only: [:show, :edit, :update, :destroy]
-  before_filter :authenticate_user!
+  load_and_authorize_resource
   # GET /tries
   # GET /tries.json
   def index
@@ -55,6 +55,7 @@ class TriesController < ApplicationController
   def try_result
     @task_result = TaskResult.where(:status => 'ответ не дан', :try_id => params[:id]).order('RANDOM()').first
     @try = Try.find(params[:id])
+    @try.status = 'Выполнен'
     max_points = 0
     user_points = 0
 
@@ -272,7 +273,7 @@ class TriesController < ApplicationController
 
 # Never trust parameters from the scary internet, only allow the white list through.
   def try_params
-    params.require(:try).permit(:date, :rate,:task_results_queue, :user_id, :test_id)
+    params.require(:try).permit(:date,:status, :rate,:task_results_queue, :user_id, :test_id)
   end
 
 end
