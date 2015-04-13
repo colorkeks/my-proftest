@@ -682,5 +682,5 @@ TaskContent.create([{:file_content => File.new("#{Rails.root}/app/assets/media/1
                      :task_id => tasks[21].id},
                     {:file_content => File.new("#{Rails.root}/app/assets/media/video.mp4"),
                      :task_id => tasks[24].id},
-                    {:file_content => File.new("#{Rails.root}/app/assets/media/audio.mp3"),
+                    {:file_content => File.new("#{Rails.root}/app/assets/media/audio.mp4"),
                      :task_id => tasks[25].id}])

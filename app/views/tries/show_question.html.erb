@@ -119,7 +119,7 @@
                   <tbody>
                   <% if  @task_result.task_type == 'Открытый вопрос' %>
                       <tr class="answer">
-                        <td style="width: 50px; text-align: center; display: none"></td>
+                        <td style="display: none"></td>
                         <td>
                           <label>
                             <%= text_field_tag 'user_answer', nil, :autocomplete => :off, :class => 'form-control' %>
