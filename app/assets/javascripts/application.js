@@ -170,6 +170,16 @@ function upper_downer(){
             $('.answer_table tr td:first-child').css('opacity','1')
         }
     });
+    $(".associate_table").rowSorter({
+        handler: "td.sorter",
+        onDragStart: function(tbody, row, new_index, old_index){
+            $('.associate_table tr td:first-child').css('opacity','0.0')
+        },
+        onDrop: function(tbody, row, new_index, old_index) {
+            row_index();
+            $('.associate_table tr td:first-child').css('opacity','1')
+        }
+    });
 
 
 

@@ -75,7 +75,7 @@
                 </thead>
                 <tbody>
                 <%= f.fields_for :associations, (params[:action] == 'edit' ? @task.associations.order('id ASC') : nil) do |ff| %>
-                    <%= render 'answer_fields', :f => ff %>
+                    <%= render 'association_fields', :f => ff %>
                 <% end %>
                 </tbody>
               </table>
