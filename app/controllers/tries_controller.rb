@@ -248,10 +248,15 @@ class TriesController < ApplicationController
       end
     end
     @try.save!
-    @try.task_results.order('RANDOM()').each do |task_result|
-      @try.task_results_queue << task_result.id
+    if @test.algorithm == 'Все задания'
+      @try.task_results.order('RANDOM()').each do |task_result|
+        @try.task_results_queue << task_result.id
+      end
+    elsif @test.algorithm == 'Все задания'
+      @try.task_results.order('RANDOM()').each do |task_result|
+        @try.task_results_queue << task_result.id
+      end
     end
-
     respond_to do |format|
       if @try.save
         format.html { redirect_to show_question_try_path(@try) }

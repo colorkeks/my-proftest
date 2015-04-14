@@ -79,6 +79,13 @@ function add_fields(link, association, content, table_name) {
     off_on(table_name);
 }
 
+function time_picker(){
+    $('#datetimepicker').datetimepicker({
+        format: 'LT',
+        locale: 'ru'
+    });
+}
+
 function off_on(table_name){
     $('.radio-btn').off();
     $(".edit_hint").off();
@@ -150,10 +157,10 @@ function tasks_list(){
         });
 }
 
-function algoritm_selects(){
-        $('.algoritm').change(function () {
+function algorithm_selects(){
+        $('.algorithm').change(function () {
             var str = "";
-            $(".algoritm option:selected").each(function () {
+            $(".algorithm option:selected").each(function () {
                 if ($(this).text() == 'Адаптивный выбор') {
                     $('.adaptive_options').removeClass('hide')
                 }
@@ -161,7 +168,7 @@ function algoritm_selects(){
                     $('.adaptive_options').addClass('hide')
                 }
             });
-            $(".algoritm option:selected").each(function () {
+            $(".algorithm option:selected").each(function () {
                 if ($(this).text() == 'Ограниченое количество заданий') {
                     $('.limited_options').removeClass('hide')
                 }

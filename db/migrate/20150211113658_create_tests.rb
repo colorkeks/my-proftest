@@ -3,7 +3,7 @@ class CreateTests < ActiveRecord::Migration
     create_table :tests do |t|
       t.string :title
       t.time :timer
-      t.string :algoritm
+      t.string :algorithm
       t.text :description
       t.integer :user_id
 

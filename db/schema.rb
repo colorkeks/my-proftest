@@ -87,7 +87,7 @@ ActiveRecord::Schema.define(version: 20150409084422) do
   create_table "tests", force: true do |t|
     t.string   "title"
     t.time     "timer"
-    t.string   "algoritm"
+    t.string   "algorithm"
     t.text     "description"
     t.integer  "user_id"
     t.datetime "created_at"
