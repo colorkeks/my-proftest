@@ -1,6 +1,6 @@
 class TriesController < ApplicationController
   include ActionView::Helpers::TextHelper
-  before_action :set_try, only: [:show, :edit, :update, :destroy]
+  before_action :set_try, only: [:show, :edit, :update, :destroy, :try_result, :show_question]
   load_and_authorize_resource
   # GET /tries
   # GET /tries.json
@@ -23,38 +23,62 @@ class TriesController < ApplicationController
   end
 
   def show_question
-    @try = Try.find(params[:id])
     @test = Test.find_by_id(@try.test_id)
     @current_task = @try.task_results.where(:status => 'правильно').count + @try.task_results.where(:status => 'не правильно').count + @try.task_results.where(:status => 'частично правильно').count
     @tasks_count =@try.task_results.count
     @current_task_index = params[:current_task_index].nil? ? 0 : params[:current_task_index].to_i
-    @try.task_results_queue.each_with_index do |id, index|
-      if index < @current_task_index
-      else
-        if @try.task_results.find(id).status == 'ответ не дан'
-          @task_result = @try.task_results.find(id)
-          @current_task_index = index
-          break
-        end
+
+    #таймер
+    @timer = (Time.now - @try.created_at.to_time).to_f
+    @hours = (@timer/3600).to_i
+    @minutes = (@timer/60).to_i - @hours*60
+    @seconds = (@timer%60).to_i
+
+    # если таймер дошел до ограниченного времени
+    if  @hours >= @try.timer.strftime('%H').to_i && @minutes >= @try.timer.strftime('%M').to_i
+      @try.task_results.where(:status => 'ответ не дан').each do |task_result|
+        task_result.status = 'не правильно'
+        task_result.point = 0
+        task_result.save!
       end
-    end
-    if @task_result.nil?
-      @try.task_results_queue.each do |id|
-        if @try.task_results.find(id).status == 'ответ не дан'
-          @task_result = @try.task_results.find(id)
-          @current_task_index = @try.task_results_queue.index(id)
-          break
+      respond_to do |format|
+        format.html { redirect_to try_result_try_path(:current_task_index => params[:current_task_index]) }
+      end
+    else
+      @try.task_results_queue.each_with_index do |id, index|
+        if index < @current_task_index
+        else
+          if @try.task_results.find(id).status == 'ответ не дан'
+            @task_result = @try.task_results.find(id)
+            @current_task_index = index
+            break
+          end
         end
       end
       if @task_result.nil?
-        redirect_to try_result_try_path
+        @try.task_results_queue.each do |id|
+          if @try.task_results.find(id).status == 'ответ не дан'
+            @task_result = @try.task_results.find(id)
+            @current_task_index = @try.task_results_queue.index(id)
+            break
+          end
+        end
+        if @task_result.nil?
+          @try.timer = format('%02d:%02d', @hours, @minutes)
+          respond_to do |format|
+            if @try.save
+              format.html { redirect_to redirect_to try_result_try_path }
+            else
+              format.json { render json: @try.errors, status: :unprocessable_entity }
+            end
+          end
+        end
       end
     end
   end
 
   def try_result
     @task_result = TaskResult.where(:status => 'ответ не дан', :try_id => params[:id]).order('RANDOM()').first
-    @try = Try.find(params[:id])
     @try.status = 'Выполнен'
     max_points = 0
     user_points = 0
@@ -77,7 +101,6 @@ class TriesController < ApplicationController
 
   def check_user_answer
     @task_result = TaskResult.find(params[:task_result_id])
-
     # МНОЖЕСТВЕННЫЙ ВЫБОР
     percent_points = 0
     if @task_result.task_type == 'Множественный выбор'
@@ -175,7 +198,7 @@ class TriesController < ApplicationController
             @user_association.user_answer_id = arr.first
           else # если выбрано не верно
             @user_answer.correct = false
-            @user_answer.point = - answer_points.to_f
+            @user_answer.point = -answer_points.to_f
             @user_answer.user_association_id = arr.second[0].to_i
             @user_association.user_answer_id = arr.first
           end
@@ -199,7 +222,6 @@ class TriesController < ApplicationController
       end
     end
 
-    @task_result.save!
     respond_to do |format|
       if @task_result.save
         format.html { redirect_to show_question_try_path(:current_task_index => params[:current_task_index]) }
@@ -273,7 +295,7 @@ class TriesController < ApplicationController
 
 # Never trust parameters from the scary internet, only allow the white list through.
   def try_params
-    params.require(:try).permit(:date,:status, :rate,:task_results_queue, :user_id, :test_id)
+    params.require(:try).permit(:date, :status, :timer, :rate, :task_results_queue, :user_id, :test_id)
   end
 
 end

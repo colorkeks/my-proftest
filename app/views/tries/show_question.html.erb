@@ -8,11 +8,11 @@
           <h3 class="text-center test-title"><%= @test.title.html_safe %></h3>
 
           <div style="color: #5f5f5f; height: 22px">
-            <i class="pull-left"><span class="glyphicon glyphicon-time"></span> Таймера пока нету</i>
+            <i class="pull-left"><span class="glyphicon glyphicon-time"></span><div style="display: inline" class="hours_timer"><%= @hours %></div> часов <div style="display: inline" class="minutes_timer"><%= @minutes %></div> минут <div style="display: inline" class="seconds_timer"><%= ((@timer%60)).to_i%></div> секунд </i>
             <i class="pull-right">Задание <%= @current_task + 1 %> из <%= @tasks_count %></i>
           </div>
 
-          <div class="progress" title="50/150">
+          <div class="progress" title="<%= @current_task + 1 %>/<%= @tasks_count %>">
             <div class="progress-bar progress-bar-success"
                  role="progressbar" aria-valuenow="<%= (@current_task/@tasks_count)*100 %>" aria-valuemin="0" aria-valuemax="100"
                  style="width:<%=(@current_task.to_f/@tasks_count)*100 %>%;">
@@ -173,10 +173,26 @@
     </div>
   </div>
 </div>
+
+<span id="imageLayout">
+    <span class="image{d10}"></span>
+    <span class="image{d1}"></span>
+    <span class="imageDay"></span>
+    <span class="imageSpace"></span>
+    <span class="image{h10}"></span>
+    <span class="image{h1}"></span>
+    <span class="imageSep"></span>
+    <span class="image{m10}"></span>
+    <span class="image{m1}"></span>
+    <span class="imageSep"></span>
+    <span class="image{s10}"></span>
+    <span class="image{s1}"></span>
+</span>
 <script>
     row_index();
     upper_downer();
     disable_select();
     tasks_list();
+    timer();
 </script>
 

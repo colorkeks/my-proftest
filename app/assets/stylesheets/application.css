@@ -12,7 +12,6 @@
  *
  *= require_tree .
  *= require dropzone/basic
- /*= require froala_editor.min.css
- /*= require froala_style.min.css
+ *= require bootstrap-datetimepicker
  *= require_self
  */

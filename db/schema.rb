@@ -86,6 +86,8 @@ ActiveRecord::Schema.define(version: 20150409084422) do
 
   create_table "tests", force: true do |t|
     t.string   "title"
+    t.time     "timer"
+    t.string   "algoritm"
     t.text     "description"
     t.integer  "user_id"
     t.datetime "created_at"
@@ -96,6 +98,7 @@ ActiveRecord::Schema.define(version: 20150409084422) do
     t.date     "date"
     t.float    "rate"
     t.string   "status",             default: "Не выполнен"
+    t.time     "timer"
     t.text     "task_results_queue"
     t.integer  "user_id"
     t.integer  "test_id"

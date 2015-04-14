@@ -1,0 +1,75 @@
+<%= form_for @test, :html => {:class => 'form-horizontal'} do |f| %>
+    <div class="col-lg-5">
+      <div class="form-group">
+        <div class="controls col-md-4">
+          <%= f.label :title, :class => 'control-label' %>
+        </div>
+        <div class="controls col-md-offset-4">
+          <%= f.text_field :title, :class => 'form-control' %>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="controls col-md-4">
+          <%= f.label :description, :class => 'control-label' %>
+        </div>
+        <div class="controls col-md-offset-4">
+          <%= f.text_field :description, :class => 'form-control' %>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="controls col-md-4">
+          <label>Время:</label>
+        </div>
+        <div class="col-md-offset-4" >
+            <%= f.text_field :timer, :class => 'form-control', :id => 'datetimepicker', :value => '1:00'%>
+        </div>
+      </div>
+      <%= f.hidden_field :user_id, :value => @user_id %>
+      <%= f.submit 'Создать тест', :class => 'btn btn-primary' %>
+    </div>
+    <div class="col-lg-2">
+    </div>
+    <div class="col-lg-5">
+      <div class="form-group">
+        <div class="controls col-md-4">
+          <label>Каталог:</label>
+        </div>
+        <div class="controls col-md-offset-4">
+          <%= select_tag(:catalog, '<option>Каталога пока нет</option>'.html_safe, {:class => 'form-control'}) %>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="controls col-md-4">
+          <label>Алгоритм:</label>
+        </div>
+        <div class="controls col-md-offset-4">
+          <%= select_tag(:algoritm, '<option>Все задания</option><option>Ограниченое количество заданий</option><option>Адаптивный выбор</option>'.html_safe, {:class => 'form-control algoritm'}) %>
+        </div>
+      </div>
+      <div class="form-group  adaptive_options hide">
+        <div class="controls col-md-4">
+          <label>Параметры:</label>
+        </div>
+        <div class="col-md-offset-4" style="border: 1px solid black; text-align: center">
+          <h4>Пока ничего конкретного нету</h4>
+        </div>
+      </div>
+      <div class="form-group  limited_options hide">
+        <div class="controls col-md-4">
+          <label>Процент заданий:</label>
+        </div>
+        <div class="col-md-offset-4">
+          <%= number_field_tag(:percent_tasks, 50,{:class => 'form-control', :style => 'width: 75px;'}) %>
+        </div>
+      </div>
+    </div>
+<% end %>
+
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker').datetimepicker({
+            format: 'LT',
+            locale: 'ru'
+        });
+    });
+</script>

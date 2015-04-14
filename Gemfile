@@ -36,6 +36,10 @@ gem 'tinymce-rails'
 gem 'simple_form'
 gem 'russian'
 gem 'cancancan', '~> 1.10'
+gem 'awesome_nested_set'
+gem 'momentjs-rails', '~> 2.9',  :github => 'derekprior/momentjs-rails'
+gem 'bootstrap3-datetimepicker-rails', '~> 4.0.0'
+gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

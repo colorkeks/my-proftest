@@ -13,6 +13,6 @@ class User < ActiveRecord::Base
   end
   private
   def create_role
-    self.roles << Role.find_by_name(:Тестируемый)
+    self.roles << Role.find_by_name(:Методолог)
   end
 end

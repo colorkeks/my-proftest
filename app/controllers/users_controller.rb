@@ -10,9 +10,6 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-  end
-
-  def create_test
     @user_id = params[:id]
     @test = Test.new
   end

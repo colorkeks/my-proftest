@@ -9,8 +9,8 @@ Role.create(:name => :Супер_Юзер)
 Role.create(:name => :Администратор)
 Role.create(:name => :Методолог)
 Role.create(:name => :Тестируемый)
-test = Test.create([{title: 'Судебно-медицинская экспертиза трупа',
-                     description: 'Раздел IV'}, {title: 'Дерматовенерология', description: ''},{title: 'патологическая анатомия(пример видео и аудио)', description: ''}])
+test = Test.create([{title: 'Судебно-медицинская экспертиза трупа', timer: '1:00',
+                     description: 'Раздел IV'}, {title: 'Дерматовенерология',timer: '1:00', description: 'Раздел I'},{title: 'патологическая анатомия(пример видео и аудио)',timer: '0:20', description: 'Пример'}])
 
 tasks = Task.create([{task_type: 'Единичный выбор', #1
                       text: 'Для наступления смерти от тампонады сердца кровью имеет значение:',

@@ -16,6 +16,10 @@
 //= require dropzone
 //= require jquery.rowsorter.min.js
 //= require tinymce-jquery
+//= require jquery.timers.js
+//= require moment
+//= require bootstrap-datetimepicker
+//= require moment/ru
 //= require turbolinks
 //= require_tree .
 
@@ -135,7 +139,7 @@ function disable_select(){
     });
 }
 function tab_selected(){
-    $('.item').click(function (e) {
+    $('.item').click(function () {
         $('.item').removeClass('selected');
         $(this).addClass('selected');
     })
@@ -145,6 +149,46 @@ function tasks_list(){
         $('#show-q-btns').click(function () {
             $('#q-btns').toggleClass('hide');
         });
+}
+
+function algoritm_selects(){
+        $('.algoritm').change(function () {
+            var str = "";
+            $(".algoritm option:selected").each(function () {
+                if ($(this).text() == 'Адаптивный выбор') {
+                    $('.adaptive_options').removeClass('hide')
+                }
+                else {
+                    $('.adaptive_options').addClass('hide')
+                }
+            });
+            $(".algoritm option:selected").each(function () {
+                if ($(this).text() == 'Ограниченое количество заданий') {
+                    $('.limited_options').removeClass('hide')
+                }
+                else {
+                    $('.limited_options').addClass('hide')
+                }
+            });
+        });
+}
+
+function timer(){
+    $(".seconds_timer").everyTime(1000, function() {
+        if (parseInt($('.seconds_timer').text()) >= 59) {
+            $('.seconds_timer').text(0);
+            if  (parseInt($('.minutes_timer').text()) >= 59) {
+                $('.minutes_timer').text(0)
+                $('.hours_timer').text(parseInt($('.hours_timer').text()) + 1);
+            }
+            else {
+                $('.minutes_timer').text(parseInt($('.minutes_timer').text()) + 1)
+            }
+        }
+        else {
+            $('.seconds_timer').text(parseInt($('.seconds_timer').text()) + 1)
+        }
+    });
 }
 
 function upper_downer(){

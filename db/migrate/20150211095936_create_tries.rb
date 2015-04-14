@@ -4,6 +4,7 @@ class CreateTries < ActiveRecord::Migration
       t.date :date
       t.float :rate
       t.string :status
+      t.time :timer
       t.text 'task_results_queue'
       t.integer :user_id
       t.integer :test_id
