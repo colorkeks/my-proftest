@@ -1,11 +1,6 @@
 <%- model_class = Test -%>
 <div class="page-header">
   <h2>Тест</h2>
-  <div>
-    <%= link_to t('.back', :default => t("helpers.links.back_to_tests")),
-                user_path(@test.user_id),
-                :class => 'btn btn-default btn-xs' %>
-  </div>
 </div>
 
 <dl class="dl-horizontal">
@@ -26,7 +21,7 @@
       <th>text</th>
       <th>task_type</th>
       <th>point</th>
-      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+      <th style="min-width: 205px;"><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
     </thead>
     <tbody>

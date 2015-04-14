@@ -63,7 +63,7 @@ class TestsController < ApplicationController
   def destroy
     @test.destroy
     respond_to do |format|
-      format.html { redirect_to user_path(@test.user_id), notice: 'Test was successfully destroyed.' }
+      format.html { redirect_to current_user, notice: 'Test was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
