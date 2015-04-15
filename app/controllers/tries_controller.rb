@@ -67,7 +67,7 @@ class TriesController < ApplicationController
           @try.timer = format('%02d:%02d', @hours, @minutes)
           respond_to do |format|
             if @try.save
-              format.html { redirect_to redirect_to try_result_try_path }
+              format.html { redirect_to try_result_try_path }
             else
               format.json { render json: @try.errors, status: :unprocessable_entity }
             end
