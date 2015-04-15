@@ -59,7 +59,7 @@
           <label>Процент заданий:</label>
         </div>
         <div class="col-md-offset-4">
-          <%= number_field_tag(:percent_tasks, 50,{:class => 'form-control', :style => 'width: 75px;'}) %>
+          <%= f.number_field(:percent_tasks,:value => 50, :class => 'form-control', :style => 'width: 75px;') %>
         </div>
       </div>
     </div>

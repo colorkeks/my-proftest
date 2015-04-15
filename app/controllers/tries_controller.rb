@@ -44,6 +44,7 @@ class TriesController < ApplicationController
       respond_to do |format|
         format.html { redirect_to try_result_try_path(:current_task_index => params[:current_task_index]) }
       end
+    # если таймер еще не дошел до ограниченного времени
     else
       @try.task_results_queue.each_with_index do |id, index|
         if index < @current_task_index
@@ -55,6 +56,7 @@ class TriesController < ApplicationController
           end
         end
       end
+      # если задание не найдено, по индексу в очереди
       if @task_result.nil?
         @try.task_results_queue.each do |id|
           if @try.task_results.find(id).status == 'ответ не дан'
@@ -63,6 +65,7 @@ class TriesController < ApplicationController
             break
           end
         end
+        # если все задания пройдены
         if @task_result.nil?
           @try.timer = format('%02d:%02d', @hours, @minutes)
           respond_to do |format|
@@ -101,132 +104,140 @@ class TriesController < ApplicationController
 
   def check_user_answer
     @task_result = TaskResult.find(params[:task_result_id])
-    # МНОЖЕСТВЕННЫЙ ВЫБОР
-    percent_points = 0
-    if @task_result.task_type == 'Множественный выбор'
-      params[:user_answers].each do |id|
-        @user_answer = UserAnswer.find(id)
-        @user_answer.user_reply = true
-        @user_answer.save!
-      end
-      coefficient = @task_result.point.to_f/@task_result.user_answers.where(:correct => true).count
-
-      @task_result.user_answers.each do |user_answer|
-        if user_answer.correct == true
-          user_answer.point = coefficient.to_f
-        else
-          user_answer.point = -coefficient.to_f
+    # если на вопрос действительно еще не отвечали
+    if @task_result.status == 'ответ не дан'
+      # МНОЖЕСТВЕННЫЙ ВЫБОР
+      percent_points = 0
+      if @task_result.task_type == 'Множественный выбор'
+        params[:user_answers].each do |id|
+          @user_answer = UserAnswer.find(id)
+          @user_answer.user_reply = true
+          @user_answer.save!
         end
-        user_answer.save!
-      end
+        coefficient = @task_result.point.to_f/@task_result.user_answers.where(:correct => true).count
 
-      params[:user_answers].each do |id|
-        @user_answer = UserAnswer.find(id)
-        percent_points = percent_points + @user_answer.point.to_f
-      end
-
-      if percent_points == @task_result.point
-        @task_result.status = 'правильно'
-      elsif percent_points <= 0
-        @task_result.status = 'не правильно'
-        @task_result.point = 0
-      else
-        @task_result.status = 'частично правильно'
-        @task_result.point = percent_points
-      end
-      # ЕДИНИЧНЫЙ ВЫБОР
-    elsif @task_result.task_type == 'Единичный выбор'
-      @user_answer = UserAnswer.find(params[:user_answers])
-      @user_answer.user_reply = true
-      (@user_answer.correct == true) ? (@task_result.status = 'правильно') :
-          (@task_result.status = 'не правильно'; @task_result.point = 0)
-      @user_answer.save!
-      # ОТКРЫТЫЙ ВОПРОС
-    elsif @task_result.task_type == 'Открытый вопрос'
-      i = 0
-      @task_result.user_answers.each do |user_answer|
-        user_answer.user_reply = params[:user_answer]
-        if strip_tags(user_answer.text).mb_chars.downcase.to_s == params[:user_answer].mb_chars.downcase.to_s
-          i = i + 1
-        end
-        user_answer.save!
-      end
-      if i > 0
-        @task_result.status = 'правильно'
-      else
-        @task_result.status = 'не правильно'
-        @task_result.point = 0
-      end
-      # ПОСЛЕДОВАТЕЛЬНОСТЬ
-    elsif @task_result.task_type == 'Последовательность'
-      params[:user_answers].each do |arr|
-        @user_answer = UserAnswer.find(arr.first)
-        @user_answer.user_reply = arr.second[0].to_i
-        if @user_answer.answer.serial_number == arr.second[0].to_i
-          @user_answer.correct = true
-        end
-        @user_answer.save!
-      end
-      if @task_result.user_answers.where(:correct => false).exists?
-        @task_result.status = 'не правильно'
-        @task_result.point = 0
-      else
-        @task_result.status = 'правильно'
-      end
-      # СОПОСТАВЛЕНИЕ
-    elsif @task_result.task_type == 'Сопоставление'
-      answer_points = @task_result.point.to_f/@task_result.user_answers.count
-      task_result_points = 0
-      params[:associations].each do |arr|
-        @user_answer = UserAnswer.find(arr.first)
-        if arr.second[0] == 'Не выбрано'
-          # если не выбрано но ассоциации как таковой нету
-          if @task_result.user_associations.where(:serial_number => @user_answer.serial_number).exists?
-            @user_answer.correct = false
-            @user_answer.point = 0
+        @task_result.user_answers.each do |user_answer|
+          if user_answer.correct == true
+            user_answer.point = coefficient.to_f
           else
-            @user_answer.correct = true
-            @user_answer.point = 0
+            user_answer.point = -coefficient.to_f
           end
-        else
-          @user_association = UserAssociation.find(arr.second[0].to_i)
-          # если выбрано верно
-          if @user_answer.serial_number == @user_association.serial_number
-            @user_answer.correct = true
-            @user_answer.point = answer_points.to_f
-            @user_answer.user_association_id = arr.second[0].to_i
-            @user_association.user_answer_id = arr.first
-          else # если выбрано не верно
-            @user_answer.correct = false
-            @user_answer.point = -answer_points.to_f
-            @user_answer.user_association_id = arr.second[0].to_i
-            @user_association.user_answer_id = arr.first
-          end
+          user_answer.save!
         end
+
+        params[:user_answers].each do |id|
+          @user_answer = UserAnswer.find(id)
+          percent_points = percent_points + @user_answer.point.to_f
+        end
+
+        if percent_points == @task_result.point
+          @task_result.status = 'правильно'
+        elsif percent_points <= 0
+          @task_result.status = 'не правильно'
+          @task_result.point = 0
+        else
+          @task_result.status = 'частично правильно'
+          @task_result.point = percent_points
+        end
+        # ЕДИНИЧНЫЙ ВЫБОР
+      elsif @task_result.task_type == 'Единичный выбор'
+        @user_answer = UserAnswer.find(params[:user_answers])
+        @user_answer.user_reply = true
+        (@user_answer.correct == true) ? (@task_result.status = 'правильно') :
+            (@task_result.status = 'не правильно'; @task_result.point = 0)
         @user_answer.save!
-        @user_association.save! if @user_association
+        # ОТКРЫТЫЙ ВОПРОС
+      elsif @task_result.task_type == 'Открытый вопрос'
+        i = 0
+        @task_result.user_answers.each do |user_answer|
+          user_answer.user_reply = params[:user_answer]
+          if strip_tags(user_answer.text).mb_chars.downcase.to_s == params[:user_answer].mb_chars.downcase.to_s
+            i = i + 1
+          end
+          user_answer.save!
+        end
+        if i > 0
+          @task_result.status = 'правильно'
+        else
+          @task_result.status = 'не правильно'
+          @task_result.point = 0
+        end
+        # ПОСЛЕДОВАТЕЛЬНОСТЬ
+      elsif @task_result.task_type == 'Последовательность'
+        params[:user_answers].each do |arr|
+          @user_answer = UserAnswer.find(arr.first)
+          @user_answer.user_reply = arr.second[0].to_i
+          if @user_answer.answer.serial_number == arr.second[0].to_i
+            @user_answer.correct = true
+          end
+          @user_answer.save!
+        end
+        if @task_result.user_answers.where(:correct => false).exists?
+          @task_result.status = 'не правильно'
+          @task_result.point = 0
+        else
+          @task_result.status = 'правильно'
+        end
+        # СОПОСТАВЛЕНИЕ
+      elsif @task_result.task_type == 'Сопоставление'
+        answer_points = @task_result.point.to_f/@task_result.user_answers.count
+        task_result_points = 0
+        params[:associations].each do |arr|
+          @user_answer = UserAnswer.find(arr.first)
+          if arr.second[0] == 'Не выбрано'
+            # если не выбрано но ассоциации как таковой нету
+            if @task_result.user_associations.where(:serial_number => @user_answer.serial_number).exists?
+              @user_answer.correct = false
+              @user_answer.point = 0
+            else
+              @user_answer.correct = true
+              @user_answer.point = 0
+            end
+          else
+            @user_association = UserAssociation.find(arr.second[0].to_i)
+            # если выбрано верно
+            if @user_answer.serial_number == @user_association.serial_number
+              @user_answer.correct = true
+              @user_answer.point = answer_points.to_f
+              @user_answer.user_association_id = arr.second[0].to_i
+              @user_association.user_answer_id = arr.first
+            else # если выбрано не верно
+              @user_answer.correct = false
+              @user_answer.point = -answer_points.to_f
+              @user_answer.user_association_id = arr.second[0].to_i
+              @user_association.user_answer_id = arr.first
+            end
+          end
+          @user_answer.save!
+          @user_association.save! if @user_association
+        end
+
+        @task_result.user_answers.each do |user_answer|
+          task_result_points = task_result_points + user_answer.point
+        end
+
+        if @task_result.user_answers.where(:correct => true).count == @task_result.user_answers.count
+          @task_result.status = 'правильно'
+        elsif task_result_points <= 0
+          @task_result.status = 'не правильно'
+          @task_result.point = 0
+        else
+          @task_result.status = 'частично правильно'
+          @task_result.point = task_result_points
+        end
       end
 
-      @task_result.user_answers.each do |user_answer|
-        task_result_points = task_result_points + user_answer.point
+      respond_to do |format|
+        if @task_result.save
+          format.html { redirect_to show_question_try_path(:current_task_index => params[:current_task_index]) }
+        else
+          format.json { render json: @try.errors, status: :unprocessable_entity }
+        end
       end
-
-      if @task_result.user_answers.where(:correct => true).count == @task_result.user_answers.count
-        @task_result.status = 'правильно'
-      elsif task_result_points <= 0
-        @task_result.status = 'не правильно'
-        @task_result.point = 0
-      else
-        @task_result.status = 'частично правильно'
-        @task_result.point = task_result_points
-      end
-    end
-
-    respond_to do |format|
-      if @task_result.save
-        format.html { redirect_to show_question_try_path(:current_task_index => params[:current_task_index]) }
-      else
-        format.json { render json: @try.errors, status: :unprocessable_entity }
+    # если на вопрос уже ответили
+    else
+      respond_to do |format|
+        format.html { redirect_to show_question_try_path(:current_task_index => params[:current_task_index]), :alert => 'Вы уже ответили на этот вопрос. Пожалуйста больше не пытайтесь жульничать' }
       end
     end
   end
@@ -252,7 +263,12 @@ class TriesController < ApplicationController
       @try.task_results.order('RANDOM()').each do |task_result|
         @try.task_results_queue << task_result.id
       end
-    elsif @test.algorithm == 'Все задания'
+    elsif @test.algorithm == 'Ограниченое количество заданий'
+      tasks_selection = ((@try.task_results.count.to_f/100)*@try.test.percent_tasks).round
+      @try.task_results.order('RANDOM()').first(tasks_selection).each do |task_result|
+        @try.task_results_queue << task_result.id
+      end
+    else
       @try.task_results.order('RANDOM()').each do |task_result|
         @try.task_results_queue << task_result.id
       end

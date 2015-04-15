@@ -165,6 +165,7 @@
                           <tr>
                             <th>Название:</th>
                             <th>Кол-во вопросов:</th>
+                            <th>Алгоритм</th>
                             <th>Время:</th>
                             <th>Действия:</th>
                           </tr>
@@ -175,6 +176,7 @@
                               <tr>
                                 <td><%= test.title %></td>
                                 <td><%= test.tasks.count %></td>
+                                <td><%= test.algorithm %></td>
                                 <td><%= test.timer.strftime('%H:%M')%></td>
                                 <% if test.tasks.count > 0%>
                                     <td><%= link_to 'Пройти тест', {:controller => :tries, :action => :create, :try => {:timer => test.timer ,:date => Time.now, :user_id => @user.id, :test_id => test.id}}, :method => 'POST', :class => 'btn btn-default' %></td>
@@ -253,9 +255,9 @@
                                 <td><%= test.description %></td>
                                 <td><%= l test.created_at %></td>
                                 <td>
-                                  <%= link_to t('.show', :default => t("helpers.links.show")),
+                                  <%= link_to t('.show', :default => t("helpers.links.показать")),
                                               test_path(test), :class => 'btn btn-default btn-md' %>
-                                  <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                                  <%= link_to t('.edit', :default => t("helpers.links.редактировать")),
                                               edit_test_path(test), :class => 'btn btn-default btn-md' %>
                                   <%#= link_to t('.destroy', :default => t("helpers.links.destroy")),
                                               test_path(test),

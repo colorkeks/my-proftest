@@ -4,6 +4,7 @@ class CreateTests < ActiveRecord::Migration
       t.string :title
       t.time :timer
       t.string :algorithm
+      t.integer :percent_tasks
       t.text :description
       t.integer :user_id
 
