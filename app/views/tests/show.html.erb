@@ -1,14 +1,27 @@
 <%- model_class = Test -%>
+<div class="row question-content">
 <div class="page-header">
   <h2>Тест</h2>
 </div>
+<div class="row">
+<div class="col-lg-12">
+  <h3>
+  <div class="col-sm-2">
+    Заголовок:
+  </div>
+  <div class="col-sm-offset-2">
+    <%= @test.title %>
+  </div>
 
-<dl class="dl-horizontal">
-  <dt><strong><%= model_class.human_attribute_name(:title) %>:</strong></dt>
-  <dd><%= @test.title %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:description) %>:</strong></dt>
-  <dd><%= @test.description %></dd>
-</dl>
+  <div class="col-sm-2">
+    Описание:
+  </div>
+  <div class="col-sm-offset-2">
+    <%= @test.description %>
+  </div>
+  </h3>
+</div>
+</div>
 
 
 <div class="page-header">
@@ -50,6 +63,7 @@
 <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#myModal">
   Добавить задание
 </button>
+<%= link_to 'Назад', current_user, :class => 'btn btn-default'%>
 
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -62,4 +76,5 @@
         <%= render partial: 'task_form' %>
     </div>
   </div>
+</div>
 </div>

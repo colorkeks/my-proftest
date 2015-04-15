@@ -35,10 +35,10 @@ class TestsController < ApplicationController
 
     respond_to do |format|
       if @test.save
-        format.html { redirect_to @test, notice: 'Test was successfully created.' }
+        format.html { redirect_to @test, notice: 'тест успешно создан' }
         format.json { render :show, status: :created, location: @test }
       else
-        format.html { render :new }
+        format.html { redirect_to current_user, alert: 'Поле "Заголовок" не заполнено' }
         format.json { render json: @test.errors, status: :unprocessable_entity }
       end
     end

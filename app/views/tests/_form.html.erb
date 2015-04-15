@@ -62,7 +62,10 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-12"><%= f.submit 'Редактировать', :class => 'btn btn-primary' %></div>
+    <div class="col-lg-12">
+      <%= f.submit 'Редактировать', :class => 'btn btn-primary' %>
+      <%= link_to 'Назад', current_user, :class => 'btn btn-default'%>
+    </div>
     </div>
 <% end %>
 
