@@ -49,12 +49,16 @@
                               <tr>
                                 <td><%= test.title %></td>
                                 <td><%= test.tasks.count %></td>
-                                <td><%= test.timer.strftime('%H:%M')%></td>
-                                <% if test.tasks.count > 0%>
-                                    <td><%= link_to 'Пройти тест', {:timer => test.timer ,:controller => :tries, :action => :create, :try => {:date => Time.now, :user_id => @user.id, :test_id => test.id}}, :method => 'POST', :class => 'btn btn-default' %></td>
+                                <td><%= test.timer.strftime('%H:%M') %></td>
+                                <% if test.tasks.count > 0 %>
+                                    <td><%= link_to 'Пройти тест', {:timer => test.timer, :controller => :tries, :action => :create, :try => {:date => Time.now, :user_id => @user.id, :test_id => test.id}}, :method => 'POST', :class => 'btn btn-default' %></td>
                                 <% else %>
-                                    <td><h4><div class="label label-warning">Пополните задания</div></h4></td>
-                                <% end%>
+                                    <td>
+                                      <h4>
+                                        <div class="label label-warning">Пополните задания</div>
+                                      </h4>
+                                    </td>
+                                <% end %>
                               </tr>
                           <% end %>
                           </tbody>
@@ -133,19 +137,27 @@
 
           <!-- Блок формулировски тестового задания -->
           <div class="row">
-            <div class="col-lg-12 question-content">
-              <div class="sub-menu">
-                <div class="item selected" href="#create_test" aria-controls="create_test" role="tab" data-toggle="tab">
-                  Создание теста
+            <div class="question-content">
+              <div class="sub-menu row">
+                <div class="col-sm-3">
+                  <div class="item selected" href="#create_test" aria-controls="create_test" role="tab" data-toggle="tab">
+                    Создание
+                  </div>
                 </div>
-                <div class="item" href="#tests" aria-controls="my_tests" role="tab" data-toggle="tab">
-                  Тесты
+                <div class="col-sm-3">
+                  <div class="item" href="#tests" aria-controls="my_tests" role="tab" data-toggle="tab">
+                    Тесты
+                  </div>
                 </div>
-                <div class="item" href="#practice" aria-controls="practice" role="tab" data-toggle="tab">
-                  Тренировка
+                <div class="col-sm-3">
+                  <div class="item" href="#practice" aria-controls="practice" role="tab" data-toggle="tab">
+                    Тренировка
+                  </div>
                 </div>
-                <div class="item" href="#history" aria-controls="history" role="tab" data-toggle="tab">
-                  История
+                <div class="col-sm-3">
+                  <div class="item" href="#history" aria-controls="history" role="tab" data-toggle="tab">
+                    История
+                  </div>
                 </div>
               </div>
               <div class="test-case">
@@ -177,12 +189,16 @@
                                 <td><%= test.title %></td>
                                 <td><%= test.tasks.count %></td>
                                 <td><%= test.algorithm %></td>
-                                <td><%= test.timer.strftime('%H:%M')%></td>
-                                <% if test.tasks.count > 0%>
-                                    <td><%= link_to 'Пройти тест', {:controller => :tries, :action => :create, :try => {:timer => test.timer ,:date => Time.now, :user_id => @user.id, :test_id => test.id}}, :method => 'POST', :class => 'btn btn-default' %></td>
+                                <td><%= test.timer.strftime('%H:%M') %></td>
+                                <% if test.tasks.count > 0 %>
+                                    <td><%= link_to 'Пройти тест', {:controller => :tries, :action => :create, :try => {:timer => test.timer, :date => Time.now, :user_id => @user.id, :test_id => test.id}}, :method => 'POST', :class => 'btn btn-default' %></td>
                                 <% else %>
-                                    <td><h4><div class="label label-warning">Пополните задания</div></h4></td>
-                                <% end%>
+                                    <td>
+                                      <h4>
+                                        <div class="label label-warning">Пополните задания</div>
+                                      </h4>
+                                    </td>
+                                <% end %>
                               </tr>
                           <% end %>
                           </tbody>
