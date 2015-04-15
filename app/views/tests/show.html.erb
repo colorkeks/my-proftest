@@ -27,10 +27,9 @@
 <div class="page-header">
   <h2>Задания</h2>
 </div>
-  <table class="table table-striped">
+  <table class="table table-striped test-case">
     <thead>
     <tr>
-      <th>id</th>
       <th>text</th>
       <th>task_type</th>
       <th>point</th>
@@ -40,7 +39,6 @@
     <tbody>
     <% @tasks.each do |task| %>
         <tr>
-          <td><%= link_to task.id, task_path(task) %></td>
           <td><%= task.text.html_safe %></td>
           <td><%= task.task_type %></td>
           <td><%= task.point %></td>
