@@ -41,7 +41,9 @@ body {
   #q-btns .legend {
     margin-top: 10px;
     font-size: 13px;
-    color: #4d4d4d; }
+    color: #4d4d4d;
+    margin-bottom: 10px;
+  }
     #q-btns .legend .btn-xs {
       margin-left: 10px;
       padding: 0;
@@ -217,9 +219,17 @@ audio, video {
 .pagination {
   margin: 10px 0; }
 
-table tr.sorting-row td {background-color: #8b8;}
+table tr.sorting-row td {background-color: #d0ffb4; color: #006400
+}
 table tr.sorting-row td:first-child {opacity: 0.0}
-table td.sorter {background-color: #f80; width: 10px; cursor: ns-resize;}
+table td.sorter {
+    /*background-color: #f80; */
+    width: 10px;
+    cursor: ns-resize;
+    color: #585858;
+    line-height: 33px !important;
+
+}
 table tr.nodrag td.sorter {cursor: default; background-color: #ddd;}
 table.sorting-table tbody tr:not(.sorting-row) td {opacity: 0.7;}
 

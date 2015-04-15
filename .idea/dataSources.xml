@@ -18,9 +18,9 @@
     <data-source source="LOCAL" name="Rails Tests: production" uuid="bcfca952-3e4d-4665-a886-e572c2194e67">
       <driver-ref>postgresql</driver-ref>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql:Tests_production</jdbc-url>
-      <user-name>Tests</user-name>
-      <user-password>df96df8fdf97df8adfefdfe4dffcdff1df8ddffedfefdff9dffedff9dff5dfeedfebdffedfebdfe8dfebdff9dfefdff5dffadfebdff9dff9dffddfe5dff8dfeedf8ddff7df8adf8fdf94</user-password>
+      <jdbc-url>jdbc:postgresql://127.0.0.1:5434/kdl</jdbc-url>
+      <user-name>postgres</user-name>
+      <user-password>df9bdf98df99</user-password>
       <libraries />
     </data-source>
   </component>
