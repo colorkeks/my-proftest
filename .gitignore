@@ -17,3 +17,20 @@
 
 #Ignore uploaded files
 /public/system
+
+
+/.idea
+#Ignore the default SQLite database.
+/db/*.sqlite3
+/db/data.yml
+/config/database.yml
+/config/secrets.yml
+/config/initializers/conf.rb
+
+# Ignore all logfiles and tempfiles.
+/3001
+*.jasper
+Gemfile.lock
+/public/assets/
+/info.txt*
+ 
