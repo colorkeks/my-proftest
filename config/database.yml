@@ -1,9 +1,0 @@
-development:
-    adapter: postgresql
-    encoding: unicode
-    database: kdl
-    host: localhost
-    username: postgres
-    password: '123'
-    port: 5434
-    pool: 5
