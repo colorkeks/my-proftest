@@ -27,7 +27,6 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'spring',        group: :development
 
 gem 'devise'
-gem 'dropzonejs-rails'
 gem 'paperclip'
 gem 'wysiwyg-rails'
 gem 'tinymce-rails'
