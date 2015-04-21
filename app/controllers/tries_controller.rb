@@ -82,7 +82,6 @@ class TriesController < ApplicationController
 
   def try_result
     @task_result = TaskResult.where(:status => 'ответ не дан', :try_id => params[:id]).order('RANDOM()').first
-    @try.status = 'Выполнен'
     max_points = 0
     user_points = 0
 
@@ -97,8 +96,12 @@ class TriesController < ApplicationController
     if @task_result != nil
       redirect_to show_question_try_path
     else
-      @try.rate = @percent
-      @try.save!
+      if @try.status == 'Не выполнен'
+        @try.status = 'Выполнен'
+        @try.rate = @percent
+        @try.timer = @try.test.timer
+        @try.save!
+      end
     end
   end
 
