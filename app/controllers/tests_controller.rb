@@ -35,10 +35,10 @@ class TestsController < ApplicationController
 
     respond_to do |format|
       if @test.save
-        format.html { redirect_to @test, notice: 'Test was successfully created.' }
+        format.html { redirect_to @test, notice: 'тест успешно создан' }
         format.json { render :show, status: :created, location: @test }
       else
-        format.html { render :new }
+        format.html { redirect_to current_user, alert: 'Поле "Заголовок" не заполнено' }
         format.json { render json: @test.errors, status: :unprocessable_entity }
       end
     end
@@ -77,6 +77,6 @@ class TestsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def test_params
-      params.require(:test).permit(:title, :timer, :algorithm, :description, :user_id)
+      params.require(:test).permit(:title, :timer, :algorithm, :percent_tasks, :description, :user_id)
     end
 end

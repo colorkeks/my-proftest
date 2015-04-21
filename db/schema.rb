@@ -88,6 +88,7 @@ ActiveRecord::Schema.define(version: 20150409084422) do
     t.string   "title"
     t.time     "timer"
     t.string   "algorithm"
+    t.integer  "percent_tasks"
     t.text     "description"
     t.integer  "user_id"
     t.datetime "created_at"
