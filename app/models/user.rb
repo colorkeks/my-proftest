@@ -5,8 +5,12 @@ class User < ActiveRecord::Base
   has_many :tests, dependent: :destroy
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+
+  if Rails.env.production?
+    devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
+  else
+    devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable, :registerable
+  end
 
   def role?(role)
     return !!self.roles.find_by_name(role.to_s.camelize)
