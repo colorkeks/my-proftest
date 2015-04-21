@@ -110,45 +110,54 @@ class TriesController < ApplicationController
     # если на вопрос действительно еще не отвечали
     if @task_result.status == 'ответ не дан'
       # МНОЖЕСТВЕННЫЙ ВЫБОР
-      percent_points = 0
       if @task_result.task_type == 'Множественный выбор'
-        params[:user_answers].each do |id|
-          @user_answer = UserAnswer.find(id)
-          @user_answer.user_reply = true
-          @user_answer.save!
-        end
-        coefficient = @task_result.point.to_f/@task_result.user_answers.where(:correct => true).count
-
-        @task_result.user_answers.each do |user_answer|
-          if user_answer.correct == true
-            user_answer.point = coefficient.to_f
-          else
-            user_answer.point = -coefficient.to_f
-          end
-          user_answer.save!
-        end
-
-        params[:user_answers].each do |id|
-          @user_answer = UserAnswer.find(id)
-          percent_points = percent_points + @user_answer.point.to_f
-        end
-
-        if percent_points == @task_result.point
-          @task_result.status = 'правильно'
-        elsif percent_points <= 0
+        # если не выбрано ни одного из вариантов ответа
+        if params[:user_answers].nil?
           @task_result.status = 'не правильно'
           @task_result.point = 0
         else
-          @task_result.status = 'частично правильно'
-          @task_result.point = percent_points
+          params[:user_answers].each do |id|
+            @user_answer = UserAnswer.find(id)
+            @user_answer.user_reply = true
+            @user_answer.save!
+          end
+          coefficient = @task_result.point.to_f/@task_result.user_answers.where(:correct => true).count
+
+          @task_result.user_answers.each do |user_answer|
+            if user_answer.correct == true
+              user_answer.point = coefficient.to_f
+            else
+              user_answer.point = -coefficient.to_f
+            end
+            user_answer.save!
+          end
+
+            @user_answers = UserAnswer.find(params[:user_answers])
+            percent_points = @user_answers.inject(0){|sum,hash| sum.to_f + hash[:point]}
+
+          if percent_points == @task_result.point
+            @task_result.status = 'правильно'
+          elsif percent_points <= 0
+            @task_result.status = 'не правильно'
+            @task_result.point = 0
+          else
+            @task_result.status = 'частично правильно'
+            @task_result.point = percent_points
+          end
         end
         # ЕДИНИЧНЫЙ ВЫБОР
       elsif @task_result.task_type == 'Единичный выбор'
-        @user_answer = UserAnswer.find(params[:user_answers])
-        @user_answer.user_reply = true
-        (@user_answer.correct == true) ? (@task_result.status = 'правильно') :
-            (@task_result.status = 'не правильно'; @task_result.point = 0)
-        @user_answer.save!
+        # если не выбрано ни одного из вариантов ответа
+        if params[:user_answers].nil?
+          @task_result.status = 'не правильно'
+          @task_result.point = 0
+        else
+          @user_answer = UserAnswer.find(params[:user_answers])
+          @user_answer.user_reply = true
+          (@user_answer.correct == true) ? (@task_result.status = 'правильно') :
+              (@task_result.status = 'не правильно'; @task_result.point = 0)
+          @user_answer.save!
+        end
         # ОТКРЫТЫЙ ВОПРОС
       elsif @task_result.task_type == 'Открытый вопрос'
         i = 0
@@ -215,9 +224,7 @@ class TriesController < ApplicationController
           @user_association.save! if @user_association
         end
 
-        @task_result.user_answers.each do |user_answer|
-          task_result_points = task_result_points + user_answer.point
-        end
+        task_result_points = @task_result.user_answers.inject(0){|sum,hash| sum + hash[:point]}
 
         if @task_result.user_answers.where(:correct => true).count == @task_result.user_answers.count
           @task_result.status = 'правильно'
