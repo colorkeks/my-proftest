@@ -23,56 +23,56 @@ class TriesController < ApplicationController
   end
 
   def show_question
-    @test = Test.find_by_id(@try.test_id)
-    @current_task = @try.task_results.where(:status => 'правильно').count + @try.task_results.where(:status => 'не правильно').count + @try.task_results.where(:status => 'частично правильно').count
-    @tasks_count =@try.task_results.count
-    @current_task_index = params[:current_task_index].nil? ? 0 : params[:current_task_index].to_i
-
-    #таймер
-    @timer = (Time.now - @try.created_at.to_time).to_f
-    @hours = (@timer/3600).to_i
-    @minutes = (@timer/60).to_i - @hours*60
-    @seconds = (@timer%60).to_i
-
-    # если таймер дошел до ограниченного времени
-    if  @hours >= @try.timer.strftime('%H').to_i && @minutes >= @try.timer.strftime('%M').to_i
-      @try.task_results.where(:status => 'ответ не дан').each do |task_result|
-        task_result.status = 'не правильно'
-        task_result.point = 0
-        task_result.save!
-      end
+    # если все задания пройдены
+    if @try.task_results.where(:status => 'ответ не дан').count == 0
       respond_to do |format|
-        format.html { redirect_to try_result_try_path(:current_task_index => params[:current_task_index]) }
-      end
-    # если таймер еще не дошел до ограниченного времени
-    else
-      @try.task_results_queue.each_with_index do |id, index|
-        if index < @current_task_index
+        if @try.save
+          format.html { redirect_to try_result_try_path }
         else
-          if @try.task_results.find(id).status == 'ответ не дан'
-            @task_result = @try.task_results.find(id)
-            @current_task_index = index
-            break
-          end
+          format.json { render json: @try.errors, status: :unprocessable_entity }
         end
       end
-      # если задание не найдено, по индексу в очереди
-      if @task_result.nil?
-        @try.task_results_queue.each do |id|
-          if @try.task_results.find(id).status == 'ответ не дан'
-            @task_result = @try.task_results.find(id)
-            @current_task_index = @try.task_results_queue.index(id)
-            break
+    else
+      @test = Test.find_by_id(@try.test_id)
+      @current_task = @try.task_results.where(:status => 'правильно').count + @try.task_results.where(:status => 'не правильно').count + @try.task_results.where(:status => 'частично правильно').count
+      @tasks_count =@try.task_results.count
+      @current_task_index = params[:current_task_index].nil? ? 0 : params[:current_task_index].to_i
+
+      #таймер
+      @timer = (Time.now - @try.created_at.to_time).to_f
+      @hours = (@timer/3600).to_i
+      @minutes = (@timer/60).to_i - @hours*60
+      @seconds = (@timer%60).to_i
+
+      # если таймер дошел до ограниченного времени
+      if  @hours >= @try.test.timer.strftime('%H').to_i && @minutes >= @try.test.timer.strftime('%M').to_i
+        @try.task_results.where(:status => 'ответ не дан').each do |task_result|
+          task_result.status = 'не правильно'
+          task_result.point = 0
+          task_result.save!
+        end
+        respond_to do |format|
+          format.html { redirect_to try_result_try_path(:current_task_index => params[:current_task_index]) }
+        end
+        # если таймер еще не дошел до ограниченного времени
+      else
+        @try.task_results_queue.each_with_index do |id, index|
+          if index < @current_task_index
+          else
+            if @try.task_results.find(id).status == 'ответ не дан'
+              @task_result = @try.task_results.find(id)
+              @current_task_index = index
+              break
+            end
           end
         end
-        # если все задания пройдены
+        # если задание не найдено, по индексу в очереди
         if @task_result.nil?
-          @try.timer = format('%02d:%02d', @hours, @minutes)
-          respond_to do |format|
-            if @try.save
-              format.html { redirect_to try_result_try_path }
-            else
-              format.json { render json: @try.errors, status: :unprocessable_entity }
+          @try.task_results_queue.each do |id|
+            if @try.task_results.find(id).status == 'ответ не дан'
+              @task_result = @try.task_results.find(id)
+              @current_task_index = @try.task_results_queue.index(id)
+              break
             end
           end
         end
@@ -97,9 +97,13 @@ class TriesController < ApplicationController
       redirect_to show_question_try_path
     else
       if @try.status == 'Не выполнен'
+        @timer = (Time.now - @try.created_at.to_time).to_f
+        @hours = (@timer/3600).to_i
+        @minutes = (@timer/60).to_i - @hours*60
+
         @try.status = 'Выполнен'
         @try.rate = @percent
-        @try.timer = @try.test.timer
+        @try.timer = format('%02d:%02d', @hours, @minutes)
         @try.save!
       end
     end

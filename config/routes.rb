@@ -46,6 +46,8 @@ Rails.application.routes.draw do
 
   resources :user_answers
 
+  resources :statistics
+
 
 
 

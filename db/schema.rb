@@ -16,14 +16,14 @@ ActiveRecord::Schema.define(version: 20150409084422) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "admins", force: true do |t|
+  create_table "admins", force: :cascade do |t|
     t.string   "first_name"
     t.string   "last_name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "answers", force: true do |t|
+  create_table "answers", force: :cascade do |t|
     t.boolean  "correct",       default: false
     t.text     "text"
     t.integer  "point"
@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 20150409084422) do
     t.datetime "updated_at"
   end
 
-  create_table "associations", force: true do |t|
+  create_table "associations", force: :cascade do |t|
     t.text     "text"
     t.integer  "serial_number"
     t.integer  "task_id"
@@ -41,18 +41,18 @@ ActiveRecord::Schema.define(version: 20150409084422) do
     t.datetime "updated_at"
   end
 
-  create_table "roles", force: true do |t|
+  create_table "roles", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "roles_users", id: false, force: true do |t|
+  create_table "roles_users", id: false, force: :cascade do |t|
     t.integer "role_id"
     t.integer "user_id"
   end
 
-  create_table "task_contents", force: true do |t|
+  create_table "task_contents", force: :cascade do |t|
     t.string   "file_content_file_name"
     t.string   "file_content_content_type"
     t.integer  "file_content_file_size"
@@ -62,7 +62,7 @@ ActiveRecord::Schema.define(version: 20150409084422) do
     t.datetime "updated_at"
   end
 
-  create_table "task_results", force: true do |t|
+  create_table "task_results", force: :cascade do |t|
     t.float    "point"
     t.string   "task_type"
     t.text     "text"
@@ -74,7 +74,7 @@ ActiveRecord::Schema.define(version: 20150409084422) do
     t.datetime "updated_at"
   end
 
-  create_table "tasks", force: true do |t|
+  create_table "tasks", force: :cascade do |t|
     t.text     "text"
     t.text     "hint"
     t.string   "task_type"
@@ -84,7 +84,7 @@ ActiveRecord::Schema.define(version: 20150409084422) do
     t.datetime "updated_at"
   end
 
-  create_table "tests", force: true do |t|
+  create_table "tests", force: :cascade do |t|
     t.string   "title"
     t.time     "timer"
     t.string   "algorithm"
@@ -95,7 +95,7 @@ ActiveRecord::Schema.define(version: 20150409084422) do
     t.datetime "updated_at"
   end
 
-  create_table "tries", force: true do |t|
+  create_table "tries", force: :cascade do |t|
     t.date     "date"
     t.float    "rate"
     t.string   "status",             default: "Не выполнен"
@@ -107,7 +107,7 @@ ActiveRecord::Schema.define(version: 20150409084422) do
     t.datetime "updated_at"
   end
 
-  create_table "user_answers", force: true do |t|
+  create_table "user_answers", force: :cascade do |t|
     t.string   "user_reply"
     t.boolean  "correct"
     t.text     "text"
@@ -121,7 +121,7 @@ ActiveRecord::Schema.define(version: 20150409084422) do
     t.datetime "updated_at"
   end
 
-  create_table "user_associations", force: true do |t|
+  create_table "user_associations", force: :cascade do |t|
     t.text     "text"
     t.integer  "serial_number"
     t.integer  "task_id"
@@ -132,7 +132,7 @@ ActiveRecord::Schema.define(version: 20150409084422) do
     t.datetime "updated_at"
   end
 
-  create_table "users", force: true do |t|
+  create_table "users", force: :cascade do |t|
     t.string   "first_name"
     t.string   "last_name"
     t.string   "job"
