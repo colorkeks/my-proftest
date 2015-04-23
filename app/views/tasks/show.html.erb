@@ -61,7 +61,7 @@
         <table class="table answer_table">
           <thead>
           </thead>
-          <tbody>
+          <tbody id="items">
           <% @task.answers.order('id ASC').each do |answer| %>
               <tr class="answer">
                 <td style="width: 50px;"></td>
@@ -82,7 +82,7 @@
                     <td><%= answer.text %></td>
                 <% end %>
                 <% if @task.task_type == 'Последовательность' %>
-                    <td style="width: 50px; height: 50px; text-align: center; border: 1px solid black" class="sorter">
+                    <td style="width: 50px; height: 50px; text-align: center;" class="sorter">
                       <span style="font-size: 20px;" class="glyphicon glyphicon-move"></span>
                     </td>
                 <% end %>
@@ -94,7 +94,6 @@
   <%= link_to t('.back', :default => t("helpers.links.Назад")),
               test_path(@task.test_id), :class => 'btn btn-primary' %>
 </div>
-
 <script>
     row_index();
     upper_downer();

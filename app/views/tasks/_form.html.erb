@@ -60,7 +60,7 @@
               <table class="table answer_table">
                 <thead>
                 </thead>
-                <tbody>
+                <tbody id="assoc_items">
                 <%= f.fields_for :answers, (params[:action] == 'edit' ? @task.answers.order('id ASC') : nil) do |ff| %>
                     <%= render 'answer_fields', :f => ff %>
                 <% end %>
@@ -73,13 +73,28 @@
               <table class="table associate_table">
                 <thead>
                 </thead>
-                <tbody>
+                <tbody id="items">
                 <%= f.fields_for :associations, (params[:action] == 'edit' ? @task.associations.order('id ASC') : nil) do |ff| %>
                     <%= render 'association_fields', :f => ff %>
                 <% end %>
                 </tbody>
               </table>
               <p><%= link_to_add_fields 'Добавить ассоциацию', f, :associations,'associate_table' %></p>
+            </div>
+          </div>
+      <% elsif @type == 'Последовательность' %>
+          <div class="row">
+            <div class="col-sm-6">
+              <table class="table table-striped answer_table">
+                <thead>
+                </thead>
+                <tbody id="items">
+                <%= f.fields_for :answers, (params[:action] == 'edit' ? @task.answers.order('id ASC') : nil) do |ff| %>
+                    <%= render 'answer_fields', :f => ff %>
+                <% end %>
+                </tbody>
+              </table>
+              <p><%= link_to_add_fields 'Добавить вариант ответа', f, :answers,'answer_table'%></p>
             </div>
           </div>
       <% else %>

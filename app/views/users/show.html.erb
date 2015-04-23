@@ -10,16 +10,22 @@
 
         <!-- Блок формулировски тестового задания -->
         <div class="row">
-          <div class="col-lg-12 question-content">
-            <div class="sub-menu">
-              <div class="item selected" href="#attestation" aria-controls="attestation" role="tab" data-toggle="tab">
-                Аттестация
+          <div class="question-content">
+            <div class="sub-menu row">
+              <div class="col-sm-4">
+                <div class="item selected" href="#attestation" aria-controls="attestation" role="tab" data-toggle="tab">
+                  Аттестация
+                </div>
               </div>
-              <div class="item" href="#practice" aria-controls="practice" role="tab" data-toggle="tab">
-                Тренировка
+              <div class="col-sm-4">
+                <div class="item" href="#practice" aria-controls="practice" role="tab" data-toggle="tab">
+                  Тренировка
+                </div>
               </div>
-              <div class="item" href="#history" aria-controls="history" role="tab" data-toggle="tab">
-                История
+              <div class="col-sm-4">
+                <div class="item" href="#history" aria-controls="history" role="tab" data-toggle="tab">
+                  История
+                </div>
               </div>
             </div>
             <div class="test-case">
@@ -49,7 +55,7 @@
                               <td><%= test.tasks.count %></td>
                               <td><%= test.timer.strftime('%H:%M') %></td>
                               <% if test.tasks.count > 0 %>
-                                  <td><%= link_to 'Пройти тест', { :controller => :tries, :action => :create, :try => {:date => Time.now,:timer => format('%02d:%02d', 0, 0), :user_id => @user.id, :test_id => test.id}}, :method => 'POST', :class => 'btn btn-default' %></td>
+                                  <td><%= link_to 'Пройти тест', {:controller => :tries, :action => :create, :try => {:date => Time.now, :timer => format('%02d:%02d', 0, 0), :user_id => @user.id, :test_id => test.id}}, :method => 'POST', :class => 'btn btn-default' %></td>
                               <% else %>
                                   <td>
                                     <h4>
@@ -281,6 +287,64 @@
                         <% end %>
                         </tbody>
                       </table>
+                    </div>
+                  </div>
+                  <hr/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<% elsif @user.roles.first.name == 'Администратор' %>
+    <div class="row">
+      <div class="col-lg-12">
+        <!-- Блок навигации по тесту с отметкой правильности выполненных тестовых заданий -->
+        <div class="row">
+          <div class="col-lg-12">
+            <h3 class="text-center test-title">Личный кабинет</h3>
+          </div>
+        </div>
+
+        <!-- Блок формулировски тестового задания -->
+        <div class="row">
+          <div class="question-content">
+            <div class="sub-menu row">
+              <div class="col-sm-4">
+                <div class="item selected" href="#auth_users" aria-controls="attestation" role="tab" data-toggle="tab">
+                  Инициализация пользователей
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="item" href="#attestation_control" aria-controls="practice" role="tab" data-toggle="tab">
+                  Контроль аттестации
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="item" href="#history" aria-controls="history" role="tab" data-toggle="tab">
+                  1
+                </div>
+              </div>
+            </div>
+            <div class="test-case">
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="auth_users">
+                      <div style="text-align: center">
+                        <span class="title">Тут форма с ФИО Работой и Логином будет</span>
+                      </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="attestation_control">
+                      <div style="text-align: center">
+                        <span class="title">А тут будет распределение аттестационных тестов для пользователей</span>
+                      </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="history">
+                      <div style="text-align: center">
+                        <span class="title">А тут хз, мб статистика</span>
+                      </div>
                     </div>
                   </div>
                   <hr/>
