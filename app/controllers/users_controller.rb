@@ -10,8 +10,18 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
+    @users = User.search(params[:search])
     @user_id = params[:id]
     @test = Test.new
+    @new_user = User.new
+  end
+
+  def custom_create
+    @user = User.create!(user_params)
+    respond_to do |format|
+        format.html { redirect_to current_user, notice: 'Пользователь успешно создан' }
+        format.json { render :show, status: :created, location: @user }
+    end
   end
 
   def profile
@@ -62,7 +72,7 @@ class UsersController < ApplicationController
   def destroy
     @user.destroy
     respond_to do |format|
-      format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
+      format.html { redirect_to current_user, notice: 'User was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -77,6 +87,6 @@ class UsersController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :job)
+    params.require(:user).permit(:first_name, :last_name, :job, :email, :password, :password_confirmation)
   end
 end

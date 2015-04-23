@@ -23,6 +23,7 @@ Rails.application.routes.draw do
     member do
       get 'create_try'
       get 'create_test'
+      post 'custom_create'
     end
   end
 

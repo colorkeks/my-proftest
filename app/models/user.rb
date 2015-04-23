@@ -12,11 +12,22 @@ class User < ActiveRecord::Base
     devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable, :registerable
   end
 
+
+  def self.search(search)
+    if search
+      self.where("first_name like ?", "%#{search}%")
+    else
+      self.all
+    end
+  end
+
   def role?(role)
     return !!self.roles.find_by_name(role.to_s.camelize)
   end
   private
   def create_role
-    self.roles << Role.find_by_name(:Администратор)
+    # self.roles << Role.find_by_name(:Администратор)
+    # self.roles << Role.find_by_name(:Тестируемый)
+    self.roles << Role.find_by_name(:Методолог)
   end
 end

@@ -220,6 +220,15 @@ audio, video {
 .pagination {
   margin: 10px 0; }
 
+.user_form{
+    margin: 20px;
+    font-size: 17px;
+    padding: 5px 10px;
+}
+
+.user_form .form-group .controls input{
+    width: 300px;
+}
 
 table td.sorter {
     /*background-color: #f80; */
