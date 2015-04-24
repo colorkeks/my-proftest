@@ -85,11 +85,12 @@ ActiveRecord::Schema.define(version: 20150409084422) do
   end
 
   create_table "tests", force: :cascade do |t|
-    t.boolean  "attestation",   default: false
-    t.string   "title"
-    t.time     "timer"
+    t.boolean  "attestation",      default: false
+    t.text     "show_attestation"
     t.string   "algorithm"
     t.integer  "percent_tasks"
+    t.string   "title"
+    t.time     "timer"
     t.text     "description"
     t.integer  "user_id"
     t.datetime "created_at"

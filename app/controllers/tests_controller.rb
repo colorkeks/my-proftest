@@ -19,6 +19,21 @@ class TestsController < ApplicationController
     @test_id = params[:id]
   end
 
+  def attestation_for_users
+    if params[:check_tests].empty? && params[:check_users].empty?
+      redirect_to current_user, :alert => 'Вы не выбрали ни одного теста, либо ни одного тестируемого'
+    else
+      params[:check_tests].each do |test_id|
+        @test = Test.find(test_id)
+        params[:check_users].each do |user_id|
+          @test.show_attestation << user_id
+        end
+        @test.save!
+      end
+      redirect_to current_user, :notice => 'Тесты успешно добавлены тестируемым'
+    end
+  end
+
   # GET /tests/new
   def new
     @test = Test.new
@@ -77,6 +92,6 @@ class TestsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def test_params
-      params.require(:test).permit(:title, :timer, :algorithm, :attestation, :percent_tasks, :description, :user_id)
+      params.require(:test).permit(:title, :timer, :algorithm, :attestation, :show_attestation, :count_tries, :percent_tasks, :description, :user_id)
     end
 end

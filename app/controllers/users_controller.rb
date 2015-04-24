@@ -10,7 +10,9 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-    @users = User.search(params[:search])
+    @users = User.search(params[:search_users])
+    @tests_search = Test.search(params[:search_tests])
+    @attestation_tests = Test.all.select{ |m| m.show_attestation.include? params[:id] }
     @user_id = params[:id]
     @test = Test.new
     @new_user = User.new

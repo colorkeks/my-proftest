@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :roles
   has_many :tries
   has_many :tests, dependent: :destroy
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
 
@@ -13,9 +14,9 @@ class User < ActiveRecord::Base
   end
 
 
-  def self.search(search)
-    if search
-      self.where("first_name like ?", "%#{search}%")
+  def self.search(search_users)
+    if search_users
+      self.where("first_name LIKE ? OR last_name LIKE ? OR job LIKE ?", "%#{search_users}%", "%#{search_users}%", "%#{search_users}%")
     else
       self.all
     end
@@ -27,7 +28,7 @@ class User < ActiveRecord::Base
   private
   def create_role
     # self.roles << Role.find_by_name(:Администратор)
-    # self.roles << Role.find_by_name(:Тестируемый)
-    self.roles << Role.find_by_name(:Методолог)
+    self.roles << Role.find_by_name(:Тестируемый)
+    # self.roles << Role.find_by_name(:Методолог)
   end
 end

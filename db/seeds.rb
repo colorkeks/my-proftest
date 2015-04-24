@@ -5,10 +5,14 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-Role.create(:name => :Супер_Юзер)
-Role.create(:name => :Администратор)
-Role.create(:name => :Методолог)
-Role.create(:name => :Тестируемый)
+Role.create!(:name => :Супер_Юзер)
+Role.create!(:name => :Администратор)
+Role.create!(:name => :Методолог)
+Role.create!(:name => :Тестируемый)
+
+# User.create([{first_name: 'Методолог', last_name: 'Методолог', job: 'Методолог', roles: Role.find_by_name(:Методолог), email: 'met@met.ru', password: '1234qwer', password_confirmation: '1234qwer'}
+#
+#             ])
 test = Test.create([{title: 'Судебно-медицинская экспертиза трупа', timer: '1:00', attestation: true, algorithm: 'Все задания', description: 'Раздел IV'},
                     {title: 'Дерматовенерология', timer: '1:00', algorithm: 'Все задания', description: 'Раздел I'},
                     {title: 'патологическая анатомия(пример видео и аудио)', timer: '0:20', algorithm: 'Все задания', description: 'Пример'},

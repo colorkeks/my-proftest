@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :tests do
     member do
       get 'create_task'
+      post 'attestation_for_users'
     end
   end
 
