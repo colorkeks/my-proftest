@@ -1,8 +1,10 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
+  delegate :can?, :cannot?, :to => :ability
   load_and_authorize_resource
   # GET /users
   # GET /users.json
+
   def index
     @users = User.all
   end
@@ -11,11 +13,9 @@ class UsersController < ApplicationController
   # GET /users/1.json
   def show
     @users = User.search(params[:search_users])
-    @tests_search = Test.search(params[:search_tests])
-    @attestation_tests = Test.all.select{ |m| m.show_attestation.include? params[:id] }
     @user_id = params[:id]
+    @attestation_tests = Test.find(@user.attestation_tests)
     @test = Test.new
-    @new_user = User.new
   end
 
   def custom_create
@@ -27,7 +27,24 @@ class UsersController < ApplicationController
   end
 
   def profile
+    @tests_search = Test.search(params[:search_tests])
+    @attestation_tests = Test.find(@user.attestation_tests)
+  end
 
+  def add_attestation_tests
+    if params[:attestation_id].nil?
+      redirect_to profile_user_path(@user), alert: 'Вы не выбрали тест'
+    else
+      @attestation_test = Test.find(params[:attestation_id])
+      if @attestation_test.attestation == false
+        redirect_to profile_user_path(@user), alert: 'Тест не аттестационный'
+      else
+        @user.attestation_tests << params[:attestation_id]
+        if @user.save
+          redirect_to profile_user_path(@user), notice: 'Тест успешно добавлен'
+        end
+      end
+    end
   end
 
   # GET /users/new
@@ -89,6 +106,6 @@ class UsersController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :job, :email, :password, :password_confirmation)
+    params.require(:user).permit(:first_name, :second_name, :last_name, :attestation_tests, :job, :email, :password, :password_confirmation)
   end
 end

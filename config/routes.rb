@@ -8,7 +8,6 @@ Rails.application.routes.draw do
   resources :tests do
     member do
       get 'create_task'
-      post 'attestation_for_users'
     end
   end
 
@@ -24,6 +23,10 @@ Rails.application.routes.draw do
     member do
       get 'create_try'
       get 'create_test'
+      get 'profile'
+      get 'add_attestation_tests'
+    end
+    collection do
       post 'custom_create'
     end
   end

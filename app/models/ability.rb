@@ -7,6 +7,7 @@ class Ability
       can :manage, :all
     elsif user.role? :Администратор
       can :manage, :all
+      cannot :manage
       cannot :destroy, :all
       cannot :edit, Role
     elsif user.role? :Методолог

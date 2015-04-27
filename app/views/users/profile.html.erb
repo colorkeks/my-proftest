@@ -1,0 +1,103 @@
+<div class="question-content">
+  <div class="test-case">
+    <div class="row">
+      <div class="col-lg-6">
+        <div style="width: 100%; height: 50px;">
+          <span class="title"> Профиль: </span>
+        </div>
+        <table class="table">
+          <tr>
+            <td><h4>Имя:</h4></td>
+            <td><h4><%= @user.first_name %></h4></td>
+          </tr>
+          <tr>
+          <tr>
+            <td><h4>Отчество:</h4></td>
+            <td><h4><%= @user.second_name %></h4></td>
+          </tr>
+          <tr>
+            <td><h4>Фамилия:</h4></td>
+            <td><h4><%= @user.last_name %></h4></td>
+          </tr>
+          <tr>
+            <td><h4>Работа:</h4></td>
+            <td><h4><%= @user.job %></h4></td>
+          </tr>
+        </table>
+        <div style=" width: 100%; height: 50px;">
+          <span class="title"> Список Аттестационных тестов: </span>
+        </div>
+            <table class="table">
+              <thead>
+              <tr>
+                <th>Название:</th>
+                <th>Описание:</th>
+                <th>Алгоритм:</th>
+                <th>Задания:</th>
+              </tr>
+              </thead>
+              <tbody>
+              <% @attestation_tests.each do |test| %>
+                  <tr>
+                    <td><%= test.title %></td>
+                    <td><%= test.description %></td>
+                    <td><%= test.algorithm %></td>
+                    <td><%= test.tasks.count %></td>
+                  </tr>
+              <% end %>
+              </tbody>
+            </table>
+      </div>
+
+<% if current_user.roles.first.name == 'Администратор'%>
+      <div class="col-lg-6">
+        <div style="text-align: center; width: 100%; height: 50px;">
+          <span class="title"> Поиск Аттестационных тестов </span>
+        </div>
+
+        <%= form_tag(profile_user_path, :method => 'get') do %>
+            <div class="col-lg-8">
+              <%= text_field_tag :search_tests, params[:search_tests], :class => 'form-control' %>
+            </div>
+            <div class="col-lg-offset-2">
+              <%= button_tag(type: 'submit', class: 'btn btn-default') do %>
+                  Поиск <span class="glyphicon glyphicon-search"></span>
+              <% end %>
+            </div>
+        <% end %>
+      </div>
+      <div style="margin-top: 30px;">
+        <div class="col-lg-6">
+          <table class="table">
+            <thead>
+            <tr>
+              <th>Название:</th>
+              <th>Описание:</th>
+              <th>Алгоритм:</th>
+              <th>Задания:</th>
+              <th>Добавить:</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% if @tests_search %>
+                <% @tests_search.where(:attestation => true).each do |test| %>
+                    <tr>
+                      <td><%= test.title %></td>
+                      <td><%= test.description %></td>
+                      <td><%= test.algorithm %></td>
+                      <td><%= test.tasks.count %></td>
+                      <td><%= link_to 'Добавить', add_attestation_tests_user_path(@user.id, attestation_id: test.id), :class => 'btn btn-default'%></td>
+                    </tr>
+                <% end %>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+<% elsif current_user.roles.first.name == 'Тестируемый' %>
+
+<% end %>
+    </div>
+  </div>
+</div>
+

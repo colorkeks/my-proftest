@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :roles
   has_many :tries
   has_many :tests, dependent: :destroy
+  serialize :attestation_tests, Array
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -16,7 +17,7 @@ class User < ActiveRecord::Base
 
   def self.search(search_users)
     if search_users
-      self.where("first_name LIKE ? OR last_name LIKE ? OR job LIKE ?", "%#{search_users}%", "%#{search_users}%", "%#{search_users}%")
+      self.where("first_name LIKE ? OR second_name LIKE ? OR last_name LIKE ? OR job LIKE ?", "%#{search_users}%", "%#{search_users}%", "%#{search_users}%", "%#{search_users}%")
     else
       self.all
     end
