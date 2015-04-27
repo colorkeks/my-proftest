@@ -20,7 +20,7 @@ class TestsController < ApplicationController
   end
 
   def attestation_for_users
-    if params[:check_tests].empty? && params[:check_users].empty?
+    if params[:check_tests].nil? && params[:check_users].nil?
       redirect_to current_user, :alert => 'Вы не выбрали ни одного теста, либо ни одного тестируемого'
     else
       params[:check_tests].each do |test_id|
