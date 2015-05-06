@@ -24,6 +24,7 @@
             <td><h4><%= @user.job %></h4></td>
           </tr>
         </table>
+        <% if @user.roles.first.name == 'Тестируемый' %>
         <div style=" width: 100%; height: 50px;">
           <span class="title"> Список Аттестационных тестов: </span>
         </div>
@@ -48,8 +49,8 @@
               </tbody>
             </table>
       </div>
-
-<% if current_user.roles.first.name == 'Администратор'%>
+      <% end %>
+<% if (current_user.roles.first.name == 'Администратор') && (@user.roles.first.name == 'Тестируемый')%>
       <div class="col-lg-6">
         <div style="text-align: center; width: 100%; height: 50px;">
           <span class="title"> Поиск Аттестационных тестов </span>

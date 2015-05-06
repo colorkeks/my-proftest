@@ -77,9 +77,16 @@
                     </div>
                   </div>
                   <div class="col-lg-6">
-                    <div style="text-align: center">
-                        <%= link_to 'Новый тестируемый', new_user_path, :class => 'btn btn-primary'%>
-                    </div>
+                      <div class="panel panel-primary">
+                        <div class="panel-heading">
+                          <h2 class="panel-title">Создание учетной записи тестируемого</h2>
+                        </div>
+                        <div class="panel-body">
+                          <div style="text-align: center; padding: 30px;">
+                            <%= link_to 'Создать учетную запись', new_user_path, :class => 'btn btn-primary'%>
+                          </div>
+                        </div>
+                      </div>
                   </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="attestation_control">
