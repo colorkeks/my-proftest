@@ -19,6 +19,20 @@ test = Test.create([{title: 'Судебно-медицинская экспер�
                     {title: 'патологическая анатомия(пример видео и аудио)', timer: '0:20', algorithm: 'Все задания', description: 'Пример'},
                     {title: 'Судебно-медицинская экспертиза трупа', timer: '1:00', algorithm: 'Ограниченое количество заданий', percent_tasks: '60', description: 'Раздел IV'}])
 
+# first_test = Test.find(test.first.id)
+# second_test = Test.find(test.second.id)
+# third_test = Test.find(test.third.id)
+# fourth_test = Test.find(test.fourth.id)
+#
+# chapters = Chapter.create([{title: 'Педиатрия'}])
+# first_chapter = Chapter.find(chapters.first.id)
+#
+#
+# first_test.move_to_child_of first_chapter
+# second_test.move_to_child_of first_chapter
+# third_test.move_to_child_of first_chapter
+# fourth_test.move_to_child_of first_chapter
+
 tasks = Task.create([{task_type: 'Единичный выбор', #1
                       text: 'Для наступления смерти от тампонады сердца кровью имеет значение:',
                       hint: 'Выберите наиболее правильный и полный ответ:',

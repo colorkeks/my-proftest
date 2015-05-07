@@ -16,6 +16,8 @@ class UsersController < ApplicationController
     @user_id = params[:id]
     @attestation_tests = Test.find(@user.attestation_tests)
     @test = Test.new
+
+    @tests_tree = Test.nested_set.select('id, title, parent_id').limit(15)
   end
 
   def custom_create

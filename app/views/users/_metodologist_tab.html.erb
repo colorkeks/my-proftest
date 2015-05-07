@@ -67,40 +67,12 @@
                                 </div>
                               </div>
                               <%= f.hidden_field :user_id, :value => @user_id %>
-                            </div>
-                            <div class="col-lg-2">
-                            </div>
-                            <div class="col-lg-5">
-                              <div class="form-group">
-                                <div class="controls col-md-4">
-                                  <label>Аттестационный:</label>
-                                </div>
-                                <div class="col-md-offset-4" >
-                                  <%= f.check_box :attestation, :class => 'form-control'%>
-                                </div>
-                              </div>
-                              <div class="form-group">
-                                <div class="controls col-md-4">
-                                  <label>Каталог:</label>
-                                </div>
-                                <div class="controls col-md-offset-4">
-                                  <%= select_tag(:catalog, '<option>Каталога пока нет</option>'.html_safe, {:class => 'form-control'}) %>
-                                </div>
-                              </div>
                               <div class="form-group">
                                 <div class="controls col-md-4">
                                   <label>Алгоритм:</label>
                                 </div>
                                 <div class="controls col-md-offset-4">
                                   <%= f.select(:algorithm, ['Все задания', 'Ограниченое количество заданий'],{},{:class => 'form-control algorithm'}) %>
-                                </div>
-                              </div>
-                              <div class="form-group  adaptive_options hide">
-                                <div class="controls col-md-4">
-                                  <label>Параметры:</label>
-                                </div>
-                                <div class="col-md-offset-4" style="border: 1px solid black; text-align: center">
-                                  <h4 style="margin: 6px;">Пока ничего конкретного нету</h4>
                                 </div>
                               </div>
                               <div class="form-group  limited_options hide">
@@ -111,6 +83,29 @@
                                   <%= f.number_field(:percent_tasks,:value => 50, :class => 'form-control', :style => 'width: 75px;') %>
                                 </div>
                               </div>
+                              <div class="form-group">
+                                <div class="controls col-md-4">
+                                  <label>Аттестационный:</label>
+                                </div>
+                                <div class="col-md-offset-4" >
+                                  <%= f.check_box :attestation, :class => 'form-control'%>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-lg-2">
+                            </div>
+                            <div class="col-lg-5">
+                              <div class="form-group">
+                                <div class="controls col-md-4">
+                                  <label>Каталог:</label>
+                                </div>
+                                <div class="controls col-md-offset-4">
+                                  <%= select_tag(:catalog, '<option>Каталога пока нет</option>'.html_safe, {:class => 'form-control'}) %>
+                                </div>
+                              </div>
+                              <ol class='sortable_tree expandable ui-sortable' data-cookie-scope="Test" data-cookie-store="true" data-expand-node-url="<%= expand_node_tests_url%>" data-max-level="5" data-rebuild-url="<%= rebuild_tests_url %>">
+                                <%= expandable_tree @tests_tree %>
+                              </ol>
                             </div>
                             <div class="col-lg-12"><%= f.submit 'Создать тест', :class => 'btn btn-primary' %></div>
                           </div>
@@ -136,7 +131,7 @@
                           <td><%= test.title %></td>
                           <td><%= test.tasks.count %></td>
                           <td><%= test.algorithm %></td>
-                          <td><%= test.timer.strftime('%H:%M') %></td>
+                          <td><%= test.timer.strftime('%H:%M') if !test.timer.nil? %></td>
                           <% if test.tasks.count > 0 %>
                               <td><%= link_to 'Пройти тест', {:controller => :tries, :action => :create, :try => {:timer => format('%02d:%02d', 00, 00), :date => Time.now, :user_id => @user.id, :test_id => test.id}}, :method => 'POST', :class => 'btn btn-default' %></td>
                           <% else %>

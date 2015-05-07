@@ -9,6 +9,7 @@ class Ability
       can :manage, :all
       cannot :destroy, :all
       cannot :assign_role, User
+      cannot :manage, Chapter
       cannot [:index,:show, :edit,:update], Test
       cannot [:index,:show, :edit,:update], Task
       cannot [:index,:show, :edit,:update], Answer
@@ -20,7 +21,7 @@ class Ability
       end
     elsif user.role? :Методолог
       can :manage, :all
-      cannot :destroy, :all
+      # cannot :destroy, :all
       cannot :assign_role, User
       cannot [:add_attestation_tests,:custom_create,:index, :show, :edit, :update], User
       can [:show, :edit, :update], User do |current_user|
@@ -30,6 +31,7 @@ class Ability
       can :manage, :all
       cannot :destroy, :all
       cannot :assign_role, User
+      cannot :manage, Chapter
       cannot [:index,:show, :edit,:update], Test
       cannot [:index,:show, :edit,:update], Task
       cannot [:index,:show, :edit,:update], Answer

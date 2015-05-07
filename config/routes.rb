@@ -9,6 +9,11 @@ Rails.application.routes.draw do
     member do
       get 'create_task'
     end
+    collection do
+      # required for Sortable GUI server side actions
+      post :rebuild
+      post :expand_node
+    end
   end
 
   resources :tasks do
@@ -50,6 +55,14 @@ Rails.application.routes.draw do
   resources :task_results
 
   resources :user_answers
+
+  resources :chapters do
+    collection do
+      # required for Sortable GUI server side actions
+      post :rebuild
+      post :expand_node
+    end
+  end
 
   resources :statistics
 

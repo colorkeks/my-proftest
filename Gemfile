@@ -42,7 +42,7 @@ group :development, :test do
 end
 
 gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git', branch: 'bootstrap3'
-
+gem 'jquery-ui-rails'
 gem 'devise'
 gem 'paperclip'
 gem 'wysiwyg-rails'
@@ -55,6 +55,7 @@ gem 'momentjs-rails', '~> 2.9',  :github => 'derekprior/momentjs-rails'
 gem 'bootstrap3-datetimepicker-rails', '~> 4.0.0'
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master'
 gem 'thin'
+gem 'the_sortable_tree'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
