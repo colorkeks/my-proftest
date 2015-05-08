@@ -27,9 +27,9 @@ class @TSTconst
 @_compactArray = (array) -> array.filter (e) -> return e
 
 @_nested_set_hash_arr = (hash) ->
-    return [] unless hash
-    [prefix, arr] = hash.split(TSTconst.separator)
-    _compactArray _uniqueArray arr.split(TSTconst.delimiter)
+  return [] unless hash
+  [prefix, arr] = hash.split(TSTconst.separator)
+  _compactArray _uniqueArray arr.split(TSTconst.delimiter)
 
 # ====================================
 # Helpers Fn
@@ -66,7 +66,7 @@ class @TSTconst
     _set_hash('')
   else
     _set_hash(TSTconst.hash_prefix() + str)
-  
+
   hash_and_cookie_accordance()
 
   true

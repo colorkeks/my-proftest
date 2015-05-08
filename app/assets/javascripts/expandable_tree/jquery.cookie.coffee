@@ -23,22 +23,22 @@
     try
       return (if config.json then JSON.parse(s) else s)
 
-  
+
   config = $.cookie = (key, value, options) ->
     # write
     if value isnt `undefined`
       options = $.extend({}, config.defaults, options)
-      
+
       if typeof options.expires is "number"
         days = options.expires
         t    = options.expires = new Date()
         t.setDate t.getDate() + days
-      
+
       value = (if config.json then JSON.stringify(value) else String(value))
-      
+
       # use expires attribute, max-age is not supported by IE
       return (document.cookie = [(if config.raw then key else encodeURIComponent(key)), "=", (if config.raw then value else encodeURIComponent(value)), (if options.expires then "; expires=" + options.expires.toUTCString() else ""), (if options.path then "; path=" + options.path else ""), (if options.domain then "; domain=" + options.domain else ""), (if options.secure then "; secure" else "")].join(""))
-    
+
     # read
     decode  = (if config.raw then raw else decoded)
     cookies = document.cookie.split("; ")

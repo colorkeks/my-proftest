@@ -1,7 +1,7 @@
-<%- model_class = Test -%>
+<% if @test.directory == false %>
 <div class="row question-content">
 <div class="page-header">
-  <h2>Тест</h2>
+  <h2>Тест <%= link_to 'Редактировать', edit_test_path(@test), :class => 'btn btn-default btn-lg', :style => 'display: inline'%></h2>
 </div>
 <div class="row">
 <div class="col-lg-12">
@@ -76,3 +76,70 @@
   </div>
 </div>
 </div>
+<% else %>
+    <div class="row question-content">
+      <div class="page-header">
+        <h2>Папка <%= link_to 'Редактировать', edit_test_path(@test), :class => 'btn btn-default btn-lg', :style => 'display: inline'%></h2>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="col-lg-6">
+          <h3>
+            <div class="col-sm-4">
+              Заголовок:
+            </div>
+            <div class="col-sm-offset-4">
+              <%= @test.title %>
+            </div>
+          </h3>
+          </div>
+          <div class="col-lg-6">
+          </div>
+        </div>
+      </div>
+
+    <div class="page-header">
+      <h2>Тесты</h2>
+    </div>
+    <table class="table table-striped test-case">
+      <thead>
+      <tr>
+        <th>Название:</th>
+        <th>Кол-во вопросов:</th>
+        <th>Алгоритм</th>
+        <th>Время:</th>
+      </tr>
+      </thead>
+      <tbody>
+    <% @test.children.where(:directory => false).each do |test| %>
+        <tr>
+          <td><%= link_to test.title, test_path(test.id) %></td>
+            <td><%= test.tasks.count %></td>
+          <td><%= test.algorithm %></td>
+          <td><%= test.timer.strftime('%H:%M') if !test.timer.nil? %></td>
+        </tr>
+    <% end %>
+      </tbody>
+    </table>
+
+    <div class="page-header">
+      <h2>Папки</h2>
+    </div>
+    <table class="table table-striped test-case">
+      <thead>
+      <tr>
+        <th>Название:</th>
+        <th>Кол-во элементов в папке:</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @test.children.where(:directory => true).each do |test| %>
+          <tr>
+            <td><%= link_to test.title, test_path(test.id) %></td>
+            <td><%= test.children.count%></td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+    </div>
+<% end %>

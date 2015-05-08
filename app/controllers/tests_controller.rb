@@ -35,13 +35,25 @@ class TestsController < ApplicationController
   def create
     @test = Test.new(test_params)
 
-    respond_to do |format|
-      if @test.save
-        format.html { redirect_to @test, notice: 'тест успешно создан' }
-        format.json { render :show, status: :created, location: @test }
-      else
-        format.html { redirect_to current_user, alert: 'Поле "Заголовок" не заполнено' }
-        format.json { render json: @test.errors, status: :unprocessable_entity }
+    if @test.directory == false
+      respond_to do |format|
+        if @test.save
+          format.html { redirect_to current_user, notice: 'тест успешно создан' }
+          format.json { render :show, status: :created, location: @test }
+        else
+          format.html { redirect_to current_user, alert: 'Поле "Заголовок" не заполнено' }
+          format.json { render json: @test.errors, status: :unprocessable_entity }
+        end
+      end
+    else
+      respond_to do |format|
+        if @test.save
+          format.html { redirect_to current_user, notice: 'Папка успешно создана' }
+          format.json { render :show, status: :created, location: @test }
+        else
+          format.html { redirect_to current_user, alert: 'Поле "Заголовок" не заполнено' }
+          format.json { render json: @test.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
@@ -50,12 +62,22 @@ class TestsController < ApplicationController
   # PATCH/PUT /tests/1.json
   def update
     respond_to do |format|
-      if @test.update(test_params)
-        format.html { redirect_to @test, notice: 'Test was successfully updated.' }
-        format.json { render :show, status: :ok, location: @test }
+      if @test.directory == false
+        if @test.update(test_params)
+          format.html { redirect_to @test, notice: 'Тест был успешно обновлен' }
+          format.json { render :show, status: :ok, location: @test }
+        else
+          format.html { render :edit }
+          format.json { render json: @test.errors, status: :unprocessable_entity }
+        end
       else
-        format.html { render :edit }
-        format.json { render json: @test.errors, status: :unprocessable_entity }
+        if @test.update(test_params)
+          format.html { redirect_to current_user, notice: 'Папка была успешно обновлена' }
+          format.json { render :show, status: :ok, location: @test }
+        else
+          format.html { render :edit }
+          format.json { render json: @test.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
@@ -79,6 +101,6 @@ class TestsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def test_params
-      params.require(:test).permit(:title, :timer, :algorithm, :attestation, :count_tries, :percent_tasks, :description, :user_id)
+      params.require(:test).permit(:title, :directory, :timer, :algorithm, :attestation, :count_tries, :percent_tasks, :description, :user_id)
     end
 end

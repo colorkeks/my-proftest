@@ -6,7 +6,7 @@
 # Prepare your data on server side for rendering
 # or use h.html_escape(node.content)
 # for escape potentially dangerous content
-module RenderSortableTreeHelper
+module RenderExpandableTreeHelper
   module Render 
     class << self
       attr_accessor :h, :options
@@ -19,6 +19,7 @@ module RenderSortableTreeHelper
           <li data-node-id='#{ node.id }'>
             <div class='item'>
               <i class='handle'></i>
+              <b class='expand plus'>+</b>
               #{ show_link }
               #{ controls }
             </div>
@@ -30,13 +31,14 @@ module RenderSortableTreeHelper
       def show_link
         node = options[:node]
         ns   = options[:namespace]
-        url = h.url_for(:controller => options[:klass].pluralize, :action => :show, :id => node)
+        url  = h.url_for(ns + [node])
         title_field = options[:title]
         directory_field = options[:directory]
 
 
+        #<span style='float:left; font-size:14px'>#{ ' (' + node.children.count.to_s + ')'}</span>
         "<h4><span class='glyphicon glyphicon-#{ node.send(directory_field) == true ? 'book' : 'list-alt'}' aria-hidden='true'></span>
-          #{ h.link_to(node.send(title_field), url) }
+           #{ h.link_to(node.send(title_field), url) }
         </h4>"
       end
 
@@ -44,12 +46,12 @@ module RenderSortableTreeHelper
         node = options[:node]
 
         edit_path = h.url_for(:controller => options[:klass].pluralize, :action => :edit, :id => node)
-        destroy_path = h.url_for(:controller => options[:klass].pluralize, :action => :destroy, :id => node)
+        show_path = h.url_for(:controller => options[:klass].pluralize, :action => :show, :id => node)
 
         "
           <div class='controls'>
             #{ h.link_to '', edit_path, :class => :edit }
-            #{ h.link_to '', destroy_path, :class => :delete, :method => :delete, :data => { :confirm => 'Are you sure?' } }
+            #{ h.link_to '', show_path, :class => :delete, :method => :delete, :data => { :confirm => 'Удалятся все вложеные файлы и папки. Вы уверены ?'.html_safe } }
           </div>
         "
       end

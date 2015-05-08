@@ -245,3 +245,6 @@ table td.sorter {
 /*table tr.sorting-row td:first-child {opacity: 0.0}*/
 
 
+.modal-dialog {
+    margin-top: 200px;
+}

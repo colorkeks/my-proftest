@@ -6,7 +6,7 @@
     return true
 
   hash_and_cookie_accordance()
-  
+
   oEvent  = hash_event.originalEvent
   new_url = oEvent.newURL
   old_url = oEvent.oldURL
@@ -18,7 +18,7 @@
 
   new_arr = _nested_set_hash_arr(new_hash)
   old_arr = _nested_set_hash_arr(old_hash)
-  
+
   diff_ids = if new_arr.length >= old_arr.length
     _arrays_diff(old_arr, new_arr)
   else

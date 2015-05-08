@@ -60,6 +60,7 @@ module TheSortableTreeHelper
       # node and base node params
       :id    => :id,      # node id field
       :title => :title,   # name of title fileld
+      :directory => :directory,
       :node  => nil,      # node
 
       # base options

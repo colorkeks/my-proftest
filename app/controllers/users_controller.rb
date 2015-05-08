@@ -17,7 +17,7 @@ class UsersController < ApplicationController
     @attestation_tests = Test.find(@user.attestation_tests)
     @test = Test.new
 
-    @tests_tree = Test.nested_set.select('id, title, parent_id').limit(15)
+    @tests_tree = Test.nested_set.roots.select('id, title, directory, parent_id').limit(15)
   end
 
   def custom_create
@@ -101,7 +101,7 @@ class UsersController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_user
-    @tests = Test.all
+    @tests = Test.all.where(:directory => false)
     @tries = Try.all.where(:user_id => params[:id])
     @user = User.find(params[:id])
   end

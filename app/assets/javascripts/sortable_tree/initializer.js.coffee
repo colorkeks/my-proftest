@@ -21,7 +21,7 @@
 @init_sortable_tree = ->
   sortable_tree = $('ol.sortable_tree')
   return false if sortable_tree.length is 0
-  
+
   rebuild_url = sortable_tree.data('rebuild_url') || sortable_tree.data('rebuild-url')
   max_levels  = sortable_tree.data('max_levels')  || sortable_tree.data('max-levels')
 
@@ -52,7 +52,7 @@
     prev_id   = item.prev().data(attr_name)
     next_id   = item.next().data(attr_name)
     parent_id = item.parent().parent().data(attr_name)
-    
+
     rebuild_sortable_tree(rebuild_url, item_id, parent_id, prev_id, next_id)
 
   true

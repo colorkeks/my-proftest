@@ -13,7 +13,6 @@
  *= require_tree .
  *= require bootstrap-datetimepicker
  *= require tree
- *= require sortable_tree
  *= require nested_options
  *= require_self
  */

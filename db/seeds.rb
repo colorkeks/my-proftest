@@ -24,8 +24,8 @@ test = Test.create([{title: 'Судебно-медицинская экспер�
 # third_test = Test.find(test.third.id)
 # fourth_test = Test.find(test.fourth.id)
 #
-# chapters = Chapter.create([{title: 'Педиатрия'}])
-# first_chapter = Chapter.find(chapters.first.id)
+# chapters = Test.create([{title: 'Примеры', directory: true}])
+# first_chapter = Test.find(chapters.first.id)
 #
 #
 # first_test.move_to_child_of first_chapter

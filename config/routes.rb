@@ -56,14 +56,6 @@ Rails.application.routes.draw do
 
   resources :user_answers
 
-  resources :chapters do
-    collection do
-      # required for Sortable GUI server side actions
-      post :rebuild
-      post :expand_node
-    end
-  end
-
   resources :statistics
 
 

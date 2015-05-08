@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150507105735) do
+ActiveRecord::Schema.define(version: 20150409084422) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,19 +40,6 @@ ActiveRecord::Schema.define(version: 20150507105735) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  create_table "chapters", force: :cascade do |t|
-    t.string  "title"
-    t.integer "parent_id"
-    t.integer "lft",                        null: false
-    t.integer "rgt",                        null: false
-    t.integer "depth",          default: 0, null: false
-    t.integer "children_count", default: 0, null: false
-  end
-
-  add_index "chapters", ["lft"], name: "index_chapters_on_lft", using: :btree
-  add_index "chapters", ["parent_id"], name: "index_chapters_on_parent_id", using: :btree
-  add_index "chapters", ["rgt"], name: "index_chapters_on_rgt", using: :btree
 
   create_table "roles", force: :cascade do |t|
     t.string   "name"
@@ -98,20 +85,20 @@ ActiveRecord::Schema.define(version: 20150507105735) do
   end
 
   create_table "tests", force: :cascade do |t|
-    t.boolean  "attestation",    default: false
+    t.boolean  "directory",     default: false
+    t.boolean  "attestation",   default: false
     t.string   "algorithm"
     t.integer  "percent_tasks"
     t.string   "title"
     t.time     "timer"
     t.text     "description"
     t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
     t.integer  "parent_id"
     t.integer  "lft"
     t.integer  "rgt"
     t.integer  "depth"
-    t.integer  "children_count"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "tries", force: :cascade do |t|

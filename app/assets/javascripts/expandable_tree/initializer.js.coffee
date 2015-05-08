@@ -30,8 +30,8 @@
 
   button = node.children('.item').children('.expand')
 
-#  if html.length is 0
-#    button.addClass 'empty'
+  if html.length is 0
+    button.addClass 'empty'
 
   if html.length > 0
     item.after html
@@ -89,7 +89,7 @@
     button     = $ @
     node       = button.parent().parent()
     nested_set = node.children('.nested_set')
-    
+
     if nested_set.length is 0
       upload_nodes_children(node, expand_node_url)
     else

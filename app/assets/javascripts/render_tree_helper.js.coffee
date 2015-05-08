@@ -49,6 +49,7 @@
     # they will be roots
     # order by lft, should be made at server side
     min_elem = tree[0]
+    console.log(roots.length)
     if roots.length is 0 and tree.length isnt 0
       for elem in tree
         min_elem = elem if elem.parent_id < min_elem.parent_id
@@ -77,6 +78,6 @@
       $.extend opts, { node: node, root: false, level: opts.level + 1 }
       children_html = render_tree tree, opts
       html += opts.render_node(node, children_html, opts)
-  
+
   # result html
   html
