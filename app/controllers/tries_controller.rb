@@ -282,6 +282,11 @@ class TriesController < ApplicationController
       @try.task_results.order('RANDOM()').first(tasks_selection).each do |task_result|
         @try.task_results_queue << task_result.id
       end
+
+      #Удаляем невостребованные задания
+      @try.task_results.each do |tr|
+        tr.mark_for_destruction unless @try.task_results_queue.include?(tr.id)
+      end
     else
       @try.task_results.order('RANDOM()').each do |task_result|
         @try.task_results_queue << task_result.id

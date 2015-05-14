@@ -9,7 +9,7 @@ class Ability
       can :manage, :all
       cannot :destroy, :all
       cannot :assign_role, User
-      cannot :manage, Chapter
+      #cannot :manage, Chapter
       cannot [:index,:show, :edit,:update], Test
       cannot [:index,:show, :edit,:update], Task
       cannot [:index,:show, :edit,:update], Answer
@@ -31,7 +31,7 @@ class Ability
       can :manage, :all
       cannot :destroy, :all
       cannot :assign_role, User
-      cannot :manage, Chapter
+      #cannot :manage, Chapter
       cannot [:index,:show, :edit,:update], Test
       cannot [:index,:show, :edit,:update], Task
       cannot [:index,:show, :edit,:update], Answer
