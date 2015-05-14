@@ -39,13 +39,15 @@ class TriesController < ApplicationController
       @current_task_index = params[:current_task_index].nil? ? 0 : params[:current_task_index].to_i
 
       #таймер
-      @timer = (Time.now - @try.created_at.to_time).to_f
+      duration = (Time.now - @try.created_at.to_time).to_f
+      remaining_time = @try.test.timer - Time.utc(2000,01,01) - duration
+      @timer = remaining_time
       @hours = (@timer/3600).to_i
       @minutes = (@timer/60).to_i - @hours*60
       @seconds = (@timer%60).to_i
 
       # если таймер дошел до ограниченного времени
-      if  @hours >= @try.test.timer.strftime('%H').to_i && @minutes >= @try.test.timer.strftime('%M').to_i
+      if remaining_time <= 0  #@hours >= @try.test.timer.strftime('%H').to_i && @minutes >= @try.test.timer.strftime('%M').to_i
         @try.task_results.where(:status => 'ответ не дан').each do |task_result|
           task_result.status = 'не правильно'
           task_result.point = 0

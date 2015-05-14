@@ -184,18 +184,18 @@ function algorithm_selects(){
 
 function timer(){
     $(".seconds_timer").everyTime(1000, function() {
-        if (parseInt($('.seconds_timer').text()) >= 59) {
-            $('.seconds_timer').text(0);
-            if  (parseInt($('.minutes_timer').text()) >= 59) {
-                $('.minutes_timer').text(0)
-                $('.hours_timer').text(parseInt($('.hours_timer').text()) + 1);
+        if (parseInt($('.seconds_timer').text()) <= 0) {
+            $('.seconds_timer').text(59);
+            if  (parseInt($('.minutes_timer').text()) <= 0) {
+                $('.minutes_timer').text(59)
+                $('.hours_timer').text(parseInt($('.hours_timer').text()) - 1);
             }
             else {
-                $('.minutes_timer').text(parseInt($('.minutes_timer').text()) + 1)
+                $('.minutes_timer').text(parseInt($('.minutes_timer').text()) - 1)
             }
         }
         else {
-            $('.seconds_timer').text(parseInt($('.seconds_timer').text()) + 1)
+            $('.seconds_timer').text(parseInt($('.seconds_timer').text()) - 1)
         }
     });
 }
