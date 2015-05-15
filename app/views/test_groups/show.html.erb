@@ -20,9 +20,9 @@
         <% end %>
         <li>
           <% if @test_group == group %>
-          <b><%= current_level %>)<%= group.name %></b>
+          <b>(<%= current_level %>)<%= group.name %></b>
           <% else %>
-            <%= link_to "#{(current_level)}#{group.name}", group %>
+            <%= link_to "(#{current_level})#{group.name}", group %>
           <% end %>
           <%if @test_group == group %></b><%end%>
 
