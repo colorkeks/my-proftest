@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
 
+  get 'main/index'
+
+  resources :test_groups
   resources :user_associations
 
   get 'table/index'
