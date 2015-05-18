@@ -1,5 +1,6 @@
 class TestGroupsController < ApplicationController
   before_action :set_test_group, only: [:show, :edit, :update, :destroy]
+  load_and_authorize_resource
 
   # GET /test_groups
   # GET /test_groups.json
@@ -13,6 +14,9 @@ class TestGroupsController < ApplicationController
   # GET /test_groups/1.json
   def show
     @test_groups = TestGroup.all
+    @tests = @test_group.tests.order(:lft)
+    @child_groups = @test_group.children.order(:lft)
+    @elements = @child_groups + @tests
   end
 
   # GET /test_groups/new

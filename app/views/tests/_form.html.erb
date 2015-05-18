@@ -1,4 +1,4 @@
-<%= form_for @test, :html => {:class => 'form-horizontal'} do |f| %>
+<%= simple_form_for @test, :html => {:class => 'form-horizontal'} do |f| %>
     <div class="row">
     <% if @test.directory == false%>
     <div class="col-lg-5">
@@ -43,7 +43,9 @@
           <label>Каталог:</label>
         </div>
         <div class="controls col-md-offset-4">
-          <%= select_tag(:catalog, '<option>Каталога пока нет</option>'.html_safe, {:class => 'form-control'}) %>
+          <%#= select_tag(:catalog, '<option>Каталога пока нет</option>'.html_safe, {:class => 'form-control'}) %>
+          <%#= select_tag(:catalog, '<option>Каталога пока нет</option>'.html_safe, {:class => 'form-control'}) %>
+          <%= f.select :test_group_id, nested_set_options(TestGroup) {|i| "#{'–' * i.level} #{i.name}"} %>
         </div>
       </div>
       <div class="form-group">

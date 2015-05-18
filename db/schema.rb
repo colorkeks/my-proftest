@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150515100411) do
+ActiveRecord::Schema.define(version: 20150518052131) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -113,7 +113,10 @@ ActiveRecord::Schema.define(version: 20150515100411) do
     t.integer  "depth"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "test_group_id"
   end
+
+  add_index "tests", ["test_group_id"], name: "index_tests_on_test_group_id", using: :btree
 
   create_table "tries", force: :cascade do |t|
     t.date     "date"

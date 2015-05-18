@@ -16,4 +16,6 @@ class CreateTestGroups < ActiveRecord::Migration
     add_index :test_groups, :lft
     add_index :test_groups, :rgt
   end
+  tg = TestGroup.find_or_initialize_by(name: 'Тесты')
+  tg.save!
 end

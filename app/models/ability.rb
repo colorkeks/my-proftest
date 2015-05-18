@@ -37,6 +37,7 @@ class Ability
       cannot [:index,:show, :edit,:update], Answer
       cannot [:index,:show, :edit,:update], Association
       cannot [:index,:show, :edit,:update], TaskContent
+      cannot [:index,:show, :edit,:update], TestGroup
       cannot [:add_attestation_tests,:custom_create,:index, :show, :edit, :update], User
       can [:show, :edit, :update], User do |current_user|
         user.id == current_user.id

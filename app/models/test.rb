@@ -5,7 +5,7 @@ class Test < ActiveRecord::Base
   has_many :tries
   has_many :tasks, dependent: :destroy
   acts_as_nested_set
-
+  belongs_to :test_group
 
   def self.search(search_tests)
     if search_tests

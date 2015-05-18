@@ -23,7 +23,8 @@ class TestsController < ApplicationController
 
   # GET /tests/new
   def new
-    @test = Test.new
+    @test = Test.new(test_group_id: params[:test_group_id])
+    @test.algorithm='Все задания'
   end
 
   # GET /tests/1/edit
@@ -38,7 +39,10 @@ class TestsController < ApplicationController
     if @test.directory == false
       respond_to do |format|
         if @test.save
-          format.html { redirect_to current_user, notice: 'тест успешно создан' }
+          format.html {
+            #redirect_to current_user, notice: 'тест успешно создан'
+            redirect_to @test.test_group, notice: 'тест успешно создан'
+          }
           format.json { render :show, status: :created, location: @test }
         else
           format.html { redirect_to current_user, alert: 'Поле "Заголовок" не заполнено' }
@@ -101,6 +105,6 @@ class TestsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def test_params
-      params.require(:test).permit(:title, :directory, :timer, :algorithm, :attestation, :count_tries, :percent_tasks, :description, :user_id)
+      params.require(:test).permit(:title, :directory, :timer, :algorithm, :attestation, :count_tries, :percent_tasks, :description, :user_id, :test_group_id)
     end
 end
