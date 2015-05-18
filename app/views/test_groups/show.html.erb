@@ -1,6 +1,43 @@
 <%- model_class = TestGroup -%>
 <div class="page-header">
+  <div class="row">
+  <div class="col-md-4">
     <h1>Каталог</h1>
+  </div>
+  <div class="col-md-8">
+    <h3>
+      <% @test_group.ancestors.each do |parent| %>
+          <%= link_to parent.name, parent %>
+          &nbsp;&#47;&nbsp;
+      <% end %>
+      <b><%= @test_group.name %></b>
+
+      <span class="dropdown" id="dropdown-create">
+        <span class=" dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+        <span class="caret"></span>
+        </span>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+          <li role="presentation">
+            <%= link_to 'переименовать', edit_test_group_path(@test_group), remote: true, role: 'menuitem', tabindex: '-1' %>
+          </li>
+          <li role="presentation">
+            <%= link_to t('.edit', :default => t("helpers.links.edit")), edit_test_group_path(@test_group), :class => 'btn btn-default btn-xs' %>
+          </li>
+          <li role="presentation">
+            <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                        test_group_path(@test_group),
+                        :method => 'delete',
+                        :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                        :class => 'btn btn-danger btn-xs' %>
+          </li>
+        </ul>
+      </span>
+
+
+
+    </h3>
+  </div>
+  </div>
 </div>
 
 <div class="row">
@@ -59,7 +96,10 @@
             </li>
         <% end %>
         <li>
-          <span class="glyphicon glyphicon-folder-close" aria-hidden="true"></span>
+          <span class="glyphicon glyphicon-folder-close folder-tree-folder" aria-hidden="true"></span>
+          <!--
+          <a href="#" class="folder-tree-folder" onclick="$(this).parent().find('ul').slideToggle(); return false;" >+</a>
+          -->
           <% if @test_group == group %>
           <b>(<%= current_level %>)<%= group.name %></b>
           <% else %>
@@ -80,21 +120,6 @@
     <% end %>
   </div>
   <div class="col-md-8">
-        <h3>
-            <% @test_group.ancestors.each do |parent| %>
-              <%= link_to parent.name, parent %>
-              &nbsp;&#47;&nbsp;
-            <% end %>
-            <b><%= @test_group.name %></b>
-            <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                      edit_test_group_path(@test_group), :class => 'btn btn-default btn-xs' %>
-            <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                      test_group_path(@test_group),
-                      :method => 'delete',
-                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
-                      :class => 'btn btn-danger btn-xs' %>
-        </h3>
-
     <table class="table table-striped">
       <thead>
       <tr>
