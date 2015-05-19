@@ -189,9 +189,6 @@
     function bulkDestroy() {
         var checked_checkboxes = $('.element_checkbox:checked');
         if (checked_checkboxes.size() > 0) {
-            for cb in checked_checkboxes
-
-
             checked_checkboxes.prop('checked', false);
         } else {
             $('.element_checkbox').prop('checked', 'checked');
