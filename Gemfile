@@ -56,6 +56,8 @@ gem 'bootstrap3-datetimepicker-rails', '~> 4.0.0'
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master'
 gem 'thin'
 gem 'the_sortable_tree'
+gem 'will_paginate'
+gem 'will_paginate-bootstrap'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

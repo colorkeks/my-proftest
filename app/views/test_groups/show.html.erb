@@ -13,10 +13,10 @@
       <b><%= @test_group.name %></b>
 
       <span class="dropdown" id="dropdown-create">
-        <span class=" dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+        <span class="dropdown dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
         <span class="caret"></span>
         </span>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+        <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
           <li role="presentation">
             <%= link_to 'переименовать', edit_test_group_path(@test_group), remote: true, role: 'menuitem', tabindex: '-1' %>
           </li>
@@ -32,9 +32,6 @@
           </li>
         </ul>
       </span>
-
-
-
     </h3>
   </div>
   </div>
@@ -120,6 +117,14 @@
     <% end %>
   </div>
   <div class="col-md-8">
+
+
+    <div class="pull-right">
+      <%#= page_entries_info @elements, :model => Test, :html => false %>
+      <span class="pagination">c <b><%= [@elements.per_page * (@elements.current_page-1) + 1, @elements.total_entries].min %></b> по <b><%= [@elements.per_page * (@elements.current_page), @elements.total_entries].min %></b> из <b><%=@elements.total_entries %></b><br/>&nbsp;</span>
+      <%= will_paginate @elements, renderer: BootstrapPagination::Rails, :page_links => false, next_label: '>', previous_label: '<' %>
+    </div>
+
     <table class="table table-striped">
       <thead>
       <tr>
