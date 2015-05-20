@@ -23,8 +23,12 @@
 //= require bootstrap-datetimepicker
 //= require moment/ru
 
-//= require_tree .
 
+
+$(function(){
+    $("a[rel~=popover], .has-popover").popover();
+    $("a[rel~=tooltip], .has-tooltip").tooltip();
+});
 
 function init_wysiwyg() {
     tinymce.init({

@@ -6,6 +6,9 @@ Rails.application.routes.draw do
     post :bulk_destroy, on: :member
     get 'bulk_move', to: :bulk_move_edit, on: :member, as: :bulk_move
     post 'bulk_move', to: :bulk_move_update, on: :member
+    get 'stub_tests', on: :collection
+    get 'stub_tasks', on: :collection
+    get 'stub_task', on: :collection
   end
 
   resources :user_associations

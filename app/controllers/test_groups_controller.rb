@@ -1,6 +1,7 @@
 class TestGroupsController < ApplicationController
   before_action :set_test_group, only: [:show, :edit, :update, :destroy, :bulk_destroy, :bulk_move_edit]
   load_and_authorize_resource
+  layout 'admin'
 
   # GET /test_groups
   # GET /test_groups.json
@@ -18,6 +19,10 @@ class TestGroupsController < ApplicationController
     @child_groups = @test_group.children.order(:lft)
     @elements = (@child_groups + @tests).paginate(:page => params[:page], :per_page => params[:per_page]||30)
   end
+
+  def stub_tests;  end
+  def stub_tasks;  end
+  def stub_task;  end
 
   # GET /test_groups/new
   def new
