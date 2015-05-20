@@ -18,6 +18,14 @@ class TestGroupsController < ApplicationController
     @tests = @test_group.tests.order(:lft)
     @child_groups = @test_group.children.order(:lft)
     @elements = (@child_groups + @tests).paginate(:page => params[:page], :per_page => params[:per_page]||30)
+
+    # delete -----
+    if params[:old]
+      render 'test_groups/show', layout: 'application'
+      return
+    end
+    # ------------
+
   end
 
   def stub_tests;  end
@@ -27,6 +35,9 @@ class TestGroupsController < ApplicationController
   # GET /test_groups/new
   def new
     @test_group = TestGroup.new(parent_id: params[:parent_id])
+    respond_to do |format|
+      format.js { render :new, layout: false }
+    end
   end
 
   # GET /test_groups/1/edit

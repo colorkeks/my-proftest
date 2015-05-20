@@ -1,4 +1,5 @@
 //= require jquery
+//= require jquery_ujs
 //= require jquery-migrate-1.2.1.min
 //= require twitter/bootstrap
 //= require Sortable

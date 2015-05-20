@@ -1,187 +1,258 @@
 <%- model_class = TestGroup -%>
-<div class="page-header">
-  <div class="row">
-  <div class="col-md-4">
-    <h1>Каталог</h1>
-  </div>
-  <div class="col-md-8">
-    <h3>
-      <% @test_group.ancestors.each do |parent| %>
-          <%= link_to parent.name, parent %>
-          &nbsp;&#47;&nbsp;
-      <% end %>
-      <b><%= @test_group.name %></b>
+<section>
 
-      <span class="dropdown" id="dropdown-create">
-        <span class="dropdown dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-        <span class="caret"></span>
-        </span>
-        <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
-          <li role="presentation">
-            <%= link_to 'переименовать', edit_test_group_path(@test_group), remote: true, role: 'menuitem', tabindex: '-1' %>
-          </li>
-          <li role="presentation">
-            <%= link_to t('.edit', :default => t("helpers.links.edit")), edit_test_group_path(@test_group), :class => 'btn btn-default btn-xs' %>
-          </li>
-          <li role="presentation">
-            <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                        test_group_path(@test_group),
-                        :method => 'delete',
-                        :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
-                        :class => 'btn btn-danger btn-xs' %>
-          </li>
-        </ul>
-      </span>
-    </h3>
-  </div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-md-4">
-    <div class="dropdown" id="dropdown-create">
-      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-        Создать
-        <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-        <li role="presentation">
-          <%= link_to 'Папку', new_test_group_path(parent_id: @test_group.id), remote: true, role: 'menuitem', tabindex: '-1' %>
-        </li>
-        <li role="presentation">
-          <%= link_to 'Тест', new_test_path(test_group_id: @test_group.id), remote: true, role: 'menuitem', tabindex: '-1' %>
-        </li>
-      </ul>
-    </div>
-    <%#= link_to 'Добавить группу', new_test_group_path(parent_id: @test_group.id), :class => 'btn btn-primary btn-sm' %>
-    <%#= link_to 'Добавить группу', new_test_group_path(parent_id: @test_group.id), :class => 'btn btn-primary btn-sm' %>
+  <div class="mainpanel">
 
 
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-          </div>
-          <div class="modal-body" id="new-form">
-            ...
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+    <div class="pageheader">
+      <div class="row">
+        <div class="col-sm-3 col-lg-2">
+          <h2> Каталог</h2>
+        </div>
+        <div class="col-sm-9 col-lg-10">
+          <div class="breadcrumb-wrapper">
+
+            <ol class="breadcrumb">
+              <% @test_group.ancestors.each do |parent| %>
+                  <li><%= link_to parent.name, parent %></li>
+              <% end %>
+              <!--<li><a href="index.html">Тесты</a></li>-->
+              <li class="active">
+                <div class="btn-group nomargin">
+                  <span class="dropdown-toggle"  data-toggle="dropdown"><%= @test_group.name %> <span class="caret"></span></span>
+                  <ul class="dropdown-menu">
+                    <li><%= link_to 'переименовать', edit_test_group_path(@test_group), remote: true %></li>
+                    <li><%= link_to t('.edit', :default => t("helpers.links.edit")), edit_test_group_path(@test_group)  %></li>
+                    <li><%= link_to t('.destroy', :default => t("helpers.links.destroy")), test_group_path(@test_group), :method => 'delete',
+                                                 :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) } %>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ol>
+
           </div>
         </div>
       </div>
     </div>
+    <div class="contentpanel panel-email">
+      <div class="row">
+        <div class="col-sm-3 col-lg-2">
+          <div class="btn-group nomargin">
+            <button class="btn btn-primary create-btn dropdown-toggle" data-toggle="dropdown" title="Создать">
+              Создать
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li><%= link_to 'Папку', new_test_group_path(parent_id: @test_group.id), remote: true %></li>
+              <li><%= link_to 'Тест', new_test_path(test_group_id: @test_group.id), remote: true %></li>
+            </ul>
 
+          </div>
 
-    <%#= link_to 'Добавить тест', new_test_path(test_group_id: @test_group.id), :class => 'btn btn-primary btn-sm' %>
-    <br/><br/>
-
-    <% last_level = -1 %>
-    <% TestGroup.root.self_and_descendants.each do |group| %>
-        <% current_level = group.level %>
-        <% if current_level < last_level %>
-            </li>
-            <% (last_level - current_level).times do %>
-                </ul></li>
-            <% end %>
-        <% elsif current_level > last_level  %>
-            <ul>
-        <% else %>
-            </li>
-        <% end %>
-        <li>
-          <span class="glyphicon glyphicon-folder-close folder-tree-folder" aria-hidden="true"></span>
-          <!--
-          <a href="#" class="folder-tree-folder" onclick="$(this).parent().find('ul').slideToggle(); return false;" >+</a>
-          -->
-          <% if @test_group == group %>
-          <b>(<%= current_level %>)<%= group.name %></b>
-          <% else %>
-            <%= link_to "(#{current_level})#{group.name}", group %>
-          <% end %>
-          <%if @test_group == group %></b><%end%>
-
-          <% last_level = current_level %>
-    <% end %>
-    <% if last_level != -1%>
-        </li>
-    <% end %>
-    <% (last_level).times do %>
-        </ul></li>
-    <% end %>
-    <%if last_level != -1%>
-        </ul>
-    <% end %>
-  </div>
-  <div class="col-md-8">
-    <div class="col-md-4">
-      <div class="btn-group" role="group" aria-label="">
-        <button type="button" class="btn btn-default" onclick="toggleCheckbox();"><span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span></button>
-        <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-th" aria-hidden="true"></span></button>
-        <button type="button" class="btn btn-default" onclick="$('#bulk_move_form').submit();"><span class="glyphicon glyphicon-folder-close" aria-hidden="true"></span></button>
-        <button type="button" class="btn btn-default" onclick="bulkDestroy();"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
-        <%= form_tag bulk_move_test_group_path(@test_group), id: 'bulk_move_form', method: 'get', remote: true do %>
-            <%= hidden_field_tag 'test_ids' %>
-            <%= hidden_field_tag 'test_group_ids' %>
-        <% end %>
-        <%= form_tag bulk_destroy_test_group_path(@test_group), id: 'bulk_destroy_form', remote: false do %>
-            <%= hidden_field_tag 'test_ids' %>
-            <%= hidden_field_tag 'test_group_ids' %>
-        <% end %>
-       </div>
-    </div>
-
-    <div class="col-md-4 pull-right">
-      <%#= page_entries_info @elements, :model => Test, :html => false %>
-      <span class="pagination">c <b><%= [@elements.per_page * (@elements.current_page-1) + 1, @elements.total_entries].min %></b> по <b><%= [@elements.per_page * (@elements.current_page), @elements.total_entries].min %></b> из <b><%=@elements.total_entries %></b><br/>&nbsp;</span>
-      <%= will_paginate @elements, renderer: BootstrapPagination::Rails, :page_links => false, next_label: '>', previous_label: '<' %>
-    </div>
-
-    <table class="table table-striped">
-      <thead>
-      <tr>
-        <th width="10px;"></th>
-        <th>Название</th>
-        <th>Действия</th>
-      </tr>
-      </thead>
-      <tbody>
-      <% @elements.each do |element| %>
-          <tr data-class="<%=element.class%>" data-id="<%= element.id %>">
-            <td><%= check_box_tag 'check', 1, false, class: 'element_checkbox' %></td>
-            <td>
-                <% if element.is_a?(TestGroup)%>
-                    <% test_group = element %>
-                    <span class="glyphicon glyphicon-folder-close" aria-hidden="true"></span>&nbsp;<%= link_to test_group.name, test_group_path(test_group) %>
-                <% elsif element.is_a?(Test) %>
-                    <% test = element %>
-                    <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>&nbsp;<%= link_to test.title, test_path(test) %>
-                <% else %>
-                <% end %>
-
-
-            </td>
-            <td>
-              <% if element.is_a?(TestGroup)%>
-                  <% test_group = element %>
-
-              <% elsif element.is_a?(Test) %>
-                  <% test = element %>
-
-              <% else %>
+          <h5 class="sidebartitle"></h5>
+          <ul class="nav nav-pills nav-stacked nav-bracket">
+            <li class="tree">
+              <% last_level = -1 %>
+              <% TestGroup.root.self_and_descendants.each do |group| %>
+                  <% current_level = group.level %>
+                  <% if current_level < last_level %>
+                      </li>
+                      <% (last_level - current_level).times do %>
+                          </ul></li>
+                      <% end %>
+                  <% elsif current_level > last_level %>
+                      <ul class="children" style="display: block">
+                  <% else %>
+                      </li>
+                  <% end %>
+                  <li>
+                    <%= link_to group, class: (@test_group == group ? 'active' : '') do %>
+                        <% if group.children.any? %>
+                            <i class="fa fa-caret-right"></i>
+                        <% else %>
+                            <i class="fa fa-caret-right trnsp"></i>
+                        <% end %>
+                       <%= group.name %>
+                    <% end %>
+                    <% last_level = current_level %>
               <% end %>
-            </td>
-          </tr>
-      <% end %>
-      </tbody>
-    </table>
+              <% if last_level != -1 %>
+                  </li>
+              <% end %>
+              <% (last_level).times do %>
+                  </ul></li>
+              <% end %>
+              <% if last_level != -1 %>
+                  </ul>
+              <% end %>
+            </li>
+          </ul>
+          <ul class="nav nav-pills nav-stacked nav-email mb20">
+            <li><a href="#"><i class="fa fa-trash"></i> Корзина</a></li>
+          </ul>
 
+        </div>
+        <div class="col-sm-9 col-lg-10">
 
+          <div class="panel panel-default list-panel">
+            <div class="panel-body">
+              <div class="btn-group mr10">
+                <div class="btn-group nomargin">
+                  <button class="btn btn-white tooltips" type="button" onclick="toggleCheckbox()">
+                    <div class="ckbox ckbox-default">
+                      <input type="checkbox" id="checkbox0">
+                      <label for="checkbox0"></label>
+                    </div>
+                  </button>
+
+                  <button onclick="$('#bulk_move_form').submit();" class="btn btn-white tooltips" type="button" title="Переместить" data-toggle="modal" data-target="#move">
+                    <i class="fa fa-folder"></i>
+                  </button>
+                  <button onclick="bulkDestroy();" class="btn btn-white tooltips" type="button" data-toggle="tooltip" title="Удалить">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                  <%= form_tag bulk_move_test_group_path(@test_group), id: 'bulk_move_form', method: 'get', remote: true do %>
+                      <%= hidden_field_tag 'test_ids' %>
+                      <%= hidden_field_tag 'test_group_ids' %>
+                  <% end %>
+                  <%= form_tag bulk_destroy_test_group_path(@test_group), id: 'bulk_destroy_form', remote: false do %>
+                      <%= hidden_field_tag 'test_ids' %>
+                      <%= hidden_field_tag 'test_group_ids' %>
+                  <% end %>
+                </div>
+                <div class="btn-group mr10">
+                  <button class="btn btn-white tooltips dropdown-toggle" data-toggle="dropdown" type="button" title="Другое">
+                    <i class="fa fa-ellipsis-v"></i>
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">Переименовать</a></li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="pull-right">
+                <span class="mr10 italic text-muted">
+                  <%= [@elements.per_page * (@elements.current_page-1) + 1, @elements.total_entries].min %>
+                  - <%= [@elements.per_page * (@elements.current_page), @elements.total_entries].min %>
+                  из <%=@elements.total_entries %>
+                </span>
+                <div class="btn-group mr10">
+                  <%= will_paginate @elements, renderer: BootstrapPagination::Rails, :page_links => false, next_label: '>', previous_label: '<' %>
+                  <button class="btn btn-white" type="button"><i class="fa fa-chevron-left"></i></button>
+                  <button class="btn btn-white" type="button"><i class="fa fa-chevron-right"></i></button>
+                </div>
+              </div>
+
+              <div class="table-responsive">
+                <table class="table table-email tests">
+                  <tbody>
+                  <% @elements.each_with_index do |element, index| %>
+                  <tr class="unread" data-class="<%=element.class%>" data-id="<%= element.id %>">
+                    <td>
+                      <div class="ckbox ckbox-default">
+                        <%= check_box_tag 'check', 1, false, class: 'element_checkbox', id: "cb_#{index}" %>
+                        <label for="<%= "cb_#{index}" %>"></label>
+                      </div>
+                    </td>
+                    <td>
+                       <i class="fa <%= element.is_a?(TestGroup) ? 'fa-folder'  : 'fa-file-o' %>"></i>
+                    </td>
+                    <td>
+                      <div class="media">
+                        <div class="media-body">
+                          <span class="media-meta pull-right">Today at 7:30am</span>
+                          <h4>
+                            <% if element.is_a?(TestGroup)%>
+                                <%= link_to element.name, test_group_path(element) %>
+                            <% elsif element.is_a?(Test) %>
+                                <%= link_to element.title, test_path(element) %>
+                            <% end %>
+                          </h4>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <% end %>
+                  </tbody>
+                </table>
+              </div>
+              <!-- table-responsive -->
+            </div>
+            <!-- panel-body -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body" id="new-form">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
   </div>
 </div>
+
+<!-- modals -->
+<div class="modal fade" id="move">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Переместить</h4>
+      </div>
+      <div class="modal-body">
+        <p>1 папку, 5 тестов в папку </p>
+        <ul class="nav nav-pills nav-stacked nav-bracket">
+          <li class="tree" style="margin-left: -10px">
+            <ul class="children" style="display: block">
+              <li><a href="general-forms.html"><i class="fa fa-caret-down"></i> Тесты</a>
+
+                <ul class="children" style="display: block">
+                  <li><a href="general-forms.html"><i class="fa fa-caret-down"></i>Фармацевтика</a>
+                    <ul class="children" style="display: block">
+                      <li><a href="general-forms.html"><i class="fa fa-caret-right trnsp"></i>Фармацевтическая технология</a></li>
+                      <li><a href="form-layouts.html"><i class="fa fa-caret-right"></i>Фармацевтическая химия</a></li>
+                      <li><a href="form-validation.html"><i class="fa fa-caret-right"></i>Управление и экономика</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="form-layouts.html" class="active"><i class="fa fa-caret-right"></i></i> Педиатрия</a></li>
+                  <li><a href="form-validation.html"><i class="fa fa-caret-right trnsp"></i> ВИЧ</a></li>
+                  <li><a href="form-validation.html"><i class="fa fa-caret-right trnsp"></i> Судебно-медицинская экспертиза</a></li>
+                  <li><a href="form-wizards.html"><i class="fa fa-caret-down"></i>Стоматология</a>
+                    <ul class="children" style="display: block">
+                      <li><a href="general-forms.html"><i class="fa fa-caret-right"></i>ЧЛХ</a></li>
+                      <li><a href="form-layouts.html"><i class="fa fa-caret-right"></i>Терапевтическая стоматология</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+        <button type="button" class="btn btn-primary">Переместить</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!--end modal-->
 
 <script type="text/javascript">
     function toggleCheckbox() {
