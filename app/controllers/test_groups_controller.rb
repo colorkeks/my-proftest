@@ -1,7 +1,7 @@
 class TestGroupsController < ApplicationController
   before_action :set_test_group, only: [:show, :edit, :update, :destroy, :bulk_destroy, :bulk_move_edit]
   load_and_authorize_resource
-  layout 'admin'
+  layout proc { request.format.symbol == :js ? false: 'admin' }
 
   # GET /test_groups
   # GET /test_groups.json
@@ -93,7 +93,26 @@ class TestGroupsController < ApplicationController
 
   def bulk_move_edit
 
+  end
 
+  def bulk_move_update
+    tests = Test.where(id: params[:test_ids].split(','))
+    test_groups = TestGroup.where(id: params[:test_group_ids].split(','))
+    destination_group = TestGroup.find(params[:destination_group_id])
+
+    TestGroup.transaction do
+      tests.each do |test|
+        test.test_group = destination_group
+        test.save!
+      end
+
+      test_groups.each do |test_group|
+        test_group.parent = destination_group
+        test_group.save!
+      end
+    end
+
+    redirect_to @test_group
   end
 
   private

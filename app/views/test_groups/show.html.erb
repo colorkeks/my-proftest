@@ -106,7 +106,7 @@
                     </div>
                   </button>
 
-                  <button onclick="$('#bulk_move_form').submit();" class="btn btn-white tooltips" type="button" title="Переместить" data-toggle="modal" data-target="#move">
+                  <button onclick="bulkMoveFormOpen();" class="btn btn-white tooltips" type="button" title="Переместить">
                     <i class="fa fa-folder"></i>
                   </button>
                   <button onclick="bulkDestroy();" class="btn btn-white tooltips" type="button" data-toggle="tooltip" title="Удалить">
@@ -255,8 +255,17 @@
 <!--end modal-->
 
 <script type="text/javascript">
+    function toggleCheckbox() {
+        var checked_checkboxes = $('.element_checkbox:checked');
+        if (checked_checkboxes.size() > 0) {
+            checked_checkboxes.prop('checked', false);
+        } else {
+            $('.element_checkbox').prop('checked', 'checked');
+        }
+        return false;
+    }
 
-    function bulkDestroy() {
+    function getSelectedIds() {
         var checked_checkboxes = $('.element_checkbox:checked');
         var trs = checked_checkboxes.closest('tr');
         var test_ids = [];
@@ -272,9 +281,24 @@
                 test_group_ids.push(id);
             }
         });
-        //alert(test_ids.join());
-        //alert(test_group_ids.join());
+        return {'test_ids': test_ids, 'test_group_ids': test_group_ids }
+    }
+
+    function bulkDestroy() {
+        var json = getSelectedIds();
+        var test_ids = json['test_ids'];
+        var test_group_ids = json['test_group_ids'];
         var form = $('#bulk_destroy_form');
+        form.children("[name='test_ids']").val(test_ids.join());
+        form.children("[name='test_group_ids']").val(test_group_ids.join());
+        form.submit();
+    }
+
+    function bulkMoveFormOpen() {
+        var json = getSelectedIds();
+        var test_ids = json['test_ids'];
+        var test_group_ids = json['test_group_ids'];
+        var form = $('#bulk_move_form');
         form.children("[name='test_ids']").val(test_ids.join());
         form.children("[name='test_group_ids']").val(test_group_ids.join());
         form.submit();
