@@ -58,6 +58,7 @@ gem 'thin'
 gem 'the_sortable_tree'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap'
+gem 'font-awesome-rails'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

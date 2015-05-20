@@ -2,7 +2,12 @@ Rails.application.routes.draw do
 
   get 'main/index'
 
-  resources :test_groups
+  resources :test_groups do
+    get 'stub_tests', on: :collection
+    get 'stub_tasks', on: :collection
+    get 'stub_task', on: :collection
+  end
+
   resources :user_associations
 
   get 'table/index'
