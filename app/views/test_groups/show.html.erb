@@ -275,13 +275,16 @@
     }
 
     function bulkDestroy() {
-        var json = getSelectedIds();
-        var test_ids = json['test_ids'];
-        var test_group_ids = json['test_group_ids'];
-        var form = $('#bulk_destroy_form');
-        form.children("[name='test_ids']").val(test_ids.join());
-        form.children("[name='test_group_ids']").val(test_group_ids.join());
-        form.submit();
+        var answer = confirm('Вы уверены?');
+        if (answer) {
+            var json = getSelectedIds();
+            var test_ids = json['test_ids'];
+            var test_group_ids = json['test_group_ids'];
+            var form = $('#bulk_destroy_form');
+            form.children("[name='test_ids']").val(test_ids.join());
+            form.children("[name='test_group_ids']").val(test_group_ids.join());
+            form.submit();
+        }
     }
 
     function bulkMoveFormOpen() {
