@@ -255,16 +255,6 @@
 <!--end modal-->
 
 <script type="text/javascript">
-    function toggleCheckbox() {
-        var checked_checkboxes = $('.element_checkbox:checked');
-        if (checked_checkboxes.size() > 0) {
-            checked_checkboxes.prop('checked', false);
-        } else {
-            $('.element_checkbox').prop('checked', 'checked');
-        }
-        return false;
-    }
-
     function getSelectedIds() {
         var checked_checkboxes = $('.element_checkbox:checked');
         var trs = checked_checkboxes.closest('tr');
