@@ -2,7 +2,12 @@ Rails.application.routes.draw do
 
   get 'main/index'
 
-  resources :test_groups
+  resources :test_groups do
+    post :bulk_destroy, on: :member
+    get 'bulk_move', to: :bulk_move_edit, on: :member, as: :bulk_move
+    post 'bulk_move', to: :bulk_move_update, on: :member
+  end
+
   resources :user_associations
 
   get 'table/index'

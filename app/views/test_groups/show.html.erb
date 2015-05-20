@@ -121,8 +121,16 @@
       <div class="btn-group" role="group" aria-label="">
         <button type="button" class="btn btn-default" onclick="toggleCheckbox();"><span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span></button>
         <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-th" aria-hidden="true"></span></button>
-        <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-folder-close" aria-hidden="true"></span></button>
-        <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+        <button type="button" class="btn btn-default" onclick="$('#bulk_move_form').submit();"><span class="glyphicon glyphicon-folder-close" aria-hidden="true"></span></button>
+        <button type="button" class="btn btn-default" onclick="bulkDestroy();"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+        <%= form_tag bulk_move_test_group_path(@test_group), id: 'bulk_move_form', method: 'get', remote: true do %>
+            <%= hidden_field_tag 'test_ids' %>
+            <%= hidden_field_tag 'test_group_ids' %>
+        <% end %>
+        <%= form_tag bulk_destroy_test_group_path(@test_group), id: 'bulk_destroy_form', remote: false do %>
+            <%= hidden_field_tag 'test_ids' %>
+            <%= hidden_field_tag 'test_group_ids' %>
+        <% end %>
        </div>
     </div>
 
@@ -188,11 +196,25 @@
     }
     function bulkDestroy() {
         var checked_checkboxes = $('.element_checkbox:checked');
-        if (checked_checkboxes.size() > 0) {
-            checked_checkboxes.prop('checked', false);
-        } else {
-            $('.element_checkbox').prop('checked', 'checked');
-        }
-        return false;
+        var trs = checked_checkboxes.closest('tr');
+        var test_ids = [];
+        var test_group_ids = [];
+
+        trs.each(function( index, element ){
+            cls = $(element).attr('data-class');
+            id = $(element).attr('data-id');
+            if (cls == "Test"){
+                test_ids.push(id);
+            }
+            else if (cls == "TestGroup") {
+                test_group_ids.push(id);
+            }
+        });
+        //alert(test_ids.join());
+        //alert(test_group_ids.join());
+        var form = $('#bulk_destroy_form');
+        form.children("[name='test_ids']").val(test_ids.join());
+        form.children("[name='test_group_ids']").val(test_group_ids.join());
+        form.submit();
     }
 </script>

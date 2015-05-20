@@ -1,0 +1,18 @@
+<div class="modal-content">
+<%= form_tag bulk_destroy_test_group_path(@test_group), id: 'bulk_destroy_form', method: 'get', remote: false do %>
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title" id="myModalLabel">Переместить объекты</h4>
+  </div>
+  <div class="modal-body" id="new-form">
+    Папка:
+    <%= select_tag :destination_group_id, options_for_select(nested_set_options(TestGroup) {|i| "#{'–' * i.level} #{i.name}"}, TestGroup.root) %>
+    <%= hidden_field_tag 'test_ids' %>
+    <%= hidden_field_tag 'test_group_ids' %>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+    <%= submit_tag 'Переместить', :class => 'btn btn-primary' %>
+  </div>
+<% end %>
+</div>

@@ -1,5 +1,5 @@
 class TestGroupsController < ApplicationController
-  before_action :set_test_group, only: [:show, :edit, :update, :destroy]
+  before_action :set_test_group, only: [:show, :edit, :update, :destroy, :bulk_destroy, :bulk_move_edit]
   load_and_authorize_resource
 
   # GET /test_groups
@@ -16,7 +16,7 @@ class TestGroupsController < ApplicationController
     @test_groups = TestGroup.all
     @tests = @test_group.tests.order(:lft)
     @child_groups = @test_group.children.order(:lft)
-    @elements = (@child_groups + @tests).paginate(:page => params[:page], :per_page => params[:per_page]||3)
+    @elements = (@child_groups + @tests).paginate(:page => params[:page], :per_page => params[:per_page]||30)
   end
 
   # GET /test_groups/new
@@ -69,6 +69,14 @@ class TestGroupsController < ApplicationController
   end
 
   def bulk_destroy
+    tests = Test.where(id: params[:test_ids].split(',')).destroy_all
+    test_groups = TestGroup.where(id: params[:test_group_ids].split(',')).destroy_all
+    @test_groups_for_destination = TestGroup.all
+    redirect_to @test_group
+  end
+
+  def bulk_move_edit
+
 
   end
 
