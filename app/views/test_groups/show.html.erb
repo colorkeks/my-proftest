@@ -99,7 +99,7 @@
             <div class="panel-body">
               <div class="btn-group mr10">
                 <div class="btn-group nomargin">
-                  <button class="btn btn-white tooltips" type="button" onclick="toggleCheckbox()">
+                  <button id="toggle-checkboxes" class="btn btn-white tooltips" type="button" >
                     <div class="ckbox ckbox-default">
                       <input type="checkbox" id="checkbox0">
                       <label for="checkbox0"></label>
@@ -255,16 +255,7 @@
 <!--end modal-->
 
 <script type="text/javascript">
-    function toggleCheckbox() {
-        var checked_checkboxes = $('.element_checkbox:checked');
-        if (checked_checkboxes.size() > 0) {
 
-            checked_checkboxes.prop('checked', false);
-        } else {
-            $('.element_checkbox').prop('checked', 'checked');
-        }
-        return false;
-    }
     function bulkDestroy() {
         var checked_checkboxes = $('.element_checkbox:checked');
         var trs = checked_checkboxes.closest('tr');
