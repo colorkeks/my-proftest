@@ -47,7 +47,6 @@
               <li><%= link_to 'Папку', new_test_group_path(parent_id: @test_group.id), remote: true %></li>
               <li><%= link_to 'Тест', new_test_path(test_group_id: @test_group.id), remote: true %></li>
             </ul>
-
           </div>
 
           <h5 class="sidebartitle"></h5>
@@ -116,9 +115,13 @@
                   из <%=@elements.total_entries %>
                 </span>
                 <div class="btn-group mr10">
-                  <%= will_paginate @elements, renderer: BootstrapPagination::Rails, :page_links => false, next_label: '>', previous_label: '<' %>
-                  <button class="btn btn-white" type="button"><i class="fa fa-chevron-left"></i></button>
-                  <button class="btn btn-white" type="button"><i class="fa fa-chevron-right"></i></button>
+                  <%= will_paginate @elements,
+                                    renderer: BootstrapPagination::Rails,
+                                    :page_links => false,
+                                    next_label: '<i class="fa fa-chevron-right"></i>',
+                                    previous_label: '<i class="fa fa-chevron-left"></i>' %>
+                  <!--<button class="btn btn-white" type="button"><i class="fa fa-chevron-left"></i></button>-->
+                  <!--<button class="btn btn-white" type="button"><i class="fa fa-chevron-right"></i></button>-->
                 </div>
               </div>
 
