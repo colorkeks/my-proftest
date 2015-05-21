@@ -43,7 +43,7 @@ class TestGroupsController < ApplicationController
 
     respond_to do |format|
       if @test_group.save
-        format.html { redirect_to @test_group, notice: 'Test group was successfully created.' }
+        format.html { redirect_to @test_group.parent, notice: 'Test group was successfully created.' }
         format.json { render :show, status: :created, location: @test_group }
       else
         format.html { render :new }
@@ -99,19 +99,29 @@ class TestGroupsController < ApplicationController
     test_groups = TestGroup.where(id: params[:test_group_ids].split(','))
     destination_group = TestGroup.find(params[:destination_group_id])
 
-    TestGroup.transaction do
-      tests.each do |test|
-        test.test_group = destination_group
-        test.save!
-      end
+    begin
+      TestGroup.transaction do
+        tests.each do |test|
+          test.test_group = destination_group
+          test.save!
+        end
 
-      test_groups.each do |test_group|
-        test_group.parent = destination_group
-        test_group.save!
+        test_groups.each do |test_group|
+          test_group.parent = destination_group
+          test_group.save!
+        end
       end
+      @success = true
+    rescue
+      @success = false
     end
 
-    redirect_to @test_group
+    if @success
+      redirect_to @test_group
+    else
+      flash[:error] = 'Невозможно переместить группу элементов'
+      redirect_to @test_group
+    end
   end
 
   private
