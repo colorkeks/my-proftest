@@ -75,7 +75,10 @@ class TestsController < ApplicationController
     respond_to do |format|
       if @test.directory == false
         if @test.update(test_params)
-          format.html { redirect_to @test, notice: 'Тест был успешно обновлен' }
+          format.html {
+            redirect_to(:back)
+            #redirect_to @test, notice: 'Тест был успешно обновлен'
+          }
           format.json { render :show, status: :ok, location: @test }
         else
           format.html { render :edit }
@@ -83,7 +86,10 @@ class TestsController < ApplicationController
         end
       else
         if @test.update(test_params)
-          format.html { redirect_to current_user, notice: 'Папка была успешно обновлена' }
+          format.html {
+            redirect_to(:back)
+            #redirect_to current_user, notice: 'Папка была успешно обновлена'
+          }
           format.json { render :show, status: :ok, location: @test }
         else
           format.html { render :edit }
