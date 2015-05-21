@@ -65,7 +65,14 @@ class TestGroupsController < ApplicationController
   def update
     respond_to do |format|
       if @test_group.update(test_group_params)
-        format.html { redirect_to @test_group, notice: 'Test group was successfully updated.' }
+        format.html {
+          if params.has_key?('current_test_group_id') && params[:current_test_group_id].present?
+            group = TestGroup.find params[:current_test_group_id]
+          else
+            group = @test_group
+          end
+          redirect_to group
+        }
         format.json { render :show, status: :ok, location: @test_group }
       else
         format.html { render :edit }
