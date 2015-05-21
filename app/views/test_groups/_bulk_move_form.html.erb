@@ -1,18 +1,36 @@
-<div class="modal-content">
 <%= form_tag bulk_move_test_group_path(@test_group), method: 'post', remote: false do %>
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <h4 class="modal-title" id="myModalLabel">Переместить объекты</h4>
-  </div>
-  <div class="modal-body" id="new-form">
-    Папка:
-    <%= select_tag :destination_group_id, options_for_select(nested_set_options(TestGroup) {|i| "#{'–' * i.level} #{i.name}"}, TestGroup.root) %>
+    <%= hidden_field_tag 'destination_group_id' %>
     <%= hidden_field_tag 'test_ids', params[:test_ids] %>
     <%= hidden_field_tag 'test_group_ids', params[:test_group_ids] %>
+
+<div class="modal-content">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">Переместить</h4>
+  </div>
+
+  <div class="modal-body">
+    <p>Папок: <%= @test_group_count  %>, Тестов: <%= @test_count  %></p>
+    <ul class="nav nav-pills nav-stacked nav-bracket">
+      <li class="tree" style="margin-left: -10px">
+        <%= render_tree(TestGroup.root) do |item| %>
+            <span id="destination_group_span" onclick="selectDestinationGroup(this);" data-id="<%= item.id%>">
+                <% if item.children.any? %>
+                    <i class="fa fa-caret-right"></i>
+                <% else %>
+                    <i class="fa fa-caret-right trnsp"></i>
+                <% end %>
+                <%= item.name %>
+            </span>
+            <%# end %>
+        <% end %>
+      </li>
+    </ul>
+
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
     <%= submit_tag 'Переместить', :class => 'btn btn-primary' %>
   </div>
+</div><!-- /.modal-content -->
 <% end %>
-</div>

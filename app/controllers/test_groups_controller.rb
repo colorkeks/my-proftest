@@ -91,7 +91,17 @@ class TestGroupsController < ApplicationController
   end
 
   def bulk_move_edit
+    if params[:test_ids].present?
+      @test_count = params[:test_ids].split(',').count
+    else
+      @test_count = 0
+    end
 
+    if params[:test_group_ids].present?
+      @test_group_count = params[:test_group_ids].split(',').count
+    else
+      @test_group_count = 0
+    end
   end
 
   def bulk_move_update

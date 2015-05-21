@@ -283,4 +283,18 @@
     function editElement() {
         $('.element_checkbox:checked').first().closest('tr').find('.element-edit-link').first().click();
     }
+
+    function selectDestinationGroup(selected) {
+        //return 5;
+        //console.log('dfgdfg');
+        //return 6;
+        var form = $(selected).closest('form');
+        form.find('.label-info').removeClass('label-info');
+        $(selected).addClass('label-info');
+        form.find("[name='destination_group_id']").val($(selected).attr('data-id'));
+        //var checked_checkboxes = $('.element_checkbox:checked');
+        //var trs = checked_checkboxes.closest('tr');
+        //var test_ids = [];
+        //var test_group_ids = [];
+    }
 </script>
