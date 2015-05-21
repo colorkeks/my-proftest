@@ -5,6 +5,8 @@ class TestsController < ApplicationController
   load_and_authorize_resource
   # GET /tests
   # GET /tests.json
+  layout 'admin'
+
   def index
     @tests = Test.all
   end
@@ -14,6 +16,11 @@ class TestsController < ApplicationController
   def show
     @task = Task.new
     @test_id = params[:id]
+
+    if params[:old]
+      render 'tests/show_old', layout: 'application'
+      return
+    end
   end
 
   def create_task
