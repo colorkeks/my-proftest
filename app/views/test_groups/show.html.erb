@@ -53,38 +53,15 @@
           <h5 class="sidebartitle"></h5>
           <ul class="nav nav-pills nav-stacked nav-bracket">
             <li class="tree">
-              <% last_level = -1 %>
-              <% TestGroup.root.self_and_descendants.each do |group| %>
-                  <% current_level = group.level %>
-                  <% if current_level < last_level %>
-                      </li>
-                      <% (last_level - current_level).times do %>
-                          </ul></li>
+              <%= render_tree(TestGroup.root) do |item| %>
+                  <%= link_to item, class: (@test_group == item ? 'active' : '') do %>
+                      <% if item.children.any? %>
+                          <i class="fa fa-caret-right"></i>
+                      <% else %>
+                          <i class="fa fa-caret-right trnsp"></i>
                       <% end %>
-                  <% elsif current_level > last_level %>
-                      <ul class="children" style="display: block">
-                  <% else %>
-                      </li>
+                      <%= item.name %>
                   <% end %>
-                  <li>
-                    <%= link_to group, class: (@test_group == group ? 'active' : '') do %>
-                        <% if group.children.any? %>
-                            <i class="fa fa-caret-right"></i>
-                        <% else %>
-                            <i class="fa fa-caret-right trnsp"></i>
-                        <% end %>
-                       <%= group.name %>
-                    <% end %>
-                    <% last_level = current_level %>
-              <% end %>
-              <% if last_level != -1 %>
-                  </li>
-              <% end %>
-              <% (last_level).times do %>
-                  </ul></li>
-              <% end %>
-              <% if last_level != -1 %>
-                  </ul>
               <% end %>
             </li>
           </ul>
