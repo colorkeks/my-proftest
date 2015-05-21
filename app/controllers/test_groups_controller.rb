@@ -17,15 +17,7 @@ class TestGroupsController < ApplicationController
     @test_groups = TestGroup.all
     @tests = @test_group.tests.order(:lft)
     @child_groups = @test_group.children.order(:lft)
-    @elements = (@child_groups + @tests).paginate(:page => params[:page], :per_page => params[:per_page]||5)
-
-    # delete -----
-    if params[:old]
-      render 'test_groups/show', layout: 'application'
-      return
-    end
-    # ------------
-
+    @elements = (@child_groups + @tests).paginate(:page => params[:page], :per_page => params[:per_page] || 30)
   end
 
   def stub_tests;  end
