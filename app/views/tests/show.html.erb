@@ -1,145 +1,209 @@
-<% if @test.directory == false %>
-<div class="row question-content">
-<div class="page-header">
-  <h2>Тест <%= link_to 'Редактировать', edit_test_path(@test), :class => 'btn btn-default btn-lg', :style => 'display: inline'%></h2>
-</div>
-<div class="row">
-<div class="col-lg-12">
-  <h3>
-  <div class="col-sm-2">
-    Заголовок:
-  </div>
-  <div class="col-sm-offset-2">
-    <%= @test.title %>
-  </div>
+<section>
+  <div class="mainpanel">
 
-  <div class="col-sm-2">
-    Описание:
+    <div class="pageheader">
+      <div class="row">
+        <div class="col-sm-3 col-lg-2">
+          <%= link_to test_group_path(@test.test_group), class: 'btn btn-white back-btn pull-right', title: 'Назад' do %>
+            <i class="fa fa-arrow-left"></i>
+          <% end %>
+          <h2> Тест</h2>
+        </div>
+        <div class="col-sm-9 col-lg-10">
+          <div class="breadcrumb-wrapper">
+            <ol class="breadcrumb">
+              <% @test.test_group.ancestors.each do |parent| %>
+                  <li><%= link_to parent.name, parent %></li>
+              <% end %>
+              <li class="active">
+                <div class="btn-group nomargin">
+                  <span class="dropdown-toggle"  data-toggle="dropdown"><%= @test.title %> <span class="caret"></span></span>
+                  <ul class="dropdown-menu">
+                    <li><a href="#"> Переименовать</a></li>
+                  </ul>
+                </div>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contentpanel panel-email">
+      <div class="row">
+        <div class="col-sm-3 col-lg-2">
+          <div class="btn-group nomargin">
+            <button class="btn btn-primary create-btn dropdown-toggle" data-toggle="dropdown" title="Создать">
+              Создать
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a href="#" data-toggle="modal" data-target="#createTask"> Задание</a></li>
+              <li><a href="#"> Раздел</a></li>
+            </ul>
+
+          </div>
+
+          <ul class="nav nav-pills nav-stacked nav-email mb20">
+            <li><a href="#"><i class="fa fa-list-alt"></i> Задания</a></li>
+            <li><a href="#"><i class="fa fa-trash"></i> Корзина</a></li>
+          </ul>
+
+          <h5 class="sidebartitle">Разделы</h5>
+          <ul class="nav nav-pills nav-stacked nav-bracket">
+            <li class="tree">
+              <ul class="children" style="display: block">
+                <li><a href="#"><i class="fa fa-caret-down trnsp"></i> Раздел 1</a></li>
+                <li><a href="#"><i class="fa fa-caret-down trnsp"></i> Раздел 2</a></li>
+                <li><a href="#" class="active"><i class="fa fa-caret-down trnsp"></i> Раздел 3</a></li>
+                <li><a href="#"><i class="fa fa-caret-down trnsp"></i> Раздел 4</a></li>
+              </ul>
+            </li>
+          </ul>
+
+        </div>
+        <div class="col-sm-9 col-lg-10">
+
+          <div class="panel panel-default">
+            <div class="panel-body task-panel">
+
+              <div class="btn-group mr10 ml5">
+                <div class="btn-group ">
+                  <button id="toggle-checkboxes" class="btn btn-white tooltips" type="button">
+                    <div class="ckbox ckbox-default">
+                      <input type="checkbox" id="checkbox0">
+                      <label for="checkbox0"></label>
+                    </div>
+                  </button>
+                  <button class="btn btn-white tooltips" type="button" title="Переместить" data-toggle="modal" data-target="#move">
+                    <i class="fa fa-folder"></i>
+                  </button>
+                </div>
+
+                <%= link_to edit_test_path(@test), :class => 'btn btn-white tooltips','data-toggle'=>"tooltip", title: "Редактировать" do %>
+                    <i class="fa fa-cog"></i>
+                <% end %>
+                <button class="btn btn-white tooltips" type="button" data-toggle="tooltip" title="Удалить"><i class="fa fa-trash"></i></button>
+                <div class="btn-group ">
+                  <button class="btn btn-white tooltips dropdown-toggle" data-toggle="dropdown" type="button" title="" data-original-title="Другое">
+                    <i class="fa fa-ellipsis-v"></i>
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">Переименовать</a></li>
+                  </ul>
+
+                </div>
+              </div>
+
+              <div class="btn-group labels mr10">
+                <div class="btn-group">
+                  <button data-toggle="dropdown" class="btn btn-white dropdown-toggle tooltips" type="button" title="Эквивалентные группы">
+                    <span class="label label-info"><strong>12</strong></span>
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a href="#"><span class="label label-info"><strong>1</strong></span></a></li>
+                    <li><a href="#"><span class="label label-info"><strong>2</strong></span></a></li>
+                    <li><a href="#"><span class="label label-info"><strong>3</strong></span></a></li>
+                    <li><a href="#">Добавить</a></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="pull-right">
+                <span class="mr10 italic text-muted">15 из 30 </span>
+                <div class="btn-group mr10">
+                  <button class="btn btn-white" type="button"><i class="fa fa-chevron-left"></i></button>
+                  <button class="btn btn-white" type="button"><i class="fa fa-chevron-right"></i></button>
+                </div>
+              </div>
+              <!-- pull-right -->
+
+
+              <div class="table-responsive">
+                <table class="table table-email tasks">
+                  <tbody>
+                  <% @tasks.each_with_index do |task, index| %>
+                      <tr class="unread">
+                        <td></td>
+                        <td>
+                          <div class="ckbox ckbox-default">
+                            <%= check_box_tag 'check', 1, false, class: 'element_checkbox', id: "cb_#{index}" %>
+                            <label for="<%= "cb_#{index}" %>"></label>
+                          </div>
+                        </td>
+                        <td><span class="label label-info"><strong>1</strong></span></td>
+                        <td style="width: 30px"><%#= task.task_type %><i class="fa fa-list"></i></td>
+                        <td>
+                          <div class="media">
+                            <div class="media-body">
+                              <span class="media-meta pull-right"><%= task.created_at %></span>
+                              <span class="media-meta pull-right mr20">Раздел 1</span>
+                              <h4><%= link_to task.text, task_path(task) %></h4>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                  <% end %>
+                  </tbody>
+                </table>
+              </div>
+              <!-- table-responsive -->
+            </div>
+            <!-- panel-body -->
+          </div>
+          <!-- panel -->
+        </div>
+        <!-- col-sm-9 -->
+      </div>
+      <!-- row -->
+    </div>
   </div>
-  <div class="col-sm-offset-2">
-    <%= @test.description %>
-  </div>
-  </h3>
-</div>
-</div>
+  <!-- mainpanel -->
+</section>
 
+<!-- modals -->
+<div class="modal fade" id="move">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Переместить</h4>
+      </div>
+      <div class="modal-body">
+        <p>3 задания в раздел </p>
+        <ul class="nav nav-pills nav-stacked nav-bracket">
+          <li class="tree" style="margin-left: -10px">
+            <ul class="children" style="display: block">
+              <li>
+                <a href="#"> Раздел 1</a>
+                <a href="#" class="active"> Раздел 2</a>
+                <a href="#"> Раздел 3</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
 
-<div class="page-header">
-  <h2>Задания</h2>
-</div>
-  <table class="table table-striped test-case">
-    <thead>
-    <tr>
-      <th>text</th>
-      <th>task_type</th>
-      <th>point</th>
-      <th style="min-width: 205px;"><%=t '.actions', :default => t("helpers.actions") %></th>
-    </tr>
-    </thead>
-    <tbody>
-    <% @tasks.each do |task| %>
-        <tr>
-          <td><%= task.text.html_safe %></td>
-          <td><%= task.task_type %></td>
-          <td><%= task.point %></td>
-          <td>
-            <%= link_to t('.show', :default => t("helpers.links.show")),
-                        task_path(task), :class => 'btn btn-default btn-md' %>
-            <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                        edit_task_path(task), :class => 'btn btn-default btn-md' %>
-            <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                        task_path(task),
-                        :method => :delete,
-                        :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
-                        :class => 'btn btn-md btn-danger' %>
-          </td>
-        </tr>
-    <% end %>
-    </tbody>
-  </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+        <button type="button" class="btn btn-primary">Переместить</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!--end modal-->
 
-<button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#myModal">
-  Добавить задание
-</button>
-<%= link_to 'Назад', current_user, :class => 'btn btn-default'%>
 
 <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="createTask" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel">Выберите тип задания:</h4>
       </div>
-        <%= render partial: 'task_form' %>
+      <%= render partial: 'task_form' %>
     </div>
   </div>
 </div>
-</div>
-<% else %>
-    <div class="row question-content">
-      <div class="page-header">
-        <h2>Папка <%= link_to 'Редактировать', edit_test_path(@test), :class => 'btn btn-default btn-lg', :style => 'display: inline'%></h2>
-      </div>
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="col-lg-6">
-          <h3>
-            <div class="col-sm-4">
-              Заголовок:
-            </div>
-            <div class="col-sm-offset-4">
-              <%= @test.title %>
-            </div>
-          </h3>
-          </div>
-          <div class="col-lg-6">
-          </div>
-        </div>
-      </div>
-
-    <div class="page-header">
-      <h2>Тесты</h2>
-    </div>
-    <table class="table table-striped test-case">
-      <thead>
-      <tr>
-        <th>Название:</th>
-        <th>Кол-во вопросов:</th>
-        <th>Алгоритм</th>
-        <th>Время:</th>
-      </tr>
-      </thead>
-      <tbody>
-    <% @test.children.where(:directory => false).each do |test| %>
-        <tr>
-          <td><%= link_to test.title, test_path(test.id) %></td>
-            <td><%= test.tasks.count %></td>
-          <td><%= test.algorithm %></td>
-          <td><%= test.timer.strftime('%H:%M') if !test.timer.nil? %></td>
-        </tr>
-    <% end %>
-      </tbody>
-    </table>
-
-    <div class="page-header">
-      <h2>Папки</h2>
-    </div>
-    <table class="table table-striped test-case">
-      <thead>
-      <tr>
-        <th>Название:</th>
-        <th>Кол-во элементов в папке:</th>
-      </tr>
-      </thead>
-      <tbody>
-      <% @test.children.where(:directory => true).each do |test| %>
-          <tr>
-            <td><%= link_to test.title, test_path(test.id) %></td>
-            <td><%= test.children.count%></td>
-          </tr>
-      <% end %>
-      </tbody>
-    </table>
-    </div>
-<% end %>
