@@ -5,7 +5,7 @@ class TestsController < ApplicationController
   load_and_authorize_resource
   # GET /tests
   # GET /tests.json
-  layout 'admin'
+  layout proc { request.format.symbol == :js ? false: 'admin' }
 
   def index
     @tests = Test.all
