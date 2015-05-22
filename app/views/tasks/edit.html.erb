@@ -1,1 +1,5 @@
-<%= render :partial => 'form' %>
+<% if params[:old] %>
+    <%= render :partial => 'form_old' %>
+<% else %>
+    <%= render :partial => 'form' %>
+<% end %>

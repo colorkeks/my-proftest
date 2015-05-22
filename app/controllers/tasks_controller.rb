@@ -32,6 +32,7 @@ class TasksController < ApplicationController
   def edit
     @test_id = @task.test_id
     @type = @task.task_type
+    render :edit, layout: 'admin'
   end
 
   # POST /tasks

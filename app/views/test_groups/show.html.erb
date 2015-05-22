@@ -1,4 +1,4 @@
-<%- model_class = TestGroup -%>
+<%= content_for :title, 'Каталог тестов - Профтест' %>
 <section>
 
   <div class="mainpanel">
@@ -152,7 +152,7 @@
                       <% elsif element.is_a?(Test) %>
                           <%= link_to 'переименовать', edit_test_path(element, current_test_group_id: @test_group.id), remote: true, class: 'element-edit-link' %>
                       <% end %>
-                      <div>
+                      </div>
                     </td>
                   </tr>
                   <% end %>

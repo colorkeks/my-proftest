@@ -224,11 +224,13 @@ table.answer_table>tbody>tr>td{
 
 }
 
-.answer_table{
-  td:nth-child(1) {width: 30px}
-  td:nth-child(2) {width: 50px}
-  td:nth-child(4) {width: 50px}
-  td:nth-child(5) {width: 50px}
+#answer_table, #associate_table{
+  .item {
+    div{ display: inline-block !important }
+  }
+  .number {width: 30px}
+  .remove, .sorter{width: 50px}
+  .form-control{width: 100%}
 }
 
 tr.success{
