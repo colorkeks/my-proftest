@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :sections
   get 'main/index'
 
   resources :test_groups do
