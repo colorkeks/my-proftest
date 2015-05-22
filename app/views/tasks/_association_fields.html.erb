@@ -1,12 +1,12 @@
-<tr class="fields">
-  <td></td>
-  <td style="width: 300px;"><%= f.text_field :text, :class => 'form-control', :style => 'width:300px;' %></td>
-  <td>
+<tr class="fields item">
+  <td class="number"></td>
+  <td><%= f.text_field :text, :class => 'form-control' %></td>
+  <td class="remove">
     <%= link_to_remove_fields 'Удалить', f %>
   </td>
   <% if @type == 'Сопоставление' %>
-      <td style="width: 50px; text-align: center;" class="sorter">
-        <span style="font-size: 18px;" class="glyphicon glyphicon-move"></span>
+      <td class="sorter">
+        <span class="fa fa-arrows"></span>
       </td>
   <% end %>
   <%= f.hidden_field :serial_number, :class => 'serial_number' %>

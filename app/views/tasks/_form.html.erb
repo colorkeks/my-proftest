@@ -1,128 +1,156 @@
+<% content_for :title, "Задание ##{@task.id}" %>
 <%= simple_form_for @task, :html => {:class => 'form-horizontal'} do |f| %>
-    <div class="row question-content">
+<section>
+  <div class="mainpanel">
+    <div class="pageheader">
       <div class="row">
-        <div class="col-sm-12">
-          <div class="page-header">
-            <h2>Задание <%= params[:action] == 'edit' ? ('№' + @task.id.to_s) : ':' %>  <%= @type %></h2>
-            <h4>Кол-во
-              баллов:  <%= f.number_field :point, :style => 'width: 50px;', params[:action] == 'edit' ? nil : :value => 1 %></h4>
-          </div>
+        <div class="col-sm-3 col-lg-2">
+          <button class="btn btn-white back-btn pull-right" title="Назад">
+            <i class="fa fa-arrow-left"></i>
+          </button>
+          <h2> Задание</h2>
         </div>
-        <div class="col-sm-12">
-          <div class="col-sm-6">
-            <% if params[:action] == 'edit' %>
-                <%= f.text_area :text, :class => 'edit' %>
-            <% else %>
-                <%= f.text_area :text, :class => 'edit', :value => '<h3>Lorem ipsum dolor sit amet, consectetur adipiscing elit</h3>' %>
-                <%= f.hidden_field :test_id, :value => @test_id %>
-                <%= f.hidden_field :task_type, :value => @type %>
-            <% end %>
-          </div>
-
-          <div class="col-sm-6">
-            <h3 style="margin-top: 0;">Загрузка картинки, аудио или видео:</h3>
-            <table class="table table-striped task_contents_table">
-              <thead>
-              <th style="width: 40px"></th>
-              <th style="min-width: 280px">Название/Файл</th>
-              <th>Тип</th>
-              <th>Действия</th>
-              </thead>
-              <tbody>
-              <%= f.fields_for :task_contents do |ff| %>
-                  <%= render 'task_content_fields', :f => ff %>
-              <% end %>
-              </tbody>
-            </table>
-            <p><%= link_to_add_fields 'Добавить контент', f, :task_contents,'task_contents_table'%></p>
+        <div class="col-sm-9 col-lg-10">
+          <div class="breadcrumb-wrapper">
+            <ol class="breadcrumb">
+              <li><a href="index.html">Педиатрия общая</a></li>
+              <li class="active">Раздел 1 </li>
+              <li class="active">Задание #<%= @task.id %>
+            </ol>
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-sm-6">
-          <% if params[:action] == 'edit' %>
-              <h3><%= f.text_area :hint, :class => 'edit_hint' %></h3>
-          <% elsif @type == 'Последовательность' %>
-              <%= f.text_area :hint, :class => 'edit_hint', :value => '<h2>Расставьте очередность:</h2>' %>
-          <% elsif @type == 'Сопоставление'%>
-              <%= f.text_area :hint, :class => 'edit_hint', :value => '<h2>Сопоставьте строки:</h2>' %>
-          <% elsif @type == 'Открытый вопрос' %>
-              <%= f.text_area :hint, :class => 'edit_hint', :value => '<h2>Введите пропущенное слово:</h2>' %>
-          <% else %>
-              <%= f.text_area :hint, :class => 'edit_hint', :value => '<h2>Выберите правильные(-ый) овет(-ы):</h2>' %>
-          <% end %>
-        </div>
-      </div>
-      <% if @type == 'Сопоставление' %>
-          <div class="row">
-            <div class="col-sm-6">
-              <h3>Ответы:</h3>
-              <table class="table answer_table">
-                <thead>
-                </thead>
-                <tbody id="assoc_items">
-                <%= f.fields_for :answers, (params[:action] == 'edit' ? @task.answers.order('id ASC') : nil) do |ff| %>
-                    <%= render 'answer_fields', :f => ff %>
-                <% end %>
-                </tbody>
-              </table>
-              <p><%= link_to_add_fields 'Добавить вариант ответа', f, :answers,'answer_table'%></p>
-            </div>
-            <div class="col-sm-6">
-              <h3>Сопоставления:</h3>
-              <table class="table associate_table">
-                <thead>
-                </thead>
-                <tbody id="items">
-                <%= f.fields_for :associations, (params[:action] == 'edit' ? @task.associations.order('id ASC') : nil) do |ff| %>
-                    <%= render 'association_fields', :f => ff %>
-                <% end %>
-                </tbody>
-              </table>
-              <p><%= link_to_add_fields 'Добавить ассоциацию', f, :associations,'associate_table' %></p>
-            </div>
-          </div>
-      <% elsif @type == 'Последовательность' %>
-          <div class="row">
-            <div class="col-sm-6">
-              <table class="table table-striped answer_table">
-                <thead>
-                </thead>
-                <tbody id="items">
-                <%= f.fields_for :answers, (params[:action] == 'edit' ? @task.answers.order('id ASC') : nil) do |ff| %>
-                    <%= render 'answer_fields', :f => ff %>
-                <% end %>
-                </tbody>
-              </table>
-              <p><%= link_to_add_fields 'Добавить вариант ответа', f, :answers,'answer_table'%></p>
-            </div>
-          </div>
-      <% else %>
-          <div class="row">
-            <div class="col-sm-6">
-              <table class="table table-striped answer_table">
-                <thead>
-                </thead>
-                <tbody>
-                <%= f.fields_for :answers, (params[:action] == 'edit' ? @task.answers.order('id ASC') : nil) do |ff| %>
-                    <%= render 'answer_fields', :f => ff %>
-                <% end %>
-                </tbody>
-              </table>
-              <p><%= link_to_add_fields 'Добавить вариант ответа', f, :answers,'answer_table'%></p>
-            </div>
-          </div>
-      <% end %>
-
-      <%= f.submit 'Сохранить', class: 'btn btn-primary' %>
-      <%= link_to t('.back', :default => t("helpers.links.Назад")),
-                  test_path(@test_id), :class => 'btn btn-default' %>
     </div>
-<% end %>
 
-<script>
-    init_wysiwyg();
-    init_nested_form();
-    upper_downer();
-    row_index();
-</script>
+    <div class="contentpanel panel-email">
+      <div class="row">
+        <div class="col-sm-3 col-lg-2">
+        </div>
+        <div class="col-sm-9 col-lg-10">
+
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <!-- pull-right -->
+              <div class="row">
+                <div class="col-lg-8">
+                  <h3>
+                    #<%= @task.id %> <small class="ml5"><%= @type %> <i class="fa fa-list ml5"></i></small>
+                  </h3>
+                </div>
+                <div class="col-lg-4 text-right save-panel">
+                  <span class="text-muted">сохранено</span>
+                  <button onclick="$(this).closest('form').submit();" class="btn btn-primary tooltips"  type="button" title="Сохранить"><i class="fa fa-cloud-upload"></i></button>
+                  <button class="btn btn-white tooltips"  type="button" title="Предпросмотр"><i class="fa fa-play"></i></button>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-6">
+                  <h4>Формулировка задания</h4>
+                  <%= f.text_area :text, :class => 'form-control edit', rows: 3 %>
+                </div>
+                <div class="col-lg-6">
+                  <%= link_to_add_fields 'Добавить контент', f, :task_contents, 'files-table' %>
+                  <!--<div class="btn btn-white btn-sm pull-right tooltips" title="Добавить файл"><i class="fa fa-plus"></i></div>-->
+                  <h4>Медиа контент</h4>
+                  <table id="files-table" class="table table-bordered table-striped table-condensed table-files">
+                    <tbody>
+                        <%= f.fields_for :task_contents do |ff| %>
+                            <%= render 'task_content_fields', :f => ff %>
+                        <% end %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12">
+                  <h4 >Варианты ответов <span class="btn btn-white btn-sm ml10 mr30 tooltips" title="Добавить вариант ответа"><i class="fa fa-plus"></i></span><small style="display: inline-block" class="ml10 ">Баллы <%= f.number_field :point, class: 'form-control input-sm score_count', params[:action] == 'edit' ? nil : :value => 1 %></small></h4>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12">
+                  <% if params[:action] == 'edit' %>
+                      <%= f.text_area :hint, :class => 'form-control' %>
+                  <% elsif @type == 'Последовательность' %>
+                      <%= f.text_area :hint, :class => 'form-control', :value => 'Расставьте очередность:' %>
+                  <% elsif @type == 'Сопоставление'%>
+                      <%= f.text_area :hint, :class => 'form-control', :value => 'Сопоставьте строки:' %>
+                  <% elsif @type == 'Открытый вопрос' %>
+                      <%= f.text_area :hint, :class => 'form-control', :value => 'Введите пропущенное слово:' %>
+                  <% else %>
+                      <%= f.text_area :hint, :class => 'form-control', :value => 'Выберите правильные(-ый) овет(-ы):' %>
+                  <% end %>
+                </div>
+              </div>
+              <br/>
+              <!--<div class="row">-->
+                <!--<div class="col-sm-6">-->
+              <% if @type == 'Сопоставление' %>
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <h4>Ответы:</h4>
+                      <table id="answer_table" class="table answer_table table-striped answer_table">
+                        <tbody id="answer_body">
+                        <%= f.fields_for :answers, (params[:action] == 'edit' ? @task.answers.order('id ASC') : nil) do |ff| %>
+                            <%= render 'answer_fields', :f => ff %>
+                        <% end %>
+                        </tbody>
+                      </table>
+                      <p><%= link_to_add_fields 'Добавить вариант ответа', f, :answers,'answer_table'%></p>
+                    </div>
+                    <div class="col-sm-6">
+                      <h4>Сопоставления:</h4>
+                      <table id="associate_table" class="table associate_table table-striped answer_table">
+                        <tbody id="associate_body">
+                        <%= f.fields_for :associations, (params[:action] == 'edit' ? @task.associations.order('id ASC') : nil) do |ff| %>
+                            <%= render 'association_fields', :f => ff %>
+                        <% end %>
+                        </tbody>
+                      </table>
+                      <p><%= link_to_add_fields 'Добавить ассоциацию', f, :associations, 'associate_table' %></p>
+                    </div>
+                  </div>
+              <% elsif @type == 'Последовательность' %>
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <table id="answer_table" class="table table-striped answer_table">
+                        <tbody id="answer_body">
+                        <%= f.fields_for :answers, (params[:action] == 'edit' ? @task.answers.order('id ASC') : nil) do |ff| %>
+                            <%= render 'answer_fields', :f => ff %>
+                        <% end %>
+                        </tbody>
+                      </table>
+                      <p><%= link_to_add_fields 'Добавить вариант ответа', f, :answers,'answer_table'%></p>
+                    </div>
+                  </div>
+              <% else %>
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <table id="answer_table" class="table table-striped answer_table">
+                        <tbody id="answer_body">
+                        <%= f.fields_for :answers, (params[:action] == 'edit' ? @task.answers.order('id ASC') : nil) do |ff| %>
+                            <%= render 'answer_fields', :f => ff %>
+                        <% end %>
+                        </tbody>
+                      </table>
+                      <p><%= link_to_add_fields 'Добавить вариант ответа', f, :answers,'answer_table'%></p>
+                    </div>
+                  </div>
+              <% end %>
+
+              <%= f.submit 'Сохранить', class: 'btn btn-primary' %>
+                 <!--</div>-->
+              <!--</div>-->
+            </div>
+            <!-- panel-body -->
+          </div>
+          <!-- panel -->
+        </div>
+        <!-- col-sm-9 -->
+      </div>
+      <!-- row -->
+    </div>
+  </div>
+  <!-- mainpanel -->
+</section>
+<% end %>
