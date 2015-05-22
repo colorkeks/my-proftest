@@ -13,14 +13,21 @@
         <div class="col-sm-9 col-lg-10">
           <div class="breadcrumb-wrapper">
             <ol class="breadcrumb">
-              <% @test.test_group.ancestors.each do |parent| %>
-                  <li><%= link_to parent.name, parent %></li>
+              <% if @selected_section %>
+                  <li><%= link_to @test.title, @test %></li>
               <% end %>
               <li class="active">
                 <div class="btn-group nomargin">
-                  <span class="dropdown-toggle"  data-toggle="dropdown"><%= @test.title %> <span class="caret"></span></span>
+                 <% element = @selected_section ? @selected_section : @test %>
+                  <span class="dropdown-toggle"  data-toggle="dropdown"><%= element.title %> <span class="caret"></span></span>
                   <ul class="dropdown-menu">
-                    <li><a href="#"> Переименовать</a></li>
+                    <li>
+                      <% if element.is_a?(Test) %>
+                        <%= link_to 'Переименовать', edit_test_path(@test), remote: true %>
+                      <% else %>
+                         <%= link_to 'Переименовать', edit_section_path(@selected_section), remote: true %>
+                      <% end %>
+                    </li>
                   </ul>
                 </div>
               </li>
@@ -40,13 +47,18 @@
             </button>
             <ul class="dropdown-menu">
               <li><a href="#" data-toggle="modal" data-target="#createTask"> Задание</a></li>
-              <li><a href="#"> Раздел</a></li>
+              <li><%= link_to 'Раздел', new_section_path(test_id: @test.id), remote: true %></li>
             </ul>
 
           </div>
 
           <ul class="nav nav-pills nav-stacked nav-email mb20">
-            <li><a href="#"><i class="fa fa-list-alt"></i> Задания</a></li>
+            <li>
+                <%= link_to test_path(@test, selected_section_id: nil), class: (@selected_section.nil? ? 'active' : '') do %>
+                    <i class="fa fa-list-alt"></i> Задания
+                <% end %>
+            </li>
+
             <li><a href="#"><i class="fa fa-trash"></i> Корзина</a></li>
           </ul>
 
@@ -54,10 +66,13 @@
           <ul class="nav nav-pills nav-stacked nav-bracket">
             <li class="tree">
               <ul class="children" style="display: block">
-                <li><a href="#"><i class="fa fa-caret-down trnsp"></i> Раздел 1</a></li>
-                <li><a href="#"><i class="fa fa-caret-down trnsp"></i> Раздел 2</a></li>
-                <li><a href="#" class="active"><i class="fa fa-caret-down trnsp"></i> Раздел 3</a></li>
-                <li><a href="#"><i class="fa fa-caret-down trnsp"></i> Раздел 4</a></li>
+                <% @test.sections.order(:id).each do |section|%>
+                <li>
+                    <%= link_to test_path(@test, selected_section_id: section.id), class: (@selected_section == section ? 'active' : '') do %>
+                        <i class="fa fa-caret-down trnsp"></i><%= section.name %>
+                    <% end %>
+                </li>
+                <% end %>
               </ul>
             </li>
           </ul>
@@ -205,6 +220,24 @@
         <h4 class="modal-title" id="myModalLabel">Выберите тип задания:</h4>
       </div>
       <%= render partial: 'task_form' %>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body" id="new-form">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
     </div>
   </div>
 </div>

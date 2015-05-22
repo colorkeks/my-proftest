@@ -16,6 +16,9 @@ class TestsController < ApplicationController
   def show
     @task = Task.new
     @test_id = params[:id]
+    if params.has_key?('selected_section_id') && params[:selected_section_id].present?
+      @selected_section = @test.sections.find(params[:selected_section_id])
+    end
 
     if params[:old]
       render 'tests/show_old', layout: 'application'
