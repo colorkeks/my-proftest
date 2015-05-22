@@ -155,7 +155,7 @@
                             <div class="media-body">
                               <span class="media-meta pull-right"><%= task.created_at %></span>
                               <span class="media-meta pull-right mr20">Раздел 1</span>
-                              <h4><%= link_to task.text, task_path(task) %></h4>
+                              <h4><%= link_to strip_tags(task.text), edit_task_path(task) %></h4>
                             </div>
                           </div>
                         </td>
