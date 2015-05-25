@@ -1,6 +1,6 @@
 <div class="modal-body">
   <div class="btn-list" style="margin: 15px;">
-    <div ><%= link_to "Единичный выбор", new_task_path(:task => {:task_type => 'Единичный выбор', :test_id => @test_id, section_id: @selected_section}), :class => 'btn btn-primary' %></div>
+    <div><%= link_to "Единичный выбор", new_task_path(:task => {:task_type => 'Единичный выбор', :test_id => @test_id, section_id: @selected_section}), :class => 'btn btn-primary' %></div>
     <div><%= link_to "Множественный выбор", new_task_path(:task => {:task_type => 'Множественный выбор', :test_id => @test_id, section_id: @selected_section}), :class => 'btn btn-primary' %></div>
     <div><%= link_to "Открытый вопрос", new_task_path(:task => {:task_type => 'Открытый вопрос', :test_id => @test_id, section_id: @selected_section}), :class => 'btn btn-primary' %></div>
     <div><%= link_to "Последовательность", new_task_path(:task => {:task_type => 'Последовательность', :test_id => @test_id, section_id: @selected_section}), :class => 'btn btn-primary' %></div>
