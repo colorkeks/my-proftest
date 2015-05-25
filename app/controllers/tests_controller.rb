@@ -22,7 +22,7 @@ class TestsController < ApplicationController
     else
       #
     end
-    @tasks = @tasks.paginate(:page => params[:page], :per_page => params[:per_page] || 30)
+    @tasks = @tasks.order('id ASC').paginate(:page => params[:page], :per_page => params[:per_page] || 30)
 
     if params[:old]
       render 'tests/show_old', layout: 'application'
