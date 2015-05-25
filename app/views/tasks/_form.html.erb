@@ -34,7 +34,7 @@
               <div class="row">
                 <div class="col-lg-8">
                   <h3>
-                    #<%= @task.id %> <small class="ml5"><%= @type %> <i class="fa fa-list ml5"></i></small>
+                    #<%= @task.id %> <small class="ml5"><%= @type %> </small>
                   </h3>
                 </div>
                 <div class="col-lg-4 text-right save-panel">
@@ -50,8 +50,7 @@
                   <%= f.text_area :text, :class => 'form-control edit', rows: 3 %>
                 </div>
                 <div class="col-lg-6">
-                  <%= link_to_add_fields 'Добавить контент', f, :task_contents, 'files-table' %>
-                  <!--<div class="btn btn-white btn-sm pull-right tooltips" title="Добавить файл"><i class="fa fa-plus"></i></div>-->
+                  <%= link_to_add_fields '<i class="fa fa-plus"></i>', f, :task_contents, 'files-table', class: 'btn btn-white btn-sm pull-right tooltips' %>
                   <h4>Медиа контент</h4>
                   <table id="files-table" class="table table-bordered table-striped table-condensed table-files">
                     <tbody>
@@ -64,7 +63,13 @@
               </div>
               <div class="row">
                 <div class="col-lg-12">
-                  <h4 >Варианты ответов <span class="btn btn-white btn-sm ml10 mr30 tooltips" title="Добавить вариант ответа"><i class="fa fa-plus"></i></span><small style="display: inline-block" class="ml10 ">Баллы <%= f.number_field :point, class: 'form-control input-sm score_count', params[:action] == 'edit' ? nil : :value => 1 %></small></h4>
+                  <h4 style="margin-top: 30px">Варианты ответов
+                    <!--<span class="btn btn-white btn-sm ml10 mr30 tooltips" title="Добавить вариант ответа">-->
+                      <%= link_to_add_fields '<i class="fa fa-plus"></i>', f, :answers, 'answer_table',
+                                             class: 'btn btn-white btn-sm ml10 mr30 tooltips',
+                                             title: 'Добавить вариант ответа' if @type != 'Сопоставление' %>
+                    <!--</span>-->
+                    <small style="display: inline-block" class="ml10 ">Баллы <%= f.number_field :point, class: 'form-control input-sm score_count', params[:action] == 'edit' ? nil : :value => 1 %></small></h4>
                 </div>
               </div>
               <div class="row">
@@ -88,18 +93,17 @@
               <% if @type == 'Сопоставление' %>
                   <div class="row">
                     <div class="col-sm-6">
-                      <h4>Ответы:</h4>
-                      <table id="answer_table" class="table answer_table table-striped answer_table">
+                      <h4>Ответы: <%= link_to_add_fields '<i class="fa fa-plus"></i>', f, :answers,'answer_table', class: 'btn btn-white btn-sm pull-right tooltips' %></h4>
+                      <table id="answer_table" class="table answer_table table-striped">
                         <tbody id="answer_body">
                         <%= f.fields_for :answers, (params[:action] == 'edit' ? @task.answers.order('id ASC') : nil) do |ff| %>
                             <%= render 'answer_fields', :f => ff %>
                         <% end %>
                         </tbody>
                       </table>
-                      <p><%= link_to_add_fields 'Добавить вариант ответа', f, :answers,'answer_table'%></p>
                     </div>
                     <div class="col-sm-6">
-                      <h4>Сопоставления:</h4>
+                      <h4>Сопоставления: <%= link_to_add_fields '<i class="fa fa-plus"></i>', f, :associations, 'associate_table', class: 'btn btn-white btn-sm pull-right tooltips' %></h4>
                       <table id="associate_table" class="table associate_table table-striped answer_table">
                         <tbody id="associate_body">
                         <%= f.fields_for :associations, (params[:action] == 'edit' ? @task.associations.order('id ASC') : nil) do |ff| %>
@@ -107,7 +111,6 @@
                         <% end %>
                         </tbody>
                       </table>
-                      <p><%= link_to_add_fields 'Добавить ассоциацию', f, :associations, 'associate_table' %></p>
                     </div>
                   </div>
               <% elsif @type == 'Последовательность' %>
@@ -120,7 +123,7 @@
                         <% end %>
                         </tbody>
                       </table>
-                      <p><%= link_to_add_fields 'Добавить вариант ответа', f, :answers,'answer_table'%></p>
+                      <%#= link_to_add_fields '<i class="fa fa-plus"></i>', f, :answers, 'answer_table', class: 'btn btn-white btn-sm pull-right tooltips' %>
                     </div>
                   </div>
               <% else %>
@@ -133,7 +136,7 @@
                         <% end %>
                         </tbody>
                       </table>
-                      <p><%= link_to_add_fields 'Добавить вариант ответа', f, :answers,'answer_table'%></p>
+                      <%#= link_to_add_fields '<i class="fa fa-plus"></i>', f, :answers, 'answer_table', class: 'btn btn-white btn-sm pull-right tooltips' %>
                     </div>
                   </div>
               <% end %>

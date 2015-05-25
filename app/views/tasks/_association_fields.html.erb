@@ -2,7 +2,7 @@
   <td class="number"></td>
   <td><%= f.text_field :text, :class => 'form-control' %></td>
   <td class="remove">
-    <%= link_to_remove_fields 'Удалить', f %>
+    <%= link_to_remove_fields '<i class="fa fa-times"></i>', f %>
   </td>
   <% if @type == 'Сопоставление' %>
       <td class="sorter">

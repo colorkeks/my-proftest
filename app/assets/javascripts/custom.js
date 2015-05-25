@@ -10,51 +10,51 @@
 
 jQuery(document).ready(function() {
 
-   jQuery('.ckbox input').click(function () {
-      var t = jQuery(this);
-      if (t.is(':checked')) {
-         t.closest('tr').addClass('selected');
-      } else {
-         t.closest('tr').removeClass('selected');
-      }
-   });
+   //jQuery('.ckbox input').click(function () {
+   //   var t = jQuery(this);
+   //   if (t.is(':checked')) {
+   //      t.closest('tr').addClass('selected');
+   //   } else {
+   //      t.closest('tr').removeClass('selected');
+   //   }
+   //});
    
    // Toggle Left Menu
-   jQuery('.leftpanel .nav-parent > a').live('click', function() {
-      
-      var parent = jQuery(this).parent();
-      var sub = parent.find('> ul');
-      
-      // Dropdown works only when leftpanel is not collapsed
-      if(!jQuery('body').hasClass('leftpanel-collapsed')) {
-         if(sub.is(':visible')) {
-            sub.slideUp(200, function(){
-               parent.removeClass('nav-active');
-               jQuery('.mainpanel').css({height: ''});
-               adjustmainpanelheight();
-            });
-         } else {
-            closeVisibleSubMenu();
-            parent.addClass('nav-active');
-            sub.slideDown(200, function(){
-               adjustmainpanelheight();
-            });
-         }
-      }
-      return false;
-   });
+   //jQuery('.leftpanel .nav-parent > a').live('click', function() {
+   //
+   //   var parent = jQuery(this).parent();
+   //   var sub = parent.find('> ul');
+   //
+   //   // Dropdown works only when leftpanel is not collapsed
+   //   if(!jQuery('body').hasClass('leftpanel-collapsed')) {
+   //      if(sub.is(':visible')) {
+   //         sub.slideUp(200, function(){
+   //            parent.removeClass('nav-active');
+   //            jQuery('.mainpanel').css({height: ''});
+   //            adjustmainpanelheight();
+   //         });
+   //      } else {
+   //         closeVisibleSubMenu();
+   //         parent.addClass('nav-active');
+   //         sub.slideDown(200, function(){
+   //            adjustmainpanelheight();
+   //         });
+   //      }
+   //   }
+   //   return false;
+   //});
    
-   function closeVisibleSubMenu() {
-      jQuery('.leftpanel .nav-parent').each(function() {
-         var t = jQuery(this);
-         if(t.hasClass('nav-active')) {
-            t.find('> ul').slideUp(200, function(){
-               t.removeClass('nav-active');
-            });
-         }
-      });
-   }
-   
+   //function closeVisibleSubMenu() {
+   //   jQuery('.leftpanel .nav-parent').each(function() {
+   //      var t = jQuery(this);
+   //      if(t.hasClass('nav-active')) {
+   //         t.find('> ul').slideUp(200, function(){
+   //            t.removeClass('nav-active');
+   //         });
+   //      }
+   //   });
+   //}
+   //
    function adjustmainpanelheight() {
       // Adjust mainpanel height
       var docHeight = jQuery(document).height();
@@ -71,10 +71,10 @@ jQuery(document).ready(function() {
    jQuery('.popovers').popover();
    
    // Close Button in Panels
-   jQuery('.panel .panel-close').click(function(){
-      jQuery(this).closest('.panel').fadeOut(200);
-      return false;
-   });
+   //jQuery('.panel .panel-close').click(function(){
+   //   jQuery(this).closest('.panel').fadeOut(200);
+   //   return false;
+   //});
    
    // Form Toggles
    //jQuery('.toggle').toggles({on: true});
@@ -114,62 +114,62 @@ jQuery(document).ready(function() {
    //
    
    // Minimize Button in Panels
-   jQuery('.minimize').click(function(){
-      var t = jQuery(this);
-      var p = t.closest('.panel');
-      if(!jQuery(this).hasClass('maximize')) {
-         p.find('.panel-body, .panel-footer').slideUp(200);
-         t.addClass('maximize');
-         t.html('&plus;');
-      } else {
-         p.find('.panel-body, .panel-footer').slideDown(200);
-         t.removeClass('maximize');
-         t.html('&minus;');
-      }
-      return false;
-   });
-   
+   //jQuery('.minimize').click(function(){
+   //   var t = jQuery(this);
+   //   var p = t.closest('.panel');
+   //   if(!jQuery(this).hasClass('maximize')) {
+   //      p.find('.panel-body, .panel-footer').slideUp(200);
+   //      t.addClass('maximize');
+   //      t.html('&plus;');
+   //   } else {
+   //      p.find('.panel-body, .panel-footer').slideDown(200);
+   //      t.removeClass('maximize');
+   //      t.html('&minus;');
+   //   }
+   //   return false;
+   //});
+   //
    
    // Add class everytime a mouse pointer hover over it
-   jQuery('.nav-bracket > li').hover(function(){
-      jQuery(this).addClass('nav-hover');
-   }, function(){
-      jQuery(this).removeClass('nav-hover');
-   });
+   //jQuery('.nav-bracket > li').hover(function(){
+   //   jQuery(this).addClass('nav-hover');
+   //}, function(){
+   //   jQuery(this).removeClass('nav-hover');
+   //});
    
    
    // Menu Toggle
-   jQuery('.menutoggle').click(function(){
-      
-      var body = jQuery('body');
-      var bodypos = body.css('position');
-      
-      if(bodypos != 'relative') {
-         
-         if(!body.hasClass('leftpanel-collapsed')) {
-            body.addClass('leftpanel-collapsed');
-            jQuery('.nav-bracket ul').attr('style','');
-            
-            jQuery(this).addClass('menu-collapsed');
-            
-         } else {
-            body.removeClass('leftpanel-collapsed chat-view');
-            jQuery('.nav-bracket li.active ul').css({display: 'block'});
-            
-            jQuery(this).removeClass('menu-collapsed');
-            
-         }
-      } else {
-         
-         if(body.hasClass('leftpanel-show'))
-            body.removeClass('leftpanel-show');
-         else
-            body.addClass('leftpanel-show');
-         
-         adjustmainpanelheight();         
-      }
-
-   });
+   //jQuery('.menutoggle').click(function(){
+   //
+   //   var body = jQuery('body');
+   //   var bodypos = body.css('position');
+   //
+   //   if(bodypos != 'relative') {
+   //
+   //      if(!body.hasClass('leftpanel-collapsed')) {
+   //         body.addClass('leftpanel-collapsed');
+   //         jQuery('.nav-bracket ul').attr('style','');
+   //
+   //         jQuery(this).addClass('menu-collapsed');
+   //
+   //      } else {
+   //         body.removeClass('leftpanel-collapsed chat-view');
+   //         jQuery('.nav-bracket li.active ul').css({display: 'block'});
+   //
+   //         jQuery(this).removeClass('menu-collapsed');
+   //
+   //      }
+   //   } else {
+   //
+   //      if(body.hasClass('leftpanel-show'))
+   //         body.removeClass('leftpanel-show');
+   //      else
+   //         body.addClass('leftpanel-show');
+   //
+   //      adjustmainpanelheight();
+   //   }
+   //
+   //});
    
    // Chat View
    //jQuery('#chatview').click(function(){
@@ -209,25 +209,25 @@ jQuery(document).ready(function() {
    //
    //});
    
-   reposition_searchform();
-   reposition_topnav();
-   
-   jQuery(window).resize(function(){
-      
-      if(jQuery('body').css('position') == 'relative') {
-
-         jQuery('body').removeClass('leftpanel-collapsed chat-view');
-         
-      } else {
-         
-         jQuery('body').removeClass('chat-relative-view');         
-         jQuery('body').css({left: '', marginRight: ''});
-      }
-      
-      reposition_searchform();
-      reposition_topnav();
-      
-   });
+   //reposition_searchform();
+   //reposition_topnav();
+   //
+   //jQuery(window).resize(function(){
+   //
+   //   if(jQuery('body').css('position') == 'relative') {
+   //
+   //      jQuery('body').removeClass('leftpanel-collapsed chat-view');
+   //
+   //   } else {
+   //
+   //      jQuery('body').removeClass('chat-relative-view');
+   //      jQuery('body').css({left: '', marginRight: ''});
+   //   }
+   //
+   //   reposition_searchform();
+   //   reposition_topnav();
+   //
+   //});
    
    
    

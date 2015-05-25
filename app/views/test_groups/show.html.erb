@@ -120,7 +120,7 @@
               </div>
 
               <div class="table-responsive">
-                <table class="table table-email tests">
+                <table id="test_list" class="table table-email tests">
                   <tbody>
                   <% @elements.each_with_index do |element, index| %>
                   <tr class="unread" data-class="<%=element.class%>" data-id="<%= element.id %>">
