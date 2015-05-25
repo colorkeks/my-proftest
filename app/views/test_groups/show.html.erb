@@ -287,8 +287,8 @@
         //console.log('dfgdfg');
         //return 6;
         var form = $(selected).closest('form');
-        form.find('.label-info').removeClass('label-info');
-        $(selected).addClass('label-info');
+        form.find('.active').removeClass('active');
+        $(selected).addClass('active');
         form.find("[name='destination_group_id']").val($(selected).attr('data-id'));
         //var checked_checkboxes = $('.element_checkbox:checked');
         //var trs = checked_checkboxes.closest('tr');

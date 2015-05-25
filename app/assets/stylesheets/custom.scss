@@ -272,6 +272,14 @@ tr.success{
 
 .tree{
   margin-left: -26px;
+  li {
+    span{cursor: pointer}
+    span.active{
+      font-weight: bold;
+      color: #115492;
+    }
+  }
+
   li > a{
     padding: 20px;
     white-space: nowrap;

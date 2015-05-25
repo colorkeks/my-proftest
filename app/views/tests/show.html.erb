@@ -274,8 +274,8 @@
 
     function selectDestinationGroup(selected) {
         var form = $(selected).closest('form');
-        form.find('.label-info').removeClass('label-info');
-        $(selected).addClass('label-info');
+        form.find('.active').removeClass('active');
+        $(selected).addClass('active');
         form.find("[name='destination_section_id']").val($(selected).attr('data-id'));
     }
 
