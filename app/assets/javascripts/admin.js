@@ -76,7 +76,7 @@ function init_wysiwyg() {
         statusbar: false,
         menubar: false,
         toolbar: [
-            "undo redo | styleselect | bold italic | link image | alignleft aligncenter alignright"
+            "bold italic subscript superscript | bullist numlist  "
         ]
     });
 
