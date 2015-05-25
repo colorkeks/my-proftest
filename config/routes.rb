@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   resources :tests do
     member do
       get 'create_task'
+      get 'settings'
     end
     collection do
       # required for Sortable GUI server side actions
