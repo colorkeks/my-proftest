@@ -79,6 +79,12 @@ class TasksController < ApplicationController
     end
   end
 
+  def bulk_destroy
+    @test = Test.find(params[:test_id])
+    @tasks = @test.tasks.where(id: params[:task_ids].split(',')).destroy_all
+    redirect_to @test
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_task
