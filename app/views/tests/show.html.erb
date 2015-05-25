@@ -167,7 +167,19 @@
                           </div>
                         </td>
                         <td><span class="label label-info"><strong>1</strong></span></td>
-                        <td style="width: 30px"><%#= task.task_type %><i class="fa fa-list"></i></td>
+                        <td style="width: 30px; font-size: 20px; line-height: 20px; padding: 0">
+                          <% if task.task_type == 'Единичный выбор' %>
+                              <span class="icon-single tooltips" title="Единичный выбор"></span>
+                          <% elsif task.task_type == 'Множественный выбор' %>
+                              <span class="icon-mutli tooltips" title="Множественный выбор"></span>
+                          <% elsif task.task_type == 'Последовательность' %>
+                              <span class="icon-sequence tooltips" title="Последовательность"></span>
+                          <% elsif task.task_type == 'Сопоставление' %>
+                              <span class="icon-connect tooltips" title="Сопоставление"></span>
+                          <% elsif task.task_type == 'Открытый вопрос' %>
+                              <span class="icon-open tooltips" title="Открытый вопрос"></span>
+                          <% end %>
+                        </td>
                         <td>
                           <div class="media">
                             <div class="media-body">
