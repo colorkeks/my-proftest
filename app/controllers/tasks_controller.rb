@@ -21,6 +21,7 @@ class TasksController < ApplicationController
     @type = params[:task][:task_type]
     @task.section_id = params[:task][:section_id]
     @task.test_id = params[:task][:test_id]
+    @task.task_type = params[:task][:task_type]
 
     @task.task_contents.build
 
