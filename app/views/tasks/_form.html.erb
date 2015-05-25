@@ -1,5 +1,7 @@
 <% content_for :title, "Задание ##{@task.id} - Профтест" %>
 <%= simple_form_for @task, :html => {:class => 'form-horizontal'} do |f| %>
+<%= f.hidden_field :test_id %>
+<%= f.hidden_field :section_id %>
 <section>
   <div class="mainpanel">
     <div class="pageheader">
