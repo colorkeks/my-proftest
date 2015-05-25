@@ -12,6 +12,10 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
+    if current_user && current_user.role?('Методолог')
+      redirect_to :test_groups
+      return
+    end
     @users = User.search(params[:search_users])
     @user_id = params[:id]
     @attestation_tests = Test.find(@user.attestation_tests)
