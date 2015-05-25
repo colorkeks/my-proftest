@@ -19,6 +19,8 @@ class TasksController < ApplicationController
     @task = Task.new
     @test_id = params[:task][:test_id]
     @type = params[:task][:task_type]
+    @task.section_id = params[:task][:section_id]
+    @task.test_id = params[:task][:test_id]
 
     @task.task_contents.build
 
@@ -85,7 +87,7 @@ class TasksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def task_params
-      params.require(:task).permit(:text, :hint, :task_type, :point, :test_id,
+      params.require(:task).permit(:text, :hint, :task_type, :point, :test_id, :section_id,
                     answers_attributes: [ :id, :task_id, :text, :correct, :serial_number, :point, :_destroy],
                     task_contents_attributes: [:id,:file_content, :task_id, :_destroy],
                     associations_attributes: [:id, :text, :serial_number, :task_id, :_destroy])

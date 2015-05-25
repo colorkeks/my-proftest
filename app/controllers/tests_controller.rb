@@ -18,7 +18,11 @@ class TestsController < ApplicationController
     @test_id = params[:id]
     if params.has_key?('selected_section_id') && params[:selected_section_id].present?
       @selected_section = @test.sections.find(params[:selected_section_id])
+      @tasks = @test.tasks.where(section: @selected_section)
+    else
+      #
     end
+    @tasks = @tasks.paginate(:page => params[:page], :per_page => params[:per_page] || 30)
 
     if params[:old]
       render 'tests/show_old', layout: 'application'
