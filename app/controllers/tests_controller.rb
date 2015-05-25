@@ -18,6 +18,9 @@ class TestsController < ApplicationController
     @test_id = params[:id]
     if params.has_key?('selected_section_id') && params[:selected_section_id].present?
       @selected_section = @test.sections.find(params[:selected_section_id])
+      @tasks = @selected_section.tasks
+    else
+      #
     end
 
     if params[:old]
