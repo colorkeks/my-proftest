@@ -22,22 +22,40 @@ $(function(){
         highlight_rows("selected", 'td > .ckbox');
     });
 
-    if($("#answer_table").length){
-        $(this).find("input[type='radio']").change(function(){ highlight_rows("success", null, this )});
-        $(this).find("input[type='checkbox']").change(function(){ highlight_rows("success")});
-        highlight_rows("success")
-    }
 
-    if($("#test_list").length){
-        $(this).find("input[type='checkbox']").change(function(){ highlight_rows("selected", 'td > .ckbox') });
-        //highlight_rows("success")
-    }
+    //if($("#answer_table").length){
+    //    $(this).find("input[type='radio']").off().change(function(){ highlight_rows("success", null, this )});
+    //    $(this).find("input[type='checkbox']").off().change(function(){ highlight_rows("success")});
+    //    highlight_rows("success")
+    //}
+    //
+    //if($("#test_list").length){
+    //    $(this).find("input[type='checkbox']").off().change(function(){ highlight_rows("selected", 'td > .ckbox') });
+    //    //highlight_rows("success")
+    //}
 
+    highlight();
     init_wysiwyg();
     init_nested_form();
     upper_downer();
     row_index();
 });
+
+function highlight(){
+    var answer_table = $("#answer_table");
+    var test_list = $("#test_list");
+
+    if(answer_table.length){
+        answer_table.find("input[type='radio']").off().change(function(){ highlight_rows("success", null, this )});
+        answer_table.find("input[type='checkbox']").off().change(function(){ highlight_rows("success")});
+        highlight_rows("success")
+    }
+
+    if(test_list.length){
+        test_list.find("input[type='checkbox']").off().change(function(){ highlight_rows("selected", 'td > .ckbox') });
+        //highlight_rows("success")
+    }
+}
 
 function highlight_rows(hilight_class, checkbox_selector, current_element){
 
@@ -115,6 +133,7 @@ function off_on(table_name){
     init_wysiwyg();
     init_nested_form();
     row_index(table_name);
+    highlight();
 }
 
 function row_index(table_name, index) {

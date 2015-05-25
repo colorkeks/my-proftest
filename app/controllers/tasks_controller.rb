@@ -26,6 +26,7 @@ class TasksController < ApplicationController
       @task.answers.build
       @task.associations.build
     end
+    render :new, layout: 'admin'
   end
 
   # GET /tasks/1/edit
@@ -43,7 +44,7 @@ class TasksController < ApplicationController
 
     respond_to do |format|
       if @task.save
-        format.html { redirect_to test_path(@task.test_id), notice: 'Task was successfully created.' }
+        format.html { redirect_to edit_task_path(@task), notice: 'Задание успешно создано' }
         format.json { render :show, status: :created, location: @task }
       else
         format.html { render :new }
