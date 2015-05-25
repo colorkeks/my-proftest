@@ -61,7 +61,7 @@
 
             <li><a href="#"><i class="fa fa-trash"></i> Корзина</a></li>
             <li>
-              <%= link_to edit_test_path(@test) do %>
+              <%= link_to settings_test_path(@test), remote: true do %>
                   <i class="fa fa-cog"></i> Настройки
               <% end %>
             </li>
