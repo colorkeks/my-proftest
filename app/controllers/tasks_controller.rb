@@ -86,6 +86,40 @@ class TasksController < ApplicationController
     redirect_to @test
   end
 
+  def bulk_move_edit
+    @test = Test.find(params[:test_id])
+    if params[:task_ids].present?
+      @task_count = params[:task_ids].split(',').count
+    else
+      @task_count = 0
+    end
+  end
+
+  def bulk_move_update
+    @test = Test.find(params[:test_id])
+    tasks = @test.tasks.where(id: params[:task_ids].split(','))
+    destination_section = @test.sections.find(params[:destination_section_id])
+
+    begin
+      Task.transaction do
+        tasks.each do |task|
+          task.section = destination_section
+          task.save!
+        end
+      end
+      @success = true
+    rescue
+      @success = false
+    end
+
+    if @success
+      redirect_to @test
+    else
+      flash[:error] = 'Невозможно переместить группу элементов'
+      redirect_to @test
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_task

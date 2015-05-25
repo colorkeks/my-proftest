@@ -1,0 +1,35 @@
+<%= form_tag bulk_move_tasks_path, method: 'post', remote: false do %>
+    <%= hidden_field_tag 'destination_section_id' %>
+    <%= hidden_field_tag 'task_ids', params[:task_ids] %>
+    <%= hidden_field_tag 'test_id', params[:test_id] %>
+
+<div class="modal-content">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">Переместить</h4>
+  </div>
+
+  <div class="modal-body">
+    <p><%= @task_count  %> заданий</p>
+    <ul class="nav nav-pills nav-stacked nav-bracket">
+      <li class="tree" style="margin-left: -10px">
+        <ul class="children" style="display: block">
+          <li>
+            <% @test.sections.each do |item| %>
+            <span id="destination_group_span" onclick="selectDestinationGroup(this);" data-id="<%= item.id%>">
+                <%= item.name %>
+            </span><br/>
+            <% end %>
+          </li>
+        </ul>
+
+      </li>
+    </ul>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+    <%= submit_tag 'Переместить', :class => 'btn btn-primary' %>
+  </div>
+</div><!-- /.modal-content -->
+<% end %>

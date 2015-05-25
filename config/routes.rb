@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   resources :tests do
     member do
       get 'create_task'
+      get 'settings'
     end
     collection do
       # required for Sortable GUI server side actions
@@ -33,6 +34,8 @@ Rails.application.routes.draw do
       get 'create_answer'
     end
     post :bulk_destroy, on: :collection
+    get 'bulk_move', to: :bulk_move_edit, on: :collection, as: :bulk_move
+    post 'bulk_move', to: :bulk_move_update, on: :collection
   end
 
   devise_for :users,  :controllers => { :registrations => "users/registrations" }

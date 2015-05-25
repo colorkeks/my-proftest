@@ -1,7 +1,7 @@
 class TestsController < ApplicationController
   include TheSortableTreeController::Rebuild
   include TheSortableTreeController::ExpandNode
-  before_action :set_test, only: [:show, :edit, :update, :destroy]
+  before_action :set_test, only: [:show, :edit, :update, :destroy, :settings]
   load_and_authorize_resource
   # GET /tests
   # GET /tests.json
@@ -43,6 +43,9 @@ class TestsController < ApplicationController
 
   # GET /tests/1/edit
   def edit
+  end
+
+  def settings
   end
 
   # POST /tests

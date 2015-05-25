@@ -61,7 +61,7 @@
 
             <li><a href="#"><i class="fa fa-trash"></i> Корзина</a></li>
             <li>
-              <%= link_to edit_test_path(@test) do %>
+              <%= link_to settings_test_path(@test), remote: true do %>
                   <i class="fa fa-cog"></i> Настройки
               <% end %>
             </li>
@@ -96,14 +96,11 @@
                       <label for="checkbox0"></label>
                     </div>
                   </button>
-                  <button class="btn btn-white tooltips" type="button" title="Переместить" data-toggle="modal" data-target="#move">
+                  <button onclick="bulkMoveFormOpen();" class="btn btn-white tooltips" type="button" title="Переместить">
                     <i class="fa fa-folder"></i>
                   </button>
                 </div>
 
-                <%= link_to edit_test_path(@test), :class => 'btn btn-white tooltips','data-toggle'=>"tooltip", title: "Редактировать" do %>
-                    <i class="fa fa-cog"></i>
-                <% end %>
                 <button onclick="bulkDestroy();" class="btn btn-white tooltips" type="button" data-toggle="tooltip" title="Удалить"><i class="fa fa-trash"></i></button>
 
                 <div class="btn-group ">
@@ -112,7 +109,7 @@
                     <span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu">
-                    <li><a href="#">Объединить цепочку</a></li>
+                    <li><a href="#">Объединить в цепочку</a></li>
                   </ul>
 
                 </div>
@@ -121,16 +118,22 @@
               <div class="btn-group labels mr10">
                 <div class="btn-group">
                   <button data-toggle="dropdown" class="btn btn-white dropdown-toggle tooltips" type="button" title="Эквивалентные группы">
-                    <span class="label label-info"><strong>12</strong></span>
+                    <span class="label label-info"><strong>1</strong></span>
                     <span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu">
                     <li><a href="#"><span class="label label-info"><strong>1</strong></span></a></li>
+                    <!--
                     <li><a href="#"><span class="label label-info"><strong>2</strong></span></a></li>
                     <li><a href="#"><span class="label label-info"><strong>3</strong></span></a></li>
+                    -->
                     <li><a href="#">Добавить</a></li>
                   </ul>
                 </div>
+                <%= form_tag bulk_move_tasks_path, id: 'bulk_move_form', method: 'get', remote: true do %>
+                    <%= hidden_field_tag 'test_id', @test.id %>
+                    <%= hidden_field_tag 'task_ids' %>
+                <% end %>
                 <%= form_tag bulk_destroy_tasks_path, id: 'bulk_destroy_form', remote: false do %>
                     <%= hidden_field_tag 'test_id', @test.id %>
                     <%= hidden_field_tag 'task_ids' %>
@@ -208,39 +211,6 @@
   <!-- mainpanel -->
 </section>
 
-<!-- modals -->
-<div class="modal fade" id="move">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Переместить</h4>
-      </div>
-      <div class="modal-body">
-        <p>3 задания в раздел </p>
-        <ul class="nav nav-pills nav-stacked nav-bracket">
-          <li class="tree" style="margin-left: -10px">
-            <ul class="children" style="display: block">
-              <li>
-                <a href="#"> Раздел 1</a>
-                <a href="#" class="active"> Раздел 2</a>
-                <a href="#"> Раздел 3</a>
-              </li>
-            </ul>
-          </li>
-        </ul>
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
-        <button type="button" class="btn btn-primary">Переместить</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-<!--end modal-->
-
-
 <!-- Modal -->
 <div class="modal fade" id="createTask" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -294,4 +264,20 @@
             form.submit();
         }
     }
+
+    function bulkMoveFormOpen() {
+        var ids = getSelectedIds();
+        var form = $('#bulk_move_form');
+        form.children("[name='task_ids']").val(ids.join());
+        form.submit();
+    }
+
+    function selectDestinationGroup(selected) {
+        var form = $(selected).closest('form');
+        form.find('.label-info').removeClass('label-info');
+        $(selected).addClass('label-info');
+        form.find("[name='destination_section_id']").val($(selected).attr('data-id'));
+    }
+
+
 </script>
