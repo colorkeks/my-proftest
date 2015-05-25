@@ -111,7 +111,7 @@
                     <span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu">
-                    <li><a href="#">Переименовать</a></li>
+                    <li><a href="#">Объединить цепочку</a></li>
                   </ul>
 
                 </div>
@@ -132,10 +132,17 @@
                 </div>
               </div>
               <div class="pull-right">
-                <span class="mr10 italic text-muted">15 из 30 </span>
+                <span class="mr10 italic text-muted">
+                  <%= [@tasks.per_page * (@tasks.current_page-1) + 1, @tasks.total_entries].min %>
+                  - <%= [@tasks.per_page * (@tasks.current_page), @tasks.total_entries].min %>
+                  из <%=@tasks.total_entries %>                
+                </span>
                 <div class="btn-group mr10">
-                  <button class="btn btn-white" type="button"><i class="fa fa-chevron-left"></i></button>
-                  <button class="btn btn-white" type="button"><i class="fa fa-chevron-right"></i></button>
+                  <%= will_paginate @tasks,
+                                    renderer: BootstrapPagination::Rails,
+                                    :page_links => false,
+                                    next_label: '<i class="fa fa-chevron-right"></i>',
+                                    previous_label: '<i class="fa fa-chevron-left"></i>' %>                  
                 </div>
               </div>
               <!-- pull-right -->
@@ -159,7 +166,7 @@
                           <div class="media">
                             <div class="media-body">
                               <span class="media-meta pull-right"><%= task.created_at %></span>
-                              <span class="media-meta pull-right mr20">Раздел 1</span>
+                              <span class="media-meta pull-right mr20"> <%= task.section.name if task.section %></span>
                               <h4><%= link_to strip_tags(task.text), edit_task_path(task) %></h4>
                             </div>
                           </div>
