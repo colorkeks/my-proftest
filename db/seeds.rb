@@ -289,7 +289,7 @@ Answer.create([{correct: false, # 1
                 text: 'Состояние и объем излившейся в полость сердечной сорочки крови',
                 point: '',
                 serial_number: '',
-                task_id: tasks.second.id},
+                task_id: tasks.first.id},
                {correct: false, #2
                 text: '30 минут -1 часа',
                 point: '',
