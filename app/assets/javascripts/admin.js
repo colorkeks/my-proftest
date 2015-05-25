@@ -12,20 +12,45 @@ $(function(){
 
     var check_box_list = $('.element_checkbox');
     $('#toggle-checkboxes').click(function(){
-       var btn_cb = $(this).find('input[type="checkbox"]');
-       btn_cb.prop('checked', !btn_cb.prop('checked'));
+        var btn_cb = $(this).find('input[type="checkbox"]');
+        btn_cb.prop('checked', !btn_cb.prop('checked'));
         check_box_list.prop('checked', btn_cb.prop('checked'));
+        highlight_rows("selected", 'td > .ckbox');
 
     }).find('input[type="checkbox"]').click(function(){
         check_box_list.prop('checked', $(this).prop('checked'));
+        highlight_rows("selected", 'td > .ckbox');
     });
 
+    if($("#answer_table").length){
+        $(this).find("input[type='radio']").change(function(){ highlight_rows("success", null, this )});
+        $(this).find("input[type='checkbox']").change(function(){ highlight_rows("success")});
+        highlight_rows("success")
+    }
+
+    if($("#test_list").length){
+        $(this).find("input[type='checkbox']").change(function(){ highlight_rows("selected", 'td > .ckbox') });
+        //highlight_rows("success")
+    }
 
     init_wysiwyg();
     init_nested_form();
     upper_downer();
     row_index();
 });
+
+function highlight_rows(hilight_class, checkbox_selector, current_element){
+
+    var selector = checkbox_selector || 'td';
+    $( "tr").removeClass( hilight_class );
+
+    if (current_element){
+        $(current_element).closest('tr').addClass(hilight_class);
+    }else{
+        $( "tr:has(" + selector + ">input[type='checkbox']:checked)").addClass( hilight_class );
+        $( "tr:has(" + selector + ">input[type='radio']:checked)" ).addClass( hilight_class );
+    }
+}
 
 function init_wysiwyg() {
     tinymce.init({

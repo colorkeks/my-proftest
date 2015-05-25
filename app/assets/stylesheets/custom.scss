@@ -221,10 +221,10 @@ label {
 table.answer_table>tbody>tr>td{
   vertical-align: middle;
   text-align: center;
-
 }
 
 #answer_table, #associate_table{
+  margin-top: 20px;
   .item {
     div{ display: inline-block !important }
   }
