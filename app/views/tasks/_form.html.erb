@@ -15,7 +15,7 @@
         <div class="col-sm-9 col-lg-10">
           <div class="breadcrumb-wrapper">
             <ol class="breadcrumb">
-              <li><a href="index.html">Педиатрия общая</a></li>
+              <li><%= link_to @task.test.title,  test_path(@task.test) %></li>
               <li class="active">Раздел 1 </li>
               <li class="active">Задание #<%= @task.id %>
             </ol>
