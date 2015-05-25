@@ -402,3 +402,14 @@ ul.children{
   margin-bottom: 0;
   border-radius: 0;
 }
+
+.btn-list{
+  div{
+    margin: 5px;
+    text-align: center;
+//    width: 300px;
+    a{
+      width: 250px;
+    }
+  }
+}
