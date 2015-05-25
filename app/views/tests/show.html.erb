@@ -104,7 +104,8 @@
                 <%= link_to edit_test_path(@test), :class => 'btn btn-white tooltips','data-toggle'=>"tooltip", title: "Редактировать" do %>
                     <i class="fa fa-cog"></i>
                 <% end %>
-                <button class="btn btn-white tooltips" type="button" data-toggle="tooltip" title="Удалить"><i class="fa fa-trash"></i></button>
+                <button onclick="bulkDestroy();" class="btn btn-white tooltips" type="button" data-toggle="tooltip" title="Удалить"><i class="fa fa-trash"></i></button>
+
                 <div class="btn-group ">
                   <button class="btn btn-white tooltips dropdown-toggle" data-toggle="dropdown" type="button" title="" data-original-title="Другое">
                     <i class="fa fa-ellipsis-v"></i>
@@ -130,7 +131,12 @@
                     <li><a href="#">Добавить</a></li>
                   </ul>
                 </div>
+                <%= form_tag bulk_destroy_tasks_path, id: 'bulk_destroy_form', remote: false do %>
+                    <%= hidden_field_tag 'test_id', @test.id %>
+                    <%= hidden_field_tag 'task_ids' %>
+                <% end %>
               </div>
+
               <div class="pull-right">
                 <span class="mr10 italic text-muted">
                   <%= [@tasks.per_page * (@tasks.current_page-1) + 1, @tasks.total_entries].min %>
@@ -152,7 +158,7 @@
                 <table class="table table-email tasks">
                   <tbody>
                   <% @tasks.each_with_index do |task, index| %>
-                      <tr class="unread">
+                      <tr class="unread" data-id="<%= task.id %>">
                         <td></td>
                         <td>
                           <div class="ckbox ckbox-default">
@@ -253,3 +259,27 @@
     </div>
   </div>
 </div>
+
+
+<script type="text/javascript">
+    function getSelectedIds() {
+        var checked_checkboxes = $('.element_checkbox:checked');
+        var trs = checked_checkboxes.closest('tr');
+        var ids = [];
+        trs.each(function( index, element ){
+            id = $(element).attr('data-id');
+            ids.push(id);
+        });
+        return ids;
+    }
+
+    function bulkDestroy() {
+        var answer = confirm('Вы уверены?');
+        if (answer) {
+            var ids = getSelectedIds();
+            var form = $('#bulk_destroy_form');
+            form.children("[name='task_ids']").val(ids.join());
+            form.submit();
+        }
+    }
+</script>

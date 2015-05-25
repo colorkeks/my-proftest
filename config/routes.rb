@@ -32,6 +32,7 @@ Rails.application.routes.draw do
     member do
       get 'create_answer'
     end
+    post :bulk_destroy, on: :collection
   end
 
   devise_for :users,  :controllers => { :registrations => "users/registrations" }
