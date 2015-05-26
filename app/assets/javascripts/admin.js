@@ -15,24 +15,13 @@ $(function(){
         var btn_cb = $(this).find('input[type="checkbox"]');
         btn_cb.prop('checked', !btn_cb.prop('checked'));
         check_box_list.prop('checked', btn_cb.prop('checked'));
-        highlight_rows("selected", 'td > .ckbox');
+        //highlight_rows("selected", 'td > .ckbox');
 
     }).find('input[type="checkbox"]').click(function(){
         check_box_list.prop('checked', $(this).prop('checked'));
-        highlight_rows("selected", 'td > .ckbox');
+        //highlight_rows("selected", 'td > .ckbox');
     });
 
-
-    //if($("#answer_table").length){
-    //    $(this).find("input[type='radio']").off().change(function(){ highlight_rows("success", null, this )});
-    //    $(this).find("input[type='checkbox']").off().change(function(){ highlight_rows("success")});
-    //    highlight_rows("success")
-    //}
-    //
-    //if($("#test_list").length){
-    //    $(this).find("input[type='checkbox']").off().change(function(){ highlight_rows("selected", 'td > .ckbox') });
-    //    //highlight_rows("success")
-    //}
 
     highlight();
     init_wysiwyg();
@@ -43,17 +32,11 @@ $(function(){
 
 function highlight(){
     var answer_table = $("#answer_table");
-    var test_list = $("#test_list");
 
     if(answer_table.length){
         answer_table.find("input[type='radio']").off().change(function(){ highlight_rows("success", null, this )});
         answer_table.find("input[type='checkbox']").off().change(function(){ highlight_rows("success")});
         highlight_rows("success")
-    }
-
-    if(test_list.length){
-        test_list.find("input[type='checkbox']").off().change(function(){ highlight_rows("selected", 'td > .ckbox') });
-        //highlight_rows("success")
     }
 }
 
