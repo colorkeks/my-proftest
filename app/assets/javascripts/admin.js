@@ -14,11 +14,11 @@ $(function(){
     $('#toggle-checkboxes').click(function(){
         var btn_cb = $(this).find('input[type="checkbox"]');
         btn_cb.prop('checked', !btn_cb.prop('checked'));
-        check_box_list.prop('checked', btn_cb.prop('checked'));
+        check_box_list.prop('checked', btn_cb.prop('checked')).change();
         //highlight_rows("selected", 'td > .ckbox');
 
     }).find('input[type="checkbox"]').click(function(){
-        check_box_list.prop('checked', $(this).prop('checked'));
+        check_box_list.prop('checked', $(this).prop('checked')).change();
         //highlight_rows("selected", 'td > .ckbox');
     });
 
@@ -28,7 +28,24 @@ $(function(){
     init_nested_form();
     upper_downer();
     row_index();
+    button_states();
 });
+
+function button_states(){
+    show_hide();
+
+    $('table input[type="checkbox"]').change(function(){
+        show_hide()
+    });
+
+    function show_hide(){
+        if ($('table input[type="checkbox"]:checked').length > 0){
+            $('#move-btn, #remove-btn').removeClass('disabled');
+        }else{
+            $('#move-btn, #remove-btn').addClass('disabled');
+        }
+    }
+}
 
 function highlight(){
     var answer_table = $("#answer_table");
