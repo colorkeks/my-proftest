@@ -7,6 +7,8 @@ class Test < ActiveRecord::Base
   acts_as_nested_set
   belongs_to :test_group
   has_many :sections, dependent: :destroy
+  has_many :eqvgroups, dependent: :destroy
+  after_create :add_eqvgroup
 
   def self.search(search_tests)
     if search_tests
@@ -14,5 +16,10 @@ class Test < ActiveRecord::Base
     else
       self.all
     end
+  end
+
+  def add_eqvgroup
+    eg = self.eqvgroups.build(number: 1)
+    eg.save!
   end
 end
