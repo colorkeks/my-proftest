@@ -37,6 +37,7 @@ Rails.application.routes.draw do
     post :bulk_destroy, on: :collection
     get 'bulk_move', to: :bulk_move_edit, on: :collection, as: :bulk_move
     post 'bulk_move', to: :bulk_move_update, on: :collection
+    post :bulk_change_eqvgroup, on: :collection
   end
 
   devise_for :users,  :controllers => { :registrations => "users/registrations" }

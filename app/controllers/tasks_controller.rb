@@ -121,6 +121,31 @@ class TasksController < ApplicationController
     end
   end
 
+  def bulk_change_eqvgroup
+    @test = Test.find(params[:test_id])
+    @tasks = @test.tasks.where(id: params[:task_ids].split(','))
+    @eqvgroup = @test.eqvgroups.find(params[:eqvgroup_id])
+
+    begin
+      Task.transaction do
+        @tasks.each do |task|
+          task.eqvgroup = @eqvgroup
+          task.save!
+        end
+      end
+      @success = true
+    rescue
+      @success = false
+    end
+
+    if @success
+      redirect_to :back
+    else
+      flash[:error] = 'Невозможно назначить эквивалентную группу'
+      redirect_to :back
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_task

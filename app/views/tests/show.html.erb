@@ -123,7 +123,7 @@
                   </button>
                   <ul class="dropdown-menu">
                     <% @eqvgroups.each do |eq|%>
-                    <li><a href="#"><span class="label label-info"><strong><%= eq.number %></strong></span></a></li>
+                    <li><a href="#" onclick="bulkChangeEqvgroup('<%=eq.id %>');"><span class="label label-info"><strong><%= eq.number %></strong></span></a></li>
                     <% end %>
                     <li><%= link_to 'Добавить', eqvgroups_path(eqvgroup:{test_id: @test.id, section_id: @selected_section}), method: 'post' %></li>
                   </ul>
@@ -135,6 +135,11 @@
                 <%= form_tag bulk_destroy_tasks_path, id: 'bulk_destroy_form', remote: false do %>
                     <%= hidden_field_tag 'test_id', @test.id %>
                     <%= hidden_field_tag 'task_ids' %>
+                <% end %>
+                <%= form_tag bulk_change_eqvgroup_tasks_path, id: 'bulk_change_eqvgroup_form', remote: false do %>
+                    <%= hidden_field_tag 'test_id', @test.id %>
+                    <%= hidden_field_tag 'task_ids' %>
+                    <%= hidden_field_tag 'eqvgroup_id' %>
                 <% end %>
               </div>
 
@@ -295,5 +300,12 @@
         form.find("[name='destination_section_id']").val($(selected).attr('data-id'));
     }
 
+    function bulkChangeEqvgroup(eqvgroup_id) {
+        var ids = getSelectedIds();
+        var form = $('#bulk_change_eqvgroup_form');
+        form.children("[name='task_ids']").val(ids.join());
+        form.children("[name='eqvgroup_id']").val(eqvgroup_id);
+        form.submit();
+    }
 
 </script>

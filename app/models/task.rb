@@ -10,4 +10,11 @@ class Task < ActiveRecord::Base
   belongs_to :eqvgroup
   validates :test_id, presence: true
   validates :eqvgroup_id, presence: true
+  validate :eqvgroup_and_section_valid
+
+  def eqvgroup_and_section_valid
+    if !(self.section == self.eqvgroup.section)
+      errors.add(:eqvgroup, "Невозможно назначить данную группу")
+    end
+  end
 end
