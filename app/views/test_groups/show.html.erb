@@ -78,10 +78,10 @@
                     </div>
                   </button>
 
-                  <button onclick="bulkMoveFormOpen();" class="btn btn-white tooltips" type="button" title="Переместить">
+                  <button onclick="bulkMoveFormOpen();" id="move-btn" class="btn btn-white tooltips" type="button" title="Переместить">
                     <i class="fa fa-folder"></i>
                   </button>
-                  <button onclick="bulkDestroy();" class="btn btn-white tooltips" type="button" data-toggle="tooltip" title="Удалить">
+                  <button onclick="bulkDestroy();" id="remove-btn" class="btn btn-white tooltips" type="button" title="Удалить">
                     <i class="fa fa-trash"></i>
                   </button>
                   <%= form_tag bulk_move_test_group_path(@test_group), id: 'bulk_move_form', method: 'get', remote: true do %>
