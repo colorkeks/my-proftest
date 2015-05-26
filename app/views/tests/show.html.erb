@@ -197,7 +197,13 @@
                           <%= link_to edit_task_path(task) do%>
                           <div class="media">
                             <div class="media-body">
-                              <span class="media-meta pull-right"><%= task.created_at %></span>
+                              <% if Date.today.day == task.created_at.day %>
+                                  <span class="media-meta pull-right"><%= task.created_at.strftime('%H:%M') %></span>
+                              <% elsif Date.today.year == task.created_at.year %>
+                                  <span class="media-meta pull-right"><%= Russian::strftime(task.created_at, "%d %b") %></span>
+                              <% else %>
+                                  <span class="media-meta pull-right"><%= task.created_at.strftime('%d.%m.%Y') %></span>
+                              <% end %>
                               <span class="media-meta pull-right mr20"> <%= task.section.name if task.section %></span>
                               <h4> <%= strip_tags(task.text) %></h4>
                             </div>

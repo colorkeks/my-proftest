@@ -149,7 +149,13 @@
                       <%= link_to element.is_a?(TestGroup) ? test_group_path(element) : test_path(element) do %>
                       <div class="media">
                         <div class="media-body">
-                          <span class="media-meta pull-right"><%= element.created_at %></span>
+                          <% if Date.today.day == element.created_at.day %>
+                              <span class="media-meta pull-right"><%= element.created_at.strftime('%H:%M') %></span>
+                          <% elsif Date.today.year == element.created_at.year %>
+                              <span class="media-meta pull-right"><%= Russian::strftime(element.created_at, "%d %b") %></span>
+                          <% else %>
+                              <span class="media-meta pull-right"><%= element.created_at.strftime('%d.%m.%Y') %></span>
+                          <% end %>
                           <h4>
                             <%= element.is_a?(TestGroup) ? element.name : element.title %>
                           </h4>

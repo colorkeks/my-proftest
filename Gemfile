@@ -60,6 +60,7 @@ gem 'will_paginate'
 gem 'will_paginate-bootstrap'
 gem 'paranoia'
 gem 'font-awesome-rails'
+gem 'russian'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
