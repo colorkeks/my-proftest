@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150525073859) do
+ActiveRecord::Schema.define(version: 20150526093252) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,17 @@ ActiveRecord::Schema.define(version: 20150525073859) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "eqvgroups", force: :cascade do |t|
+    t.integer  "test_id",                null: false
+    t.integer  "section_id"
+    t.integer  "number",     default: 1, null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "eqvgroups", ["test_id", "number"], name: "index_eqvgroups_on_test_id_and_number", unique: true, using: :btree
+  add_index "eqvgroups", ["test_id"], name: "index_eqvgroups_on_test_id", using: :btree
 
   create_table "roles", force: :cascade do |t|
     t.string   "name"
@@ -92,8 +103,10 @@ ActiveRecord::Schema.define(version: 20150525073859) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "section_id"
+    t.integer  "eqvgroup_id", null: false
   end
 
+  add_index "tasks", ["eqvgroup_id"], name: "index_tasks_on_eqvgroup_id", using: :btree
   add_index "tasks", ["section_id"], name: "index_tasks_on_section_id", using: :btree
 
   create_table "test_groups", force: :cascade do |t|

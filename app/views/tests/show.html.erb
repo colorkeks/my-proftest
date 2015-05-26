@@ -118,16 +118,14 @@
               <div class="btn-group labels mr10">
                 <div class="btn-group">
                   <button data-toggle="dropdown" class="btn btn-white dropdown-toggle tooltips" type="button" title="Эквивалентные группы">
-                    <span class="label label-info"><strong>1</strong></span>
+                    <span class="label label-info"><strong>g</strong></span>
                     <span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu">
-                    <li><a href="#"><span class="label label-info"><strong>1</strong></span></a></li>
-                    <!--
-                    <li><a href="#"><span class="label label-info"><strong>2</strong></span></a></li>
-                    <li><a href="#"><span class="label label-info"><strong>3</strong></span></a></li>
-                    -->
-                    <li><a href="#">Добавить</a></li>
+                    <% @eqvgroups.each do |eq|%>
+                    <li><a href="#"><span class="label label-info"><strong><%= eq.number %></strong></span></a></li>
+                    <% end %>
+                    <li><%= link_to 'Добавить', eqvgroups_path(eqvgroup:{test_id: @test.id, section_id: @selected_section}), method: 'post' %></li>
                   </ul>
                 </div>
                 <%= form_tag bulk_move_tasks_path, id: 'bulk_move_form', method: 'get', remote: true do %>
@@ -179,7 +177,7 @@
                             <label for="<%= "cb_#{index}" %>"></label>
                           </div>
                         </td>
-                        <td><span class="label label-info"><strong>1</strong></span></td>
+                        <td><span class="label label-info"><strong><%= task.eqvgroup.number %></strong></span></td>
                         <td style="width: 30px; font-size: 20px; line-height: 20px; padding: 0">
                           <% if task.task_type == 'Единичный выбор' %>
                               <span class="icon-single tooltips" title="Единичный выбор"></span>

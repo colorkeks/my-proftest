@@ -23,6 +23,7 @@ class TestsController < ApplicationController
       #
     end
     @tasks = @tasks.order('id ASC').paginate(:page => params[:page], :per_page => params[:per_page] || 30)
+    @eqvgroups = @test.eqvgroups.order('number')
 
     if params[:old]
       render 'tests/show_old', layout: 'application'
