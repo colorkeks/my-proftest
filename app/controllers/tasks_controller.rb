@@ -99,8 +99,13 @@ class TasksController < ApplicationController
   def bulk_move_update
     @test = Test.find(params[:test_id])
     tasks = @test.tasks.where(id: params[:task_ids].split(','))
-    destination_section = @test.sections.find(params[:destination_section_id])
-    eqvgroup = destination_section.eqvgroups.order('number').last
+    if params[:destination_section_id].present?
+      destination_section = @test.sections.find(params[:destination_section_id])
+      eqvgroup = destination_section.eqvgroups.order('number').last
+    else
+      destination_section = nil
+      eqvgroup = @test.eqvgroups.where(section:nil).order('number').last
+    end
 
     begin
       Task.transaction do
