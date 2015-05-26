@@ -94,10 +94,10 @@ $page_left-margin: 25px;
 }
 
 .media > .media-body > h4{
-  text-overflow: ellipsis;
+  text-overflow: clip;
   white-space: nowrap; /* Запрещаем перенос строк */
   overflow: hidden;
-  width: 500px;
+  width: 600px;
   display: block;
 }
 
@@ -410,6 +410,20 @@ ul.children{
 //    width: 300px;
     a{
       width: 250px;
+    }
+  }
+}
+
+.table{
+  td.link{
+    padding: 0;
+    a{
+      display: block;
+      padding: 8px;
+      color: #353535;
+    }
+    a:hover{
+      text-decoration: none;
     }
   }
 }

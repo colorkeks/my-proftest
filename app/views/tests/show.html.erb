@@ -158,7 +158,7 @@
 
 
               <div class="table-responsive">
-                <table class="table table-email tasks">
+                <table class="table table-email tasks table-hover">
                   <tbody>
                   <% @tasks.each_with_index do |task, index| %>
                       <tr class="unread" data-id="<%= task.id %>">
@@ -183,7 +183,7 @@
                               <span class="icon-open tooltips" title="Открытый вопрос"></span>
                           <% end %>
                         </td>
-                        <td>
+                        <td class="link">
                           <%= link_to edit_task_path(task) do%>
                           <div class="media">
                             <div class="media-body">

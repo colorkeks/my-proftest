@@ -120,7 +120,7 @@
               </div>
 
               <div class="table-responsive">
-                <table id="test_list" class="table table-email tests">
+                <table id="test_list" class="table table-email tests table-hover">
                   <tbody>
                   <% @elements.each_with_index do |element, index| %>
                   <tr class="unread" data-class="<%=element.class%>" data-id="<%= element.id %>">
@@ -133,16 +133,13 @@
                     <td>
                        <i class="fa <%= element.is_a?(TestGroup) ? 'fa-folder'  : 'fa-file-o' %>"></i>
                     </td>
-                    <td>
+                    <td class="link">
+                      <%= link_to element.is_a?(TestGroup) ? test_group_path(element) : test_path(element) do %>
                       <div class="media">
                         <div class="media-body">
                           <span class="media-meta pull-right"><%= element.created_at %></span>
                           <h4>
-                            <% if element.is_a?(TestGroup)%>
-                                <%= link_to element.name, test_group_path(element) %>
-                            <% elsif element.is_a?(Test) %>
-                                <%= link_to element.title, test_path(element) %>
-                            <% end %>
+                            <%= element.is_a?(TestGroup) ? element.name : element.title %>
                           </h4>
                         </div>
                       </div>
@@ -153,6 +150,7 @@
                           <%= link_to 'переименовать', edit_test_path(element, current_test_group_id: @test_group.id), remote: true, class: 'element-edit-link' %>
                       <% end %>
                       </div>
+                      <% end %>
                     </td>
                   </tr>
                   <% end %>
