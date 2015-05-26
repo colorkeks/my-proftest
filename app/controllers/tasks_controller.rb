@@ -100,11 +100,13 @@ class TasksController < ApplicationController
     @test = Test.find(params[:test_id])
     tasks = @test.tasks.where(id: params[:task_ids].split(','))
     destination_section = @test.sections.find(params[:destination_section_id])
+    eqvgroup = destination_section.eqvgroups.order('number').last
 
     begin
       Task.transaction do
         tasks.each do |task|
           task.section = destination_section
+          task.eqvgroup = eqvgroup
           task.save!
         end
       end
