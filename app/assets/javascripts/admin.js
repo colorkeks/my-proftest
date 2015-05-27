@@ -23,12 +23,12 @@ $(function(){
     });
 
 
-    highlight();
     init_wysiwyg();
     init_nested_form();
     upper_downer();
     row_index();
     button_states();
+    highlight();
 });
 
 function button_states(){
@@ -57,8 +57,8 @@ function highlight(){
     var answer_table = $("#answer_table");
 
     if(answer_table.length){
-        answer_table.find("input[type='radio']").off().change(function(){ highlight_rows("success", null, this )});
-        answer_table.find("input[type='checkbox']").off().change(function(){ highlight_rows("success")});
+        answer_table.find("input[type='radio']").off('change').change(function(){ highlight_rows("success", null, this )});
+        answer_table.find("input[type='checkbox']").off('change').change(function(){ highlight_rows("success")});
         highlight_rows("success")
     }
 }
@@ -102,11 +102,11 @@ function init_wysiwyg() {
 }
 
 function init_nested_form(){
-    $('.radio-btn').click(function(){
-        $('input:radio').prop('checked',false);
-        $('.radio_correct').prop('value',false);
-        $(this).prop('checked',true);
-        $('input[name^="' + this.name + '"]').prop('value',true)
+    $('.radio-btn').off('click').click(function(){
+        $('input:radio').prop('checked', false);
+        $('.radio_correct').prop('value', false);
+        $(this).prop('checked', true);
+        $('input[name^="' + this.name + '"]').prop('value', true)
     })
 }
 
@@ -133,7 +133,6 @@ function time_picker(){
 }
 
 function off_on(table_name){
-    $('.radio-btn').off();
     $(".edit_hint").off();
     $(".edit").off();
     init_wysiwyg();
@@ -219,7 +218,6 @@ function timer(){
 
 function upper_downer() {
     $('#answer_body, #associate_body').each(function(index, element){
-        console.log(element);
         Sortable.create(element, {
             handler: 'sorter',
             animation: 150,
@@ -228,6 +226,6 @@ function upper_downer() {
             }
         });
     });
-};
+}
 
 
