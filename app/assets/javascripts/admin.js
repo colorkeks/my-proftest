@@ -14,46 +14,52 @@ $(function(){
     $('#toggle-checkboxes').click(function(){
         var btn_cb = $(this).find('input[type="checkbox"]');
         btn_cb.prop('checked', !btn_cb.prop('checked'));
-        check_box_list.prop('checked', btn_cb.prop('checked'));
-        highlight_rows("selected", 'td > .ckbox');
+        check_box_list.prop('checked', btn_cb.prop('checked')).change();
+        //highlight_rows("selected", 'td > .ckbox');
 
     }).find('input[type="checkbox"]').click(function(){
-        check_box_list.prop('checked', $(this).prop('checked'));
-        highlight_rows("selected", 'td > .ckbox');
+        check_box_list.prop('checked', $(this).prop('checked')).change();
+        //highlight_rows("selected", 'td > .ckbox');
     });
 
 
-    //if($("#answer_table").length){
-    //    $(this).find("input[type='radio']").off().change(function(){ highlight_rows("success", null, this )});
-    //    $(this).find("input[type='checkbox']").off().change(function(){ highlight_rows("success")});
-    //    highlight_rows("success")
-    //}
-    //
-    //if($("#test_list").length){
-    //    $(this).find("input[type='checkbox']").off().change(function(){ highlight_rows("selected", 'td > .ckbox') });
-    //    //highlight_rows("success")
-    //}
-
-    highlight();
     init_wysiwyg();
     init_nested_form();
     upper_downer();
     row_index();
+    button_states();
+    highlight();
 });
+
+function button_states(){
+    show_hide();
+
+    $('table input[type="checkbox"]').change(function(){
+        show_hide()
+    });
+
+    function show_hide(){
+        var checked = $('table input[type="checkbox"]:checked');
+        if (checked.length > 0){
+            $('#move-btn, #remove-btn').removeClass('disabled');
+        }else{
+            $('#move-btn, #remove-btn').addClass('disabled');
+        }
+        if (checked.length == 1){
+            $('#rename').removeClass('disabled').find('a').attr('onclick', 'editElement()');
+        }else{
+            $('#rename').addClass('disabled').find('a').attr('onclick', '');
+        }
+    }
+}
 
 function highlight(){
     var answer_table = $("#answer_table");
-    var test_list = $("#test_list");
 
     if(answer_table.length){
-        answer_table.find("input[type='radio']").off().change(function(){ highlight_rows("success", null, this )});
-        answer_table.find("input[type='checkbox']").off().change(function(){ highlight_rows("success")});
+        answer_table.find("input[type='radio']").off('change').change(function(){ highlight_rows("success", null, this )});
+        answer_table.find("input[type='checkbox']").off('change').change(function(){ highlight_rows("success")});
         highlight_rows("success")
-    }
-
-    if(test_list.length){
-        test_list.find("input[type='checkbox']").off().change(function(){ highlight_rows("selected", 'td > .ckbox') });
-        //highlight_rows("success")
     }
 }
 
@@ -96,11 +102,11 @@ function init_wysiwyg() {
 }
 
 function init_nested_form(){
-    $('.radio-btn').click(function(){
-        $('input:radio').prop('checked',false);
-        $('.radio_correct').prop('value',false);
-        $(this).prop('checked',true);
-        $('input[name^="' + this.name + '"]').prop('value',true)
+    $('.radio-btn').off('click').click(function(){
+        $('input:radio').prop('checked', false);
+        $('.radio_correct').prop('value', false);
+        $(this).prop('checked', true);
+        $('input[name^="' + this.name + '"]').prop('value', true)
     })
 }
 
@@ -127,7 +133,6 @@ function time_picker(){
 }
 
 function off_on(table_name){
-    $('.radio-btn').off();
     $(".edit_hint").off();
     $(".edit").off();
     init_wysiwyg();
@@ -213,7 +218,6 @@ function timer(){
 
 function upper_downer() {
     $('#answer_body, #associate_body').each(function(index, element){
-        console.log(element);
         Sortable.create(element, {
             handler: 'sorter',
             animation: 150,
@@ -222,6 +226,6 @@ function upper_downer() {
             }
         });
     });
-};
+}
 
 
