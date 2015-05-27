@@ -39,10 +39,16 @@ function button_states(){
     });
 
     function show_hide(){
-        if ($('table input[type="checkbox"]:checked').length > 0){
+        var checked = $('table input[type="checkbox"]:checked');
+        if (checked.length > 0){
             $('#move-btn, #remove-btn').removeClass('disabled');
         }else{
             $('#move-btn, #remove-btn').addClass('disabled');
+        }
+        if (checked.length == 1){
+            $('#rename').removeClass('disabled').find('a').attr('onclick', 'editElement()');
+        }else{
+            $('#rename').addClass('disabled').find('a').attr('onclick', '');
         }
     }
 }
