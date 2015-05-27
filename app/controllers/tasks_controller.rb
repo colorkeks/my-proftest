@@ -99,12 +99,19 @@ class TasksController < ApplicationController
   def bulk_move_update
     @test = Test.find(params[:test_id])
     tasks = @test.tasks.where(id: params[:task_ids].split(','))
-    destination_section = @test.sections.find(params[:destination_section_id])
+    if params[:destination_section_id].present?
+      destination_section = @test.sections.find(params[:destination_section_id])
+      eqvgroup = destination_section.eqvgroups.order('number').last
+    else
+      destination_section = nil
+      eqvgroup = @test.eqvgroups.where(section:nil).order('number').last
+    end
 
     begin
       Task.transaction do
         tasks.each do |task|
           task.section = destination_section
+          task.eqvgroup = eqvgroup
           task.save!
         end
       end
@@ -118,6 +125,31 @@ class TasksController < ApplicationController
     else
       flash[:error] = 'Невозможно переместить группу элементов'
       redirect_to @test
+    end
+  end
+
+  def bulk_change_eqvgroup
+    @test = Test.find(params[:test_id])
+    @tasks = @test.tasks.where(id: params[:task_ids].split(','))
+    @eqvgroup = @test.eqvgroups.find(params[:eqvgroup_id])
+
+    begin
+      Task.transaction do
+        @tasks.each do |task|
+          task.eqvgroup = @eqvgroup
+          task.save!
+        end
+      end
+      @success = true
+    rescue
+      @success = false
+    end
+
+    if @success
+      redirect_to :back
+    else
+      flash[:error] = 'Невозможно назначить эквивалентную группу'
+      redirect_to :back
     end
   end
 
