@@ -61,7 +61,7 @@
             </li>
           </ul>
           <ul class="nav nav-pills nav-stacked nav-email mb20">
-            <li><a href="#"><i class="fa fa-trash"></i> Корзина</a></li>
+            <li><a href="#"><i class="fa fa-trash-o"></i> Корзина</a></li>
           </ul>
 
         </div>
@@ -143,7 +143,7 @@
                       </div>
                     </td>
                     <td>
-                       <i class="fa <%= element.is_a?(TestGroup) ? 'fa-folder'  : 'fa-file-o' %>"></i>
+                       <i class="fa <%= element.is_a?(TestGroup) ? 'fa-folder-o'  : 'fa-file-o' %>"></i>
                     </td>
                     <td class="link">
                       <%= link_to element.is_a?(TestGroup) ? test_group_path(element) : test_path(element) do %>
