@@ -21,7 +21,7 @@
                 <div class="btn-group nomargin">
                   <span class="dropdown-toggle"  data-toggle="dropdown"><%= @test_group.name %> <span class="caret"></span></span>
                   <ul class="dropdown-menu">
-                    <li><%= link_to 'переименовать', edit_test_group_path(@test_group), remote: true %></li>
+                    <li><%= link_to 'Переименовать', edit_test_group_path(@test_group), remote: true %></li>
                   </ul>
                 </div>
               </li>
@@ -163,9 +163,9 @@
                       </div>
                       <div class="hide">
                       <% if element.is_a?(TestGroup)%>
-                          <%= link_to 'переименовать', edit_test_group_path(element, current_test_group_id: @test_group.id), remote: true, class: 'element-edit-link' %>
+                          <%= link_to 'Переименовать', edit_test_group_path(element, current_test_group_id: @test_group.id), remote: true, class: 'element-edit-link' %>
                       <% elsif element.is_a?(Test) %>
-                          <%= link_to 'переименовать', edit_test_path(element, current_test_group_id: @test_group.id), remote: true, class: 'element-edit-link' %>
+                          <%= link_to 'Переименовать', edit_test_path(element, current_test_group_id: @test_group.id), remote: true, class: 'element-edit-link' %>
                       <% end %>
                       </div>
                       <% end %>
