@@ -124,6 +124,12 @@ $page_left-margin: 25px;
       padding-top: 0;
       left: -0.5px;
     }
+
+    &.minus{
+      input[type="checkbox"]:checked + label::after {
+        content: '\f068';
+      }
+    }
   }
 }
 

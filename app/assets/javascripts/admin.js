@@ -10,26 +10,28 @@ $(function(){
     $("a[rel~=popover], .has-popover").popover();
     $("a[rel~=tooltip], .has-tooltip").tooltip();
 
-    var check_box_list = $('.element_checkbox');
-    $('#toggle-checkboxes').click(function(){
-        var btn_cb = $(this).find('input[type="checkbox"]');
-        btn_cb.prop('checked', !btn_cb.prop('checked'));
-        check_box_list.prop('checked', btn_cb.prop('checked')).change();
-        //highlight_rows("selected", 'td > .ckbox');
-
-    }).find('input[type="checkbox"]').click(function(){
-        check_box_list.prop('checked', $(this).prop('checked')).change();
-        //highlight_rows("selected", 'td > .ckbox');
-    });
-
-
     init_wysiwyg();
     init_nested_form();
     upper_downer();
     row_index();
     button_states();
     highlight();
+    select_all()
 });
+
+
+function select_all(){
+    var check_box_list = $('.element_checkbox');
+    $('#toggle-checkboxes').click(function(){
+        var btn_cb = $(this).find('input[type="checkbox"]');
+        btn_cb.prop('checked', !btn_cb.prop('checked'));
+        check_box_list.prop('checked', btn_cb.prop('checked')).change();
+
+    }).find('input[type="checkbox"]').click(function(){
+        check_box_list.prop('checked', $(this).prop('checked')).change();
+    });
+
+}
 
 function button_states(){
     show_hide();
@@ -40,15 +42,26 @@ function button_states(){
 
     function show_hide(){
         var checked = $('table input[type="checkbox"]:checked');
+        var all = $('table input[type="checkbox"]');
+
         if (checked.length > 0){
             $('#move-btn, #remove-btn').removeClass('disabled');
         }else{
             $('#move-btn, #remove-btn').addClass('disabled');
         }
+
         if (checked.length == 1){
             $('#rename').removeClass('disabled').find('a').attr('onclick', 'editElement()');
         }else{
             $('#rename').addClass('disabled').find('a').attr('onclick', '');
+        }
+
+        if (checked.length > 0 && checked.length != all.length){
+            $('#toggle-checkboxes').find('.ckbox').addClass('minus').find('input').prop('checked', true);
+        }else if(checked.length == all.length){
+            $('#toggle-checkboxes').find('.ckbox').removeClass('minus').find('input').prop('checked', true);
+        }else if(checked.length == 0){
+            $('#toggle-checkboxes').find('.ckbox').removeClass('minus').find('input').prop('checked', false);
         }
     }
 }
