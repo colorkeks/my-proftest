@@ -1,5 +1,5 @@
 <div class="modal-content">
-<%= simple_form_for @test_group, :html => { :class => 'form-horizontal' } do |f| %>
+  <%= simple_form_for @test_group, wrapper: :horizontal_form do |f| %>
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <h4 class="modal-title" id="myModalLabel">
@@ -12,15 +12,20 @@
       папку
     </h4>
   </div>
-  <div class="modal-body" id="new-form">
-    <%= f.input :name, label: 'Название' %>
-    <%= f.hidden_field :parent_id %>
 
-    <%= hidden_field_tag :current_test_group_id, params[:current_test_group_id] %>
+  <div class="modal-body" id="new-form">
+    <div class="row">
+      <div class="col-lg-12">
+            <%= f.input :name, label: 'Название' %>
+            <%= f.hidden_field :parent_id %>
+            <%= hidden_field_tag :current_test_group_id, params[:current_test_group_id] %>
+      </div>
+    </div>
+
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
-    <%= f.button :submit, 'Сохранить', :class => 'btn btn-primary' %>
+    <%= f.button :submit, 'Сохранить', class: 'btn btn-primary'%>
   </div>
-<% end %>
+  <% end %>
 </div>
