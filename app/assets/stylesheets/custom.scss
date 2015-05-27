@@ -115,12 +115,33 @@ $page_left-margin: 25px;
 
   }
   .ckbox{
-    input{
-      margin-top: 0;
+
+    input[type="checkbox"] + label::before {
+      margin-top: 2px;
     }
+
     input[type="checkbox"]:checked + label::after {
-      left: 1.5px;
+      padding-top: 0;
+      left: -0.5px;
     }
+  }
+}
+
+.ckbox{
+  input{
+    margin-top: 0;
+  }
+
+  input[type="checkbox"] + label::before {
+    width: 15px;
+    height: 15px
+  }
+
+  input[type="checkbox"]:checked + label::after {
+    //      left: 1.5px !important;
+    padding-top: 1px;
+    left: 2.5px;
+    font-size: 9px;
   }
 }
 
