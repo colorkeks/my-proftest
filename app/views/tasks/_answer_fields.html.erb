@@ -5,7 +5,6 @@
   <% if @type == 'Множественный выбор' %>
       <td>
         <%= f.check_box :correct %>
-        <%= f.hidden_field :correct, as: :hidden, :class => 'radio_correct' %>
       </td>
   <% elsif @type == 'Единичный выбор' %>
       <td>
