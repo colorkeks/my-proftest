@@ -19,14 +19,21 @@
               <li class="active">
                 <div class="btn-group nomargin">
                  <% element = @selected_section ? @selected_section : @test %>
-                  <span class="dropdown-toggle"  data-toggle="dropdown"><%= element.title %> <span class="caret"></span></span>
+                 <% element = @trash ? Struct.new(:title).new('Корзина') : element %>
+                  <span class="dropdown-toggle"  data-toggle="dropdown"><%= element.title %>
+                    <% if !@trash %>
+                        <span class="caret"></span>
+                    <% end %>
+                  </span>
                   <ul class="dropdown-menu right">
                     <li>
                       <% if element.is_a?(Test) %>
                         <%= link_to 'Переименовать', edit_test_path(@test), remote: true %>
+                        <a href="#">Удалить</a>
+                      <% elsif element.is_a?(Section)  %>
+                        <%= link_to 'Переименовать', edit_section_path(@selected_section), remote: true %>
+                        <a href="#">Удалить</a>
                       <% else %>
-                         <%= link_to 'Переименовать', edit_section_path(@selected_section), remote: true %>
-                          <a href="#">Удалить</a>
                       <% end %>
                     </li>
                   </ul>
@@ -60,7 +67,11 @@
                 <% end %>
             </li>
 
-            <li><a href="#"><i class="fa fa-trash-o"></i> Корзина</a></li>
+            <li>
+                <%= link_to trash_test_path(@test), class: () do %>
+                    <i class="fa fa-trash-o"></i> Корзина
+                <% end %>
+            </li>
             <li>
               <%= link_to settings_test_path(@test), remote: true do %>
                   <i class="fa fa-cog"></i> Настройки
@@ -98,11 +109,21 @@
                     </div>
                   </button>
                   <button onclick="bulkMoveFormOpen();" id="move-btn" class="btn btn-white tooltips disabled" type="button" title="Переместить">
-                    <i class="fa fa-folder"></i>
+                    <% if @trash %>
+                        <i class="fa fa-repeat"></i>
+                    <% else %>
+                        <i class="fa fa-folder"></i>
+                    <% end %>
                   </button>
                 </div>
 
-                <button onclick="bulkDestroy();" id="remove-btn"  class="btn btn-white tooltips disabled" type="button" data-toggle="tooltip" title="Удалить"><i class="fa fa-trash"></i></button>
+                <button onclick="bulkDestroy();" id="remove-btn"  class="btn btn-white tooltips disabled" type="button" data-toggle="tooltip" title="Удалить">
+                    <% if @trash %>
+                      <i class="fa fa-remove"></i>
+                    <% else %>
+                      <i class="fa fa-trash"></i>
+                    <% end %>
+                </button>
 
                 <div class="btn-group ">
                   <button class="btn btn-white tooltips dropdown-toggle" data-toggle="dropdown" type="button" title="" data-original-title="Другое">
@@ -130,10 +151,12 @@
                   </ul>
                 </div>
                 <%= form_tag bulk_move_tasks_path, id: 'bulk_move_form', method: 'get', remote: true do %>
+                    <%= hidden_field_tag 'trash', @trash %>
                     <%= hidden_field_tag 'test_id', @test.id %>
                     <%= hidden_field_tag 'task_ids' %>
                 <% end %>
                 <%= form_tag bulk_destroy_tasks_path, id: 'bulk_destroy_form', remote: false do %>
+                    <%= hidden_field_tag 'trash', @trash %>
                     <%= hidden_field_tag 'test_id', @test.id %>
                     <%= hidden_field_tag 'task_ids' %>
                 <% end %>
@@ -183,7 +206,11 @@
                             <label for="<%= "cb_#{index}" %>"></label>
                           </div>
                         </td>
-                        <td><span class="label label-info"><strong><%= task.eqvgroup.number %></strong></span></td>
+                        <td>
+                            <% if !@trash %>
+                            <span class="label label-info"><strong><%= task.eqvgroup.number %></strong></span>
+                            <% end %>
+                        </td>
                         <td style="width: 30px; font-size: 20px; line-height: 20px; padding: 0">
                           <% if task.task_type == 'Единичный выбор' %>
                               <span class="icon-single tooltips" title="Единичный выбор"></span>

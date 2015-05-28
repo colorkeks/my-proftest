@@ -17,6 +17,7 @@ class Section < ActiveRecord::Base
     end
     last_number += 1
     eg = self.test.eqvgroups.build(number: last_number)
+    eg.section = self
     eg.save!
   end
 end
