@@ -20,12 +20,13 @@
                 <div class="btn-group nomargin">
                  <% element = @selected_section ? @selected_section : @test %>
                   <span class="dropdown-toggle"  data-toggle="dropdown"><%= element.title %> <span class="caret"></span></span>
-                  <ul class="dropdown-menu">
+                  <ul class="dropdown-menu right">
                     <li>
                       <% if element.is_a?(Test) %>
                         <%= link_to 'Переименовать', edit_test_path(@test), remote: true %>
                       <% else %>
                          <%= link_to 'Переименовать', edit_section_path(@selected_section), remote: true %>
+                          <a href="#">Удалить</a>
                       <% end %>
                     </li>
                   </ul>

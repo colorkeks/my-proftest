@@ -438,6 +438,7 @@ ul.children{
     text-align: center;
 //    width: 300px;
     a{
+      text-align: left;
       width: 250px;
     }
   }
@@ -457,8 +458,21 @@ ul.children{
   }
 }
 
-  .control-label {
-    padding-top: 7px ;
-    font-weight: bold ;
-    text-align: right;
-  }
+.control-label {
+  padding-top: 7px ;
+  font-weight: bold ;
+  text-align: right;
+}
+
+.dropdown-menu.right {
+  right: -160px;
+  left: inherit;
+}
+
+.nav-bracket .children > li > a {
+  padding: 5px 0 5px 14px;
+}
+
+.breadcrumb li > a{
+  display: block;
+}
