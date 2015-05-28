@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150526093252) do
+ActiveRecord::Schema.define(version: 20150527064828) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,7 +49,6 @@ ActiveRecord::Schema.define(version: 20150526093252) do
     t.datetime "updated_at",             null: false
   end
 
-  add_index "eqvgroups", ["section_id"], name: "index_eqvgroups_on_section_id", using: :btree
   add_index "eqvgroups", ["test_id", "number"], name: "index_eqvgroups_on_test_id_and_number", unique: true, using: :btree
   add_index "eqvgroups", ["test_id"], name: "index_eqvgroups_on_test_id", using: :btree
 
@@ -118,6 +117,7 @@ ActiveRecord::Schema.define(version: 20150526093252) do
     t.integer  "depth",      default: 0, null: false
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.datetime "deleted_at"
   end
 
   add_index "test_groups", ["lft"], name: "index_test_groups_on_lft", using: :btree
@@ -140,6 +140,7 @@ ActiveRecord::Schema.define(version: 20150526093252) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "test_group_id"
+    t.datetime "deleted_at"
   end
 
   add_index "tests", ["test_group_id"], name: "index_tests_on_test_group_id", using: :btree

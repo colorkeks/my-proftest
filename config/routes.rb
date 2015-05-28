@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     get 'stub_tests', on: :collection
     get 'stub_tasks', on: :collection
     get 'stub_task', on: :collection
+    get 'trash', on: :collection
   end
 
   resources :user_associations
