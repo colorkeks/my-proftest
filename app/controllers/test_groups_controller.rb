@@ -11,6 +11,16 @@ class TestGroupsController < ApplicationController
     #@test_groups = TestGroup.all
   end
 
+  def trash
+    @trash = TestGroup.where(name: 'Корзина').first
+    @test_group = @trash
+    #@test_groups = TestGroup.deleted.order('deleted_at DESC').all
+    @tests = @test_group.tests.order('deleted_at DESC').all
+    @child_groups = @test_group.children.order(:lft)
+    @elements = (@child_groups + @tests).paginate(:page => params[:page], :per_page => params[:per_page] || 30)
+    render action: 'show'
+  end
+
   # GET /test_groups/1
   # GET /test_groups/1.json
   def show
@@ -84,9 +94,31 @@ class TestGroupsController < ApplicationController
   end
 
   def bulk_destroy
-    tests = Test.where(id: params[:test_ids].split(',')).destroy_all
-    test_groups = TestGroup.where(id: params[:test_group_ids].split(',')).destroy_all
-    @test_groups_for_destination = TestGroup.all
+    @trash = TestGroup.trash
+    tests = Test.where(id: params[:test_ids].split(','))
+    test_groups = TestGroup.where(id: params[:test_group_ids].split(','))
+
+    if @test_group.deleted? || @test_group.is_trash?
+      #Удаляем совсем
+      TestGroup.transaction do
+        tests.destroy_all
+        test_groups.destroy_all
+      end
+    else
+      #Удаляем в корзину
+      TestGroup.transaction do
+        tests.each do |test|
+          test.soft_delete!
+          test.test_group = @trash
+          test.save!
+        end
+        test_groups.each do |test_group|
+          test_group.soft_delete!
+          test_group.parent = @trash
+          test_group.save!
+        end
+      end
+    end
     redirect_to @test_group
   end
 
@@ -112,11 +144,13 @@ class TestGroupsController < ApplicationController
     begin
       TestGroup.transaction do
         tests.each do |test|
+          test.restore! if test.deleted?
           test.test_group = destination_group
           test.save!
         end
 
         test_groups.each do |test_group|
+          test_group.restore! if test_group.deleted?
           test_group.parent = destination_group
           test_group.save!
         end

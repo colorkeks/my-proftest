@@ -61,7 +61,11 @@
             </li>
           </ul>
           <ul class="nav nav-pills nav-stacked nav-email mb20">
-            <li><a href="#"><i class="fa fa-trash"></i> Корзина</a></li>
+            <li>
+              <%= link_to trash_test_groups_path, class: (@test_group == @trash ? 'active' : '') do %>
+                  <i class="fa fa-trash"></i> Корзина
+              <% end %>
+            </li>
           </ul>
 
         </div>
@@ -79,10 +83,18 @@
                   </button>
 
                   <button onclick="bulkMoveFormOpen();" id="move-btn" class="btn btn-white tooltips" type="button" title="Переместить">
+                    <% if @test_group.deleted? || @test_group.is_trash? %>
+                    <i class="fa fa-repeat"></i>
+                    <% else %>
                     <i class="fa fa-folder"></i>
+                    <% end %>
                   </button>
                   <button onclick="bulkDestroy();" id="remove-btn" class="btn btn-white tooltips" type="button" title="Удалить">
+                    <% if @test_group.deleted? || @test_group.is_trash? %>
+                    <i class="fa fa-remove"></i>
+                    <% else %>
                     <i class="fa fa-trash"></i>
+                    <% end %>
                   </button>
                   <%= form_tag bulk_move_test_group_path(@test_group), id: 'bulk_move_form', method: 'get', remote: true do %>
                       <%= hidden_field_tag 'test_ids' %>
