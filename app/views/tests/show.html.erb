@@ -29,10 +29,10 @@
                     <li>
                       <% if element.is_a?(Test) %>
                         <%= link_to 'Переименовать', edit_test_path(@test), remote: true %>
-                        <a href="#">Удалить</a>
+                        <%= link_to 'Удалить', test_path(@test), method: :delete, data: {confirm: 'Вы уверены?'} %>
                       <% elsif element.is_a?(Section)  %>
                         <%= link_to 'Переименовать', edit_section_path(@selected_section), remote: true %>
-                        <a href="#">Удалить</a>
+                        <%= link_to 'Удалить', section_path(@selected_section), method: :delete, data: {confirm: 'Вы уверены?'} %>
                       <% else %>
                       <% end %>
                     </li>

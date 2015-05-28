@@ -123,9 +123,13 @@ class TestsController < ApplicationController
   # DELETE /tests/1
   # DELETE /tests/1.json
   def destroy
-    @test.destroy
+    #@test.destroy
+    test_group = @test.test_group
+    @test.test_group = TestGroup.trash
+    @test.soft_delete!
+
     respond_to do |format|
-      format.html { redirect_to current_user, notice: 'Test was successfully destroyed.' }
+      format.html { redirect_to test_group, notice: 'Test was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
