@@ -58,7 +58,7 @@ function button_states(){
 
         if (checked.length > 0 && checked.length != all.length){
             $('#toggle-checkboxes').find('.ckbox').addClass('minus').find('input').prop('checked', true);
-        }else if(checked.length == all.length){
+        }else if(checked.length == all.length && all.length != 0){
             $('#toggle-checkboxes').find('.ckbox').removeClass('minus').find('input').prop('checked', true);
         }else if(checked.length == 0){
             $('#toggle-checkboxes').find('.ckbox').removeClass('minus').find('input').prop('checked', false);

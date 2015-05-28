@@ -25,12 +25,14 @@
                         <span class="caret"></span>
                     <% end %>
                   </span>
-                  <ul class="dropdown-menu">
+                  <ul class="dropdown-menu right">
                     <li>
                       <% if element.is_a?(Test) %>
                         <%= link_to 'Переименовать', edit_test_path(@test), remote: true %>
+                        <a href="#">Удалить</a>
                       <% elsif element.is_a?(Section)  %>
-                         <%= link_to 'Переименовать', edit_section_path(@selected_section), remote: true %>
+                        <%= link_to 'Переименовать', edit_section_path(@selected_section), remote: true %>
+                        <a href="#">Удалить</a>
                       <% else %>
                       <% end %>
                     </li>
