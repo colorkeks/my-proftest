@@ -17,7 +17,9 @@
           <div class="breadcrumb-wrapper">
             <ol class="breadcrumb">
               <li><%= link_to @task.test.title,  test_path(@task.test) %></li>
-              <li class="active">Раздел 1 </li>
+              <% if @task.section %>
+                  <li class="active"><%= link_to @task.section.title, edit_section_path(@task.section) %></li>
+              <% end %>
               <li class="active">Задание #<%= @task.id %>
             </ol>
           </div>
@@ -96,6 +98,10 @@
                       <%= f.text_area :hint, :class => 'form-control', :value => 'Сопоставьте строки:' %>
                   <% elsif @type == 'Открытый вопрос' %>
                       <%= f.text_area :hint, :class => 'form-control', :value => 'Введите пропущенное слово:' %>
+                  <% elsif @type == 'Единичный выбор' %>
+                      <%= f.text_area :hint, :class => 'form-control', :value => 'Выберите один правильный ответ:' %>
+                  <% elsif @type == 'Множественный выбор' %>
+                      <%= f.text_area :hint, :class => 'form-control', :value => 'Выберите один или несколько правильных ответов:' %>
                   <% else %>
                       <%= f.text_area :hint, :class => 'form-control', :value => 'Выберите правильные(-ый) ответ(-ы):' %>
                   <% end %>
