@@ -145,7 +145,11 @@
                   </button>
                   <ul class="dropdown-menu">
                     <% @eqvgroups.each do |eq|%>
-                    <li><a href="#" onclick="bulkChangeEqvgroup('<%=eq.id %>');"><span class="label label-info"><strong><%= eq.number %></strong></span></a></li>
+                    <li><a href="#" onclick="bulkChangeEqvgroup('<%=eq.id %>');">
+                      <span class="label label-info"><strong><%= eq.number %></strong></span>
+                      <span class="small italic text-muted"> <%= eq.section.name if eq.section %></span>
+                    </a>
+                    </li>
                     <% end %>
                     <li><%= link_to 'Добавить', eqvgroups_path(eqvgroup:{test_id: @test.id, section_id: @selected_section}), method: 'post' %></li>
                   </ul>
