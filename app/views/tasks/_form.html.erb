@@ -113,7 +113,7 @@
                 <!--<div class="col-lg-6 col-sm-12">-->
               <% if @type == 'Сопоставление' %>
                   <div class="row">
-                    <div class="col-lg-6 ">
+                    <div class="col-lg-6 col-sm-6">
                       <h4>Ответы: <%= link_to_add_fields '<i class="fa fa-plus"></i>', f, :answers,'answer_table', class: 'btn btn-white btn-sm pull-right tooltips' %></h4>
                       <table id="answer_table" class="table answer_table table-striped">
                         <tbody id="answer_body">
@@ -123,7 +123,7 @@
                         </tbody>
                       </table>
                     </div>
-                    <div class="col-lg-6 ">
+                    <div class="col-lg-6 col-sm-6">
                       <h4>Сопоставления: <%= link_to_add_fields '<i class="fa fa-plus"></i>', f, :associations, 'associate_table', class: 'btn btn-white btn-sm pull-right tooltips' %></h4>
                       <table id="associate_table" class="table associate_table table-striped answer_table">
                         <tbody id="associate_body">
