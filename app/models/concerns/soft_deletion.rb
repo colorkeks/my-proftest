@@ -43,4 +43,8 @@ module SoftDeletion
     self.deleted_at.present?
   end
 
+  def existing?
+    self.deleted_at.blank?
+  end
+
 end

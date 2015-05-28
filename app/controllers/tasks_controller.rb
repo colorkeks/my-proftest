@@ -82,8 +82,22 @@ class TasksController < ApplicationController
   end
 
   def bulk_destroy
+    @trash = params[:trash]
     @test = Test.find(params[:test_id])
-    @tasks = @test.tasks.where(id: params[:task_ids].split(',')).destroy_all
+    @tasks = @test.tasks.where(id: params[:task_ids].split(','))
+    if @trash.present?
+      @tasks.destroy_all
+    else
+      Task.transaction do
+        @tasks.each do |task|
+          task.eqvgroup = nil
+          task.eqvgroup_id = 0
+          task.section = nil
+          task.soft_delete!
+        end
+      end
+    end
+
     redirect_to @test
   end
 
@@ -112,6 +126,7 @@ class TasksController < ApplicationController
         tasks.each do |task|
           task.section = destination_section
           task.eqvgroup = eqvgroup
+          task.restore! if task.deleted?
           task.save!
         end
       end

@@ -9,8 +9,9 @@ class Task < ActiveRecord::Base
   belongs_to :section
   belongs_to :eqvgroup
   validates :test_id, presence: true
-  validates :eqvgroup_id, presence: true
-  validate :eqvgroup_and_section_valid
+  validates :eqvgroup_id, presence: true, if: 'existing?'
+  validate :eqvgroup_and_section_valid, if: 'existing?'
+  include SoftDeletion
 
   def eqvgroup_and_section_valid
     if !(self.section == self.eqvgroup.section)

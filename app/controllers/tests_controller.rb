@@ -1,7 +1,7 @@
 class TestsController < ApplicationController
   include TheSortableTreeController::Rebuild
   include TheSortableTreeController::ExpandNode
-  before_action :set_test, only: [:show, :edit, :update, :destroy, :settings]
+  before_action :set_test, only: [:show, :trash, :edit, :update, :destroy, :settings]
   load_and_authorize_resource
   # GET /tests
   # GET /tests.json
@@ -22,13 +22,21 @@ class TestsController < ApplicationController
     else
       #
     end
-    @tasks = @tasks.order('id ASC').paginate(:page => params[:page], :per_page => params[:per_page] || 30)
+    @tasks = @tasks.existing.order('id ASC').paginate(:page => params[:page], :per_page => params[:per_page] || 30)
     @eqvgroups = @test.eqvgroups.order('number')
 
     if params[:old]
       render 'tests/show_old', layout: 'application'
       return
     end
+  end
+
+  def trash
+    @trash = true
+    @tasks = @test.tasks.deleted.order('deleted_at DESC').paginate(:page => params[:page], :per_page => params[:per_page] || 30)
+    @eqvgroups = []
+
+    render action: 'show'
   end
 
   def create_task
