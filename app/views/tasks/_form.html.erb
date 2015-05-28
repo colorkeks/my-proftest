@@ -19,7 +19,7 @@
             <ol class="breadcrumb">
               <li><%= link_to @task.test.title,  test_path(@task.test) %></li>
               <% if @task.section %>
-                  <li class="active"><%= link_to @task.section.title, edit_section_path(@task.section) %></li>
+                  <li class="active"><%= link_to @task.section.title, test_path(@task.test, selected_section_id: @task.section_id) %></li>
               <% end %>
               <li class="active">Задание #<%= @task.id %></li>
             </ol>
