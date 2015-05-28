@@ -60,9 +60,19 @@ class SectionsController < ApplicationController
   # DELETE /sections/1
   # DELETE /sections/1.json
   def destroy
-    @section.destroy
+    test = @section.test
+    Section.transaction do
+      @section.tasks.each do |task|
+        task.eqvgroup = nil
+        task.eqvgroup_id = 0
+        task.section = nil
+        task.soft_delete!
+      end
+      @section.eqvgroups.destroy_all
+      @section.destroy
+    end
     respond_to do |format|
-      format.html { redirect_to sections_url, notice: 'Section was successfully destroyed.' }
+      format.html { redirect_to test, notice: 'Section was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
