@@ -155,7 +155,7 @@
                       </div>
                     </td>
                     <td>
-                       <i class="fa <%= element.is_a?(TestGroup) ? 'fa-folder-o'  : 'fa-file-o' %>"></i>
+                       <i class="fa <%= element.is_a?(TestGroup) ? 'fa-folder'  : 'fa-file-o' %>"></i>
                     </td>
                     <td class="link">
                       <%= link_to element.is_a?(TestGroup) ? test_group_path(element) : test_path(element) do %>

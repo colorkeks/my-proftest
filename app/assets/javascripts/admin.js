@@ -94,6 +94,9 @@ function init_wysiwyg() {
         selector: ".edit",
         statusbar: false,
         menubar: false,
+        cleanup : true,
+        paste_as_text: true,
+
         toolbar: [
             "bold italic subscript superscript | bullist numlist  "
         ]
