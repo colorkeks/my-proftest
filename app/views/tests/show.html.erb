@@ -236,7 +236,7 @@
                                   <span class="media-meta pull-right"><%= task.created_at.strftime('%d.%m.%Y') %></span>
                               <% end %>
                               <span class="media-meta pull-right mr20"> <%= task.section.name if task.section %></span>
-                              <h4> <%= strip_tags(task.text) %></h4>
+                              <h4> <%= strip_tags(task.text.squish) %></h4>
                             </div>
                           </div>
                           <% end %>
