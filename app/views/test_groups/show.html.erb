@@ -82,14 +82,22 @@
                     </div>
                   </button>
 
-                  <button onclick="bulkMoveFormOpen();" id="move-btn" class="btn btn-white tooltips disabled" type="button" title="Переместить">
+                  <% if @test_group.deleted? || @test_group.is_trash? %>
+                      <% move_title = 'Восстановить' %>
+                      <% delete_title = 'Удалить навсегда' %>
+                  <% else %>
+                      <% move_title = 'Переместить' %>
+                      <% delete_title = 'Удалить в корзину' %>
+                  <% end %>
+
+                  <button onclick="bulkMoveFormOpen();" id="move-btn" class="btn btn-white tooltips disabled" type="button" title="<%= move_title %>">
                     <% if @test_group.deleted? || @test_group.is_trash? %>
                     <i class="fa fa-repeat"></i>
                     <% else %>
                     <i class="fa fa-folder"></i>
                     <% end %>
                   </button>
-                  <button onclick="bulkDestroy();" id="remove-btn" class="btn btn-white tooltips disabled" type="button" title="Удалить">
+                  <button onclick="bulkDestroy();" id="remove-btn" class="btn btn-white tooltips disabled" type="button" title="<%= delete_title %>">
                     <% if @test_group.deleted? || @test_group.is_trash? %>
                     <i class="fa fa-remove"></i>
                     <% else %>

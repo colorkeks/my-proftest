@@ -108,7 +108,16 @@
                       <label for="checkbox0"></label>
                     </div>
                   </button>
-                  <button onclick="bulkMoveFormOpen();" id="move-btn" class="btn btn-white tooltips disabled" type="button" title="Переместить">
+
+                  <% if @trash %>
+                      <% move_title = 'Восстановить' %>
+                      <% delete_title = 'Удалить навсегда' %>
+                  <% else %>
+                      <% move_title = 'Переместить' %>
+                      <% delete_title = 'Удалить в корзину' %>
+                  <% end %>
+
+                  <button onclick="bulkMoveFormOpen();" id="move-btn" class="btn btn-white tooltips disabled" type="button" title="<%= move_title %>">
                     <% if @trash %>
                         <i class="fa fa-repeat"></i>
                     <% else %>
@@ -117,7 +126,7 @@
                   </button>
                 </div>
 
-                <button onclick="bulkDestroy();" id="remove-btn"  class="btn btn-white tooltips disabled" type="button" data-toggle="tooltip" title="Удалить">
+                <button onclick="bulkDestroy();" id="remove-btn"  class="btn btn-white tooltips disabled" type="button" data-toggle="tooltip" title="<%= delete_title %>">
                     <% if @trash %>
                       <i class="fa fa-remove"></i>
                     <% else %>
