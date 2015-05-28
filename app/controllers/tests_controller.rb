@@ -35,6 +35,8 @@ class TestsController < ApplicationController
     @trash = true
     @tasks = @test.tasks.deleted.order('deleted_at DESC').paginate(:page => params[:page], :per_page => params[:per_page] || 30)
     @eqvgroups = []
+    @task = Task.new
+    @test_id = params[:id]
 
     render action: 'show'
   end
