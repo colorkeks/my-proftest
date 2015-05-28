@@ -9,6 +9,7 @@ class Test < ActiveRecord::Base
   has_many :sections, dependent: :destroy
   has_many :eqvgroups, dependent: :destroy
   after_create :add_eqvgroup
+  include SoftDeletion
 
   def self.search(search_tests)
     if search_tests
@@ -22,4 +23,5 @@ class Test < ActiveRecord::Base
     eg = self.eqvgroups.build(number: 1)
     eg.save!
   end
+
 end
