@@ -465,7 +465,7 @@ ul.children{
 }
 
 .dropdown-menu.right {
-  right: -160px;
+  right: 0;
   left: inherit;
 }
 
@@ -475,4 +475,9 @@ ul.children{
 
 .dropdown-menu li > a{
   display: block;
+}
+
+.disabled {
+  cursor: default;
+  a, span{cursor: default !important; }
 }
