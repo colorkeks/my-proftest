@@ -119,7 +119,7 @@
 
                   <button onclick="bulkMoveFormOpen();" id="move-btn" class="btn btn-white tooltips disabled" type="button" title="<%= move_title %>">
                     <% if @trash %>
-                        <i class="fa fa-repeat"></i>
+                        <i class="fa fa-undo"></i>
                     <% else %>
                         <i class="fa fa-folder"></i>
                     <% end %>
@@ -128,7 +128,7 @@
 
                 <button onclick="bulkDestroy();" id="remove-btn"  class="btn btn-white tooltips disabled" type="button" data-toggle="tooltip" title="<%= delete_title %>">
                     <% if @trash %>
-                      <i class="fa fa-remove"></i>
+                      <i class="fa fa-trash"></i> <i class="fa fa-exclamation"></i>
                     <% else %>
                       <i class="fa fa-trash"></i>
                     <% end %>
