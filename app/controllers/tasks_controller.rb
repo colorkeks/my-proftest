@@ -1,5 +1,5 @@
 class TasksController < ApplicationController
-  before_action :set_task, only: [:show, :edit, :update, :destroy]
+  before_action :set_task, only: [:show, :edit, :update, :destroy, :preview]
   load_and_authorize_resource
   # GET /tasks
   # GET /tasks.json
@@ -10,6 +10,13 @@ class TasksController < ApplicationController
   # GET /tasks/1
   # GET /tasks/1.json
   def show
+    respond_to do |format|
+      format.js { render :show, layout: false }
+    end
+  end
+
+  def preview
+    render 'tasks/preview', layout: 'application'
   end
 
   # GET /tasks/new
@@ -48,6 +55,11 @@ class TasksController < ApplicationController
 
     respond_to do |format|
       if @task.save
+        if params[:preview_flag]
+          redirect_to preview_task_path(@task), notice: 'Task was successfully updated.'
+        else
+          redirect_to edit_task_path(@task), notice: 'Задание успешно создано'
+        end
         format.html { redirect_to edit_task_path(@task), notice: 'Задание успешно создано' }
         format.json { render :show, status: :created, location: @task }
       else
@@ -62,7 +74,14 @@ class TasksController < ApplicationController
   def update
     respond_to do |format|
       if @task.update(task_params)
-        format.html { redirect_to edit_task_path(@task), notice: 'Task was successfully updated.' }
+        format.html {
+
+          if params[:preview_flag] == 'true'
+            redirect_to preview_task_path(@task)
+          else
+            redirect_to edit_task_path(@task), notice: 'Задание успешно изменено'
+          end
+        }
         format.json { render :show, status: :ok, location: @task }
       else
         format.html { render :edit }
@@ -176,7 +195,7 @@ class TasksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def task_params
-      params.require(:task).permit(:text, :hint, :task_type, :point, :test_id, :section_id, :eqvgroup_id,
+      params.require(:task).permit(:text, :hint, :task_type, :point, :test_id, :section_id, :eqvgroup_id, :preview_flag,
                     answers_attributes: [ :id, :task_id, :text, :correct, :serial_number, :point, :_destroy],
                     task_contents_attributes: [:id,:file_content, :task_id, :_destroy],
                     associations_attributes: [:id, :text, :serial_number, :task_id, :_destroy])

@@ -40,6 +40,7 @@ Rails.application.routes.draw do
     get 'bulk_move', to: :bulk_move_edit, on: :collection, as: :bulk_move
     post 'bulk_move', to: :bulk_move_update, on: :collection
     post :bulk_change_eqvgroup, on: :collection
+    get :preview, on: :member
   end
 
   devise_for :users,  :controllers => { :registrations => "users/registrations" }

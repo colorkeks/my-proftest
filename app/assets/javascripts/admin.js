@@ -10,6 +10,12 @@ $(function(){
     $("a[rel~=popover], .has-popover").popover();
     $("a[rel~=tooltip], .has-tooltip").tooltip();
 
+    $('#show-preview').click(function(){
+        $(this).closest('form').find('#preview-flag').val(true);
+        $(this).closest('form').submit();
+
+    });
+
     init_wysiwyg();
     init_nested_form();
     upper_downer();
@@ -23,9 +29,8 @@ $(function(){
 
 function register_change_event(){
     if ($('#change-content').length > 0){
-        $('input, textarea').keyup(function(){
-            change_content();
-        });
+        $('input, textarea').keyup(function(){ change_content() });
+        $('input[type="radio"], input[type="checkbox"]').click(function(){ change_content() });
     }
 }
 
