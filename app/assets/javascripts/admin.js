@@ -16,8 +16,25 @@ $(function(){
     row_index();
     button_states();
     highlight();
-    select_all()
+    select_all();
+    register_change_event();
 });
+
+
+function register_change_event(){
+    if ($('#change-content').length > 0){
+        $('input, textarea').keyup(function(){
+            change_content();
+        });
+    }
+}
+
+function change_content(){
+    if (!window.change_status) {
+        $('#change-content').text('Есть не сохраненные изменения');
+        window.change_status = true;
+    }
+}
 
 
 function select_all(){
@@ -96,6 +113,11 @@ function init_wysiwyg() {
         menubar: false,
         cleanup : true,
         paste_as_text: true,
+        setup: function(editor) {
+            editor.on('change', function(e) {
+                change_content();
+            });
+        },
 
         toolbar: [
             "bold italic subscript superscript | bullist numlist  "
@@ -155,6 +177,7 @@ function off_on(table_name){
     init_nested_form();
     row_index(table_name);
     highlight();
+    change_content();
 }
 
 function row_index(table_name, index) {
@@ -239,6 +262,7 @@ function upper_downer() {
             animation: 150,
             onSort: function (evt) {
                 row_index();
+                change_content();
             }
         });
     });
