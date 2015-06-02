@@ -78,7 +78,7 @@
                         <tr>
                           <td><%= test.title %></td>
                           <td><%= test.tasks.count %></td>
-                          <td><%= test.timer.strftime('%H:%M') %></td>
+                          <td><%= test.timer.strftime('%H:%M') if test.timer %></td>
                           <% if test.tasks.count > 0 %>
                               <td><%= link_to 'Пройти тест', {:controller => :tries, :action => :create, :try => {:date => Time.now, :timer => format('%02d:%02d', 0, 0), :user_id => @user.id, :test_id => test.id}}, :method => 'POST', :class => 'btn btn-default' %></td>
                           <% else %>
