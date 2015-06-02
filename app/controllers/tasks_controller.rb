@@ -55,12 +55,14 @@ class TasksController < ApplicationController
 
     respond_to do |format|
       if @task.save
-        if params[:preview_flag]
-          redirect_to preview_task_path(@task), notice: 'Task was successfully updated.'
-        else
-          redirect_to edit_task_path(@task), notice: 'Задание успешно создано'
-        end
-        format.html { redirect_to edit_task_path(@task), notice: 'Задание успешно создано' }
+
+        format.html {
+          if params[:preview_flag]
+            redirect_to preview_task_path(@task)
+          else
+            redirect_to edit_task_path(@task), notice: 'Задание успешно создано'
+          end
+        }
         format.json { render :show, status: :created, location: @task }
       else
         format.html { render :new }

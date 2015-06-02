@@ -30,7 +30,7 @@ class SectionsController < ApplicationController
       if @section.save
         format.html {
           #redirect_to @section, notice: 'Section was successfully created.'
-          redirect_to @section.test, notice: 'Section was successfully created.'
+          redirect_to @section.test, notice: 'Раздел успешно создан'
         }
         format.json { render :show, status: :created, location: @section }
       else
@@ -72,7 +72,7 @@ class SectionsController < ApplicationController
       @section.destroy
     end
     respond_to do |format|
-      format.html { redirect_to test, notice: 'Section was successfully destroyed.' }
+      format.html { redirect_to test, notice: 'Раздел успешно удален' }
       format.json { head :no_content }
     end
   end
