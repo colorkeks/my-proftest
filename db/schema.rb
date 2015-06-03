@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150528052059) do
+ActiveRecord::Schema.define(version: 20150601064548) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,16 @@ ActiveRecord::Schema.define(version: 20150528052059) do
     t.datetime "updated_at"
   end
 
+  create_table "chains", force: :cascade do |t|
+    t.integer  "test_id",     null: false
+    t.integer  "section_id"
+    t.integer  "eqvgroup_id", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "chains", ["test_id"], name: "index_chains_on_test_id", using: :btree
+
   create_table "eqvgroups", force: :cascade do |t|
     t.integer  "test_id",                null: false
     t.integer  "section_id"
@@ -49,7 +59,6 @@ ActiveRecord::Schema.define(version: 20150528052059) do
     t.datetime "updated_at",             null: false
   end
 
-  add_index "eqvgroups", ["section_id"], name: "index_eqvgroups_on_section_id", using: :btree
   add_index "eqvgroups", ["test_id", "number"], name: "index_eqvgroups_on_test_id_and_number", unique: true, using: :btree
   add_index "eqvgroups", ["test_id"], name: "index_eqvgroups_on_test_id", using: :btree
 
@@ -104,10 +113,13 @@ ActiveRecord::Schema.define(version: 20150528052059) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "section_id"
-    t.integer  "eqvgroup_id", null: false
+    t.integer  "eqvgroup_id",    null: false
     t.datetime "deleted_at"
+    t.integer  "chain_id"
+    t.integer  "chain_position"
   end
 
+  add_index "tasks", ["chain_id", "chain_position"], name: "index_tasks_on_chain_id_and_chain_position", unique: true, using: :btree
   add_index "tasks", ["deleted_at"], name: "index_tasks_on_deleted_at", using: :btree
   add_index "tasks", ["eqvgroup_id"], name: "index_tasks_on_eqvgroup_id", using: :btree
   add_index "tasks", ["section_id"], name: "index_tasks_on_section_id", using: :btree

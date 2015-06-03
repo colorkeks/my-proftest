@@ -1,5 +1,6 @@
 class SectionsController < ApplicationController
   before_action :set_section, only: [:show, :edit, :update, :destroy]
+  load_and_authorize_resource
 
   # GET /sections
   # GET /sections.json
@@ -63,10 +64,7 @@ class SectionsController < ApplicationController
     test = @section.test
     Section.transaction do
       @section.tasks.each do |task|
-        task.eqvgroup = nil
-        task.eqvgroup_id = 0
-        task.section = nil
-        task.soft_delete!
+        task.move_to_trash!
       end
       @section.eqvgroups.destroy_all
       @section.destroy

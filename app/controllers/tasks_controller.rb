@@ -21,6 +21,7 @@ class TasksController < ApplicationController
     @type = params[:task][:task_type]
     @task.section_id = params[:task][:section_id]
     @task.eqvgroup_id = params[:task][:eqvgroup_id]
+    @task.chain_id = params[:task][:chain_id]
     @task.test_id = params[:task][:test_id]
     @task.task_type = params[:task][:task_type]
 
@@ -90,10 +91,7 @@ class TasksController < ApplicationController
     else
       Task.transaction do
         @tasks.each do |task|
-          task.eqvgroup = nil
-          task.eqvgroup_id = 0
-          task.section = nil
-          task.soft_delete!
+          task.move_to_trash!
         end
       end
     end
@@ -168,6 +166,76 @@ class TasksController < ApplicationController
     end
   end
 
+  def bulk_join_chain
+    @test = Test.find(params[:test_id])
+    @tasks = @test.tasks.where(id: params[:task_ids].split(',')).order(:id)
+
+    if params[:destination_chain_id].present?
+      @chain = @test.chains.find(params[:destination_chain_id])
+    else
+      @chain = @test.chains.build
+      @chain.section = @tasks.first.section
+      @chain.eqvgroup = @tasks.first.eqvgroup
+    end
+
+    begin
+     Task.transaction do
+        @chain.save!
+        @tasks.each do |task|
+          raise if task.chain.present?
+          task.chain = @chain
+          task.save!
+        end
+      end
+      @success = true
+    rescue #ActiveRecord::RecordInvalid => e
+      @success = false
+    end
+
+    if @success
+      redirect_to :back
+    else
+      flash[:error] = 'Невозможно объединить в цепочку'
+      redirect_to :back
+    end
+
+  end
+
+  def bulk_remove_chain
+    @test = Test.find(params[:test_id])
+    @tasks = @test.tasks.where(id: params[:task_ids].split(',')).order(:id)
+
+    begin
+      Task.transaction do
+        @tasks.each do |task|
+          task.reload
+          task.remove_from_list
+        end
+      end
+      @success = true
+    rescue
+      @success = false
+    end
+
+    if @success
+      redirect_to :back
+    else
+      flash[:error] = 'Невозможно удалить из цепочки'
+      redirect_to :back
+    end
+
+  end
+
+  def bulk_join_chain_select
+    @test = Test.find(params[:test_id])
+    if params[:task_ids].present?
+      @task_count = params[:task_ids].split(',').count
+    else
+      @task_count = 0
+    end
+    @chains = @test.chains.order(:id)
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_task
@@ -176,7 +244,7 @@ class TasksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def task_params
-      params.require(:task).permit(:text, :hint, :task_type, :point, :test_id, :section_id, :eqvgroup_id,
+      params.require(:task).permit(:text, :hint, :task_type, :point, :test_id, :section_id, :eqvgroup_id, :chain_id,
                     answers_attributes: [ :id, :task_id, :text, :correct, :serial_number, :point, :_destroy],
                     task_contents_attributes: [:id,:file_content, :task_id, :_destroy],
                     associations_attributes: [:id, :text, :serial_number, :task_id, :_destroy])
