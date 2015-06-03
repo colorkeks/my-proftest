@@ -30,6 +30,12 @@ Rails.application.routes.draw do
       post :rebuild
       post :expand_node
     end
+    resources :chains, shallow: true do
+      get 'bulk_move', to: :bulk_move_edit, on: :collection, as: :bulk_move
+      post 'bulk_move', to: :bulk_move_update, on: :collection
+      post :bulk_destroy, on: :collection
+      post :bulk_change_eqvgroup, on: :collection
+    end
   end
 
   resources :tasks do
@@ -41,6 +47,9 @@ Rails.application.routes.draw do
     post 'bulk_move', to: :bulk_move_update, on: :collection
     post :bulk_change_eqvgroup, on: :collection
     get :preview, on: :member
+    post :bulk_join_chain, on: :collection
+    post :bulk_remove_chain, on: :collection
+    get :bulk_join_chain_select, on: :collection
   end
 
   devise_for :users,  :controllers => { :registrations => "users/registrations" }

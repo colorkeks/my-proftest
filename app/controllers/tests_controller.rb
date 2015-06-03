@@ -19,9 +19,18 @@ class TestsController < ApplicationController
     if params.has_key?('selected_section_id') && params[:selected_section_id].present?
       @selected_section = @test.sections.find(params[:selected_section_id])
       @tasks = @test.tasks.where(section: @selected_section)
+      @last_eqvgroup = @selected_section.eqvgroups.order(:number).last
+    else
+      @last_eqvgroup = @test.eqvgroups.order(:number).last
+    end
+
+    if params.has_key?('selected_chain_id') && params[:selected_chain_id].present?
+      @selected_chain = @test.chains.find(params[:selected_chain_id])
+      @tasks = @test.tasks.where(chain: @selected_chain).order(:chain_position)
     else
       #
     end
+
     @tasks = @tasks.existing.order('id ASC').paginate(:page => params[:page], :per_page => params[:per_page] || 30)
     @eqvgroups = @test.eqvgroups.order('number')
 

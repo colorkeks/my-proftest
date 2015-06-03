@@ -8,6 +8,7 @@ class Test < ActiveRecord::Base
   belongs_to :test_group
   has_many :sections, dependent: :destroy
   has_many :eqvgroups, dependent: :destroy
+  has_many :chains, dependent: :destroy
   after_create :add_eqvgroup
   include SoftDeletion
 

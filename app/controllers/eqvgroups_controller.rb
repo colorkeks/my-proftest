@@ -1,5 +1,6 @@
 class EqvgroupsController < ApplicationController
   before_action :set_eqvgroup, only: [:show, :edit, :update, :destroy]
+  load_and_authorize_resource
 
   # GET /eqvgroups
   # GET /eqvgroups.json
