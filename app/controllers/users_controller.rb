@@ -102,6 +102,14 @@ class UsersController < ApplicationController
     end
   end
 
+  def add_find_stub
+    render 'users/add_find_stub', layout: 'admin'
+  end
+
+  def profile_stub
+    render 'users/profile_stub', layout: 'admin'
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_user

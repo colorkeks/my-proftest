@@ -54,6 +54,8 @@ Rails.application.routes.draw do
     end
     collection do
       post 'custom_create'
+      get 'add_find_stub'
+      get 'profile_stub'
     end
   end
 
