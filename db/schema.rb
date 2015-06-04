@@ -59,6 +59,7 @@ ActiveRecord::Schema.define(version: 20150601064548) do
     t.datetime "updated_at",             null: false
   end
 
+  add_index "eqvgroups", ["section_id"], name: "index_eqvgroups_on_section_id", using: :btree
   add_index "eqvgroups", ["test_id", "number"], name: "index_eqvgroups_on_test_id_and_number", unique: true, using: :btree
   add_index "eqvgroups", ["test_id"], name: "index_eqvgroups_on_test_id", using: :btree
 

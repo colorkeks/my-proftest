@@ -58,7 +58,7 @@ class TasksController < ApplicationController
       if @task.save
 
         format.html {
-          if params[:preview_flag]
+          if params[:preview_flag] == 'true'
             redirect_to preview_task_path(@task)
           else
             redirect_to edit_task_path(@task), notice: 'Задание успешно создано'
