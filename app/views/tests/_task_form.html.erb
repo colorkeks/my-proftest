@@ -1,33 +1,38 @@
 <% if @selected_section %>
     <% eg = @selected_section.eqvgroups.order(:number).last %>
+    <% section = @selected_section %>
+<% elsif @selected_chain %>
+    <% eg = @selected_chain.eqvgroup %>
+    <% section = @selected_chain.section %>
 <% else %>
     <% eg = @test.eqvgroups.where(section: nil).order(:number).last %>
+    <% section = nil %>
 <% end %>
 
 <div class="modal-body">
   <div class="btn-list" style="margin: 15px;">
     <div>
-      <%= link_to new_task_path(:task => {:task_type => 'Единичный выбор', :test_id => @test_id, section_id: @selected_section, eqvgroup_id:eg, chain_id:@selected_chain}), :class => 'btn btn-primary' do %>
+      <%= link_to new_task_path(:task => {:task_type => 'Единичный выбор', :test_id => @test_id, section_id: section, eqvgroup_id:eg, chain_id:@selected_chain}), :class => 'btn btn-primary' do %>
           <span class="icon-single"></span> Единичный выбор
       <% end %>
     </div>
     <div>
-      <%= link_to new_task_path(:task => {:task_type => 'Множественный выбор', :test_id => @test_id, section_id: @selected_section, eqvgroup_id:eg, chain_id:@selected_chain}), :class => 'btn btn-primary' do %>
+      <%= link_to new_task_path(:task => {:task_type => 'Множественный выбор', :test_id => @test_id, section_id: section, eqvgroup_id:eg, chain_id:@selected_chain}), :class => 'btn btn-primary' do %>
           <span class="icon-mutli"></span> Множественный выбор
       <% end %>
     </div>
     <div>
-      <%= link_to new_task_path(:task => {:task_type => 'Открытый вопрос', :test_id => @test_id, section_id: @selected_section, eqvgroup_id:eg, chain_id:@selected_chain}), :class => 'btn btn-primary' do %>
+      <%= link_to new_task_path(:task => {:task_type => 'Открытый вопрос', :test_id => @test_id, section_id: section, eqvgroup_id:eg, chain_id:@selected_chain}), :class => 'btn btn-primary' do %>
           <span class="icon-open"></span> Открытый вопрос
       <% end %>
     </div>
     <div>
-      <%= link_to new_task_path(:task => {:task_type => 'Последовательность', :test_id => @test_id, section_id: @selected_section, eqvgroup_id:eg, chain_id:@selected_chain}), :class => 'btn btn-primary' do %>
+      <%= link_to new_task_path(:task => {:task_type => 'Последовательность', :test_id => @test_id, section_id: section, eqvgroup_id:eg, chain_id:@selected_chain}), :class => 'btn btn-primary' do %>
           <span class="icon-sequence"></span> Последовательность
       <% end %>
     </div>
     <div>
-      <%= link_to new_task_path(:task => {:task_type => 'Сопоставление', :test_id => @test_id, section_id: @selected_section, eqvgroup_id:eg, chain_id:@selected_chain}), :class => 'btn btn-primary' do %>
+      <%= link_to new_task_path(:task => {:task_type => 'Сопоставление', :test_id => @test_id, section_id: section, eqvgroup_id:eg, chain_id:@selected_chain}), :class => 'btn btn-primary' do %>
           <span class="icon-connect"></span> Сопоставление
       <% end %>
     </div>
