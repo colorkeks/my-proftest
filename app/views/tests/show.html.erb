@@ -13,13 +13,14 @@
         <div class="col-sm-9 col-lg-10">
           <div class="breadcrumb-wrapper">
             <ol class="breadcrumb">
-              <% if @selected_section %>
+              <% if @selected_section || @selected_chain %>
                   <li><%= link_to @test.title, @test %></li>
               <% end %>
               <li class="active">
                 <div class="btn-group nomargin">
                  <% element = @selected_section ? @selected_section : @test %>
                  <% element = @trash ? Struct.new(:title).new('Корзина') : element %>
+                 <% element = @selected_chain if @selected_chain %>
                   <span class="dropdown-toggle"  data-toggle="dropdown"><%= element.title %>
                     <% if !@trash %>
                         <span class="caret"></span>
@@ -33,6 +34,9 @@
                       <% elsif element.is_a?(Section)  %>
                         <%= link_to 'Переименовать', edit_section_path(@selected_section), remote: true %>
                         <%= link_to 'Удалить', section_path(@selected_section), method: :delete, data: {confirm: 'Вы уверены?'} %>
+                      <% elsif element.is_a?(Chain)  %>
+                          <%#= link_to 'Переименовать', edit_section_path(@selected_section), remote: true %>
+                          <%= link_to 'Удалить', chain_path(@selected_chain, test_id: @test), method: :delete, data: {confirm: 'Вы уверены?'} %>
                       <% else %>
                       <% end %>
                     </li>
@@ -56,6 +60,7 @@
             <ul class="dropdown-menu">
               <li><a href="#" data-toggle="modal" data-target="#createTask"> Задание</a></li>
               <li><%= link_to 'Раздел', new_section_path(test_id: @test.id), remote: true %></li>
+              <li><%= link_to 'Цепочку', test_chains_path(test_id: @test, chain:{test_id: @test.id, section_id: @selected_section, eqvgroup_id:@last_eqvgroup}), method: 'post' %></li>
             </ul>
 
           </div>
@@ -65,6 +70,12 @@
                 <%= link_to test_path(@test, selected_section_id: nil), class: (@selected_section.nil? ? 'active' : '') do %>
                     <i class="fa fa-list-alt"></i> Задания
                 <% end %>
+            </li>
+
+            <li>
+              <%= link_to test_chains_path(test_id: @test), class: (nil ? 'active' : '') do %>
+                  <i class="fa fa-list-alt"></i> Цепочки
+              <% end %>
             </li>
 
             <li>
@@ -117,7 +128,13 @@
                       <% delete_title = 'Удалить в корзину' %>
                   <% end %>
 
-                  <button onclick="bulkMoveFormOpen();" id="move-btn" class="btn btn-white tooltips disabled" type="button" title="<%= move_title %>">
+                  <% if @chains %>
+                    <% item_class = 'Chain' %>
+                  <% else %>
+                    <% item_class = 'Task' %>
+                  <% end %>
+
+                  <button onclick="bulkMoveFormOpen('<%= item_class %>');" id="move-btn" class="btn btn-white tooltips disabled" type="button" title="<%= move_title %>">
                     <% if @trash %>
                         <i class="fa fa-undo"></i>
                     <% else %>
@@ -126,7 +143,7 @@
                   </button>
                 </div>
 
-                <button onclick="bulkDestroy();" id="remove-btn"  class="btn btn-white tooltips disabled" type="button" data-toggle="tooltip" title="<%= delete_title %>">
+                <button onclick="bulkDestroy('<%= item_class %>');" id="remove-btn"  class="btn btn-white tooltips disabled" type="button" data-toggle="tooltip" title="<%= delete_title %>">
                     <% if @trash %>
                       <i class="fa fa-trash"></i> <i class="fa fa-exclamation"></i>
                     <% else %>
@@ -140,7 +157,11 @@
                     <span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu">
-                    <li><a href="#">Объединить в цепочку</a></li>
+                    <li>
+                      <a href="#" onclick="bulkJoinChain('');">Объединить в цепочку</a>
+                      <a href="#" onclick="bulkJoinChainFormOpen('');">Добавить в существующую цепочку</a>
+                      <a href="#" onclick="bulkRemoveChain('');">Удалить из цепочки</a>
+                    </li>
                   </ul>
 
                 </div>
@@ -154,7 +175,7 @@
                   </button>
                   <ul class="dropdown-menu">
                     <% @eqvgroups.each do |eq|%>
-                    <li><a href="#" onclick="bulkChangeEqvgroup('<%=eq.id %>');">
+                    <li><a href="#" onclick="bulkChangeEqvgroup('<%=eq.id %>', '<%= item_class %>');">
                       <span class="label label-info"><strong><%= eq.number %></strong></span>
                       <span class="small italic text-muted"> <%= eq.section.name if eq.section %></span>
                     </a>
@@ -168,15 +189,46 @@
                     <%= hidden_field_tag 'test_id', @test.id %>
                     <%= hidden_field_tag 'task_ids' %>
                 <% end %>
+                <%= form_tag bulk_move_test_chains_path(test_id: @test), id: 'bulk_move_chains_form', method: 'get', remote: true do %>
+                    <%= hidden_field_tag 'trash', @trash %>
+                    <%#= hidden_field_tag 'test_id', @test.id %>
+                    <%= hidden_field_tag 'chain_ids' %>
+                <% end %>
+
                 <%= form_tag bulk_destroy_tasks_path, id: 'bulk_destroy_form', remote: false do %>
                     <%= hidden_field_tag 'trash', @trash %>
                     <%= hidden_field_tag 'test_id', @test.id %>
                     <%= hidden_field_tag 'task_ids' %>
                 <% end %>
+                <%= form_tag bulk_destroy_test_chains_path(test_id: @test), id: 'bulk_destroy_chains_form', remote: false do %>
+                    <%= hidden_field_tag 'trash', @trash %>
+                    <%#= hidden_field_tag 'test_id', @test.id %>
+                    <%= hidden_field_tag 'chain_ids' %>
+                <% end %>
                 <%= form_tag bulk_change_eqvgroup_tasks_path, id: 'bulk_change_eqvgroup_form', remote: false do %>
                     <%= hidden_field_tag 'test_id', @test.id %>
                     <%= hidden_field_tag 'task_ids' %>
                     <%= hidden_field_tag 'eqvgroup_id' %>
+                <% end %>
+                <%= form_tag bulk_change_eqvgroup_test_chains_path(test_id: @test), id: 'bulk_change_eqvgroup_chains_form', remote: false do %>
+                    <%#= hidden_field_tag 'test_id', @test.id %>
+                    <%= hidden_field_tag 'chain_ids' %>
+                    <%= hidden_field_tag 'eqvgroup_id' %>
+                <% end %>
+
+                <%= form_tag bulk_join_chain_tasks_path, id: 'bulk_join_chain_form', remote: false do %>
+                    <%= hidden_field_tag 'test_id', @test.id %>
+                    <%= hidden_field_tag 'task_ids' %>
+                    <%= hidden_field_tag 'chain_id' %>
+                <% end %>
+                <%= form_tag bulk_remove_chain_tasks_path, id: 'bulk_remove_chain_form', remote: false do %>
+                    <%= hidden_field_tag 'test_id', @test.id %>
+                    <%= hidden_field_tag 'task_ids' %>
+                <% end %>
+                <%= form_tag bulk_join_chain_select_tasks_path, id: 'bulk_join_chain_select_form', method: 'get', remote: true do %>
+                    <%= hidden_field_tag 'trash', @trash %>
+                    <%= hidden_field_tag 'test_id', @test.id %>
+                    <%= hidden_field_tag 'task_ids' %>
                 <% end %>
               </div>
 
@@ -206,12 +258,11 @@
               </div>
               <!-- pull-right -->
 
-
               <div class="table-responsive">
                 <table class="table table-email tasks table-hover">
                   <tbody>
                   <% @tasks.each_with_index do |task, index| %>
-                      <tr class="unread" data-id="<%= task.id %>">
+                      <tr class="unread" data-class="<%= task.class %>" data-id="<%= task.id %>">
                         <td></td>
                         <td>
                           <div class="ckbox ckbox-default">
@@ -221,8 +272,13 @@
                         </td>
                         <td>
                             <% if !@trash %>
-                            <span class="label label-info"><strong><%= task.eqvgroup.number %></strong></span>
+                            <span class="label label-info"><strong><%= task.eqvgroup.number if task.eqvgroup %></strong></span>
                             <% end %>
+                        </td>
+                        <td style="width: 30px;">
+                        <% if !@trash && task.is_a?(Task) && task.chain %>
+                            <span class="label label-success"><strong><%= "#{task.chain.id}(#{task.chain_position})" %></strong></span>
+                        <% end %>
                         </td>
                         <td style="width: 30px; font-size: 20px; line-height: 20px; padding: 0">
                           <% if task.task_type == 'Единичный выбор' %>
@@ -238,7 +294,13 @@
                           <% end %>
                         </td>
                         <td class="link">
-                          <%= link_to edit_task_path(task) do%>
+                          <% if task.is_a?(Task) %>
+                            <% link = edit_task_path(task) %>
+                          <% elsif task.is_a?(Chain) %>
+                            <% link = test_path(task.test, selected_chain_id: task.id) %>
+                          <% end %>
+
+                          <%= link_to link do %>
                           <div class="media">
                             <div class="media-body">
                               <% if Date.today.day == task.created_at.day %>
@@ -260,6 +322,8 @@
                 </table>
               </div>
               <!-- table-responsive -->
+
+
             </div>
             <!-- panel-body -->
           </div>
@@ -281,7 +345,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel">Выберите тип задания:</h4>
       </div>
-      <%= render partial: 'task_form' %>
+      <%= render partial: 'tests/task_form' %>
     </div>
   </div>
 </div>
@@ -317,20 +381,34 @@
         return ids;
     }
 
-    function bulkDestroy() {
+    function bulkDestroy(itemClass="Task") {
         var answer = confirm('Вы уверены?');
         if (answer) {
             var ids = getSelectedIds();
-            var form = $('#bulk_destroy_form');
-            form.children("[name='task_ids']").val(ids.join());
+            if(itemClass == "Task") {
+                var form = $('#bulk_destroy_form');
+                form.children("[name='task_ids']").val(ids.join());
+            } else if (itemClass == "Chain") {
+                var form = $('#bulk_destroy_chains_form');
+                form.children("[name='chain_ids']").val(ids.join());
+            } else {
+                alert('Неизвестный класс!')
+            }
             form.submit();
         }
     }
 
-    function bulkMoveFormOpen() {
+    function bulkMoveFormOpen(itemClass="Task") {
         var ids = getSelectedIds();
-        var form = $('#bulk_move_form');
-        form.children("[name='task_ids']").val(ids.join());
+        if(itemClass == "Task") {
+            var form = $('#bulk_move_form');
+            form.children("[name='task_ids']").val(ids.join());
+        } else if (itemClass == "Chain") {
+            var form = $('#bulk_move_chains_form');
+            form.children("[name='chain_ids']").val(ids.join());
+        } else {
+            alert('Неизвестный класс!')
+        }
         form.submit();
     }
 
@@ -341,11 +419,46 @@
         form.find("[name='destination_section_id']").val($(selected).attr('data-id'));
     }
 
-    function bulkChangeEqvgroup(eqvgroup_id) {
+    function selectDestinationChain(selected) {
+        var form = $(selected).closest('form');
+        form.find('.active').removeClass('active');
+        $(selected).addClass('active');
+        form.find("[name='destination_chain_id']").val($(selected).attr('data-id'));
+    }
+
+    function bulkChangeEqvgroup(eqvgroup_id, itemClass="Task") {
         var ids = getSelectedIds();
-        var form = $('#bulk_change_eqvgroup_form');
-        form.children("[name='task_ids']").val(ids.join());
+        if(itemClass == "Task") {
+            var form = $('#bulk_change_eqvgroup_form');
+            form.children("[name='task_ids']").val(ids.join());
+        } else if (itemClass == "Chain") {
+            var form = $('#bulk_change_eqvgroup_chains_form');
+            form.children("[name='chain_ids']").val(ids.join());
+        } else {
+            alert('Неизвестный класс!')
+        }
         form.children("[name='eqvgroup_id']").val(eqvgroup_id);
+        form.submit();
+    }
+    function bulkJoinChain(chain_id) {
+        var ids = getSelectedIds();
+        var form = $('#bulk_join_chain_form');
+        form.children("[name='task_ids']").val(ids.join());
+        //form.children("[name='eqvgroup_id']").val(eqvgroup_id);
+        form.submit();
+    }
+    function bulkRemoveChain() {
+        var ids = getSelectedIds();
+        var form = $('#bulk_remove_chain_form');
+        form.children("[name='task_ids']").val(ids.join());
+        //form.children("[name='eqvgroup_id']").val(eqvgroup_id);
+        form.submit();
+    }
+
+    function bulkJoinChainFormOpen() {
+        var ids = getSelectedIds();
+        var form = $('#bulk_join_chain_select_form');
+        form.children("[name='task_ids']").val(ids.join());
         form.submit();
     }
 

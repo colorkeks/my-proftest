@@ -38,6 +38,9 @@ class Ability
       cannot [:index,:show, :edit,:update], Association
       cannot [:index,:show, :edit,:update], TaskContent
       cannot [:index,:show, :edit,:update], TestGroup
+      cannot [:index,:show, :edit,:update], Section
+      cannot [:index,:show, :edit,:update], Eqvgroup
+      cannot [:index,:show, :edit,:update], Chain
       cannot [:add_attestation_tests,:custom_create,:index, :show, :edit, :update], User
       can [:show, :edit, :update], User do |current_user|
         user.id == current_user.id
