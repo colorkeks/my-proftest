@@ -66,7 +66,10 @@ class TasksController < ApplicationController
         }
         format.json { render :show, status: :created, location: @task }
       else
-        format.html { render :new }
+        format.html {
+          flash[:error] = 'Задание не создано'
+          render :new, layout: 'admin'
+        }
         format.json { render json: @task.errors, status: :unprocessable_entity }
       end
     end
