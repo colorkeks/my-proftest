@@ -310,7 +310,12 @@
                               <% else %>
                                   <span class="media-meta pull-right"><%= task.created_at.strftime('%d.%m.%Y') %></span>
                               <% end %>
-                              <span class="media-meta pull-right mr20"> <%= task.section.name if task.section %></span>
+                              <span class="media-meta pull-right mr20">
+                                <% if task.section %>
+                                    раздел <b><%= "#{task.section.name}" %></b>
+                                <% end %>
+                                <%= "##{task.id}" %>
+                              </span>
                               <h4> <%= strip_tags(task.text.squish) %></h4>
                             </div>
                           </div>

@@ -20,7 +20,7 @@ class Chain < ActiveRecord::Base
   end
 
   def text
-    "Цепочка #{self.id} (#{self.tasks.count})"
+    "Цепочка ##{self.id} [#{self.tasks.count}]"
   end
 
   def title
