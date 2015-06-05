@@ -381,7 +381,8 @@
         return ids;
     }
 
-    function bulkDestroy(itemClass="Task") {
+    function bulkDestroy(itemClass) {
+        if (typeof itemClass === 'undefined') itemClass="Task";
         var answer = confirm('Вы уверены?');
         if (answer) {
             var ids = getSelectedIds();
@@ -398,7 +399,8 @@
         }
     }
 
-    function bulkMoveFormOpen(itemClass="Task") {
+    function bulkMoveFormOpen(itemClass) {
+        if (typeof itemClass === 'undefined') itemClass="Task";
         var ids = getSelectedIds();
         if(itemClass == "Task") {
             var form = $('#bulk_move_form');
@@ -426,7 +428,8 @@
         form.find("[name='destination_chain_id']").val($(selected).attr('data-id'));
     }
 
-    function bulkChangeEqvgroup(eqvgroup_id, itemClass="Task") {
+    function bulkChangeEqvgroup(eqvgroup_id, itemClass) {
+        if (typeof itemClass === 'undefined') itemClass="Task";
         var ids = getSelectedIds();
         if(itemClass == "Task") {
             var form = $('#bulk_change_eqvgroup_form');

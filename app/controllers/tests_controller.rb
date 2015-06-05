@@ -27,6 +27,7 @@ class TestsController < ApplicationController
     if params.has_key?('selected_chain_id') && params[:selected_chain_id].present?
       @selected_chain = @test.chains.find(params[:selected_chain_id])
       @tasks = @test.tasks.where(chain: @selected_chain).order(:chain_position)
+      @last_eqvgroup = @selected_chain.eqvgroup
     else
       #
     end

@@ -12,6 +12,10 @@ class ChainsController < ApplicationController
     #@eqvgroups = []
     @eqvgroups = @test.eqvgroups.order('number')
     @last_eqvgroup = @test.eqvgroups.order(:number).last
+
+    @task = Task.new
+    @test_id = @test.id
+
     render template: 'tests/show'
   end
 
