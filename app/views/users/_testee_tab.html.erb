@@ -111,7 +111,7 @@
                         <tr>
                           <td><%= try.test.title %></td>
                           <td><%= try.date %></td>
-                          <td><%= try.timer.strftime('%H:%M') %></td>
+                          <td><%= try.timer.strftime('%H:%M') if try.timer %></td>
                           <td>
                             <span class="label <%= try.status == 'Выполнен' ? 'label-success' : 'label-danger' %> "><%= try.status %></span>
                           </td>
