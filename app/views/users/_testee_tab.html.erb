@@ -109,7 +109,7 @@
                     <tbody>
                     <% @tries.each do |try| %>
                         <tr>
-                          <td><%= try.test.title %></td>
+                          <td><%= try.test.title if try.test %></td>
                           <td><%= try.date %></td>
                           <td><%= try.timer.strftime('%H:%M') if try.timer %></td>
                           <td>
