@@ -284,7 +284,17 @@
                   <tbody>
                   <% @tasks.each_with_index do |task, index| %>
                       <tr class="unread" data-class="<%= task.class %>" data-id="<%= task.id %>">
-                        <td></td>
+                        <td>
+                          <% if task.is_a?(Task) && task.chain %>
+                            <% if task.chain_position == 1 %>
+                                <div class="chain-start"></div>
+                            <% elsif task.chain_position == task.chain.tasks.count %>
+                                 <div class="chain-stop"></div>
+                            <% else %>
+                                 <div class="chain-item"></div>
+                            <% end  %>
+                          <% end %>
+                        </td>
                         <td>
                           <div class="ckbox ckbox-default">
                             <%= check_box_tag 'check', 1, false, class: 'element_checkbox', id: "cb_#{index}" %>
@@ -339,7 +349,12 @@
                                 <% end %>
                                 <%= "##{task.id}" %>
                               </span>
-                              <h4> <%= strip_tags(task.text.squish) %></h4>
+                              <h4>
+                                <% if task.is_a?(Task) && task.chain %>
+                                    [<%= task.chain_position %> / <%= task.chain.tasks.count %>]
+                                <% end %>
+                                <%= strip_tags(task.text.squish) %>
+                              </h4>
                             </div>
                           </div>
                           <% end %>
