@@ -7,11 +7,11 @@ class ChainsController < ApplicationController
   # GET /chains.json
   def index
     @test = Test.find(params[:test_id])
-    @chains = @test.chains.paginate(:page => params[:page], :per_page => params[:per_page] || 30)
+    @chains = @test.chains.order(:id).paginate(:page => params[:page], :per_page => params[:per_page] || 30)
     @tasks = @chains
     #@eqvgroups = []
     @eqvgroups = @test.eqvgroups.order('number')
-    @last_eqvgroup = @test.eqvgroups.order(:number).last
+    @last_eqvgroup = @test.eqvgroups.where(section: nil).order(:number).last
     @chains_mode = true
 
     @task = Task.new
@@ -47,7 +47,10 @@ class ChainsController < ApplicationController
         }
         format.json { render :show, status: :created, location: @chain }
       else
-        format.html { render :new }
+        format.html {
+          flash[:error] = 'Ошибка при создании цепочки'
+          redirect_to :back
+        }
         format.json { render json: @chain.errors, status: :unprocessable_entity }
       end
     end

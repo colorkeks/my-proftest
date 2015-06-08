@@ -21,7 +21,7 @@ class TestsController < ApplicationController
       @tasks = @test.tasks.where(section: @selected_section)
       @last_eqvgroup = @selected_section.eqvgroups.order(:number).last
     else
-      @last_eqvgroup = @test.eqvgroups.order(:number).last
+      @last_eqvgroup = @test.eqvgroups.where(section: nil).order(:number).last
     end
 
     if params.has_key?('selected_chain_id') && params[:selected_chain_id].present?
