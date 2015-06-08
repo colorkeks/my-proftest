@@ -163,10 +163,16 @@
                           <a href="#" onclick="bulkSplitChain();">Разъединить цепочки</a>
                       <% end %>
 
-                      <% if !@chains_mode  %>
+                      <% if !@chains_mode && !@selected_chain %>
                         <a href="#" onclick="bulkJoinChain('');">Объединить в цепочку</a>
+                      <% end %>
+
+                      <% if !@chains_mode && !@selected_chain %>
                         <a href="#" onclick="bulkJoinChainFormOpen('');">Добавить в существующую цепочку</a>
-                        <a href="#" onclick="bulkRemoveChain('');">Удалить из цепочки</a>
+                      <% end %>
+
+                      <% if !@chains_mode  %>
+                        <a href="#" onclick="bulkRemoveChain('');">Убрать из цепочки</a>
                       <% end %>
                     </li>
                   </ul>
@@ -175,6 +181,7 @@
               </div>
 
               <div class="btn-group labels mr10">
+                <% if !@selected_chain %>
                 <div class="btn-group">
                   <button data-toggle="dropdown" class="btn btn-white dropdown-toggle tooltips" type="button" title="Эквивалентные группы">
                     <span class="label label-info"><strong>g</strong></span>
@@ -191,6 +198,8 @@
                     <li><%= link_to 'Добавить', eqvgroups_path(eqvgroup:{test_id: @test.id, section_id: @selected_section}), method: 'post' %></li>
                   </ul>
                 </div>
+                <% end %>
+
                 <%= form_tag bulk_move_tasks_path, id: 'bulk_move_form', method: 'get', remote: true do %>
                     <%= hidden_field_tag 'trash', @trash %>
                     <%= hidden_field_tag 'test_id', @test.id %>
@@ -283,13 +292,13 @@
                           </div>
                         </td>
                         <td>
-                            <% if !@trash %>
-                            <span class="label label-info"><strong><%= task.eqvgroup.number if task.eqvgroup %></strong></span>
+                            <% if !@trash && !@selected_chain %>
+                                <span class="label label-info"><strong><%= task.eqvgroup.number if task.eqvgroup %></strong></span>
                             <% end %>
                         </td>
                         <td style="width: 30px;">
-                        <% if !@trash && task.is_a?(Task) && task.chain %>
-                            <span class="label label-success"><strong><%= "#{task.chain.id}(#{task.chain_position})" %></strong></span>
+                        <% if !@trash && @selected_chain %>
+                            <span class=""><strong><%= task.chain_position %></strong></span>
                         <% end %>
                         </td>
                         <td style="width: 30px; font-size: 20px; line-height: 20px; padding: 0">
