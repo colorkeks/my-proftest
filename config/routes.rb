@@ -35,6 +35,7 @@ Rails.application.routes.draw do
       post 'bulk_move', to: :bulk_move_update, on: :collection
       post :bulk_destroy, on: :collection
       post :bulk_change_eqvgroup, on: :collection
+      post :bulk_split, on: :collection
     end
   end
 
