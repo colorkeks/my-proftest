@@ -296,11 +296,11 @@
                                 <span class="label label-info"><strong><%= task.eqvgroup.number if task.eqvgroup %></strong></span>
                             <% end %>
                         </td>
-                        <td style="width: 30px;">
                         <% if !@trash && @selected_chain %>
+                        <td>
                             <span class=""><strong><%= task.chain_position %></strong></span>
-                        <% end %>
                         </td>
+                        <% end %>
                         <td style="width: 30px; font-size: 20px; line-height: 20px; padding: 0">
                           <% if task.task_type == 'Единичный выбор' %>
                               <span class="icon-single tooltips" title="Единичный выбор"></span>
