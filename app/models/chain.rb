@@ -4,7 +4,7 @@ class Chain < ActiveRecord::Base
   belongs_to :eqvgroup
   validates :test, presence: true
   validates :eqvgroup, presence: true
-  #validate :eqvgroup_and_section_valid
+  validate :eqvgroup_and_section_valid
   has_many :tasks, -> { order(chain_position: :asc) }, dependent: :nullify
 
   after_destroy :move_tasks_to_trash
