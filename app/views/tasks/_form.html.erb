@@ -22,7 +22,15 @@
               <% if @task.section %>
                   <li class="active"><%= link_to @task.section.title, test_path(@task.test, selected_section_id: @task.section_id) %></li>
               <% end %>
+              <% if @task.chain %>
+                  <li class="active"><%= link_to @task.chain.title, test_path(@task.test, selected_chain_id: @task.chain) %></li>
+                  <li class="active">
+                    Задание #<%= @task.id %>
+                    [<%= @task.chain_position %> / <%= @task.chain.tasks.count %>]
+                  </li>
+              <% else %>
               <li class="active">Задание #<%= @task.id %></li>
+              <% end %>
             </ol>
           </div>
         </div>
@@ -58,7 +66,7 @@
                 <div class="col-lg-4 text-right save-panel">
                   <span id="change-content" class="text-muted">Все изменения сохранены</span>
                   <button onclick="$(this).closest('form').submit();" class="btn btn-primary tooltips"  type="button" title="Сохранить"><i class="fa fa-cloud-upload"></i></button>
-                  <button class="btn btn-white tooltips" id="show-preview"  title="Предпросмотр"><i class="fa fa-play"></i></button>
+                  <button class="btn btn-white tooltips" id="show-preview"  title="Сохранить и посмотреть"><i class="fa fa-play"></i></button>
                 </div>
               </div>
 
