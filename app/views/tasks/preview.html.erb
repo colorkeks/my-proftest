@@ -1,10 +1,31 @@
+<%= content_for :title, "Предпросмотр задания ##{ @task.id}" %>
+<div class="container" style="margin-top: 30px">
 <div class="row question-content">
   <div class="col-sm-12">
-    <div class="page-header">
-      <h2>Задание №<%= @task.id %> : <%= @task.task_type %></h2>
-      <h4>Кол-во баллов:  <%= @task.point %></h4>
+    <% if params[:correct] == 'incorrect' %>
+        <div class="alert alert-danger">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+          Ответ неправельный, баллов: <%= params[:point] %>
+        </div>
+    <% elsif params[:correct] == 'partial_correct' %>
+        <div class="alert alert-warning">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+          Ответ частично верый, баллов: <%= params[:point] %>
+        </div>
+    <% elsif params[:correct] == 'correct' %>
+        <div class="alert alert-success">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+          Ответ верый, баллов: <%= params[:point] %>
+        </div>
+    <% end %>
+    <br/>
+    <div class="question-number">
+      Предпросмотр задания #<%= @task.id %> <br/>
+      <small class="text-muted">Кол-во баллов:  <%= @task.point %></small>
     </div>
   </div>
+
+  <div class="col-sm-12">
   <div class="row">
     <% if @task.task_contents.detect { |i| i.file_content_content_type }.nil? %>
         <div class="col-lg-12">
@@ -53,46 +74,68 @@
         <% end %>
     <% end %>
   </div>
-  <div class="col-sm-12">
-    <h3><%= @task.hint.html_safe %></h3>
   </div>
-
   <div class="col-sm-12">
-    <table class="table answer_table">
-      <thead>
-      </thead>
-      <tbody id="items">
-      <% @task.answers.order('id ASC').each do |answer| %>
-          <tr class="answer">
-            <td style="width: 50px;"></td>
-            <% if @task.task_type == 'Множественный выбор' %>
-                <td style="width: 20px;"><%= check_box_tag :correct %></td>
-                <td><%= answer.text %></td>
-            <% elsif @task.task_type == 'Единичный выбор' %>
-                <td style="width: 20px;"><%= radio_button_tag :correct, nil %></td>
-                <td><%= answer.text %></td>
-            <% elsif @task.task_type == 'Сопоставление' %>
+    <div class="question-description"><%= @task.hint.html_safe %></div>
+  </div>
+  <%= form_tag check_user_answer_task_path(@task) do %>
+      <div class="col-sm-12">
+        <table class="table answer_table">
+          <thead>
+          </thead>
+          <tbody id="items">
+          <% if  @task.task_type == 'Открытый вопрос' %>
+              <tr class="answer">
+                <td style="display: none"></td>
                 <td>
-                  <label class="text"><%= answer.text%></label>
-                  <div class="pull-right select-answer">
-                    <%= select_tag( 'associations[]',options_for_select(['Не выбрано']) + options_from_collection_for_select(@task.associations.shuffle, 'id', 'text'), :class => 'form-control association_select') %>
-                  </div>
+                  <label>
+                    <%= text_field_tag 'answers', nil, :autocomplete => :off, :class => 'form-control' %>
+                  </label>
                 </td>
-            <% else %>
-                <td><%= answer.text %></td>
-            <% end %>
-            <% if @task.task_type == 'Последовательность' %>
-                <td style="width: 50px; height: 50px; text-align: center;" class="sorter">
-                  <span style="font-size: 20px;" class="glyphicon glyphicon-move"></span>
-                </td>
-            <% end %>
-          </tr>
-      <% end %>
-      </tbody>
-    </table>
-  </div>
-  <%= link_to 'Назад', edit_task_path(@task), :class => 'btn btn-primary' %>
+              </tr>
+          <% else %>
+              <% @task.answers.order('id ASC').each do |answer| %>
+                  <tr class="answer">
+                    <td style="width: 50px;"></td>
+                    <% if @task.task_type == 'Множественный выбор' %>
+                        <td style="width: 20px;"><%= check_box_tag "answers[#{answer.id}][]" %></td>
+                        <td><%= answer.text %></td>
+                    <% elsif @task.task_type == 'Единичный выбор' %>
+                        <td style="width: 20px;"><%= radio_button_tag "answers[#{answer.id}][]", nil %></td>
+                        <td><%= answer.text %></td>
+                    <% elsif @task.task_type == 'Сопоставление' %>
+                        <td>
+                          <div class="pull-right select-answer">
+                            <%= select_tag( "answers[#{answer.id}][]",options_for_select(['Не выбрано']) + options_from_collection_for_select(@task.associations.shuffle, 'id', 'text'), :class => 'form-control association_select') %>
+                          </div>
+                          <label class="text" style="text-align: left"><%= answer.text%></label>
+                        </td>
+                    <% elsif @task.task_type == 'Последовательность' %>
+                        <td style="text-align: left">
+                          <%= answer.text %>
+                          <%= hidden_field_tag "answers[#{answer.id}][]", '', :class => 'serial_number' %>
+                        </td>
+                    <% elsif @task.task_type == 'Открытый вопрос' %>
+                        <td style="text-align: left"><%= answer.text %></td>
+                    <% end %>
+                    <% if @task.task_type == 'Последовательность' %>
+                        <td style="" class="sorter">
+                          <span style="font-size: 20px;" class="glyphicon glyphicon-move"></span>
+                        </td>
+                    <% end %>
+                  </tr>
+              <% end %>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+      <%= submit_tag 'Ответить', :class => 'btn btn-white' %>
+      <%= link_to 'Закрыть', edit_task_path(@task), :class => 'btn btn-white' %>
+
+  <% end %>
 </div>
+</div>
+
 <script>
     row_index();
     upper_downer();

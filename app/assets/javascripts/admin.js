@@ -261,7 +261,7 @@ function timer(){
 }
 
 function upper_downer() {
-    $('#answer_body, #associate_body').each(function(index, element){
+    $('#answer_body, #associate_body, #items').each(function(index, element){
         Sortable.create(element, {
             handler: 'sorter',
             animation: 150,

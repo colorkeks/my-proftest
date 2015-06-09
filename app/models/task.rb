@@ -49,4 +49,63 @@ class Task < ActiveRecord::Base
     task.reload
     task.remove_from_list
   end
+  
+  def check_answer(answers_param)
+    answers = answers_param.is_a?(Hash) ? Answer.find(answers_param.keys) : nil
+
+    case self.task_type
+      when 'Единичный выбор'
+        if answers.first.correct
+          {correct: 'correct', point: self.point}
+        else
+          {correct: 'incorrect', point: 0}
+        end
+
+      when 'Множественный выбор'
+        coefficient_incorrect = self.point.to_f / self.answers.where(:correct => false).count
+        coefficient_correct   = self.point.to_f / self.answers.where(:correct => true).count
+        correct_answers = answers.to_a.select(&:correct)
+        percent_points = (correct_answers.size * coefficient_correct) - ((answers.size - correct_answers.size) * coefficient_incorrect)
+
+        if percent_points == self.point
+          {correct: 'correct', point: self.point}
+        elsif percent_points <= 0
+          {correct: 'incorrect', point: 0}
+        else
+          {correct: 'partial_correct', point: percent_points}
+        end
+
+      when 'Сопоставление'
+        coefficient = self.point.to_f /  self.answers.count
+        correct = answers.to_a.select do |a|
+          association = self.associations.where(id: answers_param[a.id.to_s].first.to_i).first
+          association && a.serial_number == association.serial_number
+        end
+        points = correct.size.to_f * coefficient
+
+        if points == self.point
+          {correct: 'correct', point: self.point}
+        elsif points  == 0
+          {correct: 'incorrect', point: 0 }
+        else
+          {correct: 'partial_correct', point: points}
+        end
+
+      when 'Последовательность'
+        if answers.to_a.all?{|a| a.serial_number == answers_param[a.id.to_s].first.to_i }
+          {correct: 'correct', point: self.point }
+        else
+          {correct: 'incorrect', point: 0 }
+        end
+
+      when 'Открытый вопрос'
+        if self.answers.any?{|a| a.text.mb_chars.downcase == answers_param.mb_chars.downcase}
+          {correct: 'correct', point: self.point }
+        else
+          {correct: 'incorrect', point: 0 }
+        end
+      else
+    end
+  end
+  
 end
