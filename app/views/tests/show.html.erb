@@ -286,12 +286,14 @@
                       <tr class="unread" data-class="<%= task.class %>" data-id="<%= task.id %>">
                         <td>
                           <% if task.is_a?(Task) && task.chain %>
-                            <% if task.chain_position == 1 %>
+                            <% if task.chain.tasks.count == 1 %>
+                                <div class="chain-start chain-stop"></div>
+                            <% elsif task.chain_position == 1 %>
                                 <div class="chain-start"></div>
                             <% elsif task.chain_position == task.chain.tasks.count %>
-                                 <div class="chain-stop"></div>
+                                <div class="chain-stop"></div>
                             <% else %>
-                                 <div class="chain-item"></div>
+                                <div class="chain-item"></div>
                             <% end  %>
                           <% end %>
                         </td>
@@ -345,7 +347,7 @@
                               <% end %>
                               <span class="media-meta pull-right mr20">
                                 <% if task.section %>
-                                    раздел <b><%= "#{task.section.name}" %></b>
+                                    <b><%= "#{task.section.name}" %></b>
                                 <% end %>
                                 <%= "##{task.id}" %>
                               </span>
