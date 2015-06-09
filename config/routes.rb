@@ -42,6 +42,7 @@ Rails.application.routes.draw do
   resources :tasks do
     member do
       get 'create_answer'
+      post 'check_user_answer'
     end
     post :bulk_destroy, on: :collection
     get 'bulk_move', to: :bulk_move_edit, on: :collection, as: :bulk_move

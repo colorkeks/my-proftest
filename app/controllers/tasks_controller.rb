@@ -1,5 +1,5 @@
 class TasksController < ApplicationController
-  before_action :set_task, only: [:show, :edit, :update, :destroy, :preview]
+  before_action :set_task, only: [:show, :edit, :update, :destroy, :preview, :check_user_answer ]
   load_and_authorize_resource
   # GET /tasks
   # GET /tasks.json
@@ -16,7 +16,7 @@ class TasksController < ApplicationController
   end
 
   def preview
-    render 'tasks/preview', layout: 'application'
+    render 'tasks/preview', layout: 'admin'
   end
 
   # GET /tasks/new
@@ -75,13 +75,17 @@ class TasksController < ApplicationController
     end
   end
 
+  def check_user_answer
+    result = @task.check_answer(params[:answers])
+    redirect_to preview_task_path(@task, correct: result[:correct], point: result[:point])
+  end
+
   # PATCH/PUT /tasks/1
   # PATCH/PUT /tasks/1.json
   def update
     respond_to do |format|
       if @task.update(task_params)
         format.html {
-
           if params[:preview_flag] == 'true'
             redirect_to preview_task_path(@task)
           else
@@ -90,7 +94,10 @@ class TasksController < ApplicationController
         }
         format.json { render :show, status: :ok, location: @task }
       else
-        format.html { render :edit }
+        format.html {
+          flash[:error] = 'Ошибка при сохранении задания'
+          render :new, layout: 'admin'
+        }
         format.json { render json: @task.errors, status: :unprocessable_entity }
       end
     end
