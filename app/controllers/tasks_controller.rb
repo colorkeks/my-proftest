@@ -127,7 +127,7 @@ class TasksController < ApplicationController
       end
     end
 
-    redirect_to @test
+    redirect_to :back #@test
   end
 
   def bulk_move_edit

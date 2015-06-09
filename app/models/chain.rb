@@ -4,8 +4,8 @@ class Chain < ActiveRecord::Base
   belongs_to :eqvgroup
   validates :test, presence: true
   validates :eqvgroup, presence: true
-  #validate :eqvgroup_and_section_valid
-  has_many :tasks, -> { order(chain_position: :asc) }
+  validate :eqvgroup_and_section_valid
+  has_many :tasks, -> { order(chain_position: :asc) }, dependent: :nullify
 
   after_destroy :move_tasks_to_trash
 
@@ -20,11 +20,16 @@ class Chain < ActiveRecord::Base
   end
 
   def text
-    "Цепочка #{self.id} (#{self.tasks.count})"
+    if tasks.count == 0
+      add_text = "В цепочке нет заданий"
+    else
+      add_text = "Задание: #{tasks.first.text}"
+    end
+    result = "[#{self.tasks.count}] #{add_text}"
   end
 
   def title
-    text
+    "Цепочка ##{self.id} [#{self.tasks.count}]"
   end
 
   def move_tasks_to_trash
@@ -52,5 +57,13 @@ class Chain < ActiveRecord::Base
       task.eqvgroup = eqvgroup
       task.save!
     end
+  end
+
+  def split!
+    self.tasks.each do |task|
+      task.reload
+      task.remove_from_list
+    end
+    self.destroy!
   end
 end

@@ -21,7 +21,7 @@ class TestsController < ApplicationController
       @tasks = @test.tasks.where(section: @selected_section)
       @last_eqvgroup = @selected_section.eqvgroups.order(:number).last
     else
-      @last_eqvgroup = @test.eqvgroups.order(:number).last
+      @last_eqvgroup = @test.eqvgroups.where(section: nil).order(:number).last
     end
 
     if params.has_key?('selected_chain_id') && params[:selected_chain_id].present?
@@ -32,7 +32,7 @@ class TestsController < ApplicationController
       #
     end
 
-    @tasks = @tasks.existing.order('id ASC').paginate(:page => params[:page], :per_page => params[:per_page] || 30)
+    @tasks = @tasks.existing.order('chain_id ASC, chain_position ASC, id ASC').paginate(:page => params[:page], :per_page => params[:per_page] || 30)
     @eqvgroups = @test.eqvgroups.order('number')
 
     if params[:old]

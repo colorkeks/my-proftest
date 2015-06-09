@@ -13,16 +13,17 @@
         <div class="col-sm-9 col-lg-10">
           <div class="breadcrumb-wrapper">
             <ol class="breadcrumb">
-              <% if @selected_section || @selected_chain %>
+              <% if @selected_section || @selected_chain || @chains_mode %>
                   <li><%= link_to @test.title, @test %></li>
               <% end %>
               <li class="active">
                 <div class="btn-group nomargin">
                  <% element = @selected_section ? @selected_section : @test %>
-                 <% element = @trash ? Struct.new(:title).new('Корзина') : element %>
+                 <% element = Struct.new(:title).new('Корзина') if @trash %>
                  <% element = @selected_chain if @selected_chain %>
+                 <% element = Struct.new(:title).new('Цепочки') if @chains_mode %>
                   <span class="dropdown-toggle"  data-toggle="dropdown"><%= element.title %>
-                    <% if !@trash %>
+                    <% if !@trash && !@chains_mode %>
                         <span class="caret"></span>
                     <% end %>
                   </span>
@@ -74,7 +75,7 @@
 
             <li>
               <%= link_to test_chains_path(test_id: @test), class: (nil ? 'active' : '') do %>
-                  <i class="fa fa-list-alt"></i> Цепочки
+                  <i class="fa fa-link"></i> Цепочки
               <% end %>
             </li>
 
@@ -158,9 +159,21 @@
                   </button>
                   <ul class="dropdown-menu">
                     <li>
-                      <a href="#" onclick="bulkJoinChain('');">Объединить в цепочку</a>
-                      <a href="#" onclick="bulkJoinChainFormOpen('');">Добавить в существующую цепочку</a>
-                      <a href="#" onclick="bulkRemoveChain('');">Удалить из цепочки</a>
+                      <% if @chains_mode  %>
+                          <a href="#" onclick="bulkSplitChain();">Разъединить цепочки</a>
+                      <% end %>
+
+                      <% if !@chains_mode && !@selected_chain %>
+                        <a href="#" onclick="bulkJoinChain('');">Объединить в цепочку</a>
+                      <% end %>
+
+                      <% if !@chains_mode && !@selected_chain %>
+                        <a href="#" onclick="bulkJoinChainFormOpen('');">Добавить в существующую цепочку</a>
+                      <% end %>
+
+                      <% if !@chains_mode  %>
+                        <a href="#" onclick="bulkRemoveChain('');">Убрать из цепочки</a>
+                      <% end %>
                     </li>
                   </ul>
 
@@ -168,6 +181,7 @@
               </div>
 
               <div class="btn-group labels mr10">
+                <% if !@selected_chain %>
                 <div class="btn-group">
                   <button data-toggle="dropdown" class="btn btn-white dropdown-toggle tooltips" type="button" title="Эквивалентные группы">
                     <span class="label label-info"><strong>g</strong></span>
@@ -184,6 +198,8 @@
                     <li><%= link_to 'Добавить', eqvgroups_path(eqvgroup:{test_id: @test.id, section_id: @selected_section}), method: 'post' %></li>
                   </ul>
                 </div>
+                <% end %>
+
                 <%= form_tag bulk_move_tasks_path, id: 'bulk_move_form', method: 'get', remote: true do %>
                     <%= hidden_field_tag 'trash', @trash %>
                     <%= hidden_field_tag 'test_id', @test.id %>
@@ -201,6 +217,11 @@
                     <%= hidden_field_tag 'task_ids' %>
                 <% end %>
                 <%= form_tag bulk_destroy_test_chains_path(test_id: @test), id: 'bulk_destroy_chains_form', remote: false do %>
+                    <%= hidden_field_tag 'trash', @trash %>
+                    <%#= hidden_field_tag 'test_id', @test.id %>
+                    <%= hidden_field_tag 'chain_ids' %>
+                <% end %>
+                <%= form_tag bulk_split_test_chains_path(test_id: @test), id: 'bulk_split_chains_form', remote: false do %>
                     <%= hidden_field_tag 'trash', @trash %>
                     <%#= hidden_field_tag 'test_id', @test.id %>
                     <%= hidden_field_tag 'chain_ids' %>
@@ -263,7 +284,17 @@
                   <tbody>
                   <% @tasks.each_with_index do |task, index| %>
                       <tr class="unread" data-class="<%= task.class %>" data-id="<%= task.id %>">
-                        <td></td>
+                        <td>
+                          <% if task.is_a?(Task) && task.chain %>
+                            <% if task.chain_position == 1 %>
+                                <div class="chain-start"></div>
+                            <% elsif task.chain_position == task.chain.tasks.count %>
+                                 <div class="chain-stop"></div>
+                            <% else %>
+                                 <div class="chain-item"></div>
+                            <% end  %>
+                          <% end %>
+                        </td>
                         <td>
                           <div class="ckbox ckbox-default">
                             <%= check_box_tag 'check', 1, false, class: 'element_checkbox', id: "cb_#{index}" %>
@@ -271,15 +302,15 @@
                           </div>
                         </td>
                         <td>
-                            <% if !@trash %>
-                            <span class="label label-info"><strong><%= task.eqvgroup.number if task.eqvgroup %></strong></span>
+                            <% if !@trash && !@selected_chain %>
+                                <span class="label label-info"><strong><%= task.eqvgroup.number if task.eqvgroup %></strong></span>
                             <% end %>
                         </td>
-                        <td style="width: 30px;">
-                        <% if !@trash && task.is_a?(Task) && task.chain %>
-                            <span class="label label-success"><strong><%= "#{task.chain.id}(#{task.chain_position})" %></strong></span>
-                        <% end %>
+                        <% if !@trash && @selected_chain %>
+                        <td>
+                            <span class=""><strong><%= task.chain_position %></strong></span>
                         </td>
+                        <% end %>
                         <td style="width: 30px; font-size: 20px; line-height: 20px; padding: 0">
                           <% if task.task_type == 'Единичный выбор' %>
                               <span class="icon-single tooltips" title="Единичный выбор"></span>
@@ -291,6 +322,8 @@
                               <span class="icon-connect tooltips" title="Сопоставление"></span>
                           <% elsif task.task_type == 'Открытый вопрос' %>
                               <span class="icon-open tooltips" title="Открытый вопрос"></span>
+                          <% elsif task.is_a?(Chain) %>
+                              <span class="fa fa-link" title="Цепочка"></span>
                           <% end %>
                         </td>
                         <td class="link">
@@ -310,8 +343,18 @@
                               <% else %>
                                   <span class="media-meta pull-right"><%= task.created_at.strftime('%d.%m.%Y') %></span>
                               <% end %>
-                              <span class="media-meta pull-right mr20"> <%= task.section.name if task.section %></span>
-                              <h4> <%= strip_tags(task.text.squish) %></h4>
+                              <span class="media-meta pull-right mr20">
+                                <% if task.section %>
+                                    раздел <b><%= "#{task.section.name}" %></b>
+                                <% end %>
+                                <%= "##{task.id}" %>
+                              </span>
+                              <h4>
+                                <% if task.is_a?(Task) && task.chain %>
+                                    [<%= task.chain_position %> / <%= task.chain.tasks.count %>]
+                                <% end %>
+                                <%= strip_tags(task.text.squish) %>
+                              </h4>
                             </div>
                           </div>
                           <% end %>
@@ -462,6 +505,14 @@
         var ids = getSelectedIds();
         var form = $('#bulk_join_chain_select_form');
         form.children("[name='task_ids']").val(ids.join());
+        form.submit();
+    }
+
+    function bulkSplitChain() {
+        var ids = getSelectedIds();
+        var form = $('#bulk_split_chains_form');
+        form.children("[name='chain_ids']").val(ids.join());
+        //form.children("[name='eqvgroup_id']").val(eqvgroup_id);
         form.submit();
     }
 
