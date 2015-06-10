@@ -76,8 +76,8 @@ class TasksController < ApplicationController
   end
 
   def check_user_answer
-    result = @task.check_answer(params[:answers])
-    redirect_to preview_task_path(@task, correct: result[:correct], point: result[:point])
+    @result = @task.check_answer(params[:answers])
+    # redirect_to preview_task_path(@task, correct: result[:correct], point: result[:point])
   end
 
   # PATCH/PUT /tasks/1

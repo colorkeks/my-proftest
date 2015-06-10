@@ -51,13 +51,11 @@ class Task < ActiveRecord::Base
   end
   
   def check_answer(answers_param)
-    p '+++'
-    p answers_param
     answers = answers_param.is_a?(Hash) ? Answer.find(answers_param.keys) : nil
 
     case self.task_type
       when 'Единичный выбор'
-        if Answer.find(answers_param).correct
+        if (a = Answer.where(id: answers_param).first) && a.correct
           {correct: 'correct', point: self.point}
         else
           {correct: 'incorrect', point: 0}

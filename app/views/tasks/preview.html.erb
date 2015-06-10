@@ -1,17 +1,18 @@
 <%= content_for :title, "Предпросмотр задания ##{ @task.id}" %>
 <div class="pageheader">
   <div class="row">
-    <!--<div class="col-sm-1 col-lg-1">-->
-    <!--</div>-->
-    <div class="col-sm-12 col-lg-12">
-      <%= link_to edit_task_path(@task), :class => 'btn btn-white back-btn pull-left', style: 'margin-right: 30px' do %>
+    <div class="col-sm-3 col-lg-2">
+      <%= link_to edit_task_path(@task), :class => 'btn btn-white back-btn pull-right' do %>
           <i class="fa fa-arrow-left"></i>
       <% end %>
+      <h2>Проверка</h2>
+    </div>
+    <div class="col-sm-9 col-lg-10">
       <div class="breadcrumb-wrapper" style="display: inline-block;">
         <ol class="breadcrumb">
           <li class="active">
             <div class="btn-group nomargin">
-                  <span class="dropdown-toggle" data-toggle="dropdown">Предпросмотр задания #<%= @task.id %></span>
+                  <span class="dropdown-toggle" data-toggle="dropdown">Задание #<%= @task.id %></span>
             </div>
           </li>
         </ol>
@@ -25,7 +26,7 @@
     <% if params[:correct] == 'incorrect' %>
         <div class="alert alert-danger">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-          Ответ неправельный, баллов: <%= params[:point] %>
+          Ответ неверный, баллов: <%= params[:point] %>
         </div>
     <% elsif params[:correct] == 'partial_correct' %>
         <div class="alert alert-warning">
@@ -35,14 +36,14 @@
     <% elsif params[:correct] == 'correct' %>
         <div class="alert alert-success">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-          Ответ верый, баллов: <%= params[:point] %>
+          Ответ верный, баллов: <%= params[:point] %>
         </div>
     <% end %>
     <br/>
-    <div class="question-number">
-      Задание #<%= @task.id %> <br/>
-      <small class="text-muted">Кол-во баллов:  <%= @task.point %></small>
-    </div>
+    <!--<div class="question-number">-->
+      <!--Задание #<%#= @task.id %> <br/>-->
+      <!--<small class="text-muted">Кол-во баллов:  <%#= @task.point %></small>-->
+    <!--</div>-->
   </div>
 
   <div class="col-sm-12">
@@ -98,12 +99,16 @@
   <div class="col-sm-12">
     <div class="question-description"><%= @task.hint.html_safe %></div>
   </div>
-  <%= form_tag check_user_answer_task_path(@task) do %>
+  <%= form_tag check_user_answer_task_path(@task), remote: true do %>
       <div class="col-sm-12">
         <table class="table answer_table">
           <thead>
           </thead>
-          <tbody id="items">
+          <% if %w(Сопоставление Последовательность).include? @task.task_type %>
+            <tbody id="items">
+          <% else %>
+              <tbody>
+          <% end %>
           <% if  @task.task_type == 'Открытый вопрос' %>
               <tr class="answer">
                 <td style="display: none"></td>
@@ -160,3 +165,23 @@
     upper_downer();
     disable_select();
 </script>
+
+<div class="modal fade" id="result-modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Результат</h4>
+      </div>
+      <div class="modal-body">
+        <h4 class="text-success" >Ответ верный, баллов: <span class="point"></span></h4>
+        <h4 class="text-danger" >Ответ неверный, баллов: <span class="point"></span></h4>
+        <h4 class="text-warning" >Ответ частично верый, баллов: <span class="point"></span></h4>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-white" data-dismiss="modal">Закрыть</button>
+        <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+      </div>
+    </div>
+  </div>
+</div>
