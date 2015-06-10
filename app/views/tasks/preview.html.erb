@@ -1,4 +1,24 @@
 <%= content_for :title, "Предпросмотр задания ##{ @task.id}" %>
+<div class="pageheader">
+  <div class="row">
+    <!--<div class="col-sm-1 col-lg-1">-->
+    <!--</div>-->
+    <div class="col-sm-12 col-lg-12">
+      <%= link_to edit_task_path(@task), :class => 'btn btn-white back-btn pull-left', style: 'margin-right: 30px' do %>
+          <i class="fa fa-arrow-left"></i>
+      <% end %>
+      <div class="breadcrumb-wrapper">
+        <ol class="breadcrumb">
+          <li class="active">
+            <div class="btn-group nomargin">
+                  <span class="dropdown-toggle" data-toggle="dropdown">Предпросмотр задания #<%= @task.id %></span>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="container" style="margin-top: 30px">
 <div class="row question-content">
   <div class="col-sm-12">
@@ -20,7 +40,7 @@
     <% end %>
     <br/>
     <div class="question-number">
-      Предпросмотр задания #<%= @task.id %> <br/>
+      Задание #<%= @task.id %> <br/>
       <small class="text-muted">Кол-во баллов:  <%= @task.point %></small>
     </div>
   </div>
@@ -54,7 +74,7 @@
             </div>
         <% else %>
             <div class="col-lg-12">
-              <div style="text-align: center; width: 100%; min-height: 200px;">
+              <div style="text-align: left; width: 100%; min-height: 200px;">
                 <h4><%= @task.text.html_safe %></h4>
               </div>
             </div>
@@ -96,14 +116,16 @@
           <% else %>
               <% @task.answers.order('id ASC').each do |answer| %>
                   <tr class="answer">
-                    <td style="width: 50px;"></td>
                     <% if @task.task_type == 'Множественный выбор' %>
+                        <td style="display: none;"></td>
                         <td style="width: 20px;"><%= check_box_tag "answers[#{answer.id}][]" %></td>
                         <td><%= answer.text %></td>
                     <% elsif @task.task_type == 'Единичный выбор' %>
-                        <td style="width: 20px;"><%= radio_button_tag "answers[#{answer.id}][]", nil %></td>
-                        <td><%= answer.text %></td>
+                        <td style="display: none;"></td>
+                        <td style="width: 20px;"><%= radio_button_tag "answers", answer.id %></td>
+                        <td style="text-align: left"><%= answer.text %></td>
                     <% elsif @task.task_type == 'Сопоставление' %>
+                        <td style="width: 50px;"></td>
                         <td>
                           <div class="pull-right select-answer">
                             <%= select_tag( "answers[#{answer.id}][]",options_for_select(['Не выбрано']) + options_from_collection_for_select(@task.associations.shuffle, 'id', 'text'), :class => 'form-control association_select') %>
@@ -111,17 +133,14 @@
                           <label class="text" style="text-align: left"><%= answer.text%></label>
                         </td>
                     <% elsif @task.task_type == 'Последовательность' %>
+                        <td style="width: 50px;"></td>
                         <td style="text-align: left">
                           <%= answer.text %>
                           <%= hidden_field_tag "answers[#{answer.id}][]", '', :class => 'serial_number' %>
                         </td>
                     <% elsif @task.task_type == 'Открытый вопрос' %>
+                        <td style="width: 50px;"></td>
                         <td style="text-align: left"><%= answer.text %></td>
-                    <% end %>
-                    <% if @task.task_type == 'Последовательность' %>
-                        <td style="" class="sorter">
-                          <span style="font-size: 20px;" class="glyphicon glyphicon-move"></span>
-                        </td>
                     <% end %>
                   </tr>
               <% end %>
