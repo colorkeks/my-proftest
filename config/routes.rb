@@ -67,6 +67,7 @@ Rails.application.routes.draw do
       post 'custom_create'
       get 'add_find_stub'
       get 'profile_stub'
+      get 'search_stub'
     end
   end
 
