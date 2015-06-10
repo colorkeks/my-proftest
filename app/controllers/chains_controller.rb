@@ -43,7 +43,7 @@ class ChainsController < ApplicationController
       if @chain.save
         format.html {
           #redirect_to @chain, notice: 'Chain was successfully created.'
-          redirect_to :back, notice: 'Цепочка создана'
+          redirect_to test_path(@chain.test, selected_chain_id: @chain), notice: 'Цепочка создана'
         }
         format.json { render :show, status: :created, location: @chain }
       else
