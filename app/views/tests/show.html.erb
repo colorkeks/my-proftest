@@ -302,14 +302,16 @@
                             <%= check_box_tag 'check', 1, false, class: 'element_checkbox', id: "cb_#{index}" %>
                             <label for="<%= "cb_#{index}" %>"></label>
                           </div>
-                        </td>
+                        <% if !@trash && !@selected_chain %>
                         <td>
-                            <% if !@trash && !@selected_chain %>
-                                <span class="label label-info"><strong><%= task.eqvgroup.number if task.eqvgroup %></strong></span>
-                            <% end %>
+                            <span class="label label-info"><strong><%= task.eqvgroup.number if task.eqvgroup %></strong></span>
                         </td>
+                        <% else %>
+                        <td style="width: 0px; padding: 0px;"></td>
+                        <% end %>
+
                         <% if !@trash && @selected_chain %>
-                        <td>
+                        <td style="width: 10px;">
                             <span class=""><strong><%= task.chain_position %></strong></span>
                         </td>
                         <% end %>
@@ -346,10 +348,12 @@
                                   <span class="media-meta pull-right"><%= task.created_at.strftime('%d.%m.%Y') %></span>
                               <% end %>
                               <span class="media-meta pull-right mr20">
+                                <%= "##{task.id}" %>
+                              </span>
+                              <span class="media-meta pull-right mr20">
                                 <% if task.section %>
                                     <%= "#{task.section.name}" %>
                                 <% end %>
-                                <%= "##{task.id}" %>
                               </span>
                               <h4>
                                 <% if task.is_a?(Task) && task.chain %>
