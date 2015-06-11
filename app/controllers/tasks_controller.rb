@@ -150,9 +150,15 @@ class TasksController < ApplicationController
       eqvgroup = @test.eqvgroups.where(section:nil).order('number').last
     end
 
+    full_chains = @test.chains.full_chains_from_task_ids(params[:task_ids])
+
     begin
       Task.transaction do
+        full_chains.each do |chain|
+          chain.change_section_and_eqvgroup!(destination_section)
+        end
         tasks.each do |task|
+          next if task.section == destination_section
           task.section = destination_section
           task.eqvgroup = eqvgroup
           task.restore! if task.deleted?
@@ -177,8 +183,12 @@ class TasksController < ApplicationController
     @tasks = @test.tasks.where(id: params[:task_ids].split(','))
     @eqvgroup = @test.eqvgroups.find(params[:eqvgroup_id])
 
+    full_chains = @test.chains.full_chains_from_task_ids(params[:task_ids])
     begin
       Task.transaction do
+        full_chains.each do |chain|
+          chain.change_eqvgroup!(@eqvgroup)
+        end
         @tasks.each do |task|
           task.eqvgroup = @eqvgroup
           task.save!
