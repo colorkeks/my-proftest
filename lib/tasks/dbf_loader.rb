@@ -38,7 +38,7 @@ end
 # DbfLoader.new('/home/lavrovdv/work/proftest/DOCTORS.DBF').load_data(DoctorDbf)
 # DbfLoader.new('/home/lavrovdv/work/proftest/LPU.DBF').load_data(LpuDbf)
 # DbfLoader.new('/home/lavrovdv/work/proftest/OFFICFUN.DBF').load_data(OfficfunDbf)
-DbfLoader.new('/home/lavrovdv/work/proftest/POST.DBF').load_data(PostDbf)
+# DbfLoader.new('/home/lavrovdv/work/proftest/POST.DBF').load_data(PostDbf)
 # DbfLoader.new('/home/lavrovdv/work/proftest/SPECLIST.DBF').load_data(SpeclistDbf)
 
 # load "#{Rails.root}/lib/tasks/dbf_loader.rb"
