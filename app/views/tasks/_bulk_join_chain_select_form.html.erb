@@ -17,7 +17,7 @@
           <li>
             <% @chains.each do |item| %>
             <span id="destination_group_span" onclick="selectDestinationChain(this);" data-id="<%= item.id%>">
-                <%= item.text %>
+                <%= strip_tags(item.text.squish) %>
             </span><br/>
             <% end %>
           </li>

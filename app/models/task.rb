@@ -40,6 +40,18 @@ class Task < ActiveRecord::Base
     end
   end
 
+  def decrement_positions_on_lower_items
+    return unless in_list?
+    position ||= send(position_column).to_i
+    acts_as_list_class.unscoped do
+      acts_as_list_class.where(scope_condition).where(
+          "#{position_column} > #{position}"
+      ).order("#{position_column} ASC").each do |element|
+        element.update_column position_column, (element.send(position_column).to_i - 1)
+      end
+    end
+  end
+
   def move_to_trash!
     task = self
     task.eqvgroup = nil
