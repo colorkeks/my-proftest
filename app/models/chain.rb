@@ -66,4 +66,14 @@ class Chain < ActiveRecord::Base
     end
     self.destroy!
   end
+
+  def add_task!(task)
+    if task.chain && (task.chain != self)
+      task.remove_from_list
+    end
+    task.chain = self
+    task.section = self.section
+    task.eqvgroup = self.eqvgroup
+    task.save!
+  end
 end

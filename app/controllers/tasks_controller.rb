@@ -213,9 +213,8 @@ class TasksController < ApplicationController
      Task.transaction do
         @chain.save!
         @tasks.each do |task|
-          raise if task.chain.present?
-          task.chain = @chain
-          task.save!
+          task.reload
+          @chain.add_task!(task)
         end
       end
       @success = true
