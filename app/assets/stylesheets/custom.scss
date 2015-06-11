@@ -571,6 +571,17 @@ ul.children{
     font-weight: bold;
   }
 
+  table.profile{
+    width: 100%;
+    margin-bottom: 20px;
+
+    th,td{
+      padding: 6px;
+    }
+
+  }
+
+
   .profile{
     background-color: #ffffff;
   }
