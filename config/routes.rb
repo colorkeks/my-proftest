@@ -80,6 +80,10 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :doctors do
+    post 'search', on: :collection
+  end
+
   resources :task_contents
 
   resources :admins

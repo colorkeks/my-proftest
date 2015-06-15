@@ -1,0 +1,64 @@
+<div class="mainpanel" >
+
+  <div class="pageheader">
+    <div class="row">
+      <div class="col-sm-3 col-lg-2">
+        <a class="btn btn-white back-btn pull-right" title="Назад" href="#">
+          <i class="fa fa-arrow-left"></i>
+        </a>
+        <h2>ФИО</h2>
+      </div>
+      <div class="col-sm-9 col-lg-10">
+        <div class="breadcrumb-wrapper">
+          <ol class="breadcrumb">
+            <li class="active">
+              <div class="btn-group nomargin">
+                  <span class="dropdown-toggle" data-toggle="dropdown">Справочник медперсонала (DOCTORS)</span>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contentpanel panel-email">
+    <div class="row">
+      <div class="col-sm-3 col-lg-2">
+        <div class="btn-group nomargin">
+          <button class="btn btn-primary create-btn dropdown-toggle" data-toggle="dropdown" title="Создать">
+            Создать
+          </button>
+        </div>
+        <ul class="nav nav-pills nav-stacked nav-email mb20">
+          <li>
+            <a class="active" href="#">Испытуемые</a>
+          </li>
+          <li>
+            <a class="" href="#">Медперсонал</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="col-sm-9 col-lg-10">
+        <div class="panel panel-default">
+          <div class="panel-body panel-profile">
+            <div class="btn-group labels mr10">
+              <%= form_tag search_doctors_path, remote: true do %>
+                <div class="form-group" style="margin-top: 5px">
+                  <%= text_field_tag :q, params[:q], id: 'qwery_string', autocomplete: 'off', class: 'form-control', style:'width: 500px; padding: 7px; display: inline-block' %>
+                  <span id="spinner" style="margin-left:10px; font-size: 18px; color: lightgray; display: none"><i class="fa fa-refresh fa-spin"></i></span>
+                </div>
+              <% end %>
+            </div>
+            <div class="table-responsive" id="search-result">
+              <div class="text-center text-info alert alert-info" style="">
+                <strong>Для поиска медперсонала введите код врача или ФИО</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
