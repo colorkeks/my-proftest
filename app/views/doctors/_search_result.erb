@@ -1,14 +1,16 @@
 <% if @doctors.any? %>
+<span class="text-muted">Найдено <%= @doctors.length %> из <%= @count %></span>
 <table class="table table-hover">
   <tbody>
-  <tr><td colspan="2"><span class="text-info">Найдено <%= @doctors.length %> из <%= @count %></span></td></tr>
   <% @doctors.each do |doctor| %>
     <tr>
         <td>
           <%= link_to doctor.drcode, doctor_path(doctor.drcode) %>
         </td>
-        <td><%= "#{doctor.surname} #{doctor.name} #{doctor.secname}" %></td>
-        <td></td>
+        <td>
+          <%= link_to "#{doctor.surname} #{doctor.name} #{doctor.secname}", doctor_path(doctor.drcode) %>
+        </td>
+        <td><%= doctor.current_lpu.title %></td>
     </tr>
   <% end %>
   </tbody>

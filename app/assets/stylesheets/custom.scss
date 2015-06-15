@@ -582,11 +582,30 @@ ul.children{
     th,td{
       padding: 6px;
     }
-
   }
-
 
   .profile{
     background-color: #ffffff;
   }
+}
+
+#spinner{
+  margin-left: 15px;
+  font-size: 18px;
+  color: lightgray;
+  display: none
+}
+
+#search_form{
+  .glyphicon-search{
+    margin-left: -28px;
+    top: 2px;
+    color: lightgray;
+  }
+}
+
+#qwery_string{
+  width: 500px;
+  padding: 7px;
+  display: inline-block;
 }
