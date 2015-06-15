@@ -68,8 +68,6 @@ Rails.application.routes.draw do
       get 'add_find_stub'
       get 'profile_stub'
       get 'search_stub'
-      get 'search'
-      post 'find_user'
     end
   end
 
@@ -79,6 +77,10 @@ Rails.application.routes.draw do
       get 'try_result'
       post 'check_user_answer'
     end
+  end
+
+  resources :doctors do
+    post 'search', on: :collection
   end
 
   resources :task_contents

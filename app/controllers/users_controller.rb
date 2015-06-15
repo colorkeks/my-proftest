@@ -107,22 +107,11 @@ class UsersController < ApplicationController
   end
 
   def profile_stub
-    @doctor = DoctorDbf.where(drcode: params[:drcode]).first
     render 'users/profile_stub', layout: 'admin'
   end
 
   def search_stub
     render 'users/search_stub', layout: 'admin'
-  end
-
-  def search
-    render 'users/search', layout: 'admin'
-  end
-
-  def find_user
-    query = DoctorDbf.search_doctor(params[:q])
-    @doctors = query.limit(10)
-    @count = query.count
   end
 
   private
