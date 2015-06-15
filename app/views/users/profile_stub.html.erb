@@ -1,0 +1,121 @@
+<div class="mainpanel" >
+
+  <div class="pageheader">
+    <div class="row">
+      <div class="col-sm-3 col-lg-2">
+        <a class="btn btn-white back-btn pull-right" title="Назад" href="/test_groups/3">
+          <i class="fa fa-arrow-left"></i>
+        </a>
+        <h2>Персонал</h2>
+      </div>
+      <div class="col-sm-9 col-lg-10">
+        <div class="breadcrumb-wrapper">
+          <ol class="breadcrumb">
+            <li class="active">
+              <div class="btn-group nomargin">
+                  <span class="dropdown-toggle" data-toggle="dropdown">Карточка медперсонала <%= @doctor.drcode%></span>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contentpanel ">
+    <div class="row">
+      <div class="col-sm-3 col-lg-2">
+        <div class="panel panel-default">
+          <div class="panel-body panel-profile text-center">
+            <p>Отсутствует карточка испытуемого</p>
+            <div class="btn btn-white">Создать</div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-body panel-profile text-center">
+            <a href="#">Карточка испытуемого</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-9 col-lg-10">
+        <div class="panel panel-default">
+          <div class="panel-body panel-profile">
+            <h3 style="margin: 0"><%= @doctor.surname.mb_chars.capitalize + ' ' + @doctor.name.mb_chars.capitalize + ' ' + @doctor.secname.mb_chars.capitalize %>
+              <small>
+                <% if @doctor.dbsource == 'D' %>
+                    Врач
+                <% elsif  @doctor.dbsource == 'P' %>
+                    Провизор
+                <% elsif  @doctor.dbsource == 'S' %>
+                    Средний медицинский персонал
+                <% elsif  @doctor.dbsource == 'F' %>
+                    Фармацевт
+                <% elsif  @doctor.dbsource == 'N' %>
+                    Специалист с высшим профессиональным (не медицинским) образованием
+                <% end %>
+              </small>
+            </h3>
+            <br/>
+            <table class=" profile">
+              <tr>
+                <th style="width: 150px">Номер в обл. рег.</th>
+                <td><%= @doctor.drcode %></td>
+                <th style="width: 100px">С начала</th>
+                <td style="width: 100px"><%= @doctor.datebeg%></td>
+              </tr>
+              <tr>
+                <th >СНИЛС</th>
+                <td><%= @doctor.pension %></td>
+                <th>До конца</th>
+                <td><%= @doctor.dateend %></td>
+              </tr>
+              <tr>
+                <th>ЛПУ</th>
+                <td><%= @doctor.lpu_dbfs.first.name_s.empty? ? @doctor.lpu_dbfs.first.name : @doctor.lpu_dbfs.first.name_s%></td>
+                <th></th>
+                <td></td>
+              </tr>
+            </table>
+            <p><strong>Специальности</strong></p>
+            <table class="table table-bordered table-condensed table-striped">
+              <thead>
+              <tr>
+                <th>ЛПУ</th>
+                <th>Специльность</th>
+                <th>Должность</th>
+                <th>Категория</th>
+                <th>С начала</th>
+                <th>До конца</th>
+
+              </tr>
+              </thead>
+                <tbody>
+                <% @doctor.officfun_dbfs.each do |offic| %>
+                        <tr>
+                          <td><%= @doctor.lpu_dbfs.first.name_s.empty? ? @doctor.lpu_dbfs.first.name : @doctor.lpu_dbfs.first.name_s%></td>
+                          <td><%= offic.speclist_dbfs.where.not(:deleted => 1).first.name%></td>
+                          <td><%= offic.post_dbfs.where.not(:deleted => 1).first.name if offic.post_dbfs.where.not(:deleted => 1).first %></td>
+                          <td>
+                            <% if offic.category == 1 %>
+                                Высшая категория
+                              <% elsif offic.category == 2 %>
+                                Первая категория
+                              <% elsif offic.category == 3 %>
+                                Вторая категория
+                              <% elsif offic.category == 4 %>
+                                Без категории
+                              <% end %>
+                          </td>
+                          <td><%= offic.d_start %></td>
+                          <td><%= offic.d_fin %></td>
+                        </tr>
+                <% end %>
+                </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
