@@ -278,20 +278,25 @@ class TasksController < ApplicationController
 
   def bulk_change_position
     @test = Test.find(params[:test_id])
-    @task = @test.tasks.where(id: params[:task_ids].split(',')).order(:id).first
+    @tasks = @test.tasks.where(id: params[:task_ids].split(',')).order(:chain_position)
+    @task = @tasks.first
+
+    if !@task
+      redirect_to :back
+      return
+    end
+
     position = params[:position].to_i
     #@eqvgroup = @test.eqvgroups.find(params[:eqvgroup_id])
 
     #full_chains = @test.chains.full_chains_from_task_ids(params[:task_ids])
     begin
       Task.transaction do
-        puts "======="
-        puts position
         @task.insert_at(position)
       end
       @success = true
-    #rescue
-      #@success = false
+    rescue
+      @success = false
     end
 
     if @success
