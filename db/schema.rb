@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150611093437) do
+ActiveRecord::Schema.define(version: 20150615051000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,6 +66,9 @@ ActiveRecord::Schema.define(version: 20150611093437) do
   end
 
   add_index "doctor_dbfs", ["drcode"], name: "index_doctor_dbfs_on_drcode", using: :btree
+  add_index "doctor_dbfs", ["name"], name: "index_doctor_dbfs_on_name", using: :btree
+  add_index "doctor_dbfs", ["secname"], name: "index_doctor_dbfs_on_secname", using: :btree
+  add_index "doctor_dbfs", ["surname"], name: "index_doctor_dbfs_on_surname", using: :btree
 
   create_table "eqvgroups", force: :cascade do |t|
     t.integer  "test_id",                null: false

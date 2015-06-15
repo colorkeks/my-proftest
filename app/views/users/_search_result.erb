@@ -1,0 +1,18 @@
+<% if @doctors.any? %>
+<table class="table table-hover">
+  <tbody>
+  <tr><td colspan="2"><span class="text-info">Найдено <%= @doctors.length %> из <%= @count %></span></td></tr>
+  <% @doctors.each do |doctor| %>
+    <tr>
+        <td><%= link_to doctor.drcode, profile_user_path(dcode: doctor.drcode) %></td>
+        <td><%= "#{doctor.surname} #{doctor.name} #{doctor.secname}" %></td>
+        <td></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+<% else %>
+<div class="text-center text-info alert alert-info" >
+  <strong>По Вашему запросу ничего не найдено.</strong>
+</div>
+<% end %>

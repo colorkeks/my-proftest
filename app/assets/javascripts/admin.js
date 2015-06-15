@@ -24,6 +24,7 @@ $(function(){
     highlight();
     select_all();
     register_change_event();
+    search_click();
 });
 
 
@@ -271,6 +272,18 @@ function upper_downer() {
             }
         });
     });
+}
+
+
+function search_click(){
+  $('#qwery_string').keyup(function(){
+      clearTimeout(window.search_timer);
+      var form = $(this).closest('form');
+      window.search_timer = setTimeout(function(){
+          $('#spinner').show();
+          form.submit()
+      }, 700);
+  })
 }
 
 
