@@ -276,6 +276,37 @@ class TasksController < ApplicationController
     @chains = @test.chains.order(:id)
   end
 
+  def bulk_change_position
+    @test = Test.find(params[:test_id])
+    @tasks = @test.tasks.where(id: params[:task_ids].split(',')).order(:chain_position)
+    @task = @tasks.first
+
+    if !@task
+      redirect_to :back
+      return
+    end
+
+    position = params[:position].to_i
+    #@eqvgroup = @test.eqvgroups.find(params[:eqvgroup_id])
+
+    #full_chains = @test.chains.full_chains_from_task_ids(params[:task_ids])
+    begin
+      Task.transaction do
+        @task.insert_at(position)
+      end
+      @success = true
+    rescue
+      @success = false
+    end
+
+    if @success
+      redirect_to :back
+    else
+      flash[:error] = 'Невозможно переместить задание'
+      redirect_to :back
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_task

@@ -3,7 +3,7 @@
   <div class="pageheader">
     <div class="row">
       <div class="col-sm-3 col-lg-2">
-        <a class="btn btn-white back-btn pull-right" title="Назад" href="/test_groups/3">
+        <a class="btn btn-white back-btn pull-right" title="Назад" href="/doctors">
           <i class="fa fa-arrow-left"></i>
         </a>
         <h2>Персонал</h2>
@@ -61,13 +61,13 @@
               <tr>
                 <th style="width: 150px">Номер в обл. рег.</th>
                 <td><%= @doctor.drcode %></td>
-                <th style="width: 100px">С начала</th>
+                <th style="width: 120px">Действует с:</th>
                 <td style="width: 100px"><%= @doctor.datebeg%></td>
               </tr>
               <tr>
                 <th >СНИЛС</th>
                 <td><%= @doctor.pension %></td>
-                <th>До конца</th>
+                <th>Действует по:</th>
                 <td><%= @doctor.dateend %></td>
               </tr>
               <tr>
@@ -85,15 +85,15 @@
                 <th>Специльность</th>
                 <th>Должность</th>
                 <th>Категория</th>
-                <th>С начала</th>
-                <th>До конца</th>
+                <th>С</th>
+                <th>По</th>
 
               </tr>
               </thead>
                 <tbody>
                 <% @doctor.officfun_dbfs.each do |offic| %>
                         <tr>
-                          <td><%= @doctor.lpu_dbfs.first.name_s.empty? ? @doctor.lpu_dbfs.first.name : @doctor.lpu_dbfs.first.name_s%></td>
+                          <td><%= offic.lpu_dbfs.first.name_s.empty? ? offic.lpu_dbfs.first.name : offic.lpu_dbfs.first.name_s %></td>
                           <td><%= offic.speclist_dbfs.where.not(:deleted => 1).first.name if offic.speclist_dbfs.where.not(:deleted => 1).first %></td>
                           <td><%= offic.post_dbfs.where.not(:deleted => 1).first.name if offic.post_dbfs.where.not(:deleted => 1).first %></td>
                           <td>

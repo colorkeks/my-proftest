@@ -75,8 +75,10 @@ function button_states(){
 
         if (checked.length == 1){
             $('#rename').removeClass('disabled').find('a').attr('onclick', 'editElement()');
+            $('#change-position').removeClass('disabled');
         }else{
             $('#rename').addClass('disabled').find('a').attr('onclick', '');
+            $('#change-position').addClass('disabled');
         }
 
         if (checked.length > 0 && checked.length != all.length){

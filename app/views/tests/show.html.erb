@@ -181,7 +181,7 @@
               </div>
 
               <div class="btn-group labels mr10">
-                <% if !@selected_chain %>
+                <% if !@selected_chain && !@trash %>
                 <div class="btn-group">
                   <button data-toggle="dropdown" class="btn btn-white dropdown-toggle tooltips" type="button" title="Эквивалентные группы">
                     <span class="label label-info">
@@ -224,6 +224,29 @@
                   </ul>
                 </div>
                 <% end %>
+
+                <% if @selected_chain %>
+                    <div class="btn-group">
+                      <button data-toggle="dropdown" class="btn btn-white dropdown-toggle tooltips disabled" type="button" title="Позиция" id="change-position">
+                    <span class="label label-default">
+                      <strong>№</strong>
+                    </span>
+                        <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu">
+                        <% (1..@selected_chain.tasks.count).each do |n|%>
+                            <li>
+                                <a href="#" onclick="bulkChangePosition('<%=n %>');">
+                                <span class="label label-default equal-width">
+                                <strong><%= n %></strong>
+                                </span>
+                                </a>
+                            </li>
+                        <% end %>
+                       </ul>
+                    </div>
+                <% end %>
+
 
                 <%= form_tag bulk_move_tasks_path, id: 'bulk_move_form', method: 'get', remote: true do %>
                     <%= hidden_field_tag 'trash', @trash %>
@@ -275,6 +298,11 @@
                     <%= hidden_field_tag 'trash', @trash %>
                     <%= hidden_field_tag 'test_id', @test.id %>
                     <%= hidden_field_tag 'task_ids' %>
+                <% end %>
+                <%= form_tag bulk_change_position_tasks_path, id: 'bulk_change_position_form', remote: false do %>
+                    <%= hidden_field_tag 'test_id', @test.id %>
+                    <%= hidden_field_tag 'task_ids' %>
+                    <%= hidden_field_tag 'position' %>
                 <% end %>
               </div>
 
@@ -544,6 +572,14 @@
         var form = $('#bulk_split_chains_form');
         form.children("[name='chain_ids']").val(ids.join());
         //form.children("[name='eqvgroup_id']").val(eqvgroup_id);
+        form.submit();
+    }
+
+    function bulkChangePosition(n) {
+        var ids = getSelectedIds();
+        var form = $('#bulk_change_position_form');
+        form.children("[name='task_ids']").val(ids.join());
+        form.children("[name='position']").val(n);
         form.submit();
     }
 
