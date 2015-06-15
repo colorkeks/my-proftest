@@ -160,7 +160,7 @@
                   <ul class="dropdown-menu">
                     <li>
                       <% if @chains_mode  %>
-                          <a href="#" onclick="bulkSplitChain();">Разъединить цепочки</a>
+                          <a href="#" onclick="bulkSplitChain();">Разъединить</a>
                       <% end %>
 
                       <% if !@chains_mode && !@selected_chain %>
@@ -184,15 +184,40 @@
                 <% if !@selected_chain %>
                 <div class="btn-group">
                   <button data-toggle="dropdown" class="btn btn-white dropdown-toggle tooltips" type="button" title="Эквивалентные группы">
-                    <span class="label label-info"><strong>g</strong></span>
+                    <span class="label label-info">
+                      <strong>
+                        <% if @last_eqvgroup %>
+                        <%= @last_eqvgroup.number %>
+                        <% else %>
+                        g
+                        <% end %>
+                      </strong>
+                    </span>
                     <span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu">
                     <% @eqvgroups.each do |eq|%>
-                    <li><a href="#" onclick="bulkChangeEqvgroup('<%=eq.id %>', '<%= item_class %>');">
-                      <span class="label label-info"><strong><%= eq.number %></strong></span>
-                      <span class="small italic text-muted"> <%= eq.section.name if eq.section %></span>
-                    </a>
+                    <li>
+                      <% if (@selected_section && eq.section != @selected_section) || (!@chains_mode && !@selected_section && eq.section != nil) %>
+                        <% group_visible = false %>
+                      <% else %>
+                        <% group_visible = true %>
+                      <% end %>
+                      <% if group_visible %>
+                          <a href="#" onclick="bulkChangeEqvgroup('<%=eq.id %>', '<%= item_class %>');">
+                          <span class="label label-info equal-width">
+                            <strong><%= eq.number %></strong>
+                          </span>
+                          <span class="small italic text-muted"> <%= eq.section.name if eq.section %></span>
+                          </a>
+                      <% else %>
+                          <a class="disabled">
+                          <span class="label equal-width" style="background-color: rgb(218, 218, 218); color: #898989;">
+                            <strong><%= eq.number %></strong>
+                          </span>
+                          <span class="small italic text-muted"> <%= eq.section.name if eq.section %></span>
+                          </a>
+                      <% end %>
                     </li>
                     <% end %>
                     <li><%= link_to 'Добавить', eqvgroups_path(eqvgroup:{test_id: @test.id, section_id: @selected_section}), method: 'post' %></li>
@@ -356,7 +381,7 @@
                                 <% end %>
                               </span>
                               <h4>
-                                <% if task.is_a?(Task) && task.chain %>
+                                <% if task.is_a?(Task) && task.chain && !@selected_chain %>
                                     [<%= task.chain_position %> / <%= task.chain.tasks.count %>]
                                 <% end %>
                                 <%= strip_tags(task.text.squish) %>

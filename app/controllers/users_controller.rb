@@ -115,6 +115,16 @@ class UsersController < ApplicationController
     render 'users/search_stub', layout: 'admin'
   end
 
+  def search
+    render 'users/search', layout: 'admin'
+  end
+
+  def find_user
+    query = DoctorDbf.search_doctor(params[:q])
+    @doctors = query.limit(10)
+    @count = query.count
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_user
