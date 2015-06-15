@@ -52,6 +52,7 @@ Rails.application.routes.draw do
     post :bulk_join_chain, on: :collection
     post :bulk_remove_chain, on: :collection
     get :bulk_join_chain_select, on: :collection
+    post :bulk_change_position, on: :collection
   end
 
   devise_for :users,  :controllers => { :registrations => "users/registrations" }

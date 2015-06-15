@@ -67,6 +67,7 @@ class SectionsController < ApplicationController
         task.move_to_trash!
       end
       @section.eqvgroups.destroy_all
+      @section.chains.destroy_all
       @section.destroy
     end
     respond_to do |format|
