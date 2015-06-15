@@ -52,6 +52,43 @@ class Task < ActiveRecord::Base
     end
   end
 
+  def shuffle_positions_on_intermediate_items(old_position, new_position, avoid_id = nil)
+    return if old_position == new_position
+    avoid_id_condition = avoid_id ? " AND #{self.class.primary_key} != #{self.class.connection.quote(avoid_id)}" : ''
+
+    update_column position_column, nil
+
+    if old_position < new_position
+      # Decrement position of intermediate items
+      #
+      # e.g., if moving an item from 2 to 5,
+      # move [3, 4, 5] to [2, 3, 4]
+      acts_as_list_class.unscoped do
+        acts_as_list_class.where(scope_condition).where(
+            "#{position_column} > #{old_position}"
+        ).where(
+            "#{position_column} <= #{new_position}#{avoid_id_condition}"
+        ).order("#{position_column} ASC").each do |element|
+          element.update_column position_column, (element.send(position_column).to_i - 1)
+        end
+      end
+    else
+      # Increment position of intermediate items
+      #
+      # e.g., if moving an item from 5 to 2,
+      # move [2, 3, 4] to [3, 4, 5]
+      acts_as_list_class.unscoped do
+        acts_as_list_class.where(scope_condition).where(
+            "#{position_column} >= #{new_position}"
+        ).where(
+            "#{position_column} < #{old_position}#{avoid_id_condition}"
+        ).order("#{position_column} DESC").each do |element|
+          element.update_column position_column, (element.send(position_column).to_i + 1)
+        end
+      end
+    end
+  end
+
   def move_to_trash!
     task = self
     task.eqvgroup = nil

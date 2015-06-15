@@ -3,6 +3,7 @@ class Section < ActiveRecord::Base
   validates :test_id, presence: true
   has_many :tasks
   has_many :eqvgroups
+  has_many :chains
   after_create :add_eqvgroup
 
   def title
