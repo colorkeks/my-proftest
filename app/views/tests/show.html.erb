@@ -160,7 +160,7 @@
                   <ul class="dropdown-menu">
                     <li>
                       <% if @chains_mode  %>
-                          <a href="#" onclick="bulkSplitChain();">Разъединить цепочки</a>
+                          <a href="#" onclick="bulkSplitChain();">Разъединить</a>
                       <% end %>
 
                       <% if !@chains_mode && !@selected_chain %>
@@ -184,7 +184,15 @@
                 <% if !@selected_chain %>
                 <div class="btn-group">
                   <button data-toggle="dropdown" class="btn btn-white dropdown-toggle tooltips" type="button" title="Эквивалентные группы">
-                    <span class="label label-info"><strong>g</strong></span>
+                    <span class="label label-info">
+                      <strong>
+                        <% if @last_eqvgroup %>
+                        <%= @last_eqvgroup.number %>
+                        <% else %>
+                        g
+                        <% end %>
+                      </strong>
+                    </span>
                     <span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu">
@@ -356,7 +364,7 @@
                                 <% end %>
                               </span>
                               <h4>
-                                <% if task.is_a?(Task) && task.chain %>
+                                <% if task.is_a?(Task) && task.chain && !@selected_chain %>
                                     [<%= task.chain_position %> / <%= task.chain.tasks.count %>]
                                 <% end %>
                                 <%= strip_tags(task.text.squish) %>
