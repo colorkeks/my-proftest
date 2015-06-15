@@ -94,7 +94,7 @@
                 <% @doctor.officfun_dbfs.each do |offic| %>
                         <tr>
                           <td><%= @doctor.lpu_dbfs.first.name_s.empty? ? @doctor.lpu_dbfs.first.name : @doctor.lpu_dbfs.first.name_s%></td>
-                          <td><%= offic.speclist_dbfs.where.not(:deleted => 1).first.name%></td>
+                          <td><%= offic.speclist_dbfs.where.not(:deleted => 1).first.name if offic.speclist_dbfs.where.not(:deleted => 1).first %></td>
                           <td><%= offic.post_dbfs.where.not(:deleted => 1).first.name if offic.post_dbfs.where.not(:deleted => 1).first %></td>
                           <td>
                             <% if offic.category == 1 %>
