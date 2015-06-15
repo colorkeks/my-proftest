@@ -117,12 +117,17 @@ class TasksController < ApplicationController
     @trash = params[:trash]
     @test = Test.find(params[:test_id])
     @tasks = @test.tasks.where(id: params[:task_ids].split(','))
+    full_chains = @test.chains.full_chains_from_task_ids(params[:task_ids])
+
     if @trash.present?
       @tasks.destroy_all
     else
       Task.transaction do
         @tasks.each do |task|
           task.move_to_trash!
+        end
+        full_chains.each do |chain|
+          chain.destroy
         end
       end
     end
