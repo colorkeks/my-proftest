@@ -152,6 +152,7 @@
                     <% end %>
                 </button>
 
+                <% if !@trash %>
                 <div class="btn-group ">
                   <button class="btn btn-white tooltips dropdown-toggle" data-toggle="dropdown" type="button" title="" data-original-title="Другое">
                     <i class="fa fa-ellipsis-v"></i>
@@ -160,24 +161,25 @@
                   <ul class="dropdown-menu">
 
                       <% if @chains_mode  %>
-                        <li><a href="#" onclick="bulkSplitChain();">Разъединить</a></li>
+                        <li id="split-chain-li" class="disabled"><a href="#" onclick="return false;" data-onclick="bulkSplitChain();">Разъединить</a></li>
                       <% end %>
 
                       <% if !@chains_mode && !@selected_chain %>
-                        <li><a href="#" onclick="bulkJoinChain('');">Объединить в цепочку</a></li>
+                        <li id="join-chain-li" class="disabled"><a href="#" onclick="return false;" data-onclick="bulkJoinChain('');">Объединить в цепочку</a></li>
                       <% end %>
 
                       <% if !@chains_mode && !@selected_chain %>
-                        <li><a href="#" onclick="bulkJoinChainFormOpen('');">Переместить в цепочку</a></li>
+                        <li id="move-to-chain-li" class="disabled"><a href="#" onclick="return false;" data-onclick="bulkJoinChainFormOpen('');">Переместить в цепочку</a></li>
                       <% end %>
 
                       <% if !@chains_mode  %>
-                        <li><a href="#" onclick="bulkRemoveChain('');">Убрать из цепочки</a></li>
+                        <li id="remove-chain-li" class="disabled"><a href="#" onclick="return false;" data-onclick="bulkRemoveChain('');">Убрать из цепочки</a></li>
                       <% end %>
 
                   </ul>
 
                 </div>
+                <% end %>
               </div>
 
               <div class="btn-group labels mr10">
@@ -476,8 +478,15 @@
   </div>
 </div>
 
+<script type="text/javascript">
+    window.trash = <%= @trash || false %>;
+    window.chains_mode = <%= @chains_mode || false %>;
+    window.selected_section = <%= @selected_section ? @selected_section.id : false %>;
+    window.selected_chain = <%= @selected_chain ? @selected_chain.id : false %>;
+</script>
 
 <script type="text/javascript">
+
     function getSelectedIds() {
         var checked_checkboxes = $('.element_checkbox:checked');
         var trs = checked_checkboxes.closest('tr');

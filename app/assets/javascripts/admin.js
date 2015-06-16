@@ -56,6 +56,19 @@ function select_all(){
 
 }
 
+function check_li(selector, condition){
+    var li = $(selector);
+    var a = li.children('a');
+    if (condition){
+        li.removeClass('disabled');
+        a.attr('onclick', a.attr('data-onclick'));
+    } else {
+        li.addClass('disabled');
+        a.attr('onclick','return false;');
+    }
+
+}
+
 function button_states(){
     show_hide();
 
@@ -88,6 +101,76 @@ function button_states(){
         }else if(checked.length == 0){
             $('#toggle-checkboxes').find('.ckbox').removeClass('minus').find('input').prop('checked', false);
         }
+
+        var trs = checked.closest('tr');
+        var ids = [];
+        var chains = {};
+        var chains_count = 0;
+        var sections = {};
+        var sections_count = 0;
+        var tasks_without_chain_count = 0;
+
+        trs.each(function( index, element ){
+            var id = $(element).attr('data-id');
+            ids.push(id);
+            var chain_id = $(element).attr('data-chain-id');
+            if (chain_id) {
+                var chain_task_count = $(element).attr('data-chain-tasks-count');
+                var chain = chains[chain_id];
+                //console.log(chain);
+                if (!chain) {
+                    chain = {total: chain_task_count, selected: 0};
+                    chains[chain_id] = chain;
+                }
+                chain.selected += 1;
+            } else {
+                tasks_without_chain_count++;
+            }
+            var section_id = $(element).attr('data-section-id');
+            var section = sections[section_id];
+            if (!section) {
+                section = {};
+                sections[section_id] = section;
+            }
+
+        });
+
+        var incomplete_chains_flag = false;
+        for (var ch in chains) {
+            if (chains.hasOwnProperty(ch)){
+                //console.log(ch);
+                if (chains[ch].total != chains[ch].selected) incomplete_chains_flag = true;
+                chains_count++;
+            }
+        }
+
+        for (var s in sections) {
+            if (sections.hasOwnProperty(s)){
+                sections_count++;
+            }
+        }
+        //console.log('sections_count: '+sections_count);
+
+        //console.log('flag: '+incomplete_chains_flag);
+        //Кнопка переноса
+        if (checked.length > 0 && !window.selected_chain && !incomplete_chains_flag){
+            $('#move-btn').removeClass('disabled');
+        } else {
+            $('#move-btn').addClass('disabled');
+        }
+
+        //Кнопка объединить в цепочку
+        check_li('#join-chain-li', (checked.length > 0 && chains_count == 0 && sections_count == 1));
+
+        //Кнопка переместить в цепочку
+        check_li('#move-to-chain-li', (checked.length > 0));
+
+        //Кнопка убрать из цепочки
+        check_li('#remove-chain-li', (checked.length > 0 && tasks_without_chain_count == 0));
+
+        //Кнопка разъединить
+        check_li('#split-chain-li', (checked.length > 0));
+
     }
 }
 
