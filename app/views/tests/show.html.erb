@@ -158,23 +158,23 @@
                     <span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu">
-                    <li>
+
                       <% if @chains_mode  %>
-                          <a href="#" onclick="bulkSplitChain();">Разъединить</a>
+                        <li><a href="#" onclick="bulkSplitChain();">Разъединить</a></li>
                       <% end %>
 
                       <% if !@chains_mode && !@selected_chain %>
-                        <a href="#" onclick="bulkJoinChain('');">Объединить в цепочку</a>
+                        <li><a href="#" onclick="bulkJoinChain('');">Объединить в цепочку</a></li>
                       <% end %>
 
                       <% if !@chains_mode && !@selected_chain %>
-                        <a href="#" onclick="bulkJoinChainFormOpen('');">Переместить в цепочку</a>
+                        <li><a href="#" onclick="bulkJoinChainFormOpen('');">Переместить в цепочку</a></li>
                       <% end %>
 
                       <% if !@chains_mode  %>
-                        <a href="#" onclick="bulkRemoveChain('');">Убрать из цепочки</a>
+                        <li><a href="#" onclick="bulkRemoveChain('');">Убрать из цепочки</a></li>
                       <% end %>
-                    </li>
+
                   </ul>
 
                 </div>
@@ -204,21 +204,25 @@
                         <% group_visible = true %>
                       <% end %>
                       <% if group_visible %>
+                          <li>
                           <a href="#" onclick="bulkChangeEqvgroup('<%=eq.id %>', '<%= item_class %>');">
                           <span class="label label-info equal-width">
                             <strong><%= eq.number %></strong>
                           </span>
                           <span class="small italic text-muted"> <%= eq.section.name if eq.section %></span>
                           </a>
+                          </li>
                       <% else %>
+                          <li class="disabled">
                           <a class="disabled">
                           <span class="label equal-width" style="background-color: rgb(218, 218, 218); color: #898989;">
                             <strong><%= eq.number %></strong>
                           </span>
                           <span class="small italic text-muted"> <%= eq.section.name if eq.section %></span>
                           </a>
+                          </li>
                       <% end %>
-                    </li>
+
                     <% end %>
                     <li><%= link_to 'Добавить', eqvgroups_path(eqvgroup:{test_id: @test.id, section_id: @selected_section}), method: 'post' %></li>
                   </ul>
@@ -336,7 +340,9 @@
                 <table class="table table-email tasks table-hover">
                   <tbody>
                   <% @tasks.each_with_index do |task, index| %>
-                      <tr class="unread" data-class="<%= task.class %>" data-id="<%= task.id %>">
+                      <tr class="unread" data-class="<%= task.class %>" data-id="<%= task.id %>" data-eqvgroup-id="<%= task.eqvgroup.id if task.eqvgroup %>"
+                          data-section-id="<%= task.section.id if task.section %>" data-chain-id="<%= task.chain.id if task.is_a?(Task) && task.chain %>"
+                          data-chain-tasks-count="<%= task.chain.tasks.count if task.is_a?(Task) && task.chain %>">
                         <td>
                           <% if task.is_a?(Task) && task.chain %>
                             <% if task.chain.tasks.count == 1 %>
