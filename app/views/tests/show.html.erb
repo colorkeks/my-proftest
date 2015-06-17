@@ -417,11 +417,6 @@
                             <%= truncate(strip_tags(task.text.squish), length: 75, omission: '') %>
                           <% end %>
                         </td>
-                        <td>
-                          <span class="media-meta">
-                            <%= task.task_count_label if task.is_a?(Chain)%>
-                          </span>
-                        </td>
                         <td style="width: 150px">
                           <span class="media-meta ">
                               <% if task.section %>
@@ -429,9 +424,14 @@
                               <% end %>
                           </span>
                         </td>
+                        <td>
+                          <span class="media-meta">
+                            <%= task.task_count_label if task.is_a?(Chain)%>
+                          </span>
+                        </td>
                         <td style="width: 30px">
                           <span class="media-meta ">
-                            <%= "##{task.id}" %>
+                            <%= task.chain ? "C##{task.id}" : "##{task.id}"  %>
                           </span>
                         </td>
                         <td style="width: 60px">
