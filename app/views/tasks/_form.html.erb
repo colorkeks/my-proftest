@@ -25,8 +25,7 @@
               <% if @task.chain %>
                   <li class="active"><%= link_to @task.chain.title, test_path(@task.test, selected_chain_id: @task.chain) %></li>
                   <li class="active">
-                    Задание #<%= @task.id %>
-                    [<%= @task.chain_position %> / <%= @task.chain.tasks.count %>]
+                    Задание #<%= @task.id %> (<%= @task.chain_position %> из <%= @task.chain.tasks.count %> з.)
                   </li>
               <% else %>
               <li class="active">Задание #<%= @task.id %></li>
@@ -66,7 +65,9 @@
                 <div class="col-lg-4 text-right save-panel">
                   <span id="change-content" class="text-muted">Все изменения сохранены</span>
                   <button onclick="$(this).closest('form').submit();" class="btn btn-primary tooltips"  type="button" title="Сохранить"><i class="fa fa-cloud-upload"></i></button>
-                  <button class="btn btn-white tooltips" id="show-preview"  title="Сохранить и посмотреть"><i class="fa fa-play"></i></button>
+                  <button class="btn btn-white tooltips" id="show-preview"  title="Сохранить и посмотреть" style="margin-right: 8px">
+                    <i class="fa fa-play"></i>
+                  </button>
                 </div>
               </div>
 
@@ -76,7 +77,9 @@
                   <%= f.text_area :text, :class => 'form-control edit', rows: 3 %>
                 </div>
                 <div class="col-lg-6">
-                  <%= link_to_add_fields '<i class="fa fa-plus"></i>', f, :task_contents, 'files-table', class: 'btn btn-white btn-sm pull-right tooltips' %>
+                  <div style="margin-right: 8px">
+                    <%= link_to_add_fields '<i class="fa fa-plus"></i>', f, :task_contents, 'files-table', class: 'btn btn-white btn-sm pull-right tooltips' %>
+                  </div>
                   <h4>Медиа контент</h4>
                   <table id="files-table" class="table table-bordered table-striped table-condensed table-files">
                     <tbody>

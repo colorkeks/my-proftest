@@ -98,7 +98,7 @@
                 <% @test.sections.order(:id).each do |section|%>
                 <li>
                     <%= link_to test_path(@test, selected_section_id: section.id), class: (@selected_section == section ? 'active' : '') do %>
-                        <i class="fa fa-caret-down trnsp"></i><%= section.name %>
+                        <i class="fa fa-caret-down trnsp"></i><%= truncate(section.name, length: 27, omission: '' ) %>
                     <% end %>
                 </li>
                 <% end %>
@@ -376,7 +376,7 @@
                             <span class=""><strong><%= task.chain_position %></strong></span>
                         </td>
                         <% end %>
-                        <td style="width: 30px; font-size: 20px; line-height: 20px; padding: 0">
+                        <td style="width: 20px; font-size: 16px; line-height: 18px; padding: 0">
                           <% if task.task_type == 'Единичный выбор' %>
                               <span class="icon-single tooltips" title="Единичный выбор"></span>
                           <% elsif task.task_type == 'Множественный выбор' %>
@@ -397,35 +397,44 @@
                           <% elsif task.is_a?(Chain) %>
                             <% link = test_path(task.test, selected_chain_id: task.id) %>
                           <% end %>
-
+                          <!--<h4>-->
+                          <%# if task.is_a?(Task) && task.chain && !@selected_chain %>
+                          <!--[<%#= task.chain_position %> / <%#= task.chain.tasks.count %>]-->
+                          <%# end %>
+                          <!--</h4>-->
                           <%= link_to link do %>
-                          <div class="media">
-                            <div class="media-body">
-                              <% if Date.today.day == task.created_at.day %>
-                                  <span class="media-meta pull-right"><%= task.created_at.strftime('%H:%M') %></span>
-                              <% elsif Date.today.year == task.created_at.year %>
-                                  <span class="media-meta pull-right"><%= Russian::strftime(task.created_at, "%d %b") %></span>
-                              <% else %>
-                                  <span class="media-meta pull-right"><%= task.created_at.strftime('%d.%m.%Y') %></span>
-                              <% end %>
-                              <span class="media-meta pull-right mr20">
-                                <%= "##{task.id}" %>
-                              </span>
-                              <span class="media-meta pull-right mr20">
-                                <% if task.section %>
-                                    <%= "#{task.section.name}" %>
-                                <% end %>
-                              </span>
-                              <h4>
-                                <% if task.is_a?(Task) && task.chain && !@selected_chain %>
-                                    [<%= task.chain_position %> / <%= task.chain.tasks.count %>]
-                                <% end %>
-                                <%= strip_tags(task.text.squish) %>
-                              </h4>
-                            </div>
-                          </div>
+                            <%= truncate(strip_tags(task.text.squish), length: 75, omission: '') %>
                           <% end %>
                         </td>
+                        <td>
+                          <span class="media-meta">
+                            <%= task.task_count_label if task.is_a?(Chain)%>
+                          </span>
+                        </td>
+                        <td style="width: 150px">
+                          <span class="media-meta ">
+                              <% if task.section %>
+                                  <%= "#{truncate(task.section.name, length: 20, omission: '')}" %>
+                              <% end %>
+                          </span>
+                        </td>
+                        <td style="width: 30px">
+                          <span class="media-meta ">
+                            <%= "##{task.id}" %>
+                          </span>
+                        </td>
+                        <td style="width: 60px">
+                          <span class="media-meta pull-right">
+                              <% if Date.today.day == task.created_at.day %>
+                                  <%= task.created_at.strftime('%H:%M') %>
+                              <% elsif Date.today.year == task.created_at.year %>
+                                  <%= Russian::strftime(task.created_at, "%d %b") %>
+                              <% else %>
+                                  <%= task.created_at.strftime('%d.%m.%Y') %>
+                              <% end %>
+                          </span>
+                        </td>
+
                       </tr>
                   <% end %>
                   </tbody>

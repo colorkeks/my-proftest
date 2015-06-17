@@ -20,16 +20,24 @@ class Chain < ActiveRecord::Base
   end
 
   def text
+    if tasks.count > 0
+      tasks.first.text
+    else
+      ''
+    end
+  end
+
+  def task_count_label
     if tasks.count == 0
       add_text = "В цепочке нет заданий"
     else
-      add_text = "Задание: #{tasks.first.text}"
+      add_text = "#{self.tasks.count} з."
     end
-    result = "[#{self.tasks.count}] #{add_text}"
+    result = "#{add_text}"
   end
 
   def title
-    "Цепочка ##{self.id} [#{self.tasks.count}]"
+    "Цепочка C##{self.id} "
   end
 
   def move_tasks_to_trash
