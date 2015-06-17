@@ -34,6 +34,11 @@
         </div>
         <div class="panel panel-default">
           <div class="panel-body panel-profile text-center">
+            <a href="#">Учетная запись Р123123</a>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-body panel-profile text-center">
             <a href="#">Карточка медперсонала Р123123</a>
           </div>
         </div>
@@ -49,7 +54,11 @@
       <div class="col-sm-9 col-lg-10">
         <div class="panel panel-default">
           <div class="panel-body panel-profile">
-            <h3 style="margin: 0">Иванов Иван Иванович <span class="btn btn-white btn-sm"><i class="fa fa-pencil"></i></span></h3>
+            <h3 style="margin: 0">Иванов Иван Иванович
+              <span class="btn btn-white btn-sm" title="Редактировать карточку">
+                <i class="fa fa-pencil"></i>
+              </span>
+            </h3>
             <br/>
             <div class="row">
               <div class="col-lg-4">
@@ -71,26 +80,40 @@
             </div>
             <hr/>
             <div class="row">
-              <div class="col-lg-12">
-                <h3>Режим Аттестация 2014-А-1 <span class="btn btn-white btn-sm">Изменить</span></h3>
+              <div class="col-lg-6">
+                <h3>Режим аттестации 2014-А-1 <span class="btn btn-white btn-sm">Изменить</span></h3>
+              </div>
+              <div class="col-lg-6">
+                <h3>Резльтат
+                  <span class="btn btn-white btn-sm" title="Посмотреть результат">
+                    <i class="fa fa-eye"></i>
+                  </span>
+                  <span class="btn btn-white" title="Печать результата">
+                    <i class="fa fa-print"></i>
+                  </span>
+                </h3>
               </div>
             </div>
             <div class="row">
-              <div class="col-lg-4">
-                <table class="profile table-no-padding-left">
+              <div class="col-lg-6">
+                <table class="profile table-no-padding-left" style="width: 300px">
                   <tr>
                     <th style="width: 150px">Всего тестов</th>
-                    <td>4</td>
+                    <td title="Кол-во тестов">4</td>
+                    <td class="text-success" title="Зачтено">1</td>
+                    <td class="text-danger"  title="Не зачтено">2</td>
                   </tr>
                   <tr>
                     <th>Попыток</th>
-                    <td>6</td>
+                    <td title="Кол-во попыток">6</td>
+                    <td class="text-success" title="Зачтено">1</td>
+                    <td class="text-danger"  title="Не зачтено">5</td>
                   </tr>
                 </table>
               </div>
-              <div class="col-lg-4">
-                <h4>Резльтат <span class="btn btn-white btn-sm"><i class="fa fa-eye"></i></span> <span class="btn btn-white"><i class="fa fa-print"></i></span></h4>
-                <p class="text-success"><strong>Зачет получен 70% 75 из 120 баллов</strong></p>
+              <div class="col-lg-6">
+
+                <p class="text-success"><strong>Зачет получен <br/> 70% <br/> 75 из 120 баллов</strong></p>
                 <!--<div class="btn btn-white"><i class="fa fa-print"></i></div>-->
               </div>
             </div>
@@ -105,11 +128,11 @@
             </ul>
             <div id="myTabContent" class="tab-content" style="padding: 15px 0; background-color: #ffffff">
               <div role="tabpanel" class="tab-pane fade active in" id="home" aria-labelledby="home-tab">
-                <div title="Добавить тест" class="btn btn-white pull-right" style="margin-top: -50px"><i class="fa fa-plus"></i></div>
+                <div title="Добавить тесты" class="btn btn-white pull-right" style="margin-top: -50px"><i class="fa fa-plus"></i></div>
                 <table class="table table-bordered table-condensed table-striped">
                   <tr>
                     <th>Название</th>
-                    <th>Кл-во попыток</th>
+                    <th>Попытки</th>
                     <th>Последняя попытка</th>
                     <th>Балл</th>
                     <th>Результат</th>
@@ -118,7 +141,7 @@
                     <td>Педиатрия 2</td>
                     <td>5</td>
                     <td>22.03.15 15:55</td>
-                    <td>20</td>
+                    <td>20 из 25</td>
                     <td><span class="label label-success">Зачет</span></td>
                   </tr>
                 </table>
@@ -128,7 +151,7 @@
                   <table class="table table-bordered table-condensed table-striped">
                     <tr>
                       <th>Тест</th>
-                      <th>Время сдачи</th>
+                      <th>Дата и время сдачи</th>
                       <th>Длительность</th>
                       <th>Балл</th>
                       <th>Результат</th>
@@ -137,14 +160,14 @@
                       <td>Педиатрия </td>
                       <td>22.03.15 15:55</td>
                       <td>30 мин</td>
-                      <td>20</td>
+                      <td>20 из 40</td>
                       <td><span class="label label-danger">Не зачет</span></td>
                     </tr>
                     <tr>
                       <td>Педиатрия</td>
                       <td>24.03.15 15:55</td>
                       <td>30 мин</td>
-                      <td>40</td>
+                      <td>40 из 40</td>
                       <td><span class="label label-success">Зачет</span></td>
                     </tr>
                   </table>
