@@ -23,17 +23,12 @@ class Chain < ActiveRecord::Base
     if tasks.count > 0
       tasks.first.text
     else
-      ''
+      'В цепочке нет заданий'
     end
   end
 
   def task_count_label
-    if tasks.count == 0
-      add_text = "В цепочке нет заданий"
-    else
-      add_text = "#{self.tasks.count} з."
-    end
-    result = "#{add_text}"
+    "#{self.tasks.count} з."
   end
 
   def title
