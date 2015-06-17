@@ -196,7 +196,7 @@
               <div class="btn-group labels mr10">
                 <% if !@selected_chain && !@trash %>
                 <div class="btn-group">
-                  <button data-toggle="dropdown" class="btn btn-white dropdown-toggle tooltips" type="button" title="Эквивалентные группы">
+                  <button data-toggle="dropdown" class="btn btn-white dropdown-toggle tooltips" type="button" title="Изменить эквивалентную группу">
                     <span class="label label-info">
                       <strong>
                         <% if @last_eqvgroup %>
@@ -210,24 +210,10 @@
                   </button>
                   <ul class="dropdown-menu">
                     <% @eqvgroups.each do |eq|%>
-                      <% if (@selected_section && eq.section != @selected_section) || (!@chains_mode && !@selected_section && eq.section != nil) %>
-                        <% group_visible = false %>
-                      <% else %>
-                        <% group_visible = true %>
-                      <% end %>
                       <% if true #(group_visible) %>
                           <li class="change-eqvgroup-li" data-id="<%= eq.id %>" data-section-id="<%= eq.section.id if eq.section %>">
                           <a href="#" onclick="bulkChangeEqvgroup('<%=eq.id %>', '<%= item_class %>');" data-onclick="bulkChangeEqvgroup('<%=eq.id %>', '<%= item_class %>');">
                           <span class="group-number label label-info equal-width">
-                            <strong><%= eq.number %></strong>
-                          </span>
-                          <span class="small italic text-muted"> <%= eq.section.name if eq.section %></span>
-                          </a>
-                          </li>
-                      <% else %>
-                          <li class="disabled">
-                          <a class="disabled">
-                          <span class="group-number label equal-width" style="background-color: rgb(218, 218, 218); color: #898989;">
                             <strong><%= eq.number %></strong>
                           </span>
                           <span class="small italic text-muted"> <%= eq.section.name if eq.section %></span>
@@ -243,7 +229,7 @@
 
                 <% if @selected_chain %>
                     <div class="btn-group">
-                      <button data-toggle="dropdown" class="btn btn-white dropdown-toggle tooltips disabled" type="button" title="Позиция" id="change-position">
+                      <button data-toggle="dropdown" class="btn btn-white dropdown-toggle tooltips disabled" type="button" title="Изменить позицию" id="change-position">
                     <span class="label label-default">
                       <strong>№</strong>
                     </span>
