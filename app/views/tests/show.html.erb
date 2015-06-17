@@ -107,7 +107,7 @@
             <li class="tree">
               <ul class="children" style="display: block">
                 <% @test.sections.order(:id).each do |section|%>
-                <li>
+                <li title="<%= section.name %>" class="tooltips">
                     <%= link_to test_path(@test, selected_section_id: section.id), class: (@selected_section == section ? 'active' : '') do %>
                         <i class="fa fa-caret-down trnsp"></i><%= truncate(section.name, length: 27, omission: '' ) %>
                     <% end %>
