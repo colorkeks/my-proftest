@@ -1,13 +1,13 @@
 <% if @chains_mode %>
-    <% title = "Цепочки #{@test.title} - Профтест" %>
+    <% title = "Цепочки #{@test.title}" %>
 <% elsif @selected_chain %>
-    <% title = "Цепочка C##{@selected_chain.id} - Профтест" %>
+    <% title = "Цепочка C##{@selected_chain.id}" %>
 <% elsif @trash %>
-    <% title = "Корзина #{@test.title} - Профтест" %>
+    <% title = "Корзина #{@test.title}" %>
 <% elsif @selected_section %>
-    <% title = "#{@selected_section.title} #{@test.title} - Профтест" %>
+    <% title = "#{@selected_section.title} #{@test.title}" %>
 <% else %>
-    <% title = "#{@test.title} - Профтест" %>
+    <% title = "#{@test.title}" %>
 <% end %>
 <%= content_for :title, title %>
 <section>
@@ -423,14 +423,14 @@
                               <% end %>
                           </span>
                         </td>
-                        <td>
+                        <td style="width: 45px">
                           <span class="media-meta">
                             <%= task.task_count_label if task.is_a?(Chain)%>
                           </span>
                         </td>
                         <td style="width: 30px">
                           <span class="media-meta ">
-                            <%= task.chain ? "C##{task.id}" : "##{task.id}"  %>
+                            <%= task.chain ? "C##{task.id}" : "##{task.id}" if task.is_a?(Task) %>
                           </span>
                         </td>
                         <td style="width: 60px">
