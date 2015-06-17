@@ -8,8 +8,10 @@
       </td>
   <% elsif @type == 'Единичный выбор' %>
       <td>
-        <%= f.radio_button :correct, true, :class => 'radio-btn' %>
-        <%= f.hidden_field :correct, as: :hidden, :class => 'radio_correct' %>
+        <%= f.label :correct do %>
+            <%= f.radio_button :correct, true, :class => 'radio-btn' %>
+            <%= f.hidden_field :correct, as: :hidden, :class => 'radio_correct' %>
+        <% end %>
       </td>
   <% end %>
       <td><%= f.text_field :text, :class => 'form-control' %></td>

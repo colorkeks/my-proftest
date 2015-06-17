@@ -609,3 +609,9 @@ ul.children{
   padding: 7px;
   display: inline-block;
 }
+
+.table-no-padding-left{
+  th, td{
+    padding-left: 0 !important;
+  }
+}
