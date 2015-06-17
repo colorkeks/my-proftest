@@ -188,22 +188,22 @@ function highlight(){
     var answer_table = $("#answer_table");
 
     if(answer_table.length){
-        answer_table.find("input[type='radio']").off('change').change(function(){ highlight_rows("success", null, this )});
+        answer_table.find("input[type='radio']").off('change').change(function(){ highlight_rows("success",  this )});
         answer_table.find("input[type='checkbox']").off('change').change(function(){ highlight_rows("success")});
         highlight_rows("success")
     }
 }
 
-function highlight_rows(hilight_class, checkbox_selector, current_element){
+function highlight_rows(hilight_class, current_element){
 
-    var selector = checkbox_selector || 'td';
+    var selector = 'td';
     $( "tr").removeClass( hilight_class );
 
     if (current_element){
         $(current_element).closest('tr').addClass(hilight_class);
     }else{
-        $( "tr:has(" + selector + ">input[type='checkbox']:checked)").addClass( hilight_class );
-        $( "tr:has(" + selector + ">input[type='radio']:checked)" ).addClass( hilight_class );
+        $( "tr:has(" + selector + " input[type='checkbox']:checked)").addClass( hilight_class );
+        $( "tr:has(" + selector + " input[type='radio']:checked)" ).addClass( hilight_class );
     }
 }
 
