@@ -615,3 +615,12 @@ ul.children{
     padding-left: 0 !important;
   }
 }
+
+li.change-eqvgroup-li.disabled{
+  a {
+    span.group-number {
+      background-color: rgb(218, 218, 218);
+      color: #898989;
+    }
+  }
+}
