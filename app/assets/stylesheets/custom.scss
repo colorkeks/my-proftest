@@ -598,15 +598,17 @@ ul.children{
 
 #search_form{
   .fa-search{
-    margin-left: -28px;
-    top: 2px;
-    color: lightgray;
+    margin-left: 475px;
+    top: 14px;
+    color: #D3D3D3;
+    position: absolute;
+    display: inline-block;
   }
 }
 
 #qwery_string{
   width: 500px;
-  padding: 7px;
+  padding: 7px 30px 7px 7px;
   display: inline-block;
 }
 
