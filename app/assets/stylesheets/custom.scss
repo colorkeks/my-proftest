@@ -616,6 +616,15 @@ ul.children{
   }
 }
 
+li.change-eqvgroup-li.disabled {
+  a {
+    span.group-number {
+      background-color: rgb(218, 218, 218);
+      color: #898989;
+    }
+  }
+}
+
 .select-input{
   padding: 15px 5px;
   margin: 0;

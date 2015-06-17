@@ -107,6 +107,7 @@ function button_states(){
         var chains_count = 0;
         var sections = {};
         var sections_count = 0;
+        var last_section_id = '';
         var tasks_without_chain_count = 0;
 
         trs.each(function( index, element ){
@@ -145,6 +146,7 @@ function button_states(){
 
         for (var s in sections) {
             if (sections.hasOwnProperty(s)){
+                last_section_id = s;
                 sections_count++;
             }
         }
@@ -169,6 +171,15 @@ function button_states(){
 
         //Кнопка разъединить
         check_li('#split-chain-li', (checked.length > 0));
+
+        //Группы
+        //Если выбран один раздел, то включаем группы из этого раздела
+        //$('.change-eqvgroup-li')
+        check_li('.change-eqvgroup-li', false);
+        //alert(last_section_id);
+        if (sections_count == 1 && !incomplete_chains_flag) {
+            check_li('.change-eqvgroup-li[data-section-id="'+ last_section_id +'"]', true);
+        }
 
     }
 }

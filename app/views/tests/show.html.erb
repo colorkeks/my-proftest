@@ -210,16 +210,15 @@
                   </button>
                   <ul class="dropdown-menu">
                     <% @eqvgroups.each do |eq|%>
-                    <li>
                       <% if (@selected_section && eq.section != @selected_section) || (!@chains_mode && !@selected_section && eq.section != nil) %>
                         <% group_visible = false %>
                       <% else %>
                         <% group_visible = true %>
                       <% end %>
-                      <% if group_visible %>
-                          <li>
-                          <a href="#" onclick="bulkChangeEqvgroup('<%=eq.id %>', '<%= item_class %>');">
-                          <span class="label label-info equal-width">
+                      <% if true #(group_visible) %>
+                          <li class="change-eqvgroup-li" data-id="<%= eq.id %>" data-section-id="<%= eq.section.id if eq.section %>">
+                          <a href="#" onclick="bulkChangeEqvgroup('<%=eq.id %>', '<%= item_class %>');" data-onclick="bulkChangeEqvgroup('<%=eq.id %>', '<%= item_class %>');">
+                          <span class="group-number label label-info equal-width">
                             <strong><%= eq.number %></strong>
                           </span>
                           <span class="small italic text-muted"> <%= eq.section.name if eq.section %></span>
@@ -228,7 +227,7 @@
                       <% else %>
                           <li class="disabled">
                           <a class="disabled">
-                          <span class="label equal-width" style="background-color: rgb(218, 218, 218); color: #898989;">
+                          <span class="group-number label equal-width" style="background-color: rgb(218, 218, 218); color: #898989;">
                             <strong><%= eq.number %></strong>
                           </span>
                           <span class="small italic text-muted"> <%= eq.section.name if eq.section %></span>
