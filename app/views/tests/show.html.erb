@@ -429,8 +429,12 @@
                           </span>
                         </td>
                         <td style="width: 30px">
-                          <span class="media-meta ">
-                            <%= task.chain ? "C##{task.id}" : "##{task.id}" if task.is_a?(Task) %>
+                          <span class="media-meta">
+                            <% if task.is_a?(Task) %>
+                                <%= "##{task.id}" %>
+                            <% else %>
+                                <%= "C##{task.id}" %>
+                            <% end %>
                           </span>
                         </td>
                         <td style="width: 60px">
