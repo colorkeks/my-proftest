@@ -13,7 +13,6 @@ $(function(){
     $('#show-preview').click(function(){
         $(this).closest('form').find('#preview-flag').val(true);
         $(this).closest('form').submit();
-
     });
 
     init_wysiwyg();

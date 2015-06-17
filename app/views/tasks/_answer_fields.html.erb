@@ -3,15 +3,17 @@
       <td class="number"></td>
   <% end %>
   <% if @type == 'Множественный выбор' %>
-      <td>
-        <%= f.check_box :correct %>
+      <td style="padding: 0">
+        <label class="select-input">
+            <%= f.check_box :correct %>
+        </label>
       </td>
   <% elsif @type == 'Единичный выбор' %>
-      <td>
-        <%= f.label :correct do %>
-            <%= f.radio_button :correct, true, :class => 'radio-btn' %>
-            <%= f.hidden_field :correct, as: :hidden, :class => 'radio_correct' %>
-        <% end %>
+      <td style="padding: 0">
+        <label class="select-input">
+          <%= f.radio_button :correct, true, :class => 'radio-btn' %>
+          <%= f.hidden_field :correct, id: nil, as: :hidden, :class => 'radio_correct' %>
+        </label>
       </td>
   <% end %>
       <td><%= f.text_field :text, :class => 'form-control' %></td>

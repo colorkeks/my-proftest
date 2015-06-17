@@ -33,18 +33,15 @@ class DbfLoader
     model.copy_from "/tmp/tmp.csv"
   end
 
+  def self.load(path)
+    DbfLoader.new("#{path}/DOCTORS.DBF").load_data(DoctorDbf)
+    DbfLoader.new("#{path}/LPU.DBF").load_data(LpuDbf)
+    DbfLoader.new("#{path}/OFFICFUN.DBF").load_data(OfficfunDbf)
+    DbfLoader.new("#{path}/POST.DBF").load_data(PostDbf)
+    DbfLoader.new("#{path}/SPECLIST.DBF").load_data(SpeclistDbf)
+  end
+
 end
 
-# DbfLoader.new('/home/lavrovdv/work/proftest/DOCTORS.DBF').load_data(DoctorDbf)
-# DbfLoader.new('/home/lavrovdv/work/proftest/LPU.DBF').load_data(LpuDbf)
-# DbfLoader.new('/home/lavrovdv/work/proftest/OFFICFUN.DBF').load_data(OfficfunDbf)
-# DbfLoader.new('/home/lavrovdv/work/proftest/POST.DBF').load_data(PostDbf)
-# DbfLoader.new('/home/lavrovdv/work/proftest/SPECLIST.DBF').load_data(SpeclistDbf)
-
-# DbfLoader.new('/home/pavel/work/DBFS/DOCTORS.DBF').load_data(DoctorDbf)
-# DbfLoader.new('/home/pavel/work/DBFS/LPU.DBF').load_data(LpuDbf)
-# DbfLoader.new('/home/pavel/work/DBFS/OFFICFUN.DBF').load_data(OfficfunDbf)
-# DbfLoader.new('/home/pavel/work/DBFS/POST.DBF').load_data(PostDbf)
-# DbfLoader.new('/home/pavel/work/DBFS/SPECLIST.DBF').load_data(SpeclistDbf)
-
 # load "#{Rails.root}/lib/tasks/dbf_loader.rb"
+# DbfLoader.load('/home/deploy')
