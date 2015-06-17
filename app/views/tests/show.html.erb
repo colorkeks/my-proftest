@@ -1,4 +1,15 @@
-<%= content_for :title, "#{@test.title}" %>
+<% if @chains_mode %>
+    <% title = "Цепочки #{@test.title} - Профтест" %>
+<% elsif @selected_chain %>
+    <% title = "Цепочка C##{@selected_chain.id} - Профтест" %>
+<% elsif @trash %>
+    <% title = "Корзина #{@test.title} - Профтест" %>
+<% elsif @selected_section %>
+    <% title = "#{@selected_section.title} #{@test.title} - Профтест" %>
+<% else %>
+    <% title = "#{@test.title} - Профтест" %>
+<% end %>
+<%= content_for :title, title %>
 <section>
   <div class="mainpanel">
 
