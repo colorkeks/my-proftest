@@ -44,4 +44,4 @@ class DbfLoader
 end
 
 # load "#{Rails.root}/lib/tasks/dbf_loader.rb"
-# DbfLoader.load('/home/deploy/')
+# DbfLoader.load('/home/deploy')
