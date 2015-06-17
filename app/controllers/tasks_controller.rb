@@ -163,7 +163,7 @@ class TasksController < ApplicationController
           chain.change_section_and_eqvgroup!(destination_section)
         end
         tasks.each do |task|
-          next if task.section == destination_section
+          next if (task.existing? && task.section == destination_section)
           task.section = destination_section
           task.eqvgroup = eqvgroup
           task.restore! if task.deleted?
@@ -249,12 +249,16 @@ class TasksController < ApplicationController
   def bulk_remove_chain
     @test = Test.find(params[:test_id])
     @tasks = @test.tasks.where(id: params[:task_ids].split(',')).order(:id)
+    full_chains = @test.chains.full_chains_from_task_ids(params[:task_ids])
 
     begin
       Task.transaction do
         @tasks.each do |task|
           task.reload
           task.remove_from_list
+        end
+        full_chains.each do |chain|
+          chain.destroy
         end
       end
       @success = true
