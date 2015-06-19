@@ -396,7 +396,7 @@
                           <%# end %>
                           <!--</h4>-->
                           <%= link_to link do %>
-                            <%= truncate(strip_tags(task.text.squish), length: 75, omission: '') %>
+                            <%= truncate(strip_tags(task.text.squish), length: 75, omission: '') if task.text%>
                           <% end %>
                         </td>
                         <td style="width: 150px">

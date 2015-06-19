@@ -75,7 +75,7 @@
                 <div class="col-lg-6">
                   <h4>Формулировка задания</h4>
                   <%#= f.text_area :text, :class => 'form-control edit', rows: 3 %>
-                  <textarea name="task[edit]" id="task_text" class="form-control edit" rows="3">
+                  <textarea name="task[text]" id="task_text" class="form-control edit" rows="3">
                        <%= sanitize @task.text, attributes: [] %>
                   </textarea>
                 </div>
