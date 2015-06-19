@@ -25,17 +25,39 @@
           </div>
           <div id="q-btns" class="hide">
             <% @try.task_results_queue.each_with_index do |id, index| %>
-                <% if @try.task_results.find(id).status == 'правильно' %>
-                    <% status = 'right-answer disabled' %>
-                <% elsif @try.task_results.find(id).status == 'не правильно' %>
-                    <% status = 'wrong-answer disabled' %>
-                <% elsif @try.task_results.find(id).status == 'частично правильно' %>
-                    <% status = 'partly-right disabled' %>
-                <% else %>
-                    <% status = '' %>
-                <% end %>
-                <%= link_to  index + 1, {:action => 'show_question', :current_task_index => index}, :class => 'btn btn-default btn-xs ' + status%>
+                <% task_result = @try.task_results.find(id)%>
 
+                <% if task_result.status == 'правильно' %>
+                    <% status = 'right-answer disabled ' %>
+                <% elsif task_result.status == 'не правильно' %>
+                    <% status = 'wrong-answer disabled ' %>
+                <% elsif task_result.status == 'частично правильно' %>
+                    <% status = 'partly-right disabled ' %>
+                <% else %>
+                    <% status = ' ' %>
+                <% end %>
+
+                <% if !task_result.task.chain_id.nil? %>
+                    <% chain_count = task_result.task.chain.tasks.count %>
+                    <% if (task_result.task.chain_position != 1)%>
+                        <% @try.task_results.each do |tr|%>
+                            <% if (tr.task.chain_id == task_result.task.chain_id) && (tr.task.chain_position == task_result.task.chain_position - 1) %>
+                                <% if (tr.status == 'ответ не дан') %>
+                                    <% status = status + 'disabled '%>
+                                <% end %>
+                            <% end %>
+                        <% end %>
+                    <% end %>
+                <% else %>
+                    <% chain_count = 0%>
+                <% end %>
+                <% if task_result.task.chain_position == 1 && task_result.task.chain_id != nil%>
+                    [<%= link_to  index + 1, {:action => 'show_question', :current_task_index => index}, :class => 'btn btn-default btn-xs ' + status%>
+                <% elsif task_result.task.chain_position == chain_count %>
+                    <%= link_to  index + 1, {:action => 'show_question', :current_task_index => index}, :class => 'btn btn-default btn-xs ' + status%>]
+                <% else %>
+                    <%= link_to  index + 1, {:action => 'show_question', :current_task_index => index}, :class => 'btn btn-default btn-xs ' + status%>
+                <% end %>
             <% end %>
 
             <div class="legend pull-right">
