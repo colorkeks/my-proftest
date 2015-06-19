@@ -210,17 +210,14 @@
                   </button>
                   <ul class="dropdown-menu">
                     <% @eqvgroups.each do |eq|%>
-                      <% if true #(group_visible) %>
-                          <li class="change-eqvgroup-li" data-id="<%= eq.id %>" data-section-id="<%= eq.section.id if eq.section %>">
-                          <a href="#" onclick="bulkChangeEqvgroup('<%=eq.id %>', '<%= item_class %>');" data-onclick="bulkChangeEqvgroup('<%=eq.id %>', '<%= item_class %>');">
-                          <span class="group-number label label-info equal-width">
-                            <strong><%= eq.number %></strong>
-                          </span>
-                          <span class="small italic text-muted"> <%= eq.section.name if eq.section %></span>
-                          </a>
-                          </li>
-                      <% end %>
-
+                     <li class="change-eqvgroup-li" data-id="<%= eq.id %>" data-section-id="<%= eq.section.id if eq.section %>">
+                        <a href="#" onclick="" data-onclick="bulkChangeEqvgroup('<%=eq.id %>', '<%= item_class %>');">
+                            <span class="group-number label label-info equal-width">
+                                <strong><%= eq.number %></strong>
+                            </span>
+                            <span class="small italic text-muted"> <%= eq.section.name if eq.section %></span>
+                        </a>
+                    </li>
                     <% end %>
                     <li><%= link_to 'Добавить', eqvgroups_path(eqvgroup:{test_id: @test.id, section_id: @selected_section}), method: 'post' %></li>
                   </ul>

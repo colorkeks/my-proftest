@@ -251,7 +251,7 @@ label {
 
 table.answer_table>tbody>tr>td{
   vertical-align: middle;
-  text-align: center;
+//  text-align: center;
 }
 
 #answer_table, #associate_table{
@@ -306,10 +306,22 @@ tr.success{
 .tree{
   margin-left: -26px;
   li {
-    span{cursor: pointer}
+    margin:0;
+
+    span{
+      cursor: pointer;
+      display: block;
+      padding: 4px 15px;
+      border-radius: 3px;
+    }
+
     span.active{
       font-weight: bold;
       color: #115492;
+      background-color: #f5f5f5;
+    }
+    span:hover{
+      background-color: #fbfbfb;
     }
   }
 
@@ -539,7 +551,7 @@ ul.children{
   cursor: pointer; }
 
 .answer {
-  font-size: 17px;
+  font-size: 16px;
   padding: 5px 10px;
   border-bottom: 1px solid #ddd;
   min-height: 50px; }

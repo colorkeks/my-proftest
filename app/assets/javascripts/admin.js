@@ -57,16 +57,18 @@ function select_all(){
 }
 
 function check_li(selector, condition){
-    var li = $(selector);
-    var a = li.children('a');
-    if (condition){
-        li.removeClass('disabled');
-        a.attr('onclick', a.attr('data-onclick'));
-    } else {
-        li.addClass('disabled');
-        a.attr('onclick','return false;');
-    }
-
+    var elements = $(selector);
+    elements.each( function() {
+        var li = $(this);
+        var a = li.children('a');
+        if (condition) {
+            li.removeClass('disabled');
+            a.attr('onclick', a.attr('data-onclick'));
+        } else {
+            li.addClass('disabled');
+            a.attr('onclick', 'return false;');
+        }
+    });
 }
 
 function button_states(){
@@ -218,6 +220,10 @@ function init_wysiwyg() {
         setup: function(editor) {
             editor.on('change', function(e) {
                 change_content();
+            });
+            editor.on('init', function()
+            {
+                this.getDoc().body.style.fontSize = '13px';
             });
         },
 

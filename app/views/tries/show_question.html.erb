@@ -83,7 +83,7 @@
           <% if @task_result.task.task_contents.count <= 1 %>
               <div class="col-lg-6">
                 <div>
-                  <h4><%= @task_result.text.html_safe %></h4>
+                  <h4><%= sanitize @task_result.text.html_safe, attributes: [] %></h4>
                 </div>
               </div>
               <div class="col-lg-6" style="text-align: center">
@@ -101,7 +101,7 @@
           <% else %>
               <div class="col-lg-12">
                 <div style="text-align: center; width: 100%; min-height: 200px;">
-                  <h4><%= @task_result.text.html_safe %></h4>
+                  <h4><%= sanitize @task_result.text.html_safe, attributes: [] %></h4>
                 </div>
               </div>
               <div class="row">
