@@ -29,7 +29,7 @@ class Ability
       end
     elsif user.role? :Тестируемый
       can :manage, :all
-      cannot :destroy, :all
+      #cannot :destroy, :all
       cannot :assign_role, User
       #cannot :manage, Chapter
       cannot [:index,:show, :edit,:update], Test

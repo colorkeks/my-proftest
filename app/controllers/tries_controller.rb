@@ -32,6 +32,7 @@ class TriesController < ApplicationController
           format.json { render json: @try.errors, status: :unprocessable_entity }
         end
       end
+      # если не все задания пройдены
     else
       @test = Test.find_by_id(@try.test_id)
       @current_task = @try.task_results.where(:status => 'правильно').count + @try.task_results.where(:status => 'не правильно').count + @try.task_results.where(:status => 'частично правильно').count
@@ -40,29 +41,52 @@ class TriesController < ApplicationController
 
       #таймер
       duration = (Time.now - @try.created_at.to_time).to_f
-      remaining_time = @try.test.timer - Time.utc(2000,01,01) - duration
+      remaining_time = @try.test.timer - Time.utc(2000, 01, 01) - duration
       @timer = remaining_time
       @hours = (@timer/3600).to_i
       @minutes = (@timer/60).to_i - @hours*60
       @seconds = (@timer%60).to_i
 
       # если таймер дошел до ограниченного времени
-      if remaining_time <= 0  #@hours >= @try.test.timer.strftime('%H').to_i && @minutes >= @try.test.timer.strftime('%M').to_i
+      if remaining_time <= 0 #@hours >= @try.test.timer.strftime('%H').to_i && @minutes >= @try.test.timer.strftime('%M').to_i
         @try.task_results.where(:status => 'ответ не дан').each do |task_result|
           task_result.status = 'не правильно'
           task_result.point = 0
           task_result.save!
         end
         respond_to do |format|
-          format.html { redirect_to try_result_try_path(:current_task_index => params[:current_task_index]) }
+          format.html { redirect_to try_result_try_path }
         end
         # если таймер еще не дошел до ограниченного времени
       else
         @try.task_results_queue.each_with_index do |id, index|
+          task_result = @try.task_results.find(id)
           if index < @current_task_index
+            # если данная задача в цепочке, то убедиться что предыдущие отвечены или это и есть первое задание
+          elsif task_result.status == 'ответ не дан' && task_result.task.chain && (task_result.task.chain_position != 1)
+            # если ответ на предыдущее задание цепочки было дано, то можно
+            task_result.task.chain.tasks.where(chain_position: task_result.task.chain_position - 1).each do |task|
+              p task.task_results.where(try_id: @try.id).first.status
+              p task.chain_position
+              p '++++++++++++++++++++'
+              if task.task_results.where(try_id: @try.id).first.status == ('правильно' || 'не правильно' || 'частично правильно')
+                @task_result = task_result
+                @current_task_index = index
+                # иначе берем первую задачу где нету цепочки либо позиция цепочки 1
+              else
+                @try.task_results_queue.each_with_index do |queue_id, index|
+                  task_result = @try.task_results.find(queue_id)
+                  if (!task_result.task.chain || task_result.task.chain_position == 1) && task_result.status == 'ответ не дан'
+                    @task_result = task_result
+                    @current_task_index = index
+                  end
+                end
+              end
+            end
+            break
           else
-            if @try.task_results.find(id).status == 'ответ не дан'
-              @task_result = @try.task_results.find(id)
+            if task_result.status == 'ответ не дан'
+              @task_result = task_result
               @current_task_index = index
               break
             end
@@ -70,10 +94,11 @@ class TriesController < ApplicationController
         end
         # если задание не найдено, по индексу в очереди
         if @task_result.nil?
-          @try.task_results_queue.each do |id|
-            if @try.task_results.find(id).status == 'ответ не дан'
-              @task_result = @try.task_results.find(id)
-              @current_task_index = @try.task_results_queue.index(id)
+          @try.task_results_queue.each_with_index do |id, index|
+            task_result = @try.task_results.find(id)
+            if task_result.status == 'ответ не дан'
+              @task_result = task_result
+              @current_task_index = index
               break
             end
           end
@@ -244,6 +269,18 @@ class TriesController < ApplicationController
 
       respond_to do |format|
         if task_result.save
+          # если на цепочку ответили не правильно, то прервать цепочку и отметить как не правильно
+          if task_result.status == 'не правильно' && task_result.task.chain
+            task_result.task.chain.tasks.each do |task|
+              curr_task_result = task.task_results.where(try_id: @try.id).first
+              if curr_task_result.status == 'ответ не дан'
+                p '==============='
+                curr_task_result.status = 'не правильно'
+                curr_task_result.point = 0
+                curr_task_result.save!
+              end
+            end
+          end
           format.html { redirect_to show_question_try_path(:current_task_index => params[:current_task_index]) }
         else
           format.json { render json: @try.errors, status: :unprocessable_entity }
@@ -259,7 +296,7 @@ class TriesController < ApplicationController
 
 
   # POST /tries
-# POST /tries.json
+  # POST /tries.json
   def create
     @try = Try.new(try_params)
     @test = Test.find_by_id(@try.test_id)
@@ -276,7 +313,13 @@ class TriesController < ApplicationController
     @try.save!
     if @test.algorithm == 'Все задания'
       @try.task_results.order('RANDOM()').each do |task_result|
-        @try.task_results_queue << task_result.id
+        if task_result.task.chain_id.nil?
+          @try.task_results_queue << task_result.id
+        elsif task_result.task.chain_position == 1
+          task_result.task.chain.tasks.order('chain_position DESC').each do |task|
+            @try.task_results_queue << task.task_results.where(try_id: @try.id).first.id
+          end
+        end
       end
     elsif @test.algorithm == 'Ограниченое количество заданий'
       tasks_selection = ((@try.task_results.count.to_f/100)*@try.test.percent_tasks).round

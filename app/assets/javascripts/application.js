@@ -20,6 +20,7 @@
 //= require tinymce-jquery
 //= require jquery.timers.js
 //= require moment
+//= require Answers
 //= require bootstrap-datetimepicker
 //= require moment/ru
 
