@@ -1,9 +1,0 @@
-var correct = '<%= @result[:correct] %>';
-var points = <%= @result[:point] %>;
-var modal  = $('#result-modal');
-modal.find('.text-success, .text-danger,.text-warning').hide();
-if (correct == 'correct') modal.find('.text-success').show();
-if (correct == 'incorrect') modal.find('.text-danger').show();
-if (correct == 'partial_correct') modal.find('.text-warning').show();
-modal.find('.point').text(points);
-modal.modal('show');

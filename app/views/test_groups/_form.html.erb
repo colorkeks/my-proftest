@@ -1,9 +1,0 @@
-<%= simple_form_for @test_group,  wrapper: :horizontal_form do |f| %>
-  <%= f.input :name %>
-  <%= f.association :parent %>
-
-
-  <%= f.button :submit, :class => 'btn-primary' %>
-  <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                test_groups_path, :class => 'btn btn-default' %>
-<% end %>

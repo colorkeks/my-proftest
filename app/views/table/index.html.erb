@@ -1,7 +1,0 @@
-<% if user_signed_in? %>
-    <span>Здравствуйте, <%= current_user.first_name %></span>
-    <%= link_to 'Выйти', destroy_user_session_path, :method => :delete %>
-<% else %>
-    <%= link_to 'Войти', new_user_session_path, class: 'btn btn-default' %>
-    <%= link_to 'Зарегистрироваться', new_user_registration_path, class: 'btn btn-default' unless Rails.env.production?%>
-<% end %>
