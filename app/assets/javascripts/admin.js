@@ -220,6 +220,10 @@ function init_wysiwyg() {
             editor.on('change', function(e) {
                 change_content();
             });
+            editor.on('init', function()
+            {
+                this.getDoc().body.style.fontSize = '13px';
+            });
         },
 
         toolbar: [
