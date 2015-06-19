@@ -62,24 +62,28 @@ class TriesController < ApplicationController
         @try.task_results_queue.each_with_index do |id, index|
           task_result = @try.task_results.find(id)
           if index < @current_task_index
-          # если данная задача в цепочке, то убедиться что предыдущие отвечены или это и есть первое задание
-          elsif task_result.status == 'ответ не дан' && task_result.task.chain &&  (task_result.task.chain_position != 1)
+            # если данная задача в цепочке, то убедиться что предыдущие отвечены или это и есть первое задание
+          elsif task_result.status == 'ответ не дан' && task_result.task.chain && (task_result.task.chain_position != 1)
             # если ответ на предыдущее задание цепочки было дано, то можно
             task_result.task.chain.tasks.where(chain_position: task_result.task.chain_position - 1).each do |task|
-               if task.task_results.where(try_id: @try.id).first == ('правильно' ||  'не правильно' || 'частично правильно')
-                 @task_result = task_result
-                 @current_task_index = index
-              # иначе берем первую задачу где нету цепочки либо позиция цепочки 1
-               else
-                 @try.task_results_queue.each_with_index do |queue_id, index|
-                   task_result = @try.task_results.find(queue_id)
-                   if (!task_result.task.chain || task_result.task.chain_position == 1) && task_result.status == 'ответ не дан'
-                     @task_result = task_result
-                     @current_task_index = index
-                   end
-                 end
-               end
+              p task.task_results.where(try_id: @try.id).first.status
+              p task.chain_position
+              p '++++++++++++++++++++'
+              if task.task_results.where(try_id: @try.id).first.status == ('правильно' || 'не правильно' || 'частично правильно')
+                @task_result = task_result
+                @current_task_index = index
+                # иначе берем первую задачу где нету цепочки либо позиция цепочки 1
+              else
+                @try.task_results_queue.each_with_index do |queue_id, index|
+                  task_result = @try.task_results.find(queue_id)
+                  if (!task_result.task.chain || task_result.task.chain_position == 1) && task_result.status == 'ответ не дан'
+                    @task_result = task_result
+                    @current_task_index = index
+                  end
+                end
+              end
             end
+            break
           else
             if task_result.status == 'ответ не дан'
               @task_result = task_result
@@ -292,7 +296,7 @@ class TriesController < ApplicationController
 
 
   # POST /tries
-# POST /tries.json
+  # POST /tries.json
   def create
     @try = Try.new(try_params)
     @test = Test.find_by_id(@try.test_id)
