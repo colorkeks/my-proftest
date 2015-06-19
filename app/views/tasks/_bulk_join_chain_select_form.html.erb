@@ -18,7 +18,7 @@
           <li>
             <% @chains.each do |item| %>
             <span id="destination_group_span" onclick="selectDestinationChain(this);" data-id="<%= item.id%>">
-                <%= strip_tags(item.text.squish) %>
+                <%= "C##{item.id}" %> <%= truncate(strip_tags(item.text.squish), length: 80) %>
             </span>
             <% end %>
           </li>
