@@ -1,6 +1,7 @@
 /**
  * Created by pavel on 18.06.15.
  */
+//= require Sortable
 
 function upper_downer() {
     $('#answer_body, #associate_body, #items').each(function(index, element){
@@ -9,7 +10,7 @@ function upper_downer() {
             animation: 150,
             onSort: function (evt) {
                 row_index();
-                change_content();
+//                change_content();
             }
         });
     });

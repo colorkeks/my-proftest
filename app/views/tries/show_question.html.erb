@@ -138,7 +138,7 @@
                 <table class="table answer_table">
                   <thead>
                   </thead>
-                  <tbody <%= @task_result.task_type == 'Последовательность' ? 'id =items' : '' %>>
+                  <tbody <%= @task_result.task_type == 'Последовательность' ? 'id =answer_body' : '' %>>
                   <% if  @task_result.task_type == 'Открытый вопрос' %>
                       <tr class="answer">
                         <td style="display: none"></td>

@@ -6,6 +6,7 @@ class DoctorsController < ApplicationController
 
   def show
     @doctor = DoctorDbf.where(drcode: params[:id]).first
+    @users = User.all
   end
 
   def search

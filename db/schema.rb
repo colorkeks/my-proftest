@@ -322,9 +322,11 @@ ActiveRecord::Schema.define(version: 20150615051000) do
   create_table "users", force: :cascade do |t|
     t.string   "first_name"
     t.string   "second_name"
-    t.text     "attestation_tests"
     t.string   "last_name"
     t.string   "job"
+    t.date     "birthday"
+    t.string   "drcode"
+    t.text     "attestation_tests"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "email",                  default: "", null: false

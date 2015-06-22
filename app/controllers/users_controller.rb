@@ -27,7 +27,7 @@ class UsersController < ApplicationController
   def custom_create
     @user = User.create!(user_params)
     respond_to do |format|
-        format.html { redirect_to current_user, notice: 'Пользователь успешно создан' }
+        format.html { redirect_to profile_user_path(@user), notice: 'Пользователь успешно создан' }
         format.json { render :show, status: :created, location: @user }
     end
   end
@@ -35,6 +35,14 @@ class UsersController < ApplicationController
   def profile
     @tests_search = Test.search(params[:search_tests])
     @attestation_tests = Test.find(@user.attestation_tests)
+    @user_tries = Try.find_by_user_id(@user.id)
+    if @user_tries
+      @user_tries.each do |try|
+        ids << try.test_id
+      end
+      @training_tests = Test.find(ids)
+    end
+    render 'users/profile', layout: 'admin'
   end
 
   def add_attestation_tests
@@ -124,6 +132,7 @@ class UsersController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def user_params
-    params.require(:user).permit(:first_name, :second_name, :last_name, :attestation_tests, :job, :email, :password, :password_confirmation)
+    params.require(:user).permit(:first_name, :second_name, :last_name, :birthday, :drcode,
+                                 :attestation_tests, :job, :email, :password, :password_confirmation)
   end
 end
