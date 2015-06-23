@@ -9,14 +9,13 @@ class Ability
       can :manage, :all
       cannot :destroy, :all
       cannot :assign_role, User
-      #cannot :manage, Chapter
       cannot [:index,:show, :edit,:update], Test
       cannot [:index,:show, :edit,:update], Task
       cannot [:index,:show, :edit,:update], Answer
       cannot [:index,:show, :edit,:update], Association
       cannot [:index,:show, :edit,:update], TaskContent
-      cannot [:index, :show, :edit, :update], User
-      can [:show, :edit, :update], User do |current_user|
+      cannot [:index, :show], User
+      can [:show], User do |current_user|
         user.id == current_user.id
       end
     elsif user.role? :Методолог

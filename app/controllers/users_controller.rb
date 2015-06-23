@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :profile]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :profile, :modes_history]
   delegate :can?, :cannot?, :to => :ability
   load_and_authorize_resource
   # GET /users
@@ -25,24 +25,34 @@ class UsersController < ApplicationController
   end
 
   def custom_create
-    @user = User.create!(user_params)
+    @user = User.create(user_params)
+    @user.test_modes.build(name: 'Нейтральный', date_beg: Date.today, date_end: (Date.today + 2.months), user_id: @user.id)
     respond_to do |format|
+      if @user.save
         format.html { redirect_to profile_user_path(@user), notice: 'Пользователь успешно создан' }
         format.json { render :show, status: :created, location: @user }
+      end
     end
   end
 
   def profile
+    @test_mode = TestMode.new
     @tests_search = Test.search(params[:search_tests])
     @attestation_tests = Test.find(@user.attestation_tests)
-    @user_tries = Try.find_by_user_id(@user.id)
+    @current_mode = @user.test_modes.order('created_at DESC').first
+    @user_tries = Try.find_by_user_id_and_test_mode_id(@user.id, @current_mode.id)
     if @user_tries
       @user_tries.each do |try|
         ids << try.test_id
       end
-      @training_tests = Test.find(ids)
+      @current_mode_tests = Test.find(ids)
     end
     render 'users/profile', layout: 'admin'
+  end
+
+  def modes_history
+    @test_modes = TestMode.all.where(user_id: @user.id)
+    render 'users/modes_history', layout: 'admin'
   end
 
   def add_attestation_tests
@@ -91,7 +101,7 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to @user, notice: 'User was successfully updated.' }
+        format.html { redirect_to profile_user_path, notice: 'User was successfully updated.' }
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit }

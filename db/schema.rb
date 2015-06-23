@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150615051000) do
+ActiveRecord::Schema.define(version: 20150622122845) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -261,6 +261,15 @@ ActiveRecord::Schema.define(version: 20150615051000) do
   add_index "test_groups", ["parent_id"], name: "index_test_groups_on_parent_id", using: :btree
   add_index "test_groups", ["rgt"], name: "index_test_groups_on_rgt", using: :btree
 
+  create_table "test_modes", force: :cascade do |t|
+    t.date     "date_beg"
+    t.date     "date_end"
+    t.string   "name"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "tests", force: :cascade do |t|
     t.boolean  "directory",     default: false
     t.boolean  "attestation",   default: false
@@ -290,6 +299,7 @@ ActiveRecord::Schema.define(version: 20150615051000) do
     t.text     "task_results_queue"
     t.integer  "user_id"
     t.integer  "test_id"
+    t.integer  "test_mode_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

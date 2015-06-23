@@ -16,6 +16,21 @@ function upper_downer() {
     });
 }
 
+function date_picker(){
+    $('#date_beg').datetimepicker({
+        locale : 'ru',
+        format: 'DD-MM-YYYY'
+    });
+    $('#date_end').datetimepicker({
+        locale : 'ru',
+        format: 'DD-MM-YYYY'
+    });
+    $('#birthday').datetimepicker({
+        locale : 'ru',
+        format: 'DD-MM-YYYY'
+    });
+};
+
 function timer(){
     $(".seconds_timer").everyTime(1000, function() {
         if (parseInt($('.seconds_timer').text()) <= 0) {
@@ -93,3 +108,4 @@ function algorithm_selects(){
         });
     });
 }
+

@@ -10,7 +10,7 @@
                   <%= f.label 'Имя', :class => 'control-label' %>
                 </div>
                 <div class="controls col-lg-offset-3">
-                  <%= f.text_field :first_name, :class => 'form-control', :value => params[:user][:first_name].mb_chars.capitalize  %>
+                  <%= f.text_field :first_name, :class => 'form-control', :value => params[:user] ? params[:user][:first_name].mb_chars.capitalize : ''  %>
                 </div>
               </div>
               <div class="form-group">
@@ -18,7 +18,7 @@
                   <%= f.label 'Отчество', :class => 'control-label' %>
                 </div>
                 <div class="controls col-lg-offset-3">
-                  <%= f.text_field :second_name, :class => 'form-control', :value => params[:user][:second_name].mb_chars.capitalize %>
+                  <%= f.text_field :second_name, :class => 'form-control', :value => params[:user] ? params[:user][:second_name].mb_chars.capitalize : '' %>
                 </div>
               </div>
               <div class="form-group">
@@ -26,7 +26,7 @@
                   <%= f.label 'Фамиля', :class => 'control-label' %>
                 </div>
                 <div class="controls col-lg-offset-3">
-                  <%= f.text_field :last_name, :class => 'form-control', :value => params[:user][:last_name].mb_chars.capitalize  %>
+                  <%= f.text_field :last_name, :class => 'form-control', :value => params[:user] ? params[:user][:last_name].mb_chars.capitalize : '' %>
                 </div>
               </div>
               <div class="form-group">
@@ -34,12 +34,12 @@
                   <%= f.label 'Работа(ЛПУ)', :class => 'control-label' %>
                 </div>
                 <div class="controls col-lg-offset-3">
-                  <%= f.text_field :job, :class => 'form-control', :value => params[:user][:job] %>
+                  <%= f.text_field :job, :class => 'form-control', :value => params[:user] ? params[:user][:job] : '' %>
                 </div>
               </div>
 
               <div class="actions">
-                <%= f.hidden_field :drcode, :class => 'form-control', :value => params[:user][:drcode]  %>
+                <%= f.hidden_field :drcode, :class => 'form-control', :value => params[:user] ? params[:user][:drcode] : '' %>
 
                 <%= f.submit 'Зарегистрировать пользователя', :class => 'btn btn-primary' %>
                 <%= link_to t('.cancel', :default => t("helpers.links.Назад")),
@@ -53,7 +53,7 @@
                   <%= f.label 'Дата рождения', :class => 'control-label' %>
                 </div>
                 <div class="controls col-md-8">
-                  <%= f.text_field :birthday, :class => 'form-control', :id => 'datetimepicker10' %>
+                  <%= f.text_field :birthday, :class => 'form-control', :id => 'birthday' %>
                 </div>
               </div>
               <div class="form-group">
@@ -81,11 +81,6 @@
   </div>
 </div>
 
-<script type="text/javascript">
-    $(function () {
-        $('#datetimepicker10').datetimepicker({
-            locale : 'ru',
-            format: 'DD-MM-YYYY'
-        });
-    });
+<script>
+  date_picker()
 </script>

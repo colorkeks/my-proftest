@@ -62,6 +62,7 @@ Rails.application.routes.draw do
       get 'create_try'
       get 'create_test'
       get 'profile'
+      get 'modes_history'
       get 'add_attestation_tests'
     end
     collection do
@@ -95,6 +96,8 @@ Rails.application.routes.draw do
   resources :task_results
 
   resources :user_answers
+
+  resources :test_modes
 
   resources :statistics
 

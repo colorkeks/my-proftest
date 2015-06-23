@@ -1,0 +1,60 @@
+<%= content_for :title, 'История режимов испытуемого' + @user.last_name + ' ' + @user.first_name + ' ' + @user.second_name %>
+
+
+<div class="pageheader">
+  <div class="row">
+    <div class="col-sm-3 col-lg-2">
+      <a class="btn btn-white back-btn pull-right" title="Назад" href="/users/<%= @user.id%>/profile">
+        <i class="fa fa-arrow-left"></i>
+      </a>
+      <h2>Профиль</h2>
+    </div>
+    <div class="col-sm-9 col-lg-10">
+      <div class="breadcrumb-wrapper">
+        <ol class="breadcrumb">
+          <li class="active">
+            <div class="btn-group nomargin">
+              <span class="dropdown-toggle" data-toggle="dropdown">История режимов испытуемого <%= @user.last_name %> <%= @user.first_name %> <%= @user.second_name %></span>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="contentpanel ">
+  <div class="row">
+    <div class="col-sm-3 col-lg-2">
+      <div class="panel panel-default">
+        <div class="panel-body panel-profile text-center">
+          <%= link_to 'Карточка тестируемого', profile_user_path(@user)%>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-9 col-lg-10">
+      <div class="panel panel-default">
+        <div class="panel-body panel-profile">
+          <table class="table table-bordered table-condensed table-striped">
+            <tr>
+              <th>Режим:</th>
+              <th>Дата начала:</th>
+              <th>Дата конца:</th>
+              <th>Дата создания</th>
+            </tr>
+            <% @test_modes.each do |mode|%>
+                <tr>
+                  <td><%= mode.name%></td>
+                  <td><%= mode.date_beg%></td>
+                  <td><%= mode.date_end%></td>
+                  <td><%= mode.created_at%></td>
+                </tr>
+            <% end %>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

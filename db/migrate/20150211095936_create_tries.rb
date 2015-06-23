@@ -8,6 +8,7 @@ class CreateTries < ActiveRecord::Migration
       t.text 'task_results_queue'
       t.integer :user_id
       t.integer :test_id
+      t.integer :test_mode_id
 
       t.timestamps
     end
