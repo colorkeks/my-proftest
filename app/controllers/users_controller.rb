@@ -37,7 +37,6 @@ class UsersController < ApplicationController
 
   def profile
     @test_mode = TestMode.new
-    @tests_search = Test.search(params[:search_tests])
     @attestation_tests = Test.find(@user.attestation_tests)
     @current_mode = @user.test_modes.order('created_at DESC').first
     @user_tries = Try.find_by_user_id_and_test_mode_id(@user.id, @current_mode.id)
@@ -53,6 +52,13 @@ class UsersController < ApplicationController
   def modes_history
     @test_modes = TestMode.all.where(user_id: @user.id)
     render 'users/modes_history', layout: 'admin'
+  end
+
+  def search_tests
+    query = Test.search_test(params[:q]).where(attestation: true)
+    @tests = query.limit(5)
+    @count = query.count
+    render 'search', layout: false
   end
 
   def add_attestation_tests
