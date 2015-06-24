@@ -17,7 +17,13 @@
             <td><%= test.description %></td>
             <td><%= test.algorithm %></td>
             <td><%= test.tasks.count %></td>
-            <td><%= link_to 'Добавить', add_attestation_tests_user_path(@user.id, attestation_id: test.id), :class => 'btn btn-default btn-xs' %></td>
+            <td>
+              <% if @user.attestation_tests.include?(test.id.to_s) %>
+                  Добавлен
+              <% else %>
+                <%= link_to 'Добавить', add_attestation_tests_user_path(@user.id, attestation_id: test.id), :class => 'btn btn-default btn-xs' %>
+              <% end %>
+            </td>
           </tr>
           </tr>
       <% end %>

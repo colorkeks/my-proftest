@@ -22,6 +22,13 @@ class TestModesController < ApplicationController
 
     respond_to do |format|
       if @test_mode.save
+        all_modes = TestMode.all.where(user_id: @test_mode.user_id).order('created_at DESC')
+        # если есть предудущий режим
+        if all_modes.second
+          # то присваиваем дату конца
+          all_modes.second.date_end = @test_mode.date_beg
+          all_modes.second.save!
+        end
         format.html { redirect_to :back, notice: 'Test_Mode result was successfully created.' }
         format.json { render :show, status: :created, location: @test_mode }
       else

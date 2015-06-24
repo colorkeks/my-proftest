@@ -106,9 +106,9 @@
               <table class="table-no-padding-left" style="width: 300px">
                 <tr>
                   <th style="width: 30px">С:</th>
-                  <td><h5><%= @current_mode ? @current_mode.date_beg : '-' %></h5></td>
-                  <th style="width: 30px">По:</th>
-                  <td><h5><%= @current_mode ? @current_mode.date_end : '-' %></h5></td>
+                  <td><h5><%= @current_mode.date_beg ? @current_mode.date_beg : '-' %></h5></td>
+                  <!--<th style="width: 30px">По:</th>-->
+                  <!--<td><h5><%#= @current_mode.date_end ? @current_mode.date_end : '-' %></h5></td>-->
                 </tr>
 
               </table>
@@ -161,22 +161,24 @@
                   <th>Балл</th>
                   <th>Результат</th>
                 </tr>
-                <% if @current_mode_tests %>
-                    <% @current_mode_tests.each do |test| %>
+                <% if @attestation_tests %>
+                    <% @attestation_tests.each do |test| %>
                         <tr>
                           <td><%= test.title %></td>
-                          <td><%= test.tries.where(user_id: @user.id).count if test.tries %></td>
-                          <td><%= test.tries.where(user_id: @user.id).order('created_at DESC').first.created_at if test.tries %></td>
-                          <td><%= test.tries.where(user_id: @user.id).order('created_at DESC').first.rate if test.tries %></td>
-                          <td>
-                            <% if test.tries %>
-                                <% if test.tries.where(user_id: @user.id).order('created_at DESC').first.rate > 50 %>
-                                    <span class="label label-success">Зачет</span>
-                                <% else %>
-                                    <span class="label label-danger">Не зачет</span>
-                                <% end %>
-                            <% end %>
-                          </td>
+                          <td><%= test.tries.where(user_id: @user.id).count %></td>
+                          <% if test.tries.where(user_id: @user.id).order('rate DESC').first %>
+                              <td><%= test.tries.where(user_id: @user.id).order('rate DESC').first.created_at %></td>
+                              <td><%= test.tries.where(user_id: @user.id).order('rate DESC').first.rate %></td>
+                              <% if test.tries.where(user_id: @user.id).order('created_at DESC').first.rate > 50 %>
+                                  <span class="label label-success">Зачет</span>
+                              <% else %>
+                                  <span class="label label-danger">Не зачет</span>
+                              <% end %>
+                          <% else %>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                          <% end %>
                         </tr>
                     <% end %>
                 <% end %>

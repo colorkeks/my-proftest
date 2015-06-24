@@ -26,7 +26,7 @@ class UsersController < ApplicationController
 
   def custom_create
     @user = User.create(user_params)
-    @user.test_modes.build(name: 'Нейтральный', date_beg: Date.today, date_end: (Date.today + 2.months), user_id: @user.id)
+    @user.test_modes.build(name: 'Нейтральный', date_beg: Date.today)
     respond_to do |format|
       if @user.save
         format.html { redirect_to profile_user_path(@user), notice: 'Пользователь успешно создан' }
