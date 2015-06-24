@@ -14,7 +14,7 @@ class Test < ActiveRecord::Base
 
   def self.search_test(q)
     if q.empty?
-      self.none
+      Test.all
     else
       Test.where("description LIKE ? OR title LIKE ?", "#{q}%", "%#{q}%")
     end
