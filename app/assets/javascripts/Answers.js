@@ -29,6 +29,10 @@ function date_picker(){
         locale : 'ru',
         format: 'DD-MM-YYYY'
     });
+    $('#datetimepicker').datetimepicker({
+        format: 'LT',
+        locale: 'ru'
+    });
 };
 
 function timer(){
