@@ -1,5 +1,4 @@
 class Test < ActiveRecord::Base
-  include TheSortableTree::Scopes
   validates :title, presence: true
   belongs_to :user
   has_many :tries
