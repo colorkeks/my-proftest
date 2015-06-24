@@ -100,6 +100,8 @@ Rails.application.routes.draw do
 
   resources :test_modes
 
+  resources :assigned_tests
+
   resources :statistics
 
 

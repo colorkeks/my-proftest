@@ -156,20 +156,22 @@
               <table class="table table-bordered table-condensed table-striped">
                 <tr>
                   <th>Название</th>
+                  <th>Тип</th>
                   <th>Попытки</th>
                   <th>Последняя попытка</th>
                   <th>Балл</th>
                   <th>Результат</th>
                 </tr>
-                <% if @attestation_tests %>
-                    <% @attestation_tests.each do |test| %>
+                <% if @assigned_tests %>
+                    <% @assigned_tests.each do |assigned_test| %>
                         <tr>
-                          <td><%= test.title %></td>
-                          <td><%= test.tries.where(user_id: @user.id).count %></td>
-                          <% if test.tries.where(user_id: @user.id).order('rate DESC').first %>
-                              <td><%= test.tries.where(user_id: @user.id).order('rate DESC').first.created_at %></td>
-                              <td><%= test.tries.where(user_id: @user.id).order('rate DESC').first.rate %></td>
-                              <% if test.tries.where(user_id: @user.id).order('created_at DESC').first.rate > 50 %>
+                          <td><%= assigned_test.test.title %></td>
+                          <td><%= assigned_test.test.attestation == true ? 'Аттестационный' : 'Тренировочный' %></td>
+                          <td><%= assigned_test.test.tries.where(user_id: @user.id).count %></td>
+                          <% if assigned_test.test.tries.where(user_id: @user.id).order('rate DESC').first %>
+                              <td><%= assigned_test.test.tries.where(user_id: @user.id).order('rate DESC').first.created_at %></td>
+                              <td><%= assigned_test.test.tries.where(user_id: @user.id).order('rate DESC').first.rate %></td>
+                              <% if assigned_test.test.tries.where(user_id: @user.id).order('created_at DESC').first.rate > 50 %>
                                   <span class="label label-success">Зачет</span>
                               <% else %>
                                   <span class="label label-danger">Не зачет</span>
@@ -240,7 +242,7 @@
 
 
 <div class="modal fade" id="AddAttestationTests" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog" style="width: 680px;">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -252,6 +254,9 @@
           <%= form_tag search_tests_user_path, remote: true, id: 'search_form', class: 'form-inline' do %>
               <div class="form-group">
                 <%= text_field_tag :q, params[:q], id: 'qwery_string', :class => 'form-control', autocomplete: 'off', placeholder: 'Найти' %>
+                <%= button_tag(type: 'submit', class: 'btn btn-white') do %>
+                    <span class="glyphicon glyphicon-search"></span>
+                <% end %>
                 <span id="spinner"><i class="fa fa-refresh fa-spin"></i></span>
               </div>
           <% end %>

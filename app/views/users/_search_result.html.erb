@@ -5,6 +5,7 @@
       <tr>
         <th>Название:</th>
         <th>Описание:</th>
+        <th>Тип:</th>
         <th>Алгоритм:</th>
         <th>Задания:</th>
         <th>Добавить:</th>
@@ -15,14 +16,11 @@
           <tr>
             <td><%= test.title %></td>
             <td><%= test.description %></td>
+            <td><%= test.attestation == true ? 'Аттестационный' : 'Тренировочный' %></td>
             <td><%= test.algorithm %></td>
             <td><%= test.tasks.count %></td>
             <td>
-              <% if @user.attestation_tests.include?(test.id.to_s) %>
-                  Добавлен
-              <% else %>
-                <%= link_to 'Добавить', add_attestation_tests_user_path(@user.id, attestation_id: test.id), :class => 'btn btn-default btn-xs' %>
-              <% end %>
+                <%= link_to 'Добавить', {:controller => 'assigned_tests', :action => 'create',:assigned_test => {user_id: @user.id, test_id: test.id, test_mode_id: @user.test_modes.order('created_at DESC').first.id}}, :method => 'POST', :class => 'btn btn-default btn-xs' %>
             </td>
           </tr>
           </tr>

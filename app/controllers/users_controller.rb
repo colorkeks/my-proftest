@@ -18,7 +18,7 @@ class UsersController < ApplicationController
     end
     @users = User.search(params[:search_users])
     @user_id = params[:id]
-    @attestation_tests = Test.find(@user.attestation_tests)
+    # @attestation_tests = Test.find(@user.attestation_tests)
     @test = Test.new
   end
 
@@ -35,8 +35,8 @@ class UsersController < ApplicationController
 
   def profile
     @test_mode = TestMode.new
-    @attestation_tests = Test.find(@user.attestation_tests)
     @current_mode = @user.test_modes.order('created_at DESC').first
+    @assigned_tests = AssignedTest.all.where(user_id: @user.id, test_mode_id: @current_mode)
     @user_tries = Try.find_by_user_id_and_test_mode_id(@user.id, @current_mode.id)
     if @user_tries
       @user_tries.each do |try|
@@ -53,26 +53,10 @@ class UsersController < ApplicationController
   end
 
   def search_tests
-    query = Test.search_test(params[:q]).where(attestation: true)
+    query = Test.search_test(params[:q])
     @tests = query.limit(5)
     @count = query.count
     render 'search', layout: false
-  end
-
-  def add_attestation_tests
-    if params[:attestation_id].nil?
-      redirect_to profile_user_path(@user), alert: 'Вы не выбрали тест'
-    else
-      @attestation_test = Test.find(params[:attestation_id])
-      if @attestation_test.attestation == false
-        redirect_to profile_user_path(@user), alert: 'Тест не аттестационный'
-      else
-        @user.attestation_tests << params[:attestation_id]
-        if @user.save
-          redirect_to profile_user_path(@user), notice: 'Тест успешно добавлен'
-        end
-      end
-    end
   end
 
   # GET /users/new
@@ -147,6 +131,6 @@ class UsersController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def user_params
     params.require(:user).permit(:first_name, :second_name, :last_name, :birthday, :drcode,
-                                 :attestation_tests, :job, :email, :password, :password_confirmation)
+                                 :job, :email, :password, :password_confirmation)
   end
 end

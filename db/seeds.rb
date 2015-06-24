@@ -16,7 +16,7 @@ User.create(first_name: 'Тест', last_name: 'Тестер', second_name: 'Т�
 
 # load "#{Rails.root}/lib/tasks/dbf_loader.rb"
 # DbfLoader.load('/home/pavel/work/DBFS')
-
+#
 # test = Test.create([{title: 'Судебно-медицинская экспертиза трупа', timer: '1:00', attestation: true, algorithm: 'Все задания', description: 'Раздел IV'},
 #                     {title: 'Дерматовенерология', timer: '1:00', algorithm: 'Все задания', description: 'Раздел I'},
 #                     {title: 'патологическая анатомия(пример видео и аудио)', timer: '0:20', algorithm: 'Все задания', description: 'Пример'},
