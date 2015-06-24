@@ -16,6 +16,8 @@ class UsersController < ApplicationController
       redirect_to :test_groups
       return
     end
+    @current_mode = @user.test_modes.order('created_at DESC').first
+    @assigned_tests = AssignedTest.all.where(user_id: @user.id, test_mode_id: @current_mode)
     @users = User.search(params[:search_users])
     @user_id = params[:id]
     # @attestation_tests = Test.find(@user.attestation_tests)
