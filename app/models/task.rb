@@ -18,6 +18,7 @@ class Task < ActiveRecord::Base
   belongs_to :chain
   acts_as_list scope: :chain, column: :chain_position
 
+
   def eqvgroup_and_section_valid
     if !(self.section == self.eqvgroup.section)
       errors.add(:eqvgroup, "Невозможно назначить данную группу")
