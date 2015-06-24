@@ -171,10 +171,12 @@
                           <% if assigned_test.test.tries.where(user_id: @user.id).order('rate DESC').first %>
                               <td><%= assigned_test.test.tries.where(user_id: @user.id).order('rate DESC').first.created_at %></td>
                               <td><%= assigned_test.test.tries.where(user_id: @user.id).order('rate DESC').first.rate %></td>
-                              <% if assigned_test.test.tries.where(user_id: @user.id).order('created_at DESC').first.rate > 50 %>
-                                  <span class="label label-success">Зачет</span>
-                              <% else %>
-                                  <span class="label label-danger">Не зачет</span>
+                              <% if assigned_test.test.tries.where(user_id: @user.id).order('created_at DESC').first.rate %>
+                                  <% if assigned_test.test.tries.where(user_id: @user.id).order('created_at DESC').first.rate > 50 %>
+                                      <td><span class="label label-success">Зачет</span></td>
+                                  <% else %>
+                                      <td><span class="label label-danger">Не зачет</span></td>
+                                  <% end %>
                               <% end %>
                           <% else %>
                               <td></td>
@@ -204,10 +206,12 @@
                         <td><%= try.timer.strftime('%H:%M') if try.timer %></td>
                         <td><%= try.rate %></td>
                         <td>
-                          <% if try.rate > 50 %>
-                              <span class="label label-success">Зачет</span>
-                          <% else %>
-                              <span class="label label-danger">Не зачет</span>
+                          <% if try.rate%>
+                              <% if try.rate > 50 %>
+                                  <span class="label label-success">Зачет</span>
+                              <% else %>
+                                  <span class="label label-danger">Не зачет</span>
+                              <% end %>
                           <% end %>
                         </td>
                       </tr>

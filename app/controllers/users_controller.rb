@@ -40,12 +40,6 @@ class UsersController < ApplicationController
     @current_mode = @user.test_modes.order('created_at DESC').first
     @assigned_tests = AssignedTest.all.where(user_id: @user.id, test_mode_id: @current_mode)
     @user_tries = Try.find_by_user_id_and_test_mode_id(@user.id, @current_mode.id)
-    if @user_tries
-      @user_tries.each do |try|
-        ids << try.test_id
-      end
-      @current_mode_tests = Test.find(ids)
-    end
     render 'users/profile', layout: 'admin'
   end
 
