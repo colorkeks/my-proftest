@@ -1,6 +1,4 @@
 class TestsController < ApplicationController
-  include TheSortableTreeController::Rebuild
-  include TheSortableTreeController::ExpandNode
   before_action :set_test, only: [:show, :trash, :edit, :update, :destroy, :settings]
   load_and_authorize_resource
   # GET /tests
