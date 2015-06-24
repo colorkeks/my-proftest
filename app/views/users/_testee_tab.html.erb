@@ -49,7 +49,7 @@
                           <td><%= assigned_test.test.tasks.count %></td>
                           <td><%= assigned_test.test.timer.strftime('%H:%M') if assigned_test.test.timer %></td>
                           <% if assigned_test.test.tasks.count > 0 %>
-                              <td><%= link_to 'Пройти тест', {:controller => :tries, :action => :create, :try => {:test_mode_id => @user.test_modes.order('created_at DESC').first, :date => Time.now, :timer => format('%02d:%02d', 0, 0), :user_id => @user.id, :test_id => test.id}}, :method => 'POST', :class => 'btn btn-default' %></td>
+                              <td><%= link_to 'Пройти тест', {:controller => :tries, :action => :create, :try => {:test_mode_id => @user.test_modes.order('created_at DESC').first.id, :date => Time.now, :timer => format('%02d:%02d', 0, 0), :user_id => @user.id, :test_id => test.id}}, :method => 'POST', :class => 'btn btn-default' %></td>
                           <% else %>
                               <td>
                                 <h4>
