@@ -90,6 +90,12 @@ class Task < ActiveRecord::Base
     end
   end
 
+  def add_to_list_bottom_with_check_scope_presence
+    add_to_list_bottom_without_check_scope_presence if self.chain
+  end
+
+  alias_method_chain :add_to_list_bottom, :check_scope_presence
+
   def move_to_trash!
     task = self
     task.eqvgroup = nil
