@@ -340,7 +340,6 @@ ActiveRecord::Schema.define(version: 20150625124850) do
   create_table "users", force: :cascade do |t|
     t.string   "first_name"
     t.string   "second_name"
-    t.text     "attestation_tests"
     t.string   "last_name"
     t.string   "job"
     t.datetime "created_at"

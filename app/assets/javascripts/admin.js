@@ -6,6 +6,11 @@
 //= require Answers
 //= require custom
 //= require tinymce-jquery
+//= require jquery.timers.js
+//= require moment
+//= require bootstrap-datetimepicker
+//= require moment/ru
+//= require bootstrap-datetimepicker
 
 $(function(){
     $("a[rel~=popover], .has-popover").popover();
@@ -25,8 +30,19 @@ $(function(){
     select_all();
     register_change_event();
     search_click();
+    date_picker();
 });
 
+function date_picker(){
+    $('#birthday').datetimepicker({
+        locale : 'ru',
+        format: 'DD-MM-YYYY'
+    });
+    $('#datetimepicker').datetimepicker({
+        format: 'LT',
+        locale: 'ru'
+    });
+};
 
 function register_change_event(){
     if ($('#change-content').length > 0){

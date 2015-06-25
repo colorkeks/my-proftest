@@ -149,7 +149,13 @@
                       <%= f.label 'Дата рождения:', :class => 'control-label' %>
                     </div>
                     <div class="controls col-md-8">
-                      <%= f.date_select(:birthday, {start_year: 1930}, {:class => 'form-control', :style => 'width:100px; display:inline-block'}) %>
+                      <div class='input-group date' id='birthday'>
+                      <%= f.text_field :birthday, :class => 'form-control'%>
+                      <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                      </span>
+                      </div>
+                      <%#= f.date_select(:birthday, {start_year: 1930}, {:class => 'form-control', :style => 'width:100px; display:inline-block'}) %>
                     </div>
                   </div>
                 </div>
@@ -161,7 +167,7 @@
                       <%= f.label 'E-mail:', :class => 'control-label' %>
                     </div>
                     <div class="controls col-md-8">
-                      <%= f.email_field :email, :class => 'form-control', autocomplete: :off  %>
+                      <%= f.email_field :email, :class => 'form-control', autocomplete: :off, value: @doctor.drcode.mb_chars.downcase + '@comsoft.corp.ru' %>
                     </div>
                   </div>
                   <div class="form-group">
@@ -169,7 +175,7 @@
                       <%= f.label 'Пароль:', :class => 'control-label' %>
                     </div>
                     <div class="controls col-md-8">
-                      <%= f.password_field :password, :class => 'form-control', autocomplete: :off %>
+                      <%= f.text_field :password, :class => 'form-control', autocomplete: :off, value: rand.to_s[2..5] %>
                     </div>
                   </div>
                 </div>
