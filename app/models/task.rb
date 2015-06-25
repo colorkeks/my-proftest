@@ -17,6 +17,7 @@ class Task < ActiveRecord::Base
 
   belongs_to :chain
   acts_as_list scope: :chain, column: :chain_position
+  has_paper_trail
 
   def eqvgroup_and_section_valid
     if !(self.section == self.eqvgroup.section)
@@ -89,6 +90,12 @@ class Task < ActiveRecord::Base
       end
     end
   end
+
+  def add_to_list_bottom_with_check_scope_presence
+    add_to_list_bottom_without_check_scope_presence if self.chain
+  end
+
+  alias_method_chain :add_to_list_bottom, :check_scope_presence
 
   def move_to_trash!
     task = self

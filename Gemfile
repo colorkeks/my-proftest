@@ -62,6 +62,9 @@ gem 'font-awesome-rails'
 gem 'acts_as_list'
 gem 'dbf'
 gem 'postgres-copy'
+#gem 'paper_trail', '~> 3.0'
+gem 'paper_trail', '~> 4.0.0.rc'
+#gem 'audited-activerecord'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

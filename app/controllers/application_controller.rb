@@ -18,4 +18,8 @@ class ApplicationController < ActionController::Base
   def after_sign_out_path_for(resource_or_scope)
     table_index_path
   end
+
+  def info_for_paper_trail
+    { :request_uuid => request.uuid, controller_name: controller_name, action_name: action_name }
+  end
 end

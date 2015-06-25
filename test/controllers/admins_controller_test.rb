@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class AdminsControllerTest < ActionController::TestCase
+=begin
   setup do
     @admin = admins(:one)
   end
@@ -46,4 +47,5 @@ class AdminsControllerTest < ActionController::TestCase
 
     assert_redirected_to admins_path
   end
+=end
 end

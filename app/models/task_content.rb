@@ -3,6 +3,7 @@ class TaskContent < ActiveRecord::Base
   has_attached_file :file_content,
                     styles: lambda { |a| a.instance.check_file_type}
   validates_attachment_content_type :file_content, :content_type => [/\Aimage\/.*\Z/, /\Avideo\/.*\Z/, /\Aaudio\/.*\Z/, /\Aapplication\/.*\Z/]
+  has_paper_trail
 
   def check_file_type
     if is_image_type?

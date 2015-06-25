@@ -6,8 +6,8 @@ Rails.application.routes.draw do
 
   resources :test_groups do
     post :bulk_destroy, on: :member
-    get 'bulk_move', to: :bulk_move_edit, on: :member, as: :bulk_move
-    post 'bulk_move', to: :bulk_move_update, on: :member
+    get 'bulk_move', action: :bulk_move_edit, on: :member, as: :bulk_move
+    post 'bulk_move', action: :bulk_move_update, on: :member
     get 'stub_tests', on: :collection
     get 'stub_tasks', on: :collection
     get 'stub_task', on: :collection
@@ -31,8 +31,8 @@ Rails.application.routes.draw do
       post :expand_node
     end
     resources :chains, shallow: true do
-      get 'bulk_move', to: :bulk_move_edit, on: :collection, as: :bulk_move
-      post 'bulk_move', to: :bulk_move_update, on: :collection
+      get 'bulk_move', action: :bulk_move_edit, on: :collection, as: :bulk_move
+      post 'bulk_move', action: :bulk_move_update, on: :collection
       post :bulk_destroy, on: :collection
       post :bulk_change_eqvgroup, on: :collection
       post :bulk_split, on: :collection
@@ -45,8 +45,8 @@ Rails.application.routes.draw do
       post 'check_user_answer'
     end
     post :bulk_destroy, on: :collection
-    get 'bulk_move', to: :bulk_move_edit, on: :collection, as: :bulk_move
-    post 'bulk_move', to: :bulk_move_update, on: :collection
+    get 'bulk_move', action: :bulk_move_edit, on: :collection, as: :bulk_move
+    post 'bulk_move', action: :bulk_move_update, on: :collection
     post :bulk_change_eqvgroup, on: :collection
     get :preview, on: :member
     post :bulk_join_chain, on: :collection
