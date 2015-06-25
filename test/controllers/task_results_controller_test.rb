@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class TaskResultsControllerTest < ActionController::TestCase
+=begin
   setup do
     @task_result = task_results(:one)
   end
@@ -46,4 +47,5 @@ class TaskResultsControllerTest < ActionController::TestCase
 
     assert_redirected_to task_results_path
   end
+=end
 end

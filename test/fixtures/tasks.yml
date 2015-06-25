@@ -5,9 +5,11 @@ one:
   task_type: MyString
   point: 1
   test_id: 1
+  eqvgroup_id: 1
 
 two:
   text: MyText
   task_type: MyString
   point: 1
   test_id: 1
+  eqvgroup_id: 1
