@@ -2,8 +2,6 @@
  *= require bootstrap_and_overrides
  *= require_self
  *= require bootstrap-datetimepicker
- *= require tree
- *= require nested_options
  *= require font-awesome
  *= require style.default
  *= require custom

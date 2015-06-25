@@ -44,7 +44,7 @@
               <th>Дата конца:</th>
               <th>Дата создания</th>
             </tr>
-            <% @test_modes.each do |mode|%>
+            <% @test_modes.order('created_at DESC').each do |mode|%>
                 <tr>
                   <td><%= mode.name%></td>
                   <td><%= mode.date_beg%></td>

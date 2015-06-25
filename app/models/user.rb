@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   has_many :tries
   has_many :tests
   has_many :test_modes
-  serialize :attestation_tests, Array
+  has_many :assigned_tests
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable

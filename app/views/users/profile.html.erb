@@ -45,14 +45,14 @@
       <div class="panel panel-default">
         <div class="panel-body panel-profile">
           <h3 style="margin: 0"><%= @user.last_name %> <%= @user.first_name %> <%= @user.second_name %>
-            <a href="/users/<%= @user.id%>/edit" class="btn btn-white btn-sm tooltips" title="Редактировать карточку">
-                <i class="fa fa-pencil"></i>
-             </a>
+            <a href="/users/<%= @user.id %>/edit" class="btn btn-white btn-sm tooltips" title="Редактировать карточку">
+              <i class="fa fa-pencil"></i>
+            </a>
           </h3>
           <br/>
 
           <div class="row">
-            <div class="col-lg-4">
+            <div class="col-lg-5">
               <table class="profile table-no-padding-left">
                 <tr>
                   <th style="width: 150px">Номер в обл. рег.</th>
@@ -85,7 +85,7 @@
                     Режима нету
                 <% end %>
                 <% if (current_user.roles.first.name == 'Администратор') && (@user.roles.first.name == 'Тестируемый') %>
-                <a href="#" class="btn btn-white btn-sm tooltips" data-toggle="modal" data-target="#createMode">Изменить</a>
+                    <a href="#" class="btn btn-white btn-sm tooltips" data-toggle="modal" data-target="#createMode">Изменить</a>
                 <% end %>
               </h3>
             </div>
@@ -106,9 +106,9 @@
               <table class="table-no-padding-left" style="width: 300px">
                 <tr>
                   <th style="width: 30px">С:</th>
-                  <td><h5><%= @current_mode ? @current_mode.date_beg : '-' %></h5></td>
-                  <th style="width: 30px">По:</th>
-                  <td><h5><%= @current_mode ? @current_mode.date_end : '-' %></h5></td>
+                  <td><h5><%= @current_mode.date_beg ? @current_mode.date_beg : '-' %></h5></td>
+                  <!--<th style="width: 30px">По:</th>-->
+                  <!--<td><h5><%#= @current_mode.date_end ? @current_mode.date_end : '-' %></h5></td>-->
                 </tr>
 
               </table>
@@ -149,34 +149,40 @@
           </ul>
           <div id="myTabContent" class="tab-content" style="padding: 15px 0; background-color: #ffffff">
             <div role="tabpanel" class="tab-pane fade active in" id="home" aria-labelledby="home-tab">
-              <% if current_user.roles.first.name == 'Администратор'%>
-              <div title="Добавить тесты" data-toggle="modal" data-target="#AddAttestationTests" class="btn btn-white btn-sm pull-right tooltips" style="margin-top: -50px">
-                <i class="fa fa-plus"></i></div>
+              <% if current_user.roles.first.name == 'Администратор' %>
+                  <div title="Добавить тесты" data-toggle="modal" data-target="#AddAttestationTests" class="btn btn-white btn-sm pull-right tooltips" style="margin-top: -50px">
+                    <i class="fa fa-plus"></i></div>
               <% end %>
               <table class="table table-bordered table-condensed table-striped">
                 <tr>
                   <th>Название</th>
+                  <th>Тип</th>
                   <th>Попытки</th>
                   <th>Последняя попытка</th>
                   <th>Балл</th>
                   <th>Результат</th>
                 </tr>
-                <% if @current_mode_tests %>
-                    <% @current_mode_tests.each do |test| %>
+                <% if @assigned_tests %>
+                    <% @assigned_tests.each do |assigned_test| %>
                         <tr>
-                          <td><%= test.title %></td>
-                          <td><%= test.tries.where(user_id: @user.id).count if test.tries %></td>
-                          <td><%= test.tries.where(user_id: @user.id).order('created_at DESC').first.created_at if test.tries %></td>
-                          <td><%= test.tries.where(user_id: @user.id).order('created_at DESC').first.rate if test.tries %></td>
-                          <td>
-                            <% if test.tries %>
-                                <% if test.tries.where(user_id: @user.id).order('created_at DESC').first.rate > 50 %>
-                                    <span class="label label-success">Зачет</span>
-                                <% else %>
-                                    <span class="label label-danger">Не зачет</span>
-                                <% end %>
-                            <% end %>
-                          </td>
+                          <td><%= assigned_test.test.title %></td>
+                          <td><%= assigned_test.test.attestation == true ? 'Аттестационный' : 'Тренировочный' %></td>
+                          <td><%= assigned_test.test.tries.where(user_id: @user.id).count %></td>
+                          <% if assigned_test.test.tries.where(user_id: @user.id).order('rate DESC').first %>
+                              <td><%= assigned_test.test.tries.where(user_id: @user.id).order('rate DESC').first.created_at %></td>
+                              <td><%= assigned_test.test.tries.where(user_id: @user.id).order('rate DESC').first.rate %></td>
+                              <% if assigned_test.test.tries.where(user_id: @user.id).order('created_at DESC').first.rate %>
+                                  <% if assigned_test.test.tries.where(user_id: @user.id).order('created_at DESC').first.rate > 50 %>
+                                      <td><span class="label label-success">Зачет</span></td>
+                                  <% else %>
+                                      <td><span class="label label-danger">Не зачет</span></td>
+                                  <% end %>
+                              <% end %>
+                          <% else %>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                          <% end %>
                         </tr>
                     <% end %>
                 <% end %>
@@ -200,10 +206,12 @@
                         <td><%= try.timer.strftime('%H:%M') if try.timer %></td>
                         <td><%= try.rate %></td>
                         <td>
-                          <% if try.rate > 50 %>
-                              <span class="label label-success">Зачет</span>
-                          <% else %>
-                              <span class="label label-danger">Не зачет</span>
+                          <% if try.rate%>
+                              <% if try.rate > 50 %>
+                                  <span class="label label-success">Зачет</span>
+                              <% else %>
+                                  <span class="label label-danger">Не зачет</span>
+                              <% end %>
                           <% end %>
                         </td>
                       </tr>
@@ -238,7 +246,7 @@
 
 
 <div class="modal fade" id="AddAttestationTests" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog" style="width: 680px;">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -246,55 +254,29 @@
         <h3 class="modal-title title" id="myModalLabel"> Поиск Аттестационных тестов:</h3>
 
         <div class="modal-body">
-              <hr/>
-              <%= form_tag(profile_user_path, :method => 'get', class: 'form-inline') do %>
-                  <%= text_field_tag :search_tests, params[:search_tests], :class => 'form-control' %>
-                  <%= button_tag(type: 'submit', class: 'btn btn-lg btn-default') do %>
-                      Поиск <span class="glyphicon glyphicon-search"></span>
-                  <% end %>
-              <% end %>
-              <br/>
-                  <table class="table table-bordered">
-                    <thead>
-                    <tr>
-                      <th>Название:</th>
-                      <th>Описание:</th>
-                      <th>Алгоритм:</th>
-                      <th>Задания:</th>
-                      <th>Добавить:</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <% if @tests_search %>
-                        <% @tests_search.where(:attestation => true).each do |test| %>
-                            <tr>
-                              <td><%= test.title %></td>
-                              <td><%= test.description %></td>
-                              <td><%= test.algorithm %></td>
-                              <td><%= test.tasks.count %></td>
-                              <td><%= link_to 'Добавить', add_attestation_tests_user_path(@user.id, attestation_id: test.id), :class => 'btn btn-default btn-xs' %></td>
-                            </tr>
-                        <% end %>
-                    <% end %>
-                    </tbody>
-                  </table>
+          <hr/>
+          <%= form_tag search_tests_user_path, remote: true, id: 'search_form', class: 'form-inline' do %>
+              <div class="form-group">
+                <%= text_field_tag :q, params[:q], id: 'qwery_string', :class => 'form-control', autocomplete: 'off', placeholder: 'Найти' %>
+                <%= button_tag(type: 'submit', class: 'btn btn-white') do %>
+                    <span class="glyphicon glyphicon-search"></span>
+                <% end %>
+                <span id="spinner"><i class="fa fa-refresh fa-spin"></i></span>
+              </div>
+          <% end %>
+          <br/>
+
+          <div class="table-responsive" id="search-result">
+            <div class="text-center text-info alert alert-info" style="">
+              <strong>Для поиска тестов введите название или описание теста</strong>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
 <script>
-    //    date_picker();
+    //    date_picker(); тут тоже почему-то не работает
 </script>

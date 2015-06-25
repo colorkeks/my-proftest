@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150622122845) do
+ActiveRecord::Schema.define(version: 20150624102725) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,14 @@ ActiveRecord::Schema.define(version: 20150622122845) do
     t.integer  "task_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "assigned_tests", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "test_id"
+    t.integer  "test_mode_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "associations", force: :cascade do |t|
@@ -299,9 +307,9 @@ ActiveRecord::Schema.define(version: 20150622122845) do
     t.text     "task_results_queue"
     t.integer  "user_id"
     t.integer  "test_id"
-    t.integer  "test_mode_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "test_mode_id"
   end
 
   create_table "user_answers", force: :cascade do |t|
@@ -334,9 +342,6 @@ ActiveRecord::Schema.define(version: 20150622122845) do
     t.string   "second_name"
     t.string   "last_name"
     t.string   "job"
-    t.date     "birthday"
-    t.string   "drcode"
-    t.text     "attestation_tests"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "email",                  default: "", null: false
@@ -349,6 +354,8 @@ ActiveRecord::Schema.define(version: 20150622122845) do
     t.datetime "last_sign_in_at"
     t.inet     "current_sign_in_ip"
     t.inet     "last_sign_in_ip"
+    t.date     "birthday"
+    t.string   "drcode"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

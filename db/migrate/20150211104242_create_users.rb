@@ -5,9 +5,6 @@ class CreateUsers < ActiveRecord::Migration
       t.string :second_name
       t.string :last_name
       t.string :job
-      t.date :birthday
-      t.string :drcode
-      t.text 'attestation_tests'
 
       t.timestamps
     end

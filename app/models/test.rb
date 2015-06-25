@@ -1,9 +1,9 @@
 class Test < ActiveRecord::Base
-  include TheSortableTree::Scopes
   validates :title, presence: true
   belongs_to :user
   has_many :tries
   has_many :tasks, dependent: :destroy
+  has_many :assigned_tests
   acts_as_nested_set
   belongs_to :test_group
   has_many :sections, dependent: :destroy
@@ -12,11 +12,11 @@ class Test < ActiveRecord::Base
   after_create :add_eqvgroup
   include SoftDeletion
 
-  def self.search(search_tests)
-    if search_tests
-      self.where("title LIKE ? OR description LIKE ? OR algorithm LIKE ?", "%#{search_tests}%", "%#{search_tests}%", "%#{search_tests}%")
+  def self.search_test(q)
+    if q.empty?
+      Test.all
     else
-      self.all
+      Test.where("description LIKE ? OR title LIKE ?", "#{q}%", "%#{q}%")
     end
   end
 

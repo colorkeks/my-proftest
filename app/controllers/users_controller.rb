@@ -16,17 +16,17 @@ class UsersController < ApplicationController
       redirect_to :test_groups
       return
     end
+    @current_mode = @user.test_modes.order('created_at DESC').first
+    @assigned_tests = AssignedTest.all.where(user_id: @user.id, test_mode_id: @current_mode)
     @users = User.search(params[:search_users])
     @user_id = params[:id]
-    @attestation_tests = Test.find(@user.attestation_tests)
+    # @attestation_tests = Test.find(@user.attestation_tests)
     @test = Test.new
-
-    @tests_tree = Test.nested_set.roots.select('id, title, directory, parent_id').limit(15)
   end
 
   def custom_create
     @user = User.create(user_params)
-    @user.test_modes.build(name: 'Нейтральный', date_beg: Date.today, date_end: (Date.today + 2.months), user_id: @user.id)
+    @user.test_modes.build(name: 'Нейтральный', date_beg: Date.today)
     respond_to do |format|
       if @user.save
         format.html { redirect_to profile_user_path(@user), notice: 'Пользователь успешно создан' }
@@ -37,16 +37,9 @@ class UsersController < ApplicationController
 
   def profile
     @test_mode = TestMode.new
-    @tests_search = Test.search(params[:search_tests])
-    @attestation_tests = Test.find(@user.attestation_tests)
     @current_mode = @user.test_modes.order('created_at DESC').first
+    @assigned_tests = AssignedTest.all.where(user_id: @user.id, test_mode_id: @current_mode)
     @user_tries = Try.find_by_user_id_and_test_mode_id(@user.id, @current_mode.id)
-    if @user_tries
-      @user_tries.each do |try|
-        ids << try.test_id
-      end
-      @current_mode_tests = Test.find(ids)
-    end
     render 'users/profile', layout: 'admin'
   end
 
@@ -55,20 +48,11 @@ class UsersController < ApplicationController
     render 'users/modes_history', layout: 'admin'
   end
 
-  def add_attestation_tests
-    if params[:attestation_id].nil?
-      redirect_to profile_user_path(@user), alert: 'Вы не выбрали тест'
-    else
-      @attestation_test = Test.find(params[:attestation_id])
-      if @attestation_test.attestation == false
-        redirect_to profile_user_path(@user), alert: 'Тест не аттестационный'
-      else
-        @user.attestation_tests << params[:attestation_id]
-        if @user.save
-          redirect_to profile_user_path(@user), notice: 'Тест успешно добавлен'
-        end
-      end
-    end
+  def search_tests
+    query = Test.search_test(params[:q])
+    @tests = query.limit(5)
+    @count = query.count
+    render 'search', layout: false
   end
 
   # GET /users/new
@@ -143,6 +127,6 @@ class UsersController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def user_params
     params.require(:user).permit(:first_name, :second_name, :last_name, :birthday, :drcode,
-                                 :attestation_tests, :job, :email, :password, :password_confirmation)
+                                 :job, :email, :password, :password_confirmation)
   end
 end

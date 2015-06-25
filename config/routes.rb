@@ -64,6 +64,7 @@ Rails.application.routes.draw do
       get 'profile'
       get 'modes_history'
       get 'add_attestation_tests'
+      post 'search_tests'
     end
     collection do
       post 'custom_create'
@@ -98,6 +99,8 @@ Rails.application.routes.draw do
   resources :user_answers
 
   resources :test_modes
+
+  resources :assigned_tests
 
   resources :statistics
 

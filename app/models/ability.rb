@@ -22,7 +22,7 @@ class Ability
       can :manage, :all
       # cannot :destroy, :all
       cannot :assign_role, User
-      cannot [:add_attestation_tests,:custom_create,:index, :show, :edit, :update], User
+      cannot [:custom_create,:index, :show, :edit, :update], User
       can [:show, :edit, :update], User do |current_user|
         user.id == current_user.id
       end
@@ -40,7 +40,7 @@ class Ability
       cannot [:index,:show, :edit,:update], Section
       cannot [:index,:show, :edit,:update], Eqvgroup
       cannot [:index,:show, :edit,:update], Chain
-      cannot [:add_attestation_tests,:custom_create,:index, :show, :edit, :update], User
+      cannot [:custom_create,:index, :show, :edit, :update], User
       can [:show, :edit, :update], User do |current_user|
         user.id == current_user.id
       end
