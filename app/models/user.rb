@@ -2,8 +2,9 @@ class User < ActiveRecord::Base
   before_create :create_role
   has_and_belongs_to_many :roles
   has_many :tries
-  has_many :tests, dependent: :destroy
-  serialize :attestation_tests, Array
+  has_many :tests
+  has_many :test_modes
+  has_many :assigned_tests
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable

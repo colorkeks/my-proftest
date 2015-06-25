@@ -104,11 +104,6 @@
                                   <%= select_tag(:catalog, '<option>Каталога пока нет</option>'.html_safe, {:class => 'form-control', :style => 'width:96%'}) %>
                                 </div>
                               </div>
-                              <!-- expandable_tree для сворачивающегося дерева, но работает плохо-->
-                              <!-- sortable_tree обычное древо-->
-                              <ol class='sortable_tree' data-cookie_store="true" data-cookie_scope="<%= @tests_tree.first.class %>"  data-expand-node-url="<%= expand_node_tests_url%>" data-max-level="5" data-rebuild-url="<%= rebuild_tests_url %>">
-                                <%= expandable_tree @tests_tree %>
-                              </ol>
                             </div>
                           </div>
                       <% end %>

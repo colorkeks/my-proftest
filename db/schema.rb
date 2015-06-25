@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150615051000) do
+ActiveRecord::Schema.define(version: 20150624102725) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,14 @@ ActiveRecord::Schema.define(version: 20150615051000) do
     t.integer  "task_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "assigned_tests", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "test_id"
+    t.integer  "test_mode_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "associations", force: :cascade do |t|
@@ -261,6 +269,15 @@ ActiveRecord::Schema.define(version: 20150615051000) do
   add_index "test_groups", ["parent_id"], name: "index_test_groups_on_parent_id", using: :btree
   add_index "test_groups", ["rgt"], name: "index_test_groups_on_rgt", using: :btree
 
+  create_table "test_modes", force: :cascade do |t|
+    t.date     "date_beg"
+    t.date     "date_end"
+    t.string   "name"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "tests", force: :cascade do |t|
     t.boolean  "directory",     default: false
     t.boolean  "attestation",   default: false
@@ -292,6 +309,7 @@ ActiveRecord::Schema.define(version: 20150615051000) do
     t.integer  "test_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "test_mode_id"
   end
 
   create_table "user_answers", force: :cascade do |t|
@@ -322,7 +340,6 @@ ActiveRecord::Schema.define(version: 20150615051000) do
   create_table "users", force: :cascade do |t|
     t.string   "first_name"
     t.string   "second_name"
-    t.text     "attestation_tests"
     t.string   "last_name"
     t.string   "job"
     t.datetime "created_at"
@@ -337,6 +354,8 @@ ActiveRecord::Schema.define(version: 20150615051000) do
     t.datetime "last_sign_in_at"
     t.inet     "current_sign_in_ip"
     t.inet     "last_sign_in_ip"
+    t.date     "birthday"
+    t.string   "drcode"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

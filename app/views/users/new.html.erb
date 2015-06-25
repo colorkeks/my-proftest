@@ -2,61 +2,85 @@
   <div class="test-case">
     <h3>Новый тестируемый:</h3>
     <%= form_for(@user, :url => url_for(:action => 'custom_create', :controller => 'users'), :html => {:class => 'form-horizontal'}) do |f| %>
-        <div class="user_form">
-          <div class="form-group">
-            <div class="col-lg-2">
-              <%= f.label 'Имя', :class => 'control-label' %>
+        <div class="row">
+          <div class="user_form">
+            <div class="col-lg-6">
+              <div class="form-group">
+                <div class="col-lg-3">
+                  <%= f.label 'Имя', :class => 'control-label' %>
+                </div>
+                <div class="controls col-lg-offset-3">
+                  <%= f.text_field :first_name, :class => 'form-control', :value => params[:user] ? params[:user][:first_name].mb_chars.capitalize : ''  %>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-lg-3">
+                  <%= f.label 'Отчество', :class => 'control-label' %>
+                </div>
+                <div class="controls col-lg-offset-3">
+                  <%= f.text_field :second_name, :class => 'form-control', :value => params[:user] ? params[:user][:second_name].mb_chars.capitalize : '' %>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-lg-3 left">
+                  <%= f.label 'Фамиля', :class => 'control-label' %>
+                </div>
+                <div class="controls col-lg-offset-3">
+                  <%= f.text_field :last_name, :class => 'form-control', :value => params[:user] ? params[:user][:last_name].mb_chars.capitalize : '' %>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-lg-3">
+                  <%= f.label 'Работа(ЛПУ)', :class => 'control-label' %>
+                </div>
+                <div class="controls col-lg-offset-3">
+                  <%= f.text_field :job, :class => 'form-control', :value => params[:user] ? params[:user][:job] : '' %>
+                </div>
+              </div>
+
+              <div class="actions">
+                <%= f.hidden_field :drcode, :class => 'form-control', :value => params[:user] ? params[:user][:drcode] : '' %>
+
+                <%= f.submit 'Зарегистрировать пользователя', :class => 'btn btn-primary' %>
+                <%= link_to t('.cancel', :default => t("helpers.links.Назад")),
+                            current_user, :class => 'btn btn-default' %>
+              </div>
             </div>
-            <div class="controls col-lg-offset-2">
-              <%= f.text_field :first_name, :class => 'form-control' %>
+
+            <div class="col-lg-6">
+              <div class="form-group">
+                <div class="col-lg-4">
+                  <%= f.label 'Дата рождения', :class => 'control-label' %>
+                </div>
+                <div class="controls col-md-8">
+                  <%= f.text_field :birthday, :class => 'form-control', :id => 'birthday' %>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-lg-4">
+                  <%= f.label 'E-mail', :class => 'control-label' %>
+                </div>
+                <div class="controls col-md-1">
+                  <%= f.email_field :email, :class => 'form-control' %>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-lg-4">
+                  <%= f.label 'Пароль', :class => 'control-label' %>
+                </div>
+                <div class="controls col-md-1">
+                  <%= f.password_field :password, :class => 'form-control'%>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="form-group">
-            <div class="col-lg-2">
-              <%= f.label 'Отчество', :class => 'control-label' %>
-            </div>
-            <div class="controls col-lg-offset-2">
-              <%= f.text_field :second_name, :class => 'form-control' %>
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="col-lg-2 left">
-              <%= f.label 'Фамиля', :class => 'control-label' %>
-            </div>
-            <div class="controls col-lg-offset-2">
-              <%= f.text_field :last_name, :class => 'form-control' %>
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="col-lg-2">
-              <%= f.label 'Работа', :class => 'control-label' %>
-            </div>
-            <div class="controls col-lg-offset-2">
-              <%= f.text_field :job, :class => 'form-control' %>
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="col-lg-2">
-              <%= f.label 'E-mail', :class => 'control-label' %>
-            </div>
-            <div class="controls col-lg-offset-2">
-              <%= f.email_field :email, :class => 'form-control' %>
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="col-lg-2">
-              <%= f.label 'Пароль', :class => 'control-label' %>
-            </div>
-            <div class="controls col-lg-offset-2">
-              <%= f.password_field :password, :class => 'form-control' %>
-            </div>
-          </div>
-          <div class="actions">
-            <%= f.submit 'Зарегистрировать пользователя', :class => 'btn btn-primary' %>
-            <%= link_to t('.cancel', :default => t("helpers.links.Назад")),
-                        current_user, :class => 'btn btn-default' %>
+
+
           </div>
         </div>
     <% end %>
   </div>
 </div>
+
+<script>
+  date_picker()
+</script>

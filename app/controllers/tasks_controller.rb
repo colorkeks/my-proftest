@@ -120,7 +120,10 @@ class TasksController < ApplicationController
     full_chains = @test.chains.full_chains_from_task_ids(params[:task_ids])
 
     if @trash.present?
-      @tasks.destroy_all
+      flash[:error] = "Удаление из корзины отключено"
+      redirect_to :back
+      return
+      #@tasks.destroy_all
     else
       Task.transaction do
         @tasks.each do |task|

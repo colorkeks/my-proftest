@@ -12,8 +12,6 @@
  *
  *= require bootstrap_and_overrides
  *= require bootstrap-datetimepicker
- *= require tree
- *= require nested_options
  *= require icomoon
  *= require_self
  */

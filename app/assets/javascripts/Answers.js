@@ -1,6 +1,7 @@
 /**
  * Created by pavel on 18.06.15.
  */
+//= require Sortable
 
 function upper_downer() {
     $('#answer_body, #associate_body, #items').each(function(index, element){
@@ -9,11 +10,30 @@ function upper_downer() {
             animation: 150,
             onSort: function (evt) {
                 row_index();
-                change_content();
+//                change_content();
             }
         });
     });
 }
+
+function date_picker(){
+    $('#date_beg').datetimepicker({
+        locale : 'ru',
+        format: 'DD-MM-YYYY'
+    });
+    $('#date_end').datetimepicker({
+        locale : 'ru',
+        format: 'DD-MM-YYYY'
+    });
+    $('#birthday').datetimepicker({
+        locale : 'ru',
+        format: 'DD-MM-YYYY'
+    });
+    $('#datetimepicker').datetimepicker({
+        format: 'LT',
+        locale: 'ru'
+    });
+};
 
 function timer(){
     $(".seconds_timer").everyTime(1000, function() {
@@ -92,3 +112,4 @@ function algorithm_selects(){
         });
     });
 }
+

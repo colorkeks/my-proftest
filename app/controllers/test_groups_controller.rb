@@ -99,10 +99,13 @@ class TestGroupsController < ApplicationController
     test_groups = TestGroup.where(id: params[:test_group_ids].split(','))
 
     if @test_group.deleted? || @test_group.is_trash?
+      flash[:error] = "Удаление из корзины отключено"
+      redirect_to @test_group
+      return
       #Удаляем совсем
       TestGroup.transaction do
-        tests.destroy_all
-        test_groups.destroy_all
+        #tests.destroy_all
+        #test_groups.destroy_all
       end
     else
       #Удаляем в корзину

@@ -26,17 +26,23 @@
   <div class="contentpanel ">
     <div class="row">
       <div class="col-sm-3 col-lg-2">
+        <% if !@users.exists?(['drcode LIKE ?', "%#{@doctor.drcode}%"])%>
         <div class="panel panel-default">
           <div class="panel-body panel-profile text-center">
             <p>Отсутствует карточка испытуемого</p>
-            <div class="btn btn-white">Создать</div>
+            <%= link_to t('.Создать', :default => t("helpers.links.Создать")),
+                        {:controller => :users, :action => :new,
+                         :user => {first_name: @doctor.name, second_name: @doctor.secname,
+                                   last_name: @doctor.surname, job: @doctor.lpu_dbfs.title, drcode: @doctor.drcode}}, :class => 'btn btn-white' %>
           </div>
         </div>
+        <% else %>
         <div class="panel panel-default">
           <div class="panel-body panel-profile text-center">
-            <a href="#">Карточка испытуемого</a>
+            <%= link_to 'Карточка тестируемого', profile_user_path(@users.where(drcode: @doctor.drcode).first)%>
           </div>
         </div>
+        <% end %>
       </div>
 
       <div class="col-sm-9 col-lg-10">
