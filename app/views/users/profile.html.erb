@@ -159,7 +159,7 @@
                   <th>Тип</th>
                   <th>Попытки</th>
                   <th>Последняя попытка</th>
-                  <th>Балл</th>
+                  <th>Процент</th>
                   <th>Результат</th>
                 </tr>
                 <% if @assigned_tests %>
@@ -170,7 +170,7 @@
                           <td><%= assigned_test.test.tries.where(user_id: @user.id).count %></td>
                           <% if assigned_test.test.tries.where(user_id: @user.id).order('rate DESC').first %>
                               <td><%= assigned_test.test.tries.where(user_id: @user.id).order('rate DESC').first.created_at %></td>
-                              <td><%= assigned_test.test.tries.where(user_id: @user.id).order('rate DESC').first.rate %></td>
+                              <td><%= assigned_test.test.tries.where(user_id: @user.id).order('rate DESC').first.rate.to_s + '%' %></td>
                               <% if assigned_test.test.tries.where(user_id: @user.id).order('created_at DESC').first.rate %>
                                   <% if assigned_test.test.tries.where(user_id: @user.id).order('created_at DESC').first.rate > 50 %>
                                       <td><span class="label label-success">Зачет</span></td>
@@ -196,7 +196,7 @@
                     <th>Тест</th>
                     <th>Дата и время сдачи</th>
                     <th>Длительность</th>
-                    <th>Балл</th>
+                    <th>Процент</th>
                     <th>Результат</th>
                   </tr>
                   <% @user.tries.where(test_mode_id: @current_mode.id).each do |try| %>
@@ -204,7 +204,7 @@
                         <td><%= try.test.title %></td>
                         <td><%= try.created_at %></td>
                         <td><%= try.timer.strftime('%H:%M') if try.timer %></td>
-                        <td><%= try.rate %></td>
+                        <td><%= try.rate.to_s + '%' %></td>
                         <td>
                           <% if try.rate%>
                               <% if try.rate > 50 %>
@@ -242,8 +242,6 @@
     </div>
   </div>
 </div>
-
-
 
 <div class="modal fade" id="AddAttestationTests" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" style="width: 680px;">

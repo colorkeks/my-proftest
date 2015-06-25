@@ -15,6 +15,9 @@ class UsersController < ApplicationController
     if current_user && current_user.role?('Методолог')
       redirect_to :test_groups
       return
+    elsif current_user && current_user.role?('Администратор')
+      redirect_to :doctors
+      return
     end
     @current_mode = @user.test_modes.order('created_at DESC').first
     @assigned_tests = AssignedTest.all.where(user_id: @user.id, test_mode_id: @current_mode)
@@ -27,12 +30,11 @@ class UsersController < ApplicationController
   def custom_create
     @user = User.create(user_params)
     @user.test_modes.build(name: 'Нейтральный', date_beg: Date.today)
-    respond_to do |format|
       if @user.save
-        format.html { redirect_to profile_user_path(@user), notice: 'Пользователь успешно создан' }
-        format.json { render :show, status: :created, location: @user }
+        redirect_to profile_user_path(@user), notice: 'Пользователь успешно создан'
+      else
+        redirect_to :back, alert: 'Пароль или Email не введен'
       end
-    end
   end
 
   def profile
