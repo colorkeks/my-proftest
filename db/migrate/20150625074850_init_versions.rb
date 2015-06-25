@@ -1,6 +1,5 @@
 class InitVersions < ActiveRecord::Migration
   def change
-=begin
     Task.find_each do |task|
       task.touch_with_version
     end
@@ -10,6 +9,11 @@ class InitVersions < ActiveRecord::Migration
     Association.find_each do |association|
       association.touch_with_version
     end
-=end
+    TaskContent.find_each do |tk|
+      tk.touch_with_version
+    end
+    Test.find_each do |t|
+      t.touch_with_version
+    end
   end
 end

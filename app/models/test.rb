@@ -11,6 +11,7 @@ class Test < ActiveRecord::Base
   has_many :chains, dependent: :destroy
   after_create :add_eqvgroup
   include SoftDeletion
+  has_paper_trail
 
   def self.search(search_tests)
     if search_tests
