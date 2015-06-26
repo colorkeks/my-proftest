@@ -16,6 +16,17 @@ function upper_downer() {
     });
 }
 
+function date_picker(){
+    $('#birthday').datetimepicker({
+        locale : 'ru',
+        format: 'YYYY-MM-DD'
+    });
+    $('#datetimepicker').datetimepicker({
+        format: 'LT',
+        locale: 'ru'
+    });
+};
+
 function timer(){
     $(".seconds_timer").everyTime(1000, function() {
         if (parseInt($('.seconds_timer').text()) <= 0) {
