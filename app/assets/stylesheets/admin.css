@@ -901,6 +901,7 @@ h4, .h4 {
 .modal-title {
     font-size: 20px;
     color: #333;
+    padding-left: 4px;
 }
 
 .modal-header .close {

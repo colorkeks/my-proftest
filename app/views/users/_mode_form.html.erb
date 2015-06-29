@@ -1,11 +1,11 @@
 <%= form_for @test_mode, :html => { :class => 'form-horizontal' } do |f| %>
     <div class="form-group">
-      <div class="col-lg-3">
-        <%= f.label 'Режим:', :class => 'control-label' %>
-      </div>
-      <div class="controls col-md-8">
+      <!--<div class="col-lg-3">-->
+        <!--<%#= f.label 'Режим:', :class => 'control-label' %>-->
+      <!--</div>-->
+      <!--<div class="controls col-md-12">-->
         <%= f.select(:name,[['Нейтральный'],['Аттестация'],['Тренировка']],{}, { :class => 'form-control'})%>
-      </div>
+      <!--</div>-->
     </div>
 
     <!--<div class="form-group">-->
@@ -20,6 +20,7 @@
 
     <%= f.hidden_field :user_id, :class => 'form-control', value: @user.id %>
     <%= f.hidden_field :date_beg, :class => 'form-control', :value => Date.today%>
-
-    <%= f.submit 'Создать режим', :class => 'btn btn-primary' %>
+    <div class="form-group">
+        <%= f.submit 'Сохранить', :class => 'btn btn-primary pull-right' %>
+    </div>
 <% end %>

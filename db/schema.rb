@@ -60,15 +60,17 @@ ActiveRecord::Schema.define(version: 20150625124850) do
   add_index "chains", ["test_id"], name: "index_chains_on_test_id", using: :btree
 
   create_table "doctor_dbfs", force: :cascade do |t|
-    t.string  "drcode",   limit: 8
-    t.string  "dbsource", limit: 1
-    t.integer "lpuwork"
-    t.string  "surname",  limit: 24
-    t.string  "name",     limit: 16
-    t.string  "secname",  limit: 16
-    t.string  "pension",  limit: 14
-    t.date    "datebeg"
-    t.date    "dateend"
+    t.string   "drcode",     limit: 8
+    t.string   "dbsource",   limit: 1
+    t.integer  "lpuwork"
+    t.string   "surname",    limit: 24
+    t.string   "name",       limit: 16
+    t.string   "secname",    limit: 16
+    t.string   "pension",    limit: 14
+    t.date     "datebeg"
+    t.date     "dateend"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "doctor_dbfs", ["drcode"], name: "index_doctor_dbfs_on_drcode", using: :btree
@@ -89,76 +91,80 @@ ActiveRecord::Schema.define(version: 20150625124850) do
   add_index "eqvgroups", ["test_id"], name: "index_eqvgroups_on_test_id", using: :btree
 
   create_table "lpu_dbfs", force: :cascade do |t|
-    t.integer "lpucode"
-    t.integer "type_s"
-    t.string  "name",       limit: 128
-    t.string  "name_l",     limit: 254
-    t.string  "name_s",     limit: 60
-    t.integer "oms"
-    t.integer "pmsp_yes"
-    t.integer "dent_yes"
-    t.integer "age"
-    t.string  "index",      limit: 6
-    t.integer "ter"
-    t.integer "orgn1"
-    t.integer "orgn2"
-    t.integer "orgn3"
-    t.integer "razdel"
-    t.integer "street"
-    t.integer "house"
-    t.string  "houseliter", limit: 1
-    t.integer "corpus"
-    t.integer "flat"
-    t.string  "flatliter",  limit: 1
-    t.string  "e_mail",     limit: 64
-    t.string  "npost",      limit: 40
-    t.string  "face",       limit: 48
-    t.string  "phone"
-    t.string  "fax"
-    t.string  "face1",      limit: 48
-    t.string  "phone1"
-    t.string  "npost3",     limit: 40
-    t.string  "face3",      limit: 48
-    t.string  "e_mail3",    limit: 64
-    t.string  "phone3"
-    t.string  "inn",        limit: 12
-    t.string  "ogrn",       limit: 15
-    t.integer "owercode"
-    t.string  "nn_lpu",     limit: 12
-    t.integer "domain"
-    t.integer "chief"
-    t.integer "kopf"
-    t.string  "ekatc",      limit: 8
-    t.string  "okpo",       limit: 13
-    t.string  "soato"
-    t.string  "soogu"
-    t.string  "kpp",        limit: 9
-    t.date    "datebeg"
-    t.date    "dateend"
-    t.date    "datemod"
+    t.integer  "lpucode"
+    t.integer  "type_s"
+    t.string   "name",       limit: 128
+    t.string   "name_l",     limit: 254
+    t.string   "name_s",     limit: 60
+    t.integer  "oms"
+    t.integer  "pmsp_yes"
+    t.integer  "dent_yes"
+    t.integer  "age"
+    t.string   "index",      limit: 6
+    t.integer  "ter"
+    t.integer  "orgn1"
+    t.integer  "orgn2"
+    t.integer  "orgn3"
+    t.integer  "razdel"
+    t.integer  "street"
+    t.integer  "house"
+    t.string   "houseliter", limit: 1
+    t.integer  "corpus"
+    t.integer  "flat"
+    t.string   "flatliter",  limit: 1
+    t.string   "e_mail",     limit: 64
+    t.string   "npost",      limit: 40
+    t.string   "face",       limit: 48
+    t.string   "phone"
+    t.string   "fax"
+    t.string   "face1",      limit: 48
+    t.string   "phone1"
+    t.string   "npost3",     limit: 40
+    t.string   "face3",      limit: 48
+    t.string   "e_mail3",    limit: 64
+    t.string   "phone3"
+    t.string   "inn",        limit: 12
+    t.string   "ogrn",       limit: 15
+    t.integer  "owercode"
+    t.string   "nn_lpu",     limit: 12
+    t.integer  "domain"
+    t.integer  "chief"
+    t.integer  "kopf"
+    t.string   "ekatc",      limit: 8
+    t.string   "okpo",       limit: 13
+    t.string   "soato"
+    t.string   "soogu"
+    t.string   "kpp",        limit: 9
+    t.date     "datebeg"
+    t.date     "dateend"
+    t.date     "datemod"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "lpu_dbfs", ["lpucode"], name: "index_lpu_dbfs_on_lpucode", using: :btree
 
   create_table "officfun_dbfs", force: :cascade do |t|
-    t.string  "drcode",   limit: 8
-    t.integer "lpuwork"
-    t.integer "speccode"
-    t.string  "dbsource", limit: 1
-    t.integer "postcode"
-    t.date    "d_prik"
-    t.date    "d_ser"
-    t.integer "category"
-    t.integer "drstatus"
-    t.date    "date_b"
-    t.date    "date_e"
-    t.integer "right"
-    t.string  "actpack",  limit: 3
-    t.integer "change_r"
-    t.date    "d_fin"
-    t.date    "d_start"
-    t.date    "d_modif"
-    t.integer "deleted"
+    t.string   "drcode",     limit: 8
+    t.integer  "lpuwork"
+    t.integer  "speccode"
+    t.string   "dbsource",   limit: 1
+    t.integer  "postcode"
+    t.date     "d_prik"
+    t.date     "d_ser"
+    t.integer  "category"
+    t.integer  "drstatus"
+    t.date     "date_b"
+    t.date     "date_e"
+    t.integer  "right"
+    t.string   "actpack",    limit: 3
+    t.integer  "change_r"
+    t.date     "d_fin"
+    t.date     "d_start"
+    t.date     "d_modif"
+    t.integer  "deleted"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "officfun_dbfs", ["drcode"], name: "index_officfun_dbfs_on_drcode", using: :btree
@@ -340,6 +346,7 @@ ActiveRecord::Schema.define(version: 20150625124850) do
   create_table "users", force: :cascade do |t|
     t.string   "first_name"
     t.string   "second_name"
+    t.text     "attestation_tests"
     t.string   "last_name"
     t.string   "job"
     t.datetime "created_at"
