@@ -4,7 +4,7 @@
 <div class="pageheader">
   <div class="row">
     <div class="col-sm-3 col-lg-3">
-      <a class="btn btn-white back-btn pull-right" title="Назад" href="/users/<%= current_user.id %>">
+      <a class="btn btn-white back-btn pull-right" title="Назад" href="/doctors">
         <i class="fa fa-arrow-left"></i>
       </a>
 
@@ -60,7 +60,7 @@
             </tr>
             <tr>
               <th>Дата рождения</th>
-              <td><%= @user.birthday %></td>
+              <td><%= @user.birthday.strftime('%Y.%m.%d') %></td>
             </tr>
             <tr>
               <th>ЛПУ</th>
@@ -77,9 +77,9 @@
                 <% if @current_mode.name == 'Аттестация' %>
                     Режим аттестации A-<%= @user.test_modes.where(name: 'Аттестация').count %>
                 <% elsif @current_mode.name == 'Нейтральный' %>
-                    Нейтральный режим Н-<%= @user.test_modes.where(name: 'Нейтральный').count %>
+                    Нейтральный режим
                 <% elsif @current_mode.name == 'Тренировка' %>
-                    Нейтральный режим Н-<%= @user.test_modes.where(name: 'Тренировка').count %>
+                    Режим тренировки Т-<%= @user.test_modes.where(name: 'Тренировка').count %>
                 <% end %>
             <% else %>
                 Режима нету
@@ -90,6 +90,7 @@
           </h3>
         </div>
         <div class="col-lg-6">
+          <% if @current_mode.name != 'Нейтральный'%>
           <h3>Результат
                   <span class="btn btn-white btn-sm tooltips" title="Посмотреть результат">
                     <i class="fa fa-eye  "></i>
@@ -98,9 +99,11 @@
                     <i class="fa fa-print"></i>
                   </span>
           </h3>
+          <% end %>
         </div>
       </div>
 
+      <% if @current_mode.name != 'Нейтральный'%>
       <div class="row">
         <div class="col-lg-6">
           <table class="table-no-padding-left" style="width: 300px">
@@ -141,6 +144,7 @@
           </table>
         </div>
         <div class="col-lg-6">
+          <% if @current_mode.name == 'Аттестация'%>
           <p>
             <strong class="text-success">Зачет получен</strong> <br/>
             <!--<strong>-->
@@ -149,6 +153,7 @@
             <!--</strong>-->
           </p>
           <!--<div class="btn btn-white"><i class="fa fa-print"></i></div>-->
+          <% end %>
         </div>
       </div>
       <hr/>
@@ -233,6 +238,7 @@
           </div>
         </div>
       </div>
+      <% end %>
     </div>
   </div>
 </div>
@@ -256,6 +262,7 @@
   </div>
 </div>
 
+<% if @current_mode.name != 'Нейтральный'%>
 <div class="modal fade" id="AddAttestationTests" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" style="width: 680px;">
     <div class="modal-content">
@@ -269,6 +276,7 @@
           <%= form_tag search_tests_user_path, remote: true, id: 'search_form', class: 'form-inline' do %>
               <div class="form-group">
                 <%= text_field_tag :q, params[:q], id: 'qwery_string', :class => 'form-control', autocomplete: 'off', placeholder: 'Найти' %>
+                <%= hidden_field_tag :mode, @current_mode.name %>
                 <%= button_tag(type: 'submit', class: 'btn btn-white') do %>
                     <span class="glyphicon glyphicon-search"></span>
                 <% end %>
@@ -287,7 +295,7 @@
     </div>
   </div>
 </div>
-
+<% end %>
 <script>
     //    date_picker(); тут тоже почему-то не работает
 </script>

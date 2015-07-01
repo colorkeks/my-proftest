@@ -36,7 +36,7 @@ $(function(){
 function date_picker(){
     $('#birthday').datetimepicker({
         locale : 'ru',
-        format: 'DD-MM-YYYY'
+        format: 'YYYY-MM-DD'
     });
     $('#datetimepicker').datetimepicker({
         format: 'LT',

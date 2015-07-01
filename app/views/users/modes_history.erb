@@ -42,14 +42,16 @@
               <th>Режим:</th>
               <th>Дата начала:</th>
               <th>Дата конца:</th>
-              <th>Дата создания</th>
+              <th>Тесты:</th>
+              <th>Попытки:</th>
             </tr>
-            <% @test_modes.order('created_at DESC').each do |mode|%>
+            <% @test_modes.where.not(name: 'Нейтральный').order('created_at DESC').each do |mode| %>
                 <tr>
-                  <td><%= mode.name%></td>
-                  <td><%= mode.date_beg%></td>
-                  <td><%= mode.date_end%></td>
-                  <td><%= mode.created_at%></td>
+                  <td><%= link_to mode.name, test_mode_path(mode)%></td>
+                  <td><%= mode.date_beg %></td>
+                  <td><%= mode.date_end %></td>
+                  <td><%= mode.assigned_tests.count %></td>
+                  <td><%= mode.tries.count %></td>
                 </tr>
             <% end %>
           </table>

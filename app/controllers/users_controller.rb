@@ -51,7 +51,7 @@ class UsersController < ApplicationController
   end
 
   def search_tests
-    query = Test.search_test(params[:q])
+    query = Test.search_test(params[:q], params[:mode])
     @tests = query.limit(5)
     @count = query.count
     render 'search', layout: false
@@ -64,6 +64,7 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
+    render 'users/edit', layout: 'admin'
   end
 
   # POST /users
