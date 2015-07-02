@@ -16,10 +16,10 @@
   </tr>
   <tr>
     <td>Количество вопросов в попытке</td>
-    <td><%= @test.eqvgroups.sum(:task_count) %></td>
+    <td><%= @eqvgroups.to_a.sum(&:task_count) %></td>
   </tr>
   <tr>
     <td>Количество чейнов в попытке</td>
-    <td><%= @test.eqvgroups.sum(:chain_count) %></td>
+    <td><%= @eqvgroups.to_a.sum(&:chain_count) %></td>
   </tr>
 </table>
