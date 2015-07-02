@@ -23,6 +23,7 @@
     tr{
         page-break-inside: avoid;
     }
+    .pagebreak{page-break-inside: avoid;}
 }
 
 label {
