@@ -1,58 +1,47 @@
-<%= form_for @user, :html => {:class => 'form-horizontal'} do |f| %>
-    <div class="form-group">
-      <div class="col-lg-2">
-        <%= f.label 'Имя', :class => 'control-label' %>
-      </div>
-      <div class="controls col-md-8">
-        <%= f.text_field :first_name, :class => 'form-control' %>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-lg-2">
-        <%= f.label 'Отчество', :class => 'control-label' %>
-      </div>
-      <div class="controls col-md-8">
-        <%= f.text_field :second_name, :class => 'form-control' %>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-lg-2">
-        <%= f.label 'Фамилия', :class => 'control-label' %>
-      </div>
-      <div class="controls col-md-8">
-        <%= f.text_field :last_name, :class => 'form-control' %>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-lg-2">
-        <%= f.label 'Работа', :class => 'control-label' %>
-      </div>
-      <div class="controls col-md-8">
-        <%= f.text_field :job, :class => 'form-control' %>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-lg-2">
-        <%= f.label 'Дата рождения:', :class => 'control-label' %>
-      </div>
-      <div class="controls col-md-8">
-        <div class='input-group date' id='birthday'>
-          <%= f.text_field :birthday, :class => 'form-control' %>
-          <span class="input-group-addon">
+ <%= form_for @user, :html => {:class => 'form-horizontal'} do |f| %>
+
+
+      <br/>
+
+      <div class="row">
+        <div class="col-lg-5">
+          <table class="profile table-no-padding-left">
+            <tr>
+              <th>Фамилия</th>
+              <td><%= f.text_field :last_name, :class => 'form-control' %></td>
+            </tr>
+            <tr>
+              <th>Имя</th>
+              <td><%= f.text_field :first_name, :class => 'form-control' %></td>
+            </tr>
+            <tr>
+              <th>Отчество</th>
+              <td><%= f.text_field :second_name, :class => 'form-control' %></td>
+            </tr>
+            <tr>
+              <th style="width: 150px;">Дата рождения</th>
+              <td>
+                <div class='input-group date' id='birthday'>
+                  <%= f.text_field :birthday, :class => 'form-control' %>
+                  <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                       </span>
+                </div>
+                <%#= f.date_select(:birthday, {start_year: 1930}, {:class => 'form-control', :style => 'width:100px; display:inline-block'}) %>
+              </td>
+            </tr>
+            <tr>
+              <th>ЛПУ</th>
+              <td><%= f.text_field :job, :class => 'form-control' %></td>
+            </tr>
+          </table>
         </div>
-        <%#= f.date_select(:birthday, {start_year: 1930}, {:class => 'form-control', :style => 'width:100px; display:inline-block'}) %>
       </div>
-    </div>
 
 
-    <%= f.submit nil, :class => 'btn btn-primary' %>
-    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                profile_user_path(@user), :class => 'btn btn-default' %>
-
-<% end %>
+      <%= f.submit 'Сохранить', :class => 'btn btn-primary' %>
+  <% end %>
 
 <script>
-  date_picker();
+    date_picker();
 </script>

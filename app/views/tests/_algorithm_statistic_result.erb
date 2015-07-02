@@ -1,0 +1,25 @@
+<table class="table table-condensed">
+  <tr>
+    <td>Максимальное количество баллов</td>
+    <td>
+      от
+      <%=
+          @eqvgroups.map{|eqv| eqv.tasks.where('chain_id is null').order(:point).limit(eqv.task_count).pluck(:point)}.flatten.sum +
+          @eqvgroups.map{|eqv| eqv.chains.map{|chain| chain.tasks.sum(:point)}.sort.take(eqv.chain_count)}.flatten.sum
+      %>
+      до
+      <%=
+          @eqvgroups.map{|eqv| eqv.tasks.where('chain_id is null').order(point: :desc).limit(eqv.task_count).pluck(:point)}.flatten.sum +
+          @eqvgroups.map{|eqv| eqv.chains.map{|chain| chain.tasks.sum(:point)}.sort.reverse.take(eqv.chain_count)}.flatten.sum
+      %>
+    </td>
+  </tr>
+  <tr>
+    <td>Количество вопросов в попытке</td>
+    <td><%= @eqvgroups.to_a.sum(&:task_count) %></td>
+  </tr>
+  <tr>
+    <td>Количество чейнов в попытке</td>
+    <td><%= @eqvgroups.to_a.sum(&:chain_count) %></td>
+  </tr>
+</table>

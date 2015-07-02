@@ -31,18 +31,46 @@ $(function(){
     register_change_event();
     search_click();
     date_picker();
+    update_algorithm_statistic();
+    hide_alerts();
 });
+
+function hide_alerts(){
+    var alert = $('.alert');
+    var timer = setInterval(
+        function(){
+            alert.fadeOut(700);
+        }, 2000
+    );
+
+    alert.hover(function(){
+        clearInterval(timer);
+        $(this).stop().fadeIn(400);
+    })
+}
+
+function update_algorithm_statistic(){
+    var submit_form = $('#ajax_submit');
+    var inputs = $('#task_chain_counts').find('input[type="text"]');
+    inputs.keyup(function(e){
+       var _this = this;
+        setTimeout(function(){
+            submit_form.find('[name="'+$(_this).attr('name')+'"]').val($(_this).val());
+            submit_form.submit();
+        },100);
+    });
+}
 
 function date_picker(){
     $('#birthday').datetimepicker({
         locale : 'ru',
-        format: 'DD-MM-YYYY'
+        format: 'YYYY-MM-DD'
     });
     $('#datetimepicker').datetimepicker({
         format: 'LT',
         locale: 'ru'
     });
-};
+}
 
 function register_change_event(){
     if ($('#change-content').length > 0){

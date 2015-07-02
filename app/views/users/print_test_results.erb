@@ -1,0 +1,102 @@
+<%= content_for :title, 'Печать тестов испытуемого ' + @user.last_name + ' ' + @user.first_name + ' ' + @user.second_name %>
+
+
+<div class="pageheader">
+  <div class="row">
+    <div class="col-sm-3 col-lg-2">
+      <a class="btn btn-white back-btn pull-right" title="Назад" href="/users/<%= @user.id %>/profile">
+        <i class="fa fa-arrow-left"></i>
+      </a>
+
+      <h2>Профиль</h2>
+    </div>
+    <div class="col-sm-9 col-lg-10">
+      <div class="breadcrumb-wrapper">
+        <ol class="breadcrumb">
+          <li class="active">
+            <div class="btn-group nomargin">
+              <span class="dropdown-toggle" data-toggle="dropdown">Печать тестов испытуемого <%= @user.last_name %> <%= @user.first_name %> <%= @user.second_name %></span>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="contentpanel ">
+  <div class="row">
+    <div class="col-sm-12 col-lg-12">
+      <div class="panel panel-default">
+        <div class="panel-body panel-profile">
+          <div class="col-lg-12">
+            <div style="text-align: right; border-bottom: 1px solid #000000">
+              <h5>Самарский</h5>
+              <h5>областной</h5>
+              <h5>информационно-аналитический</h5>
+              <h5>центр</h5>
+            </div>
+          </div>
+          <div class="col-lg-12">
+            <div style="text-align: center;"><h4>Результаты проверки знаний</h4></div>
+            <div style="text-align: center">
+              <h4>C <%= Russian::strftime(@current_mode.date_beg, '%d %B %Y') %></h4>
+            </div>
+            <br/>
+            <h5><%= @user.last_name + ' ' + @user.first_name + ' ' + @user.second_name %></h5>
+            <h5>Место работы: <%= @user.job %></h5>
+            <br/>
+            <% @assigned_tests.each do |assigned_test| %>
+                <% if assigned_test.test.attestation %>
+                    <% correct = []
+                       not_correct = []
+                       partly_correct = []
+                    %>
+                    <% if try = assigned_test.tries.order('created_at DESC').first %>
+                        <% try.task_results_queue.each_with_index do |id, index| %>
+                            <% try.task_results.where(id: id, status: 'правильно').each do %>
+                                <% correct << index + 1 %>
+                            <% end %>
+                            <% try.task_results.where(id: id, status: 'не правильно').each do %>
+                                <% not_correct << index + 1 %>
+                            <% end %>
+                            <% try.task_results.where(id: id, status: 'частично правильно').each do %>
+                                <% partly_correct << index + 1 %>
+                            <% end %>
+                        <% end %>
+                    <% end %>
+                    <h5>Курс: <%= assigned_test.test.title %></h5>
+                    <h5>Последняя
+                      попытка: <%= Russian::strftime(try.created_at, '%d %B %Y') if try %></h5>
+                    <h5>Правильные ответы: <%= correct.empty? ? 'Нет' : correct.join(', ') %></h5>
+                    <h5>Не правильные ответы: <%= not_correct.empty? ? 'Нет' : not_correct.join(', ') %></h5>
+                    <h5>Частично правильные
+                      ответы: <%= partly_correct.empty? ? 'Нет' : partly_correct.join(', ') %></h5>
+                    <h5>Сумма баллов <%= try.task_results.inject(0) { |sum, i| sum + i.point } if try %> </h5>
+                    <br/>
+                    <h5>Оценка:
+                      <% if assigned_test.tries.where('rate > ?', 70).any? && try %>
+                          Отлично
+                      <% elsif assigned_test.tries.where('rate > ?', 50).any? && try %>
+                          Хорошо
+                      <% elsif assigned_test.tries.where('rate <= ?', 50).any? && try %>
+                          Неуд.
+                      <% else %>
+                          Тест не пройден
+                      <% end %>
+                    </h5>
+                    <hr style="border-bottom: 1px dashed black ">
+                <% end %>
+            <% end %>
+            <div style="display: inline-block; width: 49%">
+              <h5>Директор МИАЦ</h5>
+            </div>
+            <div style="text-align: right; display: inline-block; width: 49%">
+              <h5>С.Г. Сорокин</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

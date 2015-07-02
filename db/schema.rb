@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150625124850) do
+ActiveRecord::Schema.define(version: 20150702075202) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -79,11 +79,13 @@ ActiveRecord::Schema.define(version: 20150625124850) do
   add_index "doctor_dbfs", ["surname"], name: "index_doctor_dbfs_on_surname", using: :btree
 
   create_table "eqvgroups", force: :cascade do |t|
-    t.integer  "test_id",                null: false
+    t.integer  "test_id",                 null: false
     t.integer  "section_id"
-    t.integer  "number",     default: 1, null: false
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.integer  "number",      default: 1, null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.integer  "task_count",  default: 0
+    t.integer  "chain_count", default: 0
   end
 
   add_index "eqvgroups", ["section_id"], name: "index_eqvgroups_on_section_id", using: :btree
@@ -316,6 +318,7 @@ ActiveRecord::Schema.define(version: 20150625124850) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "test_mode_id"
+    t.integer  "assigned_test_id"
   end
 
   create_table "user_answers", force: :cascade do |t|
