@@ -24,12 +24,16 @@ Rails.application.routes.draw do
       get 'create_task'
       get 'settings'
       get 'trash'
+      get 'algorithm'
+      post 'set_counts'
     end
+
     collection do
       # required for Sortable GUI server side actions
       post :rebuild
       post :expand_node
     end
+
     resources :chains, shallow: true do
       get 'bulk_move', action: :bulk_move_edit, on: :collection, as: :bulk_move
       post 'bulk_move', action: :bulk_move_update, on: :collection

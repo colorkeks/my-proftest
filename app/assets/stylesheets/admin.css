@@ -1313,3 +1313,22 @@ small.media-desc {
 }
 
 
+.task-count{
+    width: 60px;
+    padding: 3px 5px;
+    margin-top: 0;
+    display: inline-block;
+}
+
+.eql-group{
+    padding-left: 30px !important;
+    width: 90px;
+    vertical-align: middle;
+    color: dimgray;
+}
+
+.number{
+    text-align: center;
+    width: 40px;
+    vertical-align: middle;
+}
