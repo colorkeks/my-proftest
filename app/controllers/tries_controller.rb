@@ -59,50 +59,8 @@ class TriesController < ApplicationController
         end
         # если таймер еще не дошел до ограниченного времени
       else
-        @try.task_results_queue.each_with_index do |id, index|
-          task_result = @try.task_results.find(id)
-          if index < @current_task_index
-            # если данная задача в цепочке, то убедиться что предыдущие отвечены или это и есть первое задание
-          elsif task_result.status == 'ответ не дан' && task_result.task.chain && (task_result.task.chain_position != 1)
-            # если ответ на предыдущее задание цепочки было дано, то можно
-            task_result.task.chain.tasks.where(chain_position: task_result.task.chain_position - 1).each do |task|
-              p task.task_results.where(try_id: @try.id).first.status
-              p task.chain_position
-              p '++++++++++++++++++++'
-              if task.task_results.where(try_id: @try.id).first.status == ('правильно' || 'не правильно' || 'частично правильно')
-                @task_result = task_result
-                @current_task_index = index
-                # иначе берем первую задачу где нету цепочки либо позиция цепочки 1
-              else
-                @try.task_results_queue.each_with_index do |queue_id, index|
-                  task_result = @try.task_results.find(queue_id)
-                  if (!task_result.task.chain || task_result.task.chain_position == 1) && task_result.status == 'ответ не дан'
-                    @task_result = task_result
-                    @current_task_index = index
-                  end
-                end
-              end
-            end
-            break
-          else
-            if task_result.status == 'ответ не дан'
-              @task_result = task_result
-              @current_task_index = index
-              break
-            end
-          end
-        end
-        # если задание не найдено, по индексу в очереди
-        if @task_result.nil?
-          @try.task_results_queue.each_with_index do |id, index|
-            task_result = @try.task_results.find(id)
-            if task_result.status == 'ответ не дан'
-              @task_result = task_result
-              @current_task_index = index
-              break
-            end
-          end
-        end
+        @task_result = @try.get_question(@current_task_index)
+        @current_task_index = @try.task_results_queue.index(@task_result.id)
       end
     end
   end
@@ -299,45 +257,11 @@ class TriesController < ApplicationController
   # POST /tries.json
   def create
     @try = Try.new(try_params)
-    @test = Test.find_by_id(@try.test_id)
+    @test = Test.existing.find(@try.test_id)
+    result = @try.prepare
 
-    Task.all.where(:test_id => @test.id).each do |task|
-      @task_result = @try.task_results.build(:point => task.point, :text => task.text, :hint => task.hint, :task_type => task.task_type, :status => 'ответ не дан', :task_id => task.id, :try_id => @try.id)
-      Answer.all.where(:task_id => task.id).each do |answer|
-        @task_result.user_answers.build(:user_reply => false, :correct => answer.correct, :text => answer.text, :serial_number => answer.serial_number, :point => answer.point, :task_id => task.id, :answer_id => answer.id, :task_result_id => @task_result.id, :user_association_id => nil)
-      end
-      Association.all.where(:task_id => task.id).each do |association|
-        @task_result.user_associations.build(:text => association.text, :serial_number => association.serial_number, :task_id => task.id, :association_id => association.id, :task_result_id => @task_result.id, :user_answer_id => nil)
-      end
-    end
-    @try.save!
-    if @test.algorithm == 'Все задания'
-      @try.task_results.order('RANDOM()').each do |task_result|
-        if task_result.task.chain_id.nil?
-          @try.task_results_queue << task_result.id
-        elsif task_result.task.chain_position == 1
-          task_result.task.chain.tasks.order('chain_position DESC').each do |task|
-            @try.task_results_queue << task.task_results.where(try_id: @try.id).first.id
-          end
-        end
-      end
-    elsif @test.algorithm == 'Ограниченое количество заданий'
-      tasks_selection = ((@try.task_results.count.to_f/100)*@try.test.percent_tasks).round
-      @try.task_results.order('RANDOM()').first(tasks_selection).each do |task_result|
-        @try.task_results_queue << task_result.id
-      end
-
-      #Удаляем невостребованные задания
-      @try.task_results.each do |tr|
-        tr.mark_for_destruction unless @try.task_results_queue.include?(tr.id)
-      end
-    else
-      @try.task_results.order('RANDOM()').each do |task_result|
-        @try.task_results_queue << task_result.id
-      end
-    end
     respond_to do |format|
-      if @try.save
+      if result
         format.html { redirect_to show_question_try_path(@try) }
         format.json { render :show, status: :created, location: @try }
       else

@@ -1333,3 +1333,15 @@ small.media-desc {
     width: 40px;
     vertical-align: middle;
 }
+
+.alert{
+    position: absolute;
+    top: 4px;
+    width: 500px;
+    /*margin: auto;*/
+    z-index: 1001;
+    padding: 10px 30px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+}
