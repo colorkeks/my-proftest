@@ -60,7 +60,7 @@
             </tr>
             <tr>
               <th>Дата рождения</th>
-              <td><%= @user.birthday.strftime('%Y.%m.%d') %></td>
+              <td><%= @user.birthday %></td>
             </tr>
             <tr>
               <th>ЛПУ</th>
@@ -92,12 +92,12 @@
         <div class="col-lg-6">
           <% if @current_mode.name != 'Нейтральный'%>
           <h3>Результат
-                  <span class="btn btn-white btn-sm tooltips" title="Посмотреть результат">
+                  <a href="#" class="btn btn-white btn-sm tooltips" title="Посмотреть результат">
                     <i class="fa fa-eye  "></i>
-                  </span>
-                  <span class="btn btn-white btn-sm tooltips" title="Печать результата">
+                  </a>
+                  <a href="/users/<%= @user.id%>/print_test_results" class="btn btn-white btn-sm tooltips" title="Печать результата">
                     <i class="fa fa-print"></i>
-                  </span>
+                  </a>
           </h3>
           <% end %>
         </div>
@@ -137,7 +137,7 @@
             </tr>
             <tr>
               <th>Попыток</th>
-              <td title="Количество попыток" class="tooltips"><%= @user_tries ? @user_tries : '0' %></td>
+              <td title="Количество попыток" class="tooltips"><%= @user_tries ? @user_tries.count : '0' %></td>
               <td class="text-success tooltips" title="Зачтено"><%= @user_tries ? @user_tries.where('rate > ?', 50).count : '0' %></td>
               <td class="text-danger tooltips" title="Не зачтено"><%= @user_tries ? @user_tries.where('rate <= ?', 50).count : '0' %></td>
             </tr>
@@ -185,12 +185,12 @@
                     <tr>
                       <td><%= assigned_test.test.title %></td>
                       <td><%= assigned_test.test.attestation == true ? 'Аттестационный' : 'Тренировочный' %></td>
-                      <td><%= assigned_test.test.tries.where(user_id: @user.id).count %></td>
-                      <% if assigned_test.test.tries.where(user_id: @user.id).order('rate DESC').first %>
-                          <td><%= assigned_test.test.tries.where(user_id: @user.id).order('rate DESC').first.created_at %></td>
-                          <td><%= assigned_test.test.tries.where(user_id: @user.id).order('rate DESC').first.rate.to_s + '%' %></td>
-                          <% if assigned_test.test.tries.where(user_id: @user.id).order('created_at DESC').first.rate %>
-                              <% if assigned_test.test.tries.where(user_id: @user.id).order('created_at DESC').first.rate > 50 %>
+                      <td><%= assigned_test.tries.count %></td>
+                      <% if try = assigned_test.tries.order('rate DESC').first %>
+                          <td><%= try.created_at %></td>
+                          <td><%= try.rate.to_s + '%' %></td>
+                          <% if try.rate %>
+                              <% if try.rate > 50 %>
                                   <td><span class="label label-success">Зачет</span></td>
                               <% else %>
                                   <td><span class="label label-danger">Не зачет</span></td>

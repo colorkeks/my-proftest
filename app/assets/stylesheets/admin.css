@@ -7,6 +7,10 @@
  *= require custom
  *= require icomoon
 */
+@media print{
+    body{ background-color:#FFFFFF; background-image:none; color:#000000 }
+    .pageheader{ display:none;}
+}
 
 label {
     font-weight: normal;
