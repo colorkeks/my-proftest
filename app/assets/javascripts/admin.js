@@ -32,7 +32,22 @@ $(function(){
     search_click();
     date_picker();
     update_algorithm_statistic();
+    hide_alerts();
 });
+
+function hide_alerts(){
+    var alert = $('.alert');
+    var timer = setInterval(
+        function(){
+            alert.fadeOut(700);
+        }, 2000
+    );
+
+    alert.hover(function(){
+        clearInterval(timer);
+        $(this).stop().fadeIn(400);
+    })
+}
 
 function update_algorithm_statistic(){
     var submit_form = $('#ajax_submit');
