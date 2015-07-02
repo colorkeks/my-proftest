@@ -1,4 +1,4 @@
-<%= content_for :title, 'Печать тестов испытуемого ' + @user.last_name + ' ' + @user.first_name + ' ' + @user.second_name %>
+<%= content_for :title, 'Результаты тестов испытуемого ' + @user.last_name + ' ' + @user.first_name + ' ' + @user.second_name %>
 
 
 <div class="pageheader">
@@ -15,7 +15,7 @@
         <ol class="breadcrumb">
           <li class="active">
             <div class="btn-group nomargin">
-              <span class="dropdown-toggle" data-toggle="dropdown">Печать тестов испытуемого <%= @user.last_name %> <%= @user.first_name %> <%= @user.second_name %></span>
+              <span class="dropdown-toggle" data-toggle="dropdown">Результаты тестов испытуемого <%= @user.last_name %> <%= @user.first_name %> <%= @user.second_name %></span>
             </div>
           </li>
         </ol>
@@ -46,6 +46,16 @@
             <h5><%= @user.last_name + ' ' + @user.first_name + ' ' + @user.second_name %></h5>
             <h5>Место работы: <%= @user.job %></h5>
             <br/>
+            <table class="table table-bordered table-condensed table-striped">
+              <tr>
+                <th>Курс:</th>
+                <th>Последняя попытка: </th>
+                <th>Правильные ответы: </th>
+                <th>Не правильные ответы:</th>
+                <th>Частично правильные ответы:</th>
+                <th>Сумма баллов:</th>
+                <th>Оценка:</th>
+              </tr>
             <% @assigned_tests.each do |assigned_test| %>
                 <% if assigned_test.test.attestation %>
                     <% correct = []
@@ -64,30 +74,30 @@
                                 <% partly_correct << index + 1 %>
                             <% end %>
                         <% end %>
+                      <tr>
+                        <td><%= assigned_test.test.title %></td>
+                        <td><%= Russian::strftime(try.created_at, '%d %B %Y') if try %></td>
+                        <td><%= correct.empty? ? 'Нет' : correct.join(', ') %></td>
+                        <td> <%= not_correct.empty? ? 'Нет' : not_correct.join(', ') %></td>
+                        <td><%= partly_correct.empty? ? 'Нет' : partly_correct.join(', ') %></td>
+                        <td><%= try.task_results.inject(0) { |sum, i| sum + i.point } if try %> </td>
+                        <td>
+                          <% if assigned_test.tries.where('rate > ?', 70).any? && try %>
+                              Отлично
+                          <% elsif assigned_test.tries.where('rate > ?', 50).any? && try %>
+                              Хорошо
+                          <% elsif assigned_test.tries.where('rate <= ?', 50).any? && try %>
+                              Неуд.
+                          <% else %>
+                              Тест не пройден
+                          <% end %>
+                        </td>
+                      </tr>
                     <% end %>
-                    <h5>Курс: <%= assigned_test.test.title %></h5>
-                    <h5>Последняя
-                      попытка: <%= Russian::strftime(try.created_at, '%d %B %Y') if try %></h5>
-                    <h5>Правильные ответы: <%= correct.empty? ? 'Нет' : correct.join(', ') %></h5>
-                    <h5>Не правильные ответы: <%= not_correct.empty? ? 'Нет' : not_correct.join(', ') %></h5>
-                    <h5>Частично правильные
-                      ответы: <%= partly_correct.empty? ? 'Нет' : partly_correct.join(', ') %></h5>
-                    <h5>Сумма баллов <%= try.task_results.inject(0) { |sum, i| sum + i.point } if try %> </h5>
-                    <br/>
-                    <h5>Оценка:
-                      <% if assigned_test.tries.where('rate > ?', 70).any? && try %>
-                          Отлично
-                      <% elsif assigned_test.tries.where('rate > ?', 50).any? && try %>
-                          Хорошо
-                      <% elsif assigned_test.tries.where('rate <= ?', 50).any? && try %>
-                          Неуд.
-                      <% else %>
-                          Тест не пройден
-                      <% end %>
-                    </h5>
-                    <hr style="border-bottom: 1px dashed black ">
                 <% end %>
             <% end %>
+            </table>
+            <br/>
             <div style="display: inline-block; width: 49%">
               <h5>Директор МИАЦ</h5>
             </div>

@@ -45,6 +45,12 @@ class UsersController < ApplicationController
       render 'users/profile', layout: 'admin'
   end
 
+  def view_test_results
+    @current_mode = @user.test_modes.order('created_at DESC').first
+    @assigned_tests = AssignedTest.all.where(user_id: @user.id, test_mode_id: @current_mode)
+    render 'users/view_test_results', layout: 'admin'
+  end
+
   def print_test_results
     @current_mode = @user.test_modes.order('created_at DESC').first
     @assigned_tests = AssignedTest.all.where(user_id: @user.id, test_mode_id: @current_mode)
