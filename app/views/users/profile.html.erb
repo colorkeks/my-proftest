@@ -119,9 +119,9 @@
             <% count_true = 0
                count_fail = 0
                @assigned_tests.each do |assigned_test| %>
-                <% if assigned_test.test.tries.where(user_id: @user.id).order('rate DESC').first %>
-                    <% if assigned_test.test.tries.where(user_id: @user.id).order('created_at DESC').first.rate %>
-                        <% if assigned_test.test.tries.where(user_id: @user.id).order('created_at DESC').first.rate > 50 %>
+                <% if try = assigned_test.tries.order('rate DESC').first %>
+                    <% if try.rate %>
+                        <% if try.rate > 50 %>
                             <% count_true = count_true + 1 %>
                         <% else %>
                             <% count_fail = count_fail + 1%>
