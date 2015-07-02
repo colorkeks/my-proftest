@@ -31,4 +31,48 @@ class Try < ActiveRecord::Base
     result = result && self.save
   end
 
+  def can_show_task_result?(task_result)
+    if task_result.status == 'ответ не дан'
+      if task_result.task.chain
+        if task_result.task.chain_position == 1
+          return true
+        else
+          #Определяем индекс в очереди
+          index = self.task_results_queue.index(task_result.id)
+          prev_id = self.task_results_queue[index-1]
+          prev_task_result = self.task_results.find(prev_id)
+          return !(prev_task_result.status == 'ответ не дан')
+        end
+      else
+        return true
+      end
+    else
+      return false
+    end
+  end
+
+  def get_question(current_task_index=nil)
+    #Проверка на время
+
+    task_result = nil
+    #Ищем задачу по индексу
+    if current_task_index && (current_task_index < self.task_results_queue.count)
+      task_result_id = self.task_results_queue[current_task_index]
+      task_result = self.task_results.find(task_result_id)
+    end
+
+    #Ищем задачу по порядку, если нет индекса или нельзя отобразить задачу по индексу
+    if current_task_index.blank? || task_result.nil? || !self.can_show_task_result?(task_result)
+      task_result = nil
+      self.task_results_queue.each do |tr_id|
+        tr = self.task_results.find(tr_id)
+        if self.can_show_task_result?(tr)
+          task_result = tr
+          break
+        end
+      end
+    end
+    return task_result
+  end
+
 end
