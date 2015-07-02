@@ -108,7 +108,7 @@ class TasksController < ApplicationController
   def destroy
     @task.destroy
     respond_to do |format|
-      format.html { redirect_to test_path(@task.test_id), notice: 'Task was successfully destroyed.' }
+      format.html { redirect_to test_path(@task.test_id), notice: 'Задание успешно удалено.' }
       format.json { head :no_content }
     end
   end

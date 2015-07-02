@@ -352,7 +352,7 @@ class TriesController < ApplicationController
   def update
     respond_to do |format|
       if @try.update(try_params)
-        format.html { redirect_to @try, notice: 'Try was successfully updated.' }
+        format.html { redirect_to @try, notice: 'Попытка успешно обновлена.' }
         format.json { render :show, status: :ok, location: @try }
       else
         format.html { render :edit }
@@ -366,7 +366,7 @@ class TriesController < ApplicationController
   def destroy
     @try.destroy
     respond_to do |format|
-      format.html { redirect_to tries_path, notice: 'Try was successfully destroyed.' }
+      format.html { redirect_to tries_path, notice: 'Попытка успешно удалена.' }
       format.json { head :no_content }
     end
   end

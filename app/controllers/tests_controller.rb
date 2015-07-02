@@ -77,7 +77,7 @@ class TestsController < ApplicationController
         if @test.save
           format.html {
             #redirect_to current_user, notice: 'тест успешно создан'
-            redirect_to @test.test_group, notice: 'тест успешно создан'
+            redirect_to @test.test_group, notice: 'Тест успешно создан'
           }
           format.json { render :show, status: :created, location: @test }
         else
@@ -137,7 +137,7 @@ class TestsController < ApplicationController
     @test.soft_delete!
 
     respond_to do |format|
-      format.html { redirect_to test_group, notice: 'Test was successfully destroyed.' }
+      format.html { redirect_to test_group, notice: 'Тест успешно удален.' }
       format.json { head :no_content }
     end
   end

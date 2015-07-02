@@ -28,7 +28,7 @@ class TaskResultsController < ApplicationController
 
     respond_to do |format|
       if @task_result.save
-        format.html { redirect_to @task_result, notice: 'Task result was successfully created.' }
+        format.html { redirect_to @task_result, notice: 'Результат успешно создан.' }
         format.json { render :show, status: :created, location: @task_result }
       else
         format.html { render :new }
@@ -42,7 +42,7 @@ class TaskResultsController < ApplicationController
   def update
     respond_to do |format|
       if @task_result.update(task_result_params)
-        format.html { redirect_to @task_result, notice: 'Task result was successfully updated.' }
+        format.html { redirect_to @task_result, notice: 'Результат успешно обновлен.' }
         format.json { render :show, status: :ok, location: @task_result }
       else
         format.html { render :edit }
@@ -56,7 +56,7 @@ class TaskResultsController < ApplicationController
   def destroy
     @task_result.destroy
     respond_to do |format|
-      format.html { redirect_to task_results_url, notice: 'Task result was successfully destroyed.' }
+      format.html { redirect_to task_results_url, notice: 'Результат успешно удален.' }
       format.json { head :no_content }
     end
   end

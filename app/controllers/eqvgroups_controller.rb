@@ -49,7 +49,7 @@ class EqvgroupsController < ApplicationController
   def update
     respond_to do |format|
       if @eqvgroup.update(eqvgroup_params)
-        format.html { redirect_to @eqvgroup, notice: 'Eqvgroup was successfully updated.' }
+        format.html { redirect_to @eqvgroup, notice: 'Эквивалентная группа обновлена.' }
         format.json { render :show, status: :ok, location: @eqvgroup }
       else
         format.html { render :edit }
@@ -63,7 +63,7 @@ class EqvgroupsController < ApplicationController
   def destroy
     @eqvgroup.destroy
     respond_to do |format|
-      format.html { redirect_to eqvgroups_url, notice: 'Eqvgroup was successfully destroyed.' }
+      format.html { redirect_to eqvgroups_url, notice: 'Эквивалентная группа удалена.' }
       format.json { head :no_content }
     end
   end

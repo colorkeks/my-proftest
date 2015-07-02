@@ -61,7 +61,7 @@ class ChainsController < ApplicationController
   def update
     respond_to do |format|
       if @chain.update(chain_params)
-        format.html { redirect_to @chain, notice: 'Chain was successfully updated.' }
+        format.html { redirect_to @chain, notice: 'Цепочка успешно обновлена.' }
         format.json { render :show, status: :ok, location: @chain }
       else
         format.html { render :edit }
@@ -82,7 +82,7 @@ class ChainsController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { redirect_to test_chains_path(@test), notice: 'Chain was successfully destroyed.' }
+      format.html { redirect_to test_chains_path(@test), notice: 'Цепочка успешно удалена.' }
       format.json { head :no_content }
     end
   end

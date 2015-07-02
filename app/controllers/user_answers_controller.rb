@@ -29,7 +29,7 @@ class UserAnswersController < ApplicationController
 
     respond_to do |format|
       if @user_answer.save
-        format.html { redirect_to @user_answer, notice: 'User answer was successfully created.' }
+        format.html { redirect_to @user_answer, notice: 'Ответ успешно создан.' }
         format.json { render :show, status: :created, location: @user_answer }
       else
         format.html { render :new }
@@ -43,7 +43,7 @@ class UserAnswersController < ApplicationController
   def update
     respond_to do |format|
       if @user_answer.update(user_answer_params)
-        format.html { redirect_to @user_answer, notice: 'User answer was successfully updated.' }
+        format.html { redirect_to @user_answer, notice: 'Ответ успешно обновлен.' }
         format.json { render :show, status: :ok, location: @user_answer }
       else
         format.html { render :edit }
@@ -57,7 +57,7 @@ class UserAnswersController < ApplicationController
   def destroy
     @user_answer.destroy
     respond_to do |format|
-      format.html { redirect_to user_answers_url, notice: 'User answer was successfully destroyed.' }
+      format.html { redirect_to user_answers_url, notice: 'Ответ успешно удален.' }
       format.json { head :no_content }
     end
   end
