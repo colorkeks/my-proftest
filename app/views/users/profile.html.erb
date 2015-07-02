@@ -4,7 +4,7 @@
 <div class="pageheader">
   <div class="row">
     <div class="col-sm-3 col-lg-3">
-      <a class="btn btn-white back-btn pull-right" title="Назад" href="/users/<%= current_user.id %>">
+      <a class="btn btn-white back-btn pull-right" title="Назад" href="/doctors">
         <i class="fa fa-arrow-left"></i>
       </a>
 
@@ -77,9 +77,9 @@
                 <% if @current_mode.name == 'Аттестация' %>
                     Режим аттестации A-<%= @user.test_modes.where(name: 'Аттестация').count %>
                 <% elsif @current_mode.name == 'Нейтральный' %>
-                    Нейтральный режим Н-<%= @user.test_modes.where(name: 'Нейтральный').count %>
+                    Нейтральный режим
                 <% elsif @current_mode.name == 'Тренировка' %>
-                    Нейтральный режим Н-<%= @user.test_modes.where(name: 'Тренировка').count %>
+                    Режим тренировки Т-<%= @user.test_modes.where(name: 'Тренировка').count %>
                 <% end %>
             <% else %>
                 Режима нету
@@ -90,17 +90,20 @@
           </h3>
         </div>
         <div class="col-lg-6">
+          <% if @current_mode.name != 'Нейтральный'%>
           <h3>Результат
-                  <span class="btn btn-white btn-sm tooltips" title="Посмотреть результат">
+                  <a href="/users/<%= @user.id%>/view_test_results" class="btn btn-white btn-sm tooltips" title="Посмотреть результат">
                     <i class="fa fa-eye  "></i>
-                  </span>
-                  <span class="btn btn-white btn-sm tooltips" title="Печать результата">
+                  </a>
+                  <a href="/users/<%= @user.id%>/print_test_results" class="btn btn-white btn-sm tooltips" title="Печать результата">
                     <i class="fa fa-print"></i>
-                  </span>
+                  </a>
           </h3>
+          <% end %>
         </div>
       </div>
 
+      <% if @current_mode.name != 'Нейтральный'%>
       <div class="row">
         <div class="col-lg-6">
           <table class="table-no-padding-left" style="width: 300px">
@@ -116,9 +119,9 @@
             <% count_true = 0
                count_fail = 0
                @assigned_tests.each do |assigned_test| %>
-                <% if assigned_test.test.tries.where(user_id: @user.id).order('rate DESC').first %>
-                    <% if assigned_test.test.tries.where(user_id: @user.id).order('created_at DESC').first.rate %>
-                        <% if assigned_test.test.tries.where(user_id: @user.id).order('created_at DESC').first.rate > 50 %>
+                <% if try = assigned_test.tries.order('rate DESC').first %>
+                    <% if try.rate %>
+                        <% if try.rate > 50 %>
                             <% count_true = count_true + 1 %>
                         <% else %>
                             <% count_fail = count_fail + 1%>
@@ -134,13 +137,14 @@
             </tr>
             <tr>
               <th>Попыток</th>
-              <td title="Количество попыток" class="tooltips"><%= @user_tries ? @user_tries : '0' %></td>
+              <td title="Количество попыток" class="tooltips"><%= @user_tries ? @user_tries.count : '0' %></td>
               <td class="text-success tooltips" title="Зачтено"><%= @user_tries ? @user_tries.where('rate > ?', 50).count : '0' %></td>
               <td class="text-danger tooltips" title="Не зачтено"><%= @user_tries ? @user_tries.where('rate <= ?', 50).count : '0' %></td>
             </tr>
           </table>
         </div>
         <div class="col-lg-6">
+          <% if @current_mode.name == 'Аттестация'%>
           <p>
             <strong class="text-success">Зачет получен</strong> <br/>
             <!--<strong>-->
@@ -149,6 +153,7 @@
             <!--</strong>-->
           </p>
           <!--<div class="btn btn-white"><i class="fa fa-print"></i></div>-->
+          <% end %>
         </div>
       </div>
       <hr/>
@@ -180,12 +185,12 @@
                     <tr>
                       <td><%= assigned_test.test.title %></td>
                       <td><%= assigned_test.test.attestation == true ? 'Аттестационный' : 'Тренировочный' %></td>
-                      <td><%= assigned_test.test.tries.where(user_id: @user.id).count %></td>
-                      <% if assigned_test.test.tries.where(user_id: @user.id).order('rate DESC').first %>
-                          <td><%= assigned_test.test.tries.where(user_id: @user.id).order('rate DESC').first.created_at %></td>
-                          <td><%= assigned_test.test.tries.where(user_id: @user.id).order('rate DESC').first.rate.to_s + '%' %></td>
-                          <% if assigned_test.test.tries.where(user_id: @user.id).order('created_at DESC').first.rate %>
-                              <% if assigned_test.test.tries.where(user_id: @user.id).order('created_at DESC').first.rate > 50 %>
+                      <td><%= assigned_test.tries.count %></td>
+                      <% if try = assigned_test.tries.order('rate DESC').first %>
+                          <td><%= try.created_at %></td>
+                          <td><%= try.rate.to_s + '%' %></td>
+                          <% if try.rate %>
+                              <% if try.rate > 50 %>
                                   <td><span class="label label-success">Зачет</span></td>
                               <% else %>
                                   <td><span class="label label-danger">Не зачет</span></td>
@@ -233,6 +238,7 @@
           </div>
         </div>
       </div>
+      <% end %>
     </div>
   </div>
 </div>
@@ -249,13 +255,24 @@
         <h4 class="modal-title" id="myModalLabel">Настройка режима</h4>
 
         <div class="modal-body">
-          <%= render partial: 'mode_form' %>
+          <%= form_for @test_mode, :html => { :class => 'form-horizontal' } do |f| %>
+              <div class="form-group">
+                <%= f.select(:name,[['Нейтральный'],['Аттестация'],['Тренировка']],{}, { :class => 'form-control'})%>
+              </div>
+
+              <%= f.hidden_field :user_id, :class => 'form-control', value: @user.id %>
+              <%= f.hidden_field :date_beg, :class => 'form-control', :value => Date.today%>
+              <div class="form-group">
+                <%= f.submit 'Сохранить', :class => 'btn btn-primary pull-right' %>
+              </div>
+          <% end %>
         </div>
       </div>
     </div>
   </div>
 </div>
 
+<% if @current_mode.name != 'Нейтральный'%>
 <div class="modal fade" id="AddAttestationTests" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" style="width: 680px;">
     <div class="modal-content">
@@ -269,6 +286,7 @@
           <%= form_tag search_tests_user_path, remote: true, id: 'search_form', class: 'form-inline' do %>
               <div class="form-group">
                 <%= text_field_tag :q, params[:q], id: 'qwery_string', :class => 'form-control', autocomplete: 'off', placeholder: 'Найти' %>
+                <%= hidden_field_tag :mode, @current_mode.name %>
                 <%= button_tag(type: 'submit', class: 'btn btn-white') do %>
                     <span class="glyphicon glyphicon-search"></span>
                 <% end %>
@@ -287,7 +305,7 @@
     </div>
   </div>
 </div>
-
+<% end %>
 <script>
     //    date_picker(); тут тоже почему-то не работает
 </script>

@@ -41,8 +41,20 @@ class UsersController < ApplicationController
     @test_mode = TestMode.new
     @current_mode = @user.test_modes.order('created_at DESC').first
     @assigned_tests = AssignedTest.all.where(user_id: @user.id, test_mode_id: @current_mode)
-    @user_tries = Try.find_by_user_id_and_test_mode_id(@user.id, @current_mode.id)
-    render 'users/profile', layout: 'admin'
+    @user_tries = Try.all.where(user_id: @user.id, test_mode_id: @current_mode.id)
+      render 'users/profile', layout: 'admin'
+  end
+
+  def view_test_results
+    @current_mode = @user.test_modes.order('created_at DESC').first
+    @assigned_tests = AssignedTest.all.where(user_id: @user.id, test_mode_id: @current_mode)
+    render 'users/view_test_results', layout: 'admin'
+  end
+
+  def print_test_results
+    @current_mode = @user.test_modes.order('created_at DESC').first
+    @assigned_tests = AssignedTest.all.where(user_id: @user.id, test_mode_id: @current_mode)
+    render 'users/print_test_results', layout: 'admin'
   end
 
   def modes_history
@@ -51,7 +63,7 @@ class UsersController < ApplicationController
   end
 
   def search_tests
-    query = Test.search_test(params[:q])
+    query = Test.search_test(params[:q], params[:mode])
     @tests = query.limit(5)
     @count = query.count
     render 'search', layout: false
@@ -64,6 +76,7 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
+    render 'users/edit', layout: 'admin'
   end
 
   # POST /users

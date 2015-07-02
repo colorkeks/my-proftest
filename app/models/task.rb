@@ -1,7 +1,7 @@
 class Task < ActiveRecord::Base
   has_many :answers, dependent: :destroy
   has_many :associations, dependent: :destroy
-  has_many :task_contents, dependent: :destroy
+  has_many :task_contents, dependent: :nullify #:destroy
   has_many :task_results
   belongs_to :test
   accepts_nested_attributes_for :answers,  :reject_if => proc { |a| a['text'].blank? } , :allow_destroy => true
@@ -18,6 +18,7 @@ class Task < ActiveRecord::Base
   belongs_to :chain
   acts_as_list scope: :chain, column: :chain_position
   has_paper_trail
+  before_save :nullify_task_contents
 
   def eqvgroup_and_section_valid
     if !(self.section == self.eqvgroup.section)
@@ -162,6 +163,15 @@ class Task < ActiveRecord::Base
           {correct: 'incorrect', point: 0 }
         end
       else
+    end
+  end
+
+  def nullify_task_contents
+    self.task_contents.each do |task_content|
+      if task_content.marked_for_destruction?
+        task_content.instance_variable_set(:@marked_for_destruction, false)
+        task_content.task_id = nil
+      end
     end
   end
 

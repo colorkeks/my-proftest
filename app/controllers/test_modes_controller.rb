@@ -6,7 +6,8 @@ class TestModesController < ApplicationController
   end
 
   def show
-
+    @user = User.find(@test_mode.user_id)
+    render 'test_modes/show', layout: 'admin'
   end
 
   def edit

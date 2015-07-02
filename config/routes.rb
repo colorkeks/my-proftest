@@ -68,6 +68,8 @@ Rails.application.routes.draw do
       get 'profile'
       get 'modes_history'
       get 'add_attestation_tests'
+      get 'print_test_results'
+      get 'view_test_results'
       post 'search_tests'
     end
     collection do

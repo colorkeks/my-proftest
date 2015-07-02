@@ -379,7 +379,7 @@ class TriesController < ApplicationController
 
 # Never trust parameters from the scary internet, only allow the white list through.
   def try_params
-    params.require(:try).permit(:date, :status, :timer, :rate, :task_results_queue, :user_id, :test_id, :test_mode_id)
+    params.require(:try).permit(:date, :status, :timer, :rate, :task_results_queue, :user_id, :test_id, :test_mode_id, :assigned_test_id)
   end
 
 end
