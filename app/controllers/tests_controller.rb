@@ -1,5 +1,5 @@
 class TestsController < ApplicationController
-  before_action :set_test, only: [:show, :trash, :edit, :update, :destroy, :settings]
+  before_action :set_test, only: [:show, :trash, :edit, :update, :destroy, :settings, :algorithm, :set_counts]
   load_and_authorize_resource
   # GET /tests
   # GET /tests.json
@@ -140,6 +140,31 @@ class TestsController < ApplicationController
       format.html { redirect_to test_group, notice: 'Test was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def algorithm
+    @eqvgroups = @test.eqvgroups
+  end
+
+  def set_counts
+    if params[:submit]
+      params[:eqvgroup].each do |eqvgroup|
+        eqv = Eqvgroup.find(eqvgroup[0])
+        eqv.task_count  = eqvgroup[1][:task_count]
+        eqv.chain_count = eqvgroup[1][:chain_count]
+        eqv.save
+      end
+      redirect_to algorithm_test_path(@test), notice: 'Данные сохранены'
+    else
+      @eqvgroups = params[:eqvgroup].map do |eqvgroup|
+        eqv = Eqvgroup.find(eqvgroup[0])
+        eqv.task_count  = eqvgroup[1][:task_count].presence
+        eqv.chain_count = eqvgroup[1][:chain_count].presence
+        eqv
+      end
+      render 'algorithm_statistic', layout: false
+    end
+
   end
 
   private

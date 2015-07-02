@@ -31,7 +31,22 @@ $(function(){
     register_change_event();
     search_click();
     date_picker();
+    update_algorithm_statistic();
 });
+
+function update_algorithm_statistic(){
+    var submit_form = $('#ajax_submit');
+    var inputs = $('#task_chain_counts').find('input[type="text"]');
+    inputs.keypress(function(e){
+        if([48,49,50,51,52,53,54,55,56,57].indexOf(e.keyCode) >= 0){
+           var _this = this;
+            setTimeout(function(){
+                submit_form.find('[name="'+$(_this).attr('name')+'"]').val($(_this).val());
+                submit_form.submit();
+            },100);
+        }
+    });
+}
 
 function date_picker(){
     $('#birthday').datetimepicker({
@@ -42,7 +57,7 @@ function date_picker(){
         format: 'LT',
         locale: 'ru'
     });
-};
+}
 
 function register_change_event(){
     if ($('#change-content').length > 0){
