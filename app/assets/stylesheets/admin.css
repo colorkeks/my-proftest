@@ -10,6 +10,19 @@
 @media print{
     body{ background-color:#FFFFFF; background-image:none; color:#000000 }
     .pageheader{ display:none;}
+    table{
+        width: 100%;
+    }
+    thead {
+        display: table-header-group;
+        text-align: center;
+    }
+    tbody {
+        display: table-row-group;
+    }
+    tr{
+        page-break-inside: avoid;
+    }
 }
 
 label {
