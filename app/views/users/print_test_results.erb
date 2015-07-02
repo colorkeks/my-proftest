@@ -47,31 +47,46 @@
             <h5>Место работы: <%= @user.job %></h5>
             <br/>
             <% @assigned_tests.each do |assigned_test| %>
-                <% correct = []
-                   not_correct = []
-                   partly_correct = []
-                %>
-                <% if try = assigned_test.tries.order('created_at DESC').first %>
-                    <% try.task_results_queue.each_with_index do |id, index| %>
-                        <% try.task_results.where(id: id, status: 'правильно').each do %>
-                            <% correct << index + 1 %>
-                        <% end %>
-                        <% try.task_results.where(id: id, status: 'не правильно').each do %>
-                            <% not_correct << index + 1 %>
-                        <% end %>
-                        <% try.task_results.where(id: id, status: 'частично правильно').each do %>
-                            <% partly_correct << index + 1 %>
+                <% if assigned_test.test.attestation %>
+                    <% correct = []
+                       not_correct = []
+                       partly_correct = []
+                    %>
+                    <% if try = assigned_test.tries.order('created_at DESC').first %>
+                        <% try.task_results_queue.each_with_index do |id, index| %>
+                            <% try.task_results.where(id: id, status: 'правильно').each do %>
+                                <% correct << index + 1 %>
+                            <% end %>
+                            <% try.task_results.where(id: id, status: 'не правильно').each do %>
+                                <% not_correct << index + 1 %>
+                            <% end %>
+                            <% try.task_results.where(id: id, status: 'частично правильно').each do %>
+                                <% partly_correct << index + 1 %>
+                            <% end %>
                         <% end %>
                     <% end %>
+                    <h5>Курс: <%= assigned_test.test.title %></h5>
+                    <h5>Последняя
+                      попытка: <%= Russian::strftime(assigned_test.tries.order('created_at DESC').first.created_at, '%d %B %Y') if assigned_test.tries.order('created_at DESC').first %></h5>
+                    <h5>Правильные ответы: <%= correct.empty? ? 'Нет' : correct.join(', ') %></h5>
+                    <h5>Не правильные ответы: <%= not_correct.empty? ? 'Нет' : not_correct.join(', ') %></h5>
+                    <h5>Частично правильные
+                      ответы: <%= partly_correct.empty? ? 'Нет' : partly_correct.join(', ') %></h5>
+                    <h5>Сумма баллов <%= try.task_results.inject(0) { |sum, i| sum + i.point } if try %> </h5>
+                    <br/>
+                    <h5>Оценка:
+                      <% if assigned_test.tries.where('rate > ?', 70).any? && try %>
+                          Отлично
+                      <% elsif assigned_test.tries.where('rate > ?', 50).any? && try %>
+                          Хорошо
+                      <% elsif assigned_test.tries.where('rate <= ?', 50).any? && try %>
+                          Неуд.
+                      <% else %>
+                          Тест не пройден
+                      <% end %>
+                    </h5>
+                    <hr style="border-bottom: 1px dashed black ">
                 <% end %>
-                <h5>Курс: <%= assigned_test.test.title %></h5>
-                <h5>Последняя
-                  попытка: <%= Russian::strftime(assigned_test.tries.order('created_at DESC').first.created_at, '%d %B %Y') if assigned_test.tries.order('created_at DESC').first %></h5>
-                <h5>Правильные ответы: <%= correct.empty? ? 'Нет' : correct.join(', ') %></h5>
-                <h5>Не правильные ответы: <%= not_correct.empty? ? 'Нет' : not_correct.join(', ') %></h5>
-                <h5>Частично правильные ответы: <%= partly_correct.empty? ? 'Нет' : partly_correct.join(', ') %></h5>
-                <h5>Сумма баллов <%= try.task_results.inject(0) { |sum, i| sum + i.point } if try %> </h5>
-                <hr style="border-bottom: 1px dashed black ">
             <% end %>
             <div style="display: inline-block; width: 49%">
               <h5>Директор МИАЦ</h5>

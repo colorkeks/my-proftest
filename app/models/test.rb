@@ -16,9 +16,9 @@ class Test < ActiveRecord::Base
   def self.search_test(q,mode)
     if mode == 'Аттестация'
       if q.empty?
-        Test.all.where(attestation: true)
+        Test.all
       else
-        Test.where("description LIKE ? OR title LIKE ? AND attestation = true", "#{q}%", "%#{q}%")
+        Test.where("description LIKE ? OR title LIKE ?", "#{q}%", "%#{q}%")
       end
     elsif mode == 'Тренировка'
       if q.empty?
