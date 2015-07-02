@@ -65,6 +65,7 @@
                             <% end %>
                         <% end %>
                     <% end %>
+                    <div class="pagebreak">
                     <h5>Курс: <%= assigned_test.test.title %></h5>
                     <h5>Последняя
                       попытка: <%= Russian::strftime(try.created_at, '%d %B %Y') if try %></h5>
@@ -86,6 +87,7 @@
                       <% end %>
                     </h5>
                     <hr style="border-bottom: 1px dashed black ">
+                    </div>
                 <% end %>
             <% end %>
             <div style="display: inline-block; width: 49%">
@@ -100,3 +102,9 @@
     </div>
   </div>
 </div>
+
+<script>
+    $(function(){
+        window.print();
+    });
+</script>
