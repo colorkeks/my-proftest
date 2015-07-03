@@ -265,6 +265,7 @@ class TriesController < ApplicationController
         format.html { redirect_to show_question_try_path(@try) }
         format.json { render :show, status: :created, location: @try }
       else
+        puts @try.errors.inspect
         format.html { render :new }
         format.json { render json: @try.errors, status: :unprocessable_entity }
       end
