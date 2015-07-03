@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :profile, :modes_history]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :profile, :modes_history, :generate_token]
   delegate :can?, :cannot?, :to => :ability
   load_and_authorize_resource
   # GET /users
@@ -136,6 +136,28 @@ class UsersController < ApplicationController
     render 'users/search_stub', layout: 'admin'
   end
 
+  def generate_token
+     if @user.generate_token
+       redirect_to profile_user_path(@user), notice: 'Токен успешно сгенерирован.'
+     else
+       redirect_to profile_user_path(@user), alert: 'Токен не сгенерирован.'
+     end
+  end
+
+  def token_auth
+  end
+
+  def check_token
+    user = User.find_by(token: params[:token])
+    if user
+      sign_in(user)
+      redirect_to user_path(user)
+    else
+      redirect_to token_auth_users_path, alert: 'Токен не найден.'
+    end
+
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_user
@@ -147,6 +169,6 @@ class UsersController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def user_params
     params.require(:user).permit(:first_name, :second_name, :last_name, :birthday, :drcode,
-                                 :job, :email, :password, :password_confirmation)
+                                 :job, :email, :password, :password_confirmation, :token)
   end
 end
