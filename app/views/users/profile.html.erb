@@ -90,7 +90,7 @@
           </h3>
         </div>
         <div class="col-lg-6">
-          <% if @current_mode.name != 'Нейтральный'%>
+          <% if @current_mode && @current_mode.name != 'Нейтральный'%>
           <h3>Результат
                   <a href="/users/<%= @user.id%>/view_test_results" class="btn btn-white btn-sm tooltips" title="Посмотреть результат">
                     <i class="fa fa-eye  "></i>
@@ -103,7 +103,7 @@
         </div>
       </div>
 
-      <% if @current_mode.name != 'Нейтральный'%>
+      <% if @current_mode && @current_mode.name != 'Нейтральный' %>
       <div class="row">
         <div class="col-lg-6">
           <table class="table-no-padding-left" style="width: 300px">
@@ -272,7 +272,7 @@
   </div>
 </div>
 
-<% if @current_mode.name != 'Нейтральный'%>
+<% if @current_mode && @current_mode.name != 'Нейтральный'%>
 <div class="modal fade" id="AddAttestationTests" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" style="width: 680px;">
     <div class="modal-content">

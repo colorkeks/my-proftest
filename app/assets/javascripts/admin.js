@@ -36,7 +36,7 @@ $(function(){
 });
 
 function hide_alerts(){
-    var alert = $('.alert');
+    var alert = $('.rails-flash .alert');
     var timer = setInterval(
         function(){
             alert.fadeOut(700);

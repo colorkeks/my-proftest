@@ -9,6 +9,11 @@ class UsersController < ApplicationController
     @users = User.all
   end
 
+  def test_persons
+    @test_persons = Role.find_by(name: 'Тестируемый').users.order(:id).paginate(:page => params[:page], :per_page => params[:per_page] || 30)
+    render 'test_persons', layout: 'admin'
+  end
+
   # GET /users/1
   # GET /users/1.json
   def show
@@ -41,8 +46,8 @@ class UsersController < ApplicationController
     @test_mode = TestMode.new
     @current_mode = @user.test_modes.order('created_at DESC').first
     @assigned_tests = AssignedTest.all.where(user_id: @user.id, test_mode_id: @current_mode)
-    @user_tries = Try.all.where(user_id: @user.id, test_mode_id: @current_mode.id)
-      render 'users/profile', layout: 'admin'
+    @user_tries = Try.all.where(user_id: @user.id, test_mode_id: @current_mode.id) if @current_mode
+    render 'users/profile', layout: 'admin'
   end
 
   def view_test_results

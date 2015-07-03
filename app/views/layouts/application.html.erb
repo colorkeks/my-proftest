@@ -71,11 +71,11 @@
     </div>
   </nav>
     <% if content_for? :body %>
-      <%= bootstrap_flash %>
+      <div class="rails-flash"><%= bootstrap_flash %></div>
       <%= yield :body %>
     <% else %>
         <div class="container">
-           <%= bootstrap_flash %>
+        <div  class="rails-flash"><%= bootstrap_flash %></div>
            <%= yield %>
         </div>
     <% end %>

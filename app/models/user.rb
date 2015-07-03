@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   has_many :tests
   has_many :test_modes
   has_many :assigned_tests
+  has_one :doctor_dbf, :foreign_key => :drcode, primary_key: 'drcode'
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
