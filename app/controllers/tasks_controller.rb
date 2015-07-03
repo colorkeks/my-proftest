@@ -135,7 +135,7 @@ class TasksController < ApplicationController
       end
     end
 
-    redirect_to :back #@test
+    redirect_to :back, notice: 'Элементы успешно удалены.' #@test
   end
 
   def bulk_move_edit
@@ -179,7 +179,7 @@ class TasksController < ApplicationController
     end
 
     if @success
-      redirect_to @test
+      redirect_to @test, notice: 'Элементы успешно перенесены.'
     else
       flash[:error] = 'Невозможно переместить группу элементов'
       redirect_to @test
@@ -241,7 +241,7 @@ class TasksController < ApplicationController
     end
 
     if @success
-      redirect_to :back
+      redirect_to :back, notice: 'Элементы успешно объеденены в цепочку.'
     else
       flash[:error] = 'Невозможно объединить в цепочку'
       redirect_to :back
@@ -270,7 +270,7 @@ class TasksController < ApplicationController
     end
 
     if @success
-      redirect_to :back
+      redirect_to :back, notice: 'Элементы успешно удалены из цепочки.'
     else
       flash[:error] = 'Невозможно удалить из цепочки'
       redirect_to :back

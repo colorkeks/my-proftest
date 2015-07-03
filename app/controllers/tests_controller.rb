@@ -116,7 +116,7 @@ class TestsController < ApplicationController
       else
         if @test.update(test_params)
           format.html {
-            redirect_to(:back)
+            redirect_to :back, notice: 'Элемент успешно обновлен.'
             #redirect_to current_user, notice: 'Папка была успешно обновлена'
           }
           format.json { render :show, status: :ok, location: @test }

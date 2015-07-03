@@ -73,7 +73,7 @@ class TestGroupsController < ApplicationController
           else
             group = @test_group
           end
-          redirect_to group
+          redirect_to group, notice: 'Элемент успешно обновлен.'
         }
         format.json { render :show, status: :ok, location: @test_group }
       else
@@ -122,7 +122,7 @@ class TestGroupsController < ApplicationController
         end
       end
     end
-    redirect_to @test_group
+    redirect_to @test_group, notice: 'Элементы успешно удалены.'
   end
 
   def bulk_move_edit
@@ -164,7 +164,7 @@ class TestGroupsController < ApplicationController
     end
 
     if @success
-      redirect_to @test_group
+      redirect_to @test_group, notice: 'Элементы успешно перемещены.'
     else
       flash[:error] = 'Невозможно переместить группу элементов'
       redirect_to @test_group
