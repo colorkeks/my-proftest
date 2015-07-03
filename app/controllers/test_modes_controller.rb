@@ -7,6 +7,7 @@ class TestModesController < ApplicationController
 
   def show
     @user = User.find(@test_mode.user_id)
+    @mode_tries = @test_mode.tries.paginate(:page => params[:page], :per_page => params[:per_page] || 30)
     render 'test_modes/show', layout: 'admin'
   end
 

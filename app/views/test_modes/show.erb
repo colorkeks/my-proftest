@@ -31,8 +31,35 @@
     <div class="col-sm-12 col-lg-12">
       <div class="panel panel-default">
         <div class="panel-body panel-profile">
-          <h3 style="margin: 0">Режим - <%= @test_mode.name %>
-          </h3>
+          <div class="pull-left">
+            <h3 style="margin: 0">Режим - <%= @test_mode.name %>
+            </h3>
+          </div>
+          <div class="pull-right">
+                <span class="mr10 italic text-muted">
+                  <%= [@mode_tries.per_page * (@mode_tries.current_page-1) + 1, @mode_tries.total_entries].min %>
+                  - <%= [@mode_tries.per_page * (@mode_tries.current_page), @mode_tries.total_entries].min %>
+                  из <%= @mode_tries.total_entries %>
+                </span>
+
+            <div class="btn-group mr10">
+              <% wp = will_paginate @mode_tries, renderer: BootstrapPagination::Rails, :page_links => false,
+                                    next_label: '<i class="fa fa-chevron-right"></i>',
+                                    previous_label: '<i class="fa fa-chevron-left"></i>' %>
+              <% if wp %>
+                  <%= wp %>
+              <% else %>
+                  <ul class="pagination pagination">
+                    <li class="prev disabled">
+                      <span><i class="fa fa-chevron-left"></i></span>
+                    </li>
+                    <li class="next disabled">
+                      <span><i class="fa fa-chevron-right "></i></span>
+                    </li>
+                  </ul>
+              <% end %>
+            </div>
+          </div>
           <br>
           <!--<table class="table table-bordered table-condensed table-striped">-->
             <!--<tr>-->
@@ -77,7 +104,7 @@
               <th>Процент</th>
               <th>Результат</th>
             </tr>
-            <% @test_mode.tries.each do |try|%>
+            <% @mode_tries.each do |try|%>
                 <td><%= try.test.title%></td>
                 <td><%= try.created_at%></td>
                 <td><%= try.timer.strftime('%H:%M') if try.timer %></td>

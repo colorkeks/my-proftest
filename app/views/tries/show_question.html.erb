@@ -1,3 +1,4 @@
+<% task_was = @task_result.task_version.item_version %>
 <div class="container">
 
   <div class="row">
@@ -80,14 +81,16 @@
       <div class="col-lg-12 question-content">
         <div class="question-number">Задание № <%= @current_task_index + 1 %></div>
         <div class="row">
-          <% if @task_result.task.task_contents.count <= 1 %>
+          <% if @task_result.try_task_contents.count <= 1 %>
               <div class="col-lg-6">
                 <div>
                   <h4><%= sanitize @task_result.text.html_safe, attributes: [] %></h4>
                 </div>
               </div>
               <div class="col-lg-6" style="text-align: center">
-                <% @task_result.task.task_contents.each do |content| %>
+                <% @task_result.try_task_contents.each do |try_task_content| %>
+                    <% content = try_task_content.task_content_version.item_version %>
+                    <% content.instance_variable_set(:@new_record, false) %>
                     <% if content.file_content_content_type =~ %r(audio) %>
                         <div style="margin: 0 auto;"><%= audio_tag(content.file_content.url(:original), controls: true, style: 'margin-top:0;') %></div>
                     <% elsif content.file_content_content_type =~ %r(image) %>
@@ -101,11 +104,13 @@
           <% else %>
               <div class="col-lg-12">
                 <div style="text-align: center; width: 100%; min-height: 200px;">
-                  <h4><%= sanitize @task_result.text.html_safe, attributes: [] %></h4>
+                  <h4><%= sanitize task_was.text.html_safe, attributes: [] %></h4>
                 </div>
               </div>
               <div class="row">
-                <% @task_result.task.task_contents.each do |content| %>
+                <% @task_result.try_task_contents.each do |try_task_content| %>
+                    <% content = try_task_content.task_content_version.item_was %>
+                    <% content.instance_variable_set(:@new_record, false) %>
                     <div class="col-lg-4">
                       <% if content.file_content_content_type =~ %r(audio) %>
                           <div style=""><%= audio_tag(content.file_content.url(:original), controls: true, style: 'margin-top:0;') %></div>
@@ -124,7 +129,7 @@
         <div class="row">
           <div class="col-lg-12 answer-content">
             <div class="question-description">
-              <%= @task_result.hint.html_safe %>
+              <%= task_was.hint.html_safe %>
             </div>
           </div>
         </div>

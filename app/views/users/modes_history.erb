@@ -4,9 +4,10 @@
 <div class="pageheader">
   <div class="row">
     <div class="col-sm-3 col-lg-2">
-      <a class="btn btn-white back-btn pull-right" title="Назад" href="/users/<%= @user.id%>/profile">
+      <a class="btn btn-white back-btn pull-right" title="Назад" href="/users/<%= @user.id %>/profile">
         <i class="fa fa-arrow-left"></i>
       </a>
+
       <h2>Профиль</h2>
     </div>
     <div class="col-sm-9 col-lg-10">
@@ -30,6 +31,35 @@
     <div class="col-sm-12 col-lg-12">
       <div class="panel panel-default">
         <div class="panel-body panel-profile">
+          <div class="pull-left">
+            <h3 style="margin: 0">История режимов
+            </h3>
+          </div>
+          <div class="pull-right">
+                <span class="mr10 italic text-muted">
+                  <%= [@test_modes.per_page * (@test_modes.current_page-1) + 1, @test_modes.total_entries].min %>
+                  - <%= [@test_modes.per_page * (@test_modes.current_page), @test_modes.total_entries].min %>
+                  из <%= @test_modes.total_entries %>
+                </span>
+
+            <div class="btn-group mr10">
+              <% wp = will_paginate @test_modes, renderer: BootstrapPagination::Rails, :page_links => false,
+                                    next_label: '<i class="fa fa-chevron-right"></i>',
+                                    previous_label: '<i class="fa fa-chevron-left"></i>' %>
+              <% if wp %>
+                  <%= wp %>
+              <% else %>
+                  <ul class="pagination pagination">
+                    <li class="prev disabled">
+                      <span><i class="fa fa-chevron-left"></i></span>
+                    </li>
+                    <li class="next disabled">
+                      <span><i class="fa fa-chevron-right "></i></span>
+                    </li>
+                  </ul>
+              <% end %>
+            </div>
+          </div>
           <table class="table table-bordered table-condensed table-striped">
             <tr>
               <th>Режим:</th>
@@ -38,9 +68,9 @@
               <th>Тесты:</th>
               <th>Попытки:</th>
             </tr>
-            <% @test_modes.where.not(name: 'Нейтральный').order('created_at DESC').each do |mode| %>
+            <% @test_modes.each do |mode| %>
                 <tr>
-                  <td><%= link_to mode.name, test_mode_path(mode)%></td>
+                  <td><%= link_to mode.name, test_mode_path(mode) %></td>
                   <td><%= mode.date_beg %></td>
                   <td><%= mode.date_end %></td>
                   <td><%= mode.assigned_tests.count %></td>

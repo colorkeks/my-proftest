@@ -7,8 +7,11 @@ class TryTest < ActiveSupport::TestCase
 
   test "prepare" do
     test = tests(:one)
+    test.tasks.map(&:touch_with_version) #Создаем версии
     try = Try.new(test: test)
-    try.prepare
+    result = try.prepare
+
+    assert_equal true, result
     task_results = try.task_results.order(:id)
     assert_equal try.task_results_queue.sort, task_results.map{|tr| tr.id}
   end
@@ -16,8 +19,10 @@ class TryTest < ActiveSupport::TestCase
   test "can show task result" do
     test = tests(:one)
     try = Try.new(test: test)
-    try.prepare
+    test.tasks.map(&:touch_with_version) #Создаем версии
+    result = try.prepare
 
+    assert_equal true, result
     assert_equal try.can_show_task_result?(try.task_results.first), true
     assert_equal try.can_show_task_result?(try.task_results.last), true
 

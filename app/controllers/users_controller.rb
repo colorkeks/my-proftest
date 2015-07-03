@@ -63,7 +63,7 @@ class UsersController < ApplicationController
   end
 
   def modes_history
-    @test_modes = TestMode.all.where(user_id: @user.id)
+    @test_modes = TestMode.all.where(user_id: @user.id).where.not(name: 'Нейтральный').order('created_at DESC').paginate(:page => params[:page], :per_page => params[:per_page] || 30)
     render 'users/modes_history', layout: 'admin'
   end
 
