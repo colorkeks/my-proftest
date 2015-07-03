@@ -10,12 +10,42 @@ class Try < ActiveRecord::Base
   def populate_tasks
     tasks = self.test.get_tasks_for_current_algorithm
     tasks.each do |task|
-      task_result = self.task_results.build(:point => task.point, :text => task.text, :hint => task.hint, :task_type => task.task_type, :status => 'ответ не дан', :task_id => task.id)
+      task_result = self.task_results.build(
+          task_version: task.versions.last,
+          :point => task.point,
+          :text => task.text,
+          :hint => task.hint,
+          :task_type => task.task_type,
+          :status => 'ответ не дан',
+          :task_id => task.id
+      )
       task.answers.each do |answer|
-        task_result.user_answers.build(:user_reply => false, :correct => answer.correct, :text => answer.text, :serial_number => answer.serial_number, :point => answer.point, :task_id => task.id, :answer_id => answer.id, :user_association_id => nil)
+        task_result.user_answers.build(
+            answer_version: answer.versions.last,
+            :user_reply => false,
+            :correct => answer.correct,
+            :text => answer.text,
+            :serial_number => answer.serial_number,
+            :point => answer.point,
+            :task_id => task.id,
+            :answer_id => answer.id,
+            :user_association_id => nil
+        )
       end
       task.associations.each do |association|
-        task_result.user_associations.build(:text => association.text, :serial_number => association.serial_number, :task_id => task.id, :association_id => association.id, :user_answer_id => nil)
+        task_result.user_associations.build(
+            association_version: association.versions.last,
+            :text => association.text,
+            :serial_number => association.serial_number,
+            :task_id => task.id,
+            :association_id => association.id,
+            :user_answer_id => nil
+        )
+      end
+      task.task_contents.each do |task_content|
+        task_result.try_task_contents.build(
+          task_content_version: task_content.versions.last
+        )
       end
     end
     self

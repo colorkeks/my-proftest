@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150702075202) do
+ActiveRecord::Schema.define(version: 20150703065148) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -240,6 +240,7 @@ ActiveRecord::Schema.define(version: 20150702075202) do
     t.integer  "try_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "task_version_id"
   end
 
   create_table "tasks", force: :cascade do |t|
@@ -321,6 +322,15 @@ ActiveRecord::Schema.define(version: 20150702075202) do
     t.integer  "assigned_test_id"
   end
 
+  create_table "try_task_contents", force: :cascade do |t|
+    t.integer  "task_result_id"
+    t.integer  "task_content_version_id"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  add_index "try_task_contents", ["task_result_id"], name: "index_try_task_contents_on_task_result_id", using: :btree
+
   create_table "user_answers", force: :cascade do |t|
     t.string   "user_reply"
     t.boolean  "correct"
@@ -333,6 +343,7 @@ ActiveRecord::Schema.define(version: 20150702075202) do
     t.integer  "task_result_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "answer_version_id"
   end
 
   create_table "user_associations", force: :cascade do |t|
@@ -344,6 +355,7 @@ ActiveRecord::Schema.define(version: 20150702075202) do
     t.integer  "user_answer_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "association_version_id"
   end
 
   create_table "users", force: :cascade do |t|
