@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :profile, :modes_history, :generate_token]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :profile, :modes_history, :pdf, :generate_token]
   delegate :can?, :cannot?, :to => :ability
   load_and_authorize_resource
   # GET /users
@@ -32,16 +32,6 @@ class UsersController < ApplicationController
     @test = Test.new
   end
 
-  def custom_create
-    @user = User.create(user_params)
-    @user.test_modes.build(name: 'Нейтральный', date_beg: Date.today)
-      if @user.save
-        redirect_to profile_user_path(@user), notice: 'Пользователь успешно создан'
-      else
-        redirect_to :back, alert: 'Пароль или Email не введен'
-      end
-  end
-
   def profile
     @test_mode = TestMode.new
     @current_mode = @user.test_modes.order('created_at DESC').first
@@ -62,6 +52,18 @@ class UsersController < ApplicationController
     render 'users/print_test_results', layout: 'admin'
   end
 
+  def save_pdf
+    @current_mode = @user.test_modes.order('created_at DESC').first
+    @assigned_tests = AssignedTest.all.where(user_id: @user.id, test_mode_id: @current_mode)
+    respond_to do |format|
+      format.pdf do
+        render pdf: @user.drcode + '_' + DateTime.now.strftime('%Y-%m-%d').to_s, # Excluding ".pdf" extension.
+               :page_size => 'A4',
+               formats: :html, encoding: 'utf8'
+      end
+    end
+  end
+
   def modes_history
     @test_modes = TestMode.all.where(user_id: @user.id).where.not(name: 'Нейтральный').order('created_at DESC').paginate(:page => params[:page], :per_page => params[:per_page] || 30)
     render 'users/modes_history', layout: 'admin'
@@ -74,9 +76,32 @@ class UsersController < ApplicationController
     render 'search', layout: false
   end
 
+  def custom_role_create
+    @user = User.new
+    render 'users/custom_role_create', layout: 'admin'
+  end
+
+  def custom_create
+    @user = User.create(user_params)
+
+    if params[:roles]
+      @user.create_role(params[:roles])
+    else
+      @user.create_role(['Тестируемый'])
+    end
+
+    @user.test_modes.build(name: 'Нейтральный', date_beg: Date.today)
+    if @user.save
+      redirect_to profile_user_path(@user), notice: 'Пользователь успешно создан'
+    else
+      redirect_to :back, alert: 'Какие-то поля не заполнены'
+    end
+  end
+
   # GET /users/new
   def new
     @user = User.new
+    render 'users/new', layout: 'admin'
   end
 
   # GET /users/1/edit
@@ -137,11 +162,11 @@ class UsersController < ApplicationController
   end
 
   def generate_token
-     if @user.generate_token
-       redirect_to profile_user_path(@user), notice: 'Токен успешно сгенерирован.'
-     else
-       redirect_to profile_user_path(@user), alert: 'Токен не сгенерирован.'
-     end
+    if @user.generate_token
+      redirect_to profile_user_path(@user), notice: 'Токен успешно сгенерирован.'
+    else
+      redirect_to profile_user_path(@user), alert: 'Токен не сгенерирован.'
+    end
   end
 
   def token_auth

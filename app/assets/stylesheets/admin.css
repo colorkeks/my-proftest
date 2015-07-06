@@ -6,6 +6,7 @@
  *= require style.default
  *= require custom
  *= require icomoon
+ *= require chosen
 */
 @media print{
     body{ background-color:#FFFFFF; background-image:none; color:#000000 }
@@ -24,6 +25,10 @@
         page-break-inside: avoid;
     }
     .pagebreak{page-break-inside: avoid;}
+}
+
+.chosen-container-multi .chosen-choices {
+    min-height: 41px !important;
 }
 
 label {

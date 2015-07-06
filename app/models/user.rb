@@ -1,11 +1,13 @@
 class User < ActiveRecord::Base
-  before_create :create_role
   has_and_belongs_to_many :roles
   has_many :tries
   has_many :tests
   has_many :test_modes
   has_many :assigned_tests
   has_one :doctor_dbf, :foreign_key => :drcode, primary_key: 'drcode'
+  validates :first_name, presence: true
+  validates :second_name, presence: true
+  validates :last_name, presence: true
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -44,11 +46,10 @@ class User < ActiveRecord::Base
     Role.find_by(name: 'Тестируемый').users.where('token = ? AND token_expire_at >= ? ', token, Time.now ).first
   end
 
-  private
-
-  def create_role
-    # self.roles << Role.find_by_name(:Администратор)
-    self.roles << Role.find_by_name(:Тестируемый)
-    # self.roles << Role.find_by_name(:Методолог)
+  def create_role(roles)
+    roles.each do |role|
+      self.roles << Role.find_by_name(role)
+    end
   end
+
 end

@@ -70,6 +70,7 @@ Rails.application.routes.draw do
       get 'add_attestation_tests'
       get 'print_test_results'
       get 'view_test_results'
+      get 'save_pdf'
       post 'search_tests'
       post 'generate_token'
     end
@@ -80,6 +81,7 @@ Rails.application.routes.draw do
       get 'profile_stub'
       get 'search_stub'
       get 'test_persons'
+      get 'custom_role_create'
       post 'check_token'
     end
   end
