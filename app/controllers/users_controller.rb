@@ -1,9 +1,7 @@
 class UsersController < ApplicationController
-<<<<<<< HEAD
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :profile, :modes_history, :pdf]
-=======
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :profile, :modes_history, :generate_token]
->>>>>>> 541ecfc177602e5228f291b2523fc0a938130cb0
+
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :profile, :modes_history, :pdf, :generate_token]
+
   delegate :can?, :cannot?, :to => :ability
   load_and_authorize_resource
   # GET /users
