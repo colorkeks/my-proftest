@@ -148,12 +148,12 @@ class UsersController < ApplicationController
   end
 
   def check_token
-    user = User.find_by(token: params[:token])
+    user = User.check_token(params[:token])
     if user
       sign_in(user)
       redirect_to user_path(user)
     else
-      redirect_to token_auth_users_path, alert: 'Токен не найден.'
+      redirect_to new_user_session_path, alert: 'Токен не найден.'
     end
 
   end
