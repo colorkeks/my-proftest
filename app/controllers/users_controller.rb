@@ -32,16 +32,6 @@ class UsersController < ApplicationController
     @test = Test.new
   end
 
-  def custom_create
-    @user = User.create(user_params)
-    @user.test_modes.build(name: 'Нейтральный', date_beg: Date.today)
-    if @user.save
-      redirect_to profile_user_path(@user), notice: 'Пользователь успешно создан'
-    else
-      redirect_to :back, alert: 'Пароль или Email не введен'
-    end
-  end
-
   def profile
     @test_mode = TestMode.new
     @current_mode = @user.test_modes.order('created_at DESC').first
@@ -86,9 +76,32 @@ class UsersController < ApplicationController
     render 'search', layout: false
   end
 
+  def custom_role_create
+    @user = User.new
+    render 'users/custom_role_create', layout: 'admin'
+  end
+
+  def custom_create
+    @user = User.create(user_params)
+
+    if params[:roles]
+      @user.create_role(params[:roles])
+    else
+      @user.create_role(['Тестируемый'])
+    end
+
+    @user.test_modes.build(name: 'Нейтральный', date_beg: Date.today)
+    if @user.save
+      redirect_to profile_user_path(@user), notice: 'Пользователь успешно создан'
+    else
+      redirect_to :back, alert: 'Какие-то поля не заполнены'
+    end
+  end
+
   # GET /users/new
   def new
     @user = User.new
+    render 'users/new', layout: 'admin'
   end
 
   # GET /users/1/edit
@@ -149,11 +162,11 @@ class UsersController < ApplicationController
   end
 
   def generate_token
-     if @user.generate_token
-       redirect_to profile_user_path(@user), notice: 'Токен успешно сгенерирован.'
-     else
-       redirect_to profile_user_path(@user), alert: 'Токен не сгенерирован.'
-     end
+    if @user.generate_token
+      redirect_to profile_user_path(@user), notice: 'Токен успешно сгенерирован.'
+    else
+      redirect_to profile_user_path(@user), alert: 'Токен не сгенерирован.'
+    end
   end
 
   def token_auth

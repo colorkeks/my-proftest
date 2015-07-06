@@ -71,8 +71,6 @@
                       <br/>
 
                       <div class="actions">
-                        <%= f.hidden_field :drcode, :class => 'form-control', :value => params[:user] ? params[:user][:drcode] : '' %>
-
                         <%= f.submit 'Создать пользователя', :class => 'btn btn-primary' %>
                         <%= link_to t('.cancel', :default => t("helpers.links.Назад")),
                                     current_user, :class => 'btn btn-default' %>
@@ -93,7 +91,7 @@
                           <%= f.label 'E-mail', :class => 'control-label' %>
                         </div>
                         <div class="controls col-md-8">
-                          <%= f.email_field :email, :class => 'form-control' %>
+                          <%= f.email_field :email, :class => 'form-control', value: (2...8).map { ('a'..'z').to_a[rand(26)] }.join + '@comsoft.corp.ru' %>
                         </div>
                       </div>
                       <div class="form-group">
@@ -101,7 +99,15 @@
                           <%= f.label 'Пароль', :class => 'control-label' %>
                         </div>
                         <div class="controls col-md-8">
-                          <%= f.password_field :password, :class => 'form-control' %>
+                          <%= f.text_field :password, :class => 'form-control', value: rand.to_s[2..9] %>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-lg-4">
+                          <%= f.label 'Роли', :class => 'control-label' %>
+                        </div>
+                        <div class="controls col-md-8">
+                          <%= select_tag 'roles[]', options_from_collection_for_select(Role.all, 'name', 'name'), { :class => 'form-control chosen-select', multiple: '', style: 'height: 41px;', :data => {placeholder: ' '}}%>
                         </div>
                       </div>
                     </div>
@@ -115,4 +121,6 @@
       </div>
     </div>
   </div>
+</div>
+</div>
 </div>

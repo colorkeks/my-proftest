@@ -8,6 +8,7 @@
 //= require tinymce-jquery
 //= require jquery.timers.js
 //= require moment
+//= require chosen-jquery
 //= require bootstrap-datetimepicker
 //= require moment/ru
 //= require bootstrap-datetimepicker
@@ -33,6 +34,14 @@ $(function(){
     date_picker();
     update_algorithm_statistic();
     hide_alerts();
+    date_picker();
+
+    $('.chosen-select').chosen({
+        allow_single_deselect: true,
+        no_results_text: 'No results matched',
+        placeholder: ''
+    });
+
 });
 
 function hide_alerts(){
