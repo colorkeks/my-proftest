@@ -92,12 +92,15 @@
         <div class="col-lg-6">
           <% if @current_mode && @current_mode.name != 'Нейтральный'%>
           <h3>Результат
-                  <a href="/users/<%= @user.id%>/view_test_results" class="btn btn-white btn-sm tooltips" title="Посмотреть результат">
-                    <i class="fa fa-eye  "></i>
-                  </a>
-                  <a href="/users/<%= @user.id%>/print_test_results" class="btn btn-white btn-sm tooltips" title="Печать результата">
-                    <i class="fa fa-print"></i>
-                  </a>
+            <a href="/users/<%= @user.id %>/view_test_results" class="btn btn-white btn-sm tooltips" title="Посмотреть результат">
+              <i class="fa fa-eye  "></i>
+            </a>
+            <a href="/users/<%= @user.id %>/print_test_results" class="btn btn-white btn-sm tooltips" title="Печать результата">
+              <i class="fa fa-print"></i>
+            </a>
+            <a href="/users/<%= @user.id %>/save_pdf.pdf" class="btn btn-white btn-sm tooltips" title="Сохранить PDF">
+              <i class="fa fa-file-pdf-o"></i>
+            </a>
           </h3>
           <% end %>
         </div>
@@ -306,6 +309,3 @@
   </div>
 </div>
 <% end %>
-<script>
-    //    date_picker(); тут тоже почему-то не работает
-</script>

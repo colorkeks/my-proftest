@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :profile, :modes_history]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :profile, :modes_history, :pdf]
   delegate :can?, :cannot?, :to => :ability
   load_and_authorize_resource
   # GET /users
@@ -35,11 +35,11 @@ class UsersController < ApplicationController
   def custom_create
     @user = User.create(user_params)
     @user.test_modes.build(name: 'Нейтральный', date_beg: Date.today)
-      if @user.save
-        redirect_to profile_user_path(@user), notice: 'Пользователь успешно создан'
-      else
-        redirect_to :back, alert: 'Пароль или Email не введен'
-      end
+    if @user.save
+      redirect_to profile_user_path(@user), notice: 'Пользователь успешно создан'
+    else
+      redirect_to :back, alert: 'Пароль или Email не введен'
+    end
   end
 
   def profile
@@ -60,6 +60,18 @@ class UsersController < ApplicationController
     @current_mode = @user.test_modes.order('created_at DESC').first
     @assigned_tests = AssignedTest.all.where(user_id: @user.id, test_mode_id: @current_mode)
     render 'users/print_test_results', layout: 'admin'
+  end
+
+  def save_pdf
+    @current_mode = @user.test_modes.order('created_at DESC').first
+    @assigned_tests = AssignedTest.all.where(user_id: @user.id, test_mode_id: @current_mode)
+    respond_to do |format|
+      format.pdf do
+        render pdf: @user.drcode + '_' + DateTime.now.strftime('%Y-%m-%d').to_s, # Excluding ".pdf" extension.
+               :page_size => 'A4',
+               formats: :html, encoding: 'utf8'
+      end
+    end
   end
 
   def modes_history

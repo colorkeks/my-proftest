@@ -1,29 +1,6 @@
 <%= content_for :title, 'Печать тестов испытуемого ' + @user.last_name + ' ' + @user.first_name + ' ' + @user.second_name %>
 
 
-<div class="pageheader">
-  <div class="row">
-    <div class="col-sm-3 col-lg-2">
-      <a class="btn btn-white back-btn pull-right" title="Назад" href="/users/<%= @user.id %>/profile">
-        <i class="fa fa-arrow-left"></i>
-      </a>
-
-      <h2>Профиль</h2>
-    </div>
-    <div class="col-sm-9 col-lg-10">
-      <div class="breadcrumb-wrapper">
-        <ol class="breadcrumb">
-          <li class="active">
-            <div class="btn-group nomargin">
-              <span class="dropdown-toggle" data-toggle="dropdown">Печать тестов испытуемого <%= @user.last_name %> <%= @user.first_name %> <%= @user.second_name %></span>
-            </div>
-          </li>
-        </ol>
-      </div>
-    </div>
-  </div>
-</div>
-
 <div class="contentpanel ">
   <div class="row">
     <div class="col-sm-12 col-lg-12">
@@ -65,27 +42,27 @@
                             <% end %>
                         <% end %>
                     <div class="pagebreak">
-                    <h5>Курс: <%= assigned_test.test.title %></h5>
-                    <h5>Последняя
-                      попытка: <%= Russian::strftime(try.created_at, '%d %B %Y') if try %></h5>
-                    <h5>Правильные ответы: <%= correct.empty? ? 'Нет' : correct.join(', ') %></h5>
-                    <h5>Не правильные ответы: <%= not_correct.empty? ? 'Нет' : not_correct.join(', ') %></h5>
-                    <h5>Частично правильные
-                      ответы: <%= partly_correct.empty? ? 'Нет' : partly_correct.join(', ') %></h5>
-                    <h5>Сумма баллов <%= try.task_results.inject(0) { |sum, i| sum + i.point } if try %> </h5>
-                    <br/>
-                    <h5>Оценка:
-                      <% if assigned_test.tries.where('rate > ?', 70).any? && try %>
-                          Отлично
-                      <% elsif assigned_test.tries.where('rate > ?', 50).any? && try %>
-                          Хорошо
-                      <% elsif assigned_test.tries.where('rate <= ?', 50).any? && try %>
-                          Неуд.
-                      <% else %>
-                          Тест не пройден
-                      <% end %>
-                    </h5>
-                    <hr style="border-bottom: 1px dashed black ">
+                      <h5>Курс: <%= assigned_test.test.title %></h5>
+                      <h5>Последняя
+                        попытка: <%= Russian::strftime(try.created_at, '%d %B %Y') if try %></h5>
+                      <h5>Правильные ответы: <%= correct.empty? ? 'Нет' : correct.join(', ') %></h5>
+                      <h5>Не правильные ответы: <%= not_correct.empty? ? 'Нет' : not_correct.join(', ') %></h5>
+                      <h5>Частично правильные
+                        ответы: <%= partly_correct.empty? ? 'Нет' : partly_correct.join(', ') %></h5>
+                      <h5>Сумма баллов <%= try.task_results.inject(0) { |sum, i| sum + i.point } if try %> </h5>
+                      <br/>
+                      <h5>Оценка:
+                        <% if assigned_test.tries.where('rate > ?', 70).any? && try %>
+                            Отлично
+                        <% elsif assigned_test.tries.where('rate > ?', 50).any? && try %>
+                            Хорошо
+                        <% elsif assigned_test.tries.where('rate <= ?', 50).any? && try %>
+                            Неуд.
+                        <% else %>
+                            Тест не пройден
+                        <% end %>
+                      </h5>
+                      <hr style="border-bottom: 1px dashed black ">
                     </div>
                     <% end %>
                 <% end %>
@@ -102,9 +79,3 @@
     </div>
   </div>
 </div>
-
-<script>
-    $(function(){
-        window.print();
-    });
-</script>
