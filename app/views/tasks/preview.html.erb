@@ -51,7 +51,7 @@
     <% if @task.task_contents.detect { |i| i.file_content_content_type }.nil? %>
         <div class="col-lg-12">
           <div id="question-content">
-            <%= sanitize @task.text.html_safe, attributes: [] %>
+            <%= sanitize(@task.text.html_safe, attributes: []).gsub(/_(.*)_/, ' <span style="background-color: yellow">_______</span> ').html_safe %>
           </div>
         </div>
     <% else %>

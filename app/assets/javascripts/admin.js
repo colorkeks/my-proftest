@@ -47,13 +47,11 @@ $(function(){
 
 function fill_placeholder_in_open_answer(){
   var q_content = $('#question-content');
-
   var q_text = q_content.text();
-  q_content.html(q_text.replace(/_(.*)_/, ' <span style="background-color: yellow">_______</span> '));
 
   if(q_text){
     $('#answers').keyup(function(){
-        var value = ' <span style="background-color: yellow; text-decoration: underline">&nbsp;' + $(this).val() + '&nbsp;</span> ';
+        var value = ' <span class="highlight">&nbsp;' + $(this).val() + '&nbsp;</span> ';
         setTimeout(function(){
             q_content.html(q_text.replace(/_(.*)_/, value));
         }, 1);
