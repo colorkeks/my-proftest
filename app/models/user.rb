@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
 
   def self.search(search_users)
     if search_users
-      self.where("first_name LIKE ? OR second_name LIKE ? OR last_name LIKE ? OR job LIKE ?", "%#{search_users}%", "%#{search_users}%", "%#{search_users}%", "%#{search_users}%")
+      self.where('first_name LIKE ? OR second_name LIKE ? OR last_name LIKE ? OR job LIKE ?', "%#{search_users}%", "%#{search_users}%", "%#{search_users}%", "%#{search_users}%")
     else
       self.all
     end
@@ -28,7 +28,26 @@ class User < ActiveRecord::Base
   def role?(role)
     return !!self.roles.find_by_name(role.to_s.camelize)
   end
+
+  def generate_token
+    while true do
+      random_number = Random.rand(99999999)
+      break unless User.where(token: random_number).exists?
+    end
+
+    self.token = random_number
+    self.token_expire_at = Date.today + 1.day
+    self.save
+  end
+
+  def self.authorise_by_token(token)
+    user = User.find_by(token: token)
+    user.authenticate
+
+  end
+
   private
+
   def create_role
     # self.roles << Role.find_by_name(:Администратор)
     self.roles << Role.find_by_name(:Тестируемый)

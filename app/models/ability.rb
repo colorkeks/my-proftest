@@ -3,6 +3,7 @@ class Ability
 
   def initialize(user)
     user ||= User.new # guest user (not logged in)
+
     if user.role? :Супер_Юзер
       can :manage, :all
     elsif user.role? :Администратор
@@ -44,8 +45,8 @@ class Ability
       can [:show, :edit, :update], User do |current_user|
         user.id == current_user.id
       end
-  #  elsif user.has_role? :guest
-  #    can :new, :create, User
+    elsif user.new_record?
+      can [:token_auth, :check_token], User
     end
   end
 end

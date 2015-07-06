@@ -72,15 +72,21 @@ Rails.application.routes.draw do
       get 'view_test_results'
       get 'save_pdf'
       post 'search_tests'
+      post 'generate_token'
     end
+
     collection do
       post 'custom_create'
       get 'add_find_stub'
       get 'profile_stub'
       get 'search_stub'
       get 'test_persons'
+      post 'check_token'
     end
   end
+
+  get 'token' => 'users#token_auth'
+
 
   resources :tries do
     member do
