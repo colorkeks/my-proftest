@@ -73,6 +73,7 @@ Rails.application.routes.draw do
       get 'save_pdf'
       post 'search_tests'
       post 'generate_token'
+      post 'clean_token'
     end
 
     collection do

@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :profile, :modes_history, :pdf, :generate_token]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :profile, :modes_history, :pdf, :generate_token, :clean_token]
   delegate :can?, :cannot?, :to => :ability
   load_and_authorize_resource
   # GET /users
@@ -166,6 +166,14 @@ class UsersController < ApplicationController
       redirect_to profile_user_path(@user), notice: 'Токен успешно сгенерирован.'
     else
       redirect_to profile_user_path(@user), alert: 'Токен не сгенерирован.'
+    end
+  end
+
+  def clean_token
+    if @user.clean_token
+      redirect_to profile_user_path(@user), notice: 'Токен удален.'
+    else
+      redirect_to profile_user_path(@user), alert: 'Токен не удален.'
     end
   end
 

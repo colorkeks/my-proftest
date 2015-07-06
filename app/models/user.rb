@@ -42,6 +42,12 @@ class User < ActiveRecord::Base
     self.save
   end
 
+  def clean_token
+    self.token = nil
+    self.token_expire_at = nil
+    self.save
+  end
+
   def self.check_token(token)
     Role.find_by(name: 'Тестируемый').users.where('token = ? AND token_expire_at >= ? ', token, Time.now ).first
   end

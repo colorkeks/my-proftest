@@ -74,6 +74,7 @@
       <% if @user.token.presence && @user.token_expire_at > Time.now %>
           <strong><%= @user.token %></strong><br/>
           <div style="padding: 5px 0" class="text-success">Дествителен до <%= @user.token_expire_at.strftime('%d.%m.%Y %H:%M') %></div>
+          <%= link_to 'Удалить токен', clean_token_user_path(@user), method: 'post', class: 'btn btn-white' %>
       <% end %>
       <%= link_to 'Сгенерировать токен', generate_token_user_path(@user), method: 'post', class: 'btn btn-white' %>
       <hr/>
