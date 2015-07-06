@@ -1,7 +1,5 @@
 class UsersController < ApplicationController
-
   before_action :set_user, only: [:show, :edit, :update, :destroy, :profile, :modes_history, :pdf, :generate_token]
-
   delegate :can?, :cannot?, :to => :ability
   load_and_authorize_resource
   # GET /users
