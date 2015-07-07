@@ -1365,3 +1365,17 @@ small.media-desc {
 .highlight-empty{
     background-color: yellow;
 }
+
+.progress.statistic{
+    margin-bottom: 0;
+    height: 20px;
+
+    .progress-bar{
+        line-height: 20px;
+    }
+}
+
+.vertical-text {
+  transform: rotate(90deg);
+  transform-origin: left top 0;
+}

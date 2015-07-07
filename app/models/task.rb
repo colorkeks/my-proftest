@@ -3,6 +3,7 @@ class Task < ActiveRecord::Base
   has_many :associations, dependent: :destroy
   has_many :task_contents, dependent: :nullify #:destroy
   has_many :task_results
+  has_many :user_answers
   belongs_to :test
   accepts_nested_attributes_for :answers,  :reject_if => proc { |a| a['text'].blank? } , :allow_destroy => true
   accepts_nested_attributes_for :associations,  :reject_if => proc { |a| a['text'].blank? } , :allow_destroy => true

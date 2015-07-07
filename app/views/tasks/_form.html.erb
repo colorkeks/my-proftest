@@ -49,17 +49,7 @@
                 <div class="col-lg-8">
                   <h3>
                     #<%= @task.id %> <small class="ml5"><%= @type %> </small>
-                    <% if @task.task_type == 'Единичный выбор' %>
-                        <span class="icon-single" title="Единичный выбор"></span>
-                    <% elsif @task.task_type == 'Множественный выбор' %>
-                        <span class="icon-mutli" title="Множественный выбор"></span>
-                    <% elsif @task.task_type == 'Последовательность' %>
-                        <span class="icon-sequence" title="Последовательность"></span>
-                    <% elsif @task.task_type == 'Сопоставление' %>
-                        <span class="icon-connect" title="Сопоставление"></span>
-                    <% elsif @task.task_type == 'Открытый вопрос' %>
-                        <span class="icon-open" title="Открытый вопрос"></span>
-                    <% end %>
+                    <%= task_type_icon_class(@task) %>
                   </h3>
                 </div>
                 <div class="col-lg-4 text-right save-panel">

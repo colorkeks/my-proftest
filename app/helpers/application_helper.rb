@@ -14,4 +14,26 @@ module ApplicationHelper
                      # :class => 'btn btn-white btn-sm pull-right tooltips'
     )
   end
+
+  def task_type_icon_class(task, tag_name='span', options={})
+    case task.task_type
+      when 'Единичный выбор'
+        options.merge!(class: 'icon-single tooltips', title: 'Единичный выбор')
+      when 'Последовательность'
+        options.merge!(class: 'icon-sequence tooltips', title: 'Последовательность')
+      when 'Множественный выбор'
+        options.merge!(class: 'icon-mutli tooltips', title: 'Множественный выбор')
+      when 'Сопоставление'
+        options.merge!(class: 'icon-connect tooltips', title: 'Сопоставление')
+      when 'Открытый вопрос'
+        options.merge!(class: 'icon-connect open', title: 'Открытый вопрос')
+      when task.is_a?(Chain)
+        options.merge!(class: 'fa fa-link', title: 'Цепочка')
+      else
+    end
+    p '+++'
+    p tag_name
+    tag tag_name, options
+  end
+
 end

@@ -105,6 +105,11 @@
                   <i class="fa fa-sitemap"></i> Алгоритм
               <% end %>
             </li>
+            <li>
+              <%= link_to statistic_test_path(@test) do %>
+                  <i class="fa fa-area-chart"></i> Статистика
+              <% end %>
+            </li>
           </ul>
 
           <h5 class="sidebartitle">Разделы</h5>
@@ -375,19 +380,7 @@
                         </td>
                         <% end %>
                         <td style="width: 20px; font-size: 16px; line-height: 18px; padding: 0">
-                          <% if task.task_type == 'Единичный выбор' %>
-                              <span class="icon-single tooltips" title="Единичный выбор"></span>
-                          <% elsif task.task_type == 'Множественный выбор' %>
-                              <span class="icon-mutli tooltips" title="Множественный выбор"></span>
-                          <% elsif task.task_type == 'Последовательность' %>
-                              <span class="icon-sequence tooltips" title="Последовательность"></span>
-                          <% elsif task.task_type == 'Сопоставление' %>
-                              <span class="icon-connect tooltips" title="Сопоставление"></span>
-                          <% elsif task.task_type == 'Открытый вопрос' %>
-                              <span class="icon-open tooltips" title="Открытый вопрос"></span>
-                          <% elsif task.is_a?(Chain) %>
-                              <span class="fa fa-link" title="Цепочка"></span>
-                          <% end %>
+                          <%= task_type_icon_class(task) %>
                         </td>
                         <td class="link">
                           <% if task.is_a?(Task) %>

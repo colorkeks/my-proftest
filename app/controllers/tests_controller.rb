@@ -1,5 +1,5 @@
 class TestsController < ApplicationController
-  before_action :set_test, only: [:show, :trash, :edit, :update, :destroy, :settings, :algorithm, :set_counts]
+  before_action :set_test, only: [:show, :trash, :edit, :update, :destroy, :settings, :algorithm, :set_counts, :statistic]
   load_and_authorize_resource
   # GET /tests
   # GET /tests.json
@@ -164,7 +164,19 @@ class TestsController < ApplicationController
       end
       render 'algorithm_statistic', layout: false
     end
+  end
 
+  def statistic
+    @test = Test.find(params[:id])
+    if @test.tries.any?
+      time = 0
+      @test.tries.where(:status => 'Выполнен').each do |try|
+        time = time + try.timer.min*60 + try.timer.hour*3600
+      end
+      @timer = time/@test.tries.count
+      @hours = (@timer/3600).to_i
+      @minutes = (@timer/60).to_i - @hours*60
+    end
   end
 
   private

@@ -12,6 +12,7 @@
 //= require bootstrap-datetimepicker
 //= require moment/ru
 //= require bootstrap-datetimepicker
+//= require sparkline
 
 $(function(){
     $("a[rel~=popover], .has-popover").popover();
@@ -36,6 +37,7 @@ $(function(){
     hide_alerts();
     date_picker();
     fill_placeholder_in_open_answer();
+    statistic();
 
     $('.chosen-select').chosen({
         allow_single_deselect: true,
@@ -43,21 +45,22 @@ $(function(){
         placeholder: ''
     });
 
+    $(function() {
+        $('.inlinesparkline').sparkline();
+        $('.sparklines').sparkline('html',
+            {     type: 'pie',
+                height: '10.0em',
+                sliceColors: ['green', 'red']
+            });
+    });
+
 });
 
-//function fill_placeholder_in_open_answer(){
-//  var q_content = $('#question-content');
-//  var q_text = q_content.text();
-//
-//  if(q_text){
-//    $('#answers').keyup(function(){
-//        var value = ' <span class="highlight">&nbsp;' + $(this).val() + '&nbsp;</span> ';
-//        setTimeout(function(){
-//            q_content.html(q_text.replace(/_(.*)_/, value));
-//        }, 1);
-//    });
-//  }
-//}
+function statistic(){
+    $('.task-type-icon').click(function(){
+        $(this).closest('tr').next('tr.answers').toggle()
+    });
+}
 
 function hide_alerts(){
     var alert = $('.rails-flash .alert');

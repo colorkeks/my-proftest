@@ -26,6 +26,7 @@ Rails.application.routes.draw do
       get 'trash'
       get 'algorithm'
       post 'set_counts'
+      get 'statistic'
     end
 
     collection do
