@@ -22,12 +22,13 @@
 //= require moment
 //= require bootstrap-datetimepicker
 //= require moment/ru
-//= require Answers
+//= require answers
 
 
 $(function(){
     $("a[rel~=popover], .has-popover").popover();
     $("a[rel~=tooltip], .has-tooltip").tooltip();
+    fill_placeholder_in_open_answer();
 });
 //
 //function init_wysiwyg() {

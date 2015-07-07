@@ -105,3 +105,16 @@ function algorithm_selects(){
     });
 }
 
+function fill_placeholder_in_open_answer(){
+    var q_content = $('#question-content');
+    var q_text = q_content.text();
+
+    if(q_text){
+        $('#user_answer').keyup(function(){
+            var value = ' <span class="highlight">&nbsp;' + $(this).val() + '&nbsp;</span> ';
+            setTimeout(function(){
+                q_content.html(q_text.replace(/_(.*)_/, value));
+            }, 1);
+        });
+    }
+}

@@ -1361,3 +1361,7 @@ small.media-desc {
     background-color: yellow;
     text-decoration: underline
 }
+
+.highlight-empty{
+    background-color: yellow;
+}

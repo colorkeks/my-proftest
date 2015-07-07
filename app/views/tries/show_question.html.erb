@@ -83,8 +83,9 @@
         <div class="row">
           <% if @task_result.try_task_contents.count <= 1 %>
               <div class="col-lg-6">
-                <div>
-                  <h4><%= sanitize @task_result.text.html_safe, attributes: [] %></h4>
+                <div id="question-content">
+                  <%= sanitize(@task_result.text.html_safe, attributes: []).gsub(/_(.*)_/, ' <span class="highlight-empty">_______</span> ').html_safe %>
+
                 </div>
               </div>
               <div class="col-lg-6" style="text-align: center">
