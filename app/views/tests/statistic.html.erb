@@ -72,7 +72,15 @@
                     <tr>
                       <td><%= @test.tasks.count %></td>
                       <td><%= @test.tries.count %></td>
-                      <td><%= @test.tries.where(:status => 'Выполнен').any? ? (@test.tries.inject(0) { |sum, hash| sum + hash[:rate] })/@test.tries.count : 'N/A' %></td>
+                      <td>
+                        <%=
+                          if (tries = @test.tries.where(:status => 'Выполнен')) && tries.count > 0
+                            tries.sum(:rate) / tries.count
+                          else
+                            'не определена'
+                          end
+                        %>
+                      </td>
                       <td><%= (@hours && @minutes).nil? ? 'N/A' : (@hours.to_s + ' часов ' + @minutes.to_s + ' минут') %></td>
                     </tr>
                   </table>
