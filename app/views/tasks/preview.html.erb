@@ -119,7 +119,7 @@
                 </td>
               </tr>
           <% else %>
-              <% @task.answers.order('id ASC').each do |answer| %>
+              <% @task.answers.order('id ASC').each_with_index do |answer, index| %>
                   <tr class="answer">
                     <% if @task.task_type == 'Множественный выбор' %>
                         <td style="display: none;"></td>
@@ -130,18 +130,22 @@
                         <td style="width: 20px;"><%= radio_button_tag "answers", answer.id %></td>
                         <td style="text-align: left"><%= answer.text %></td>
                     <% elsif @task.task_type == 'Сопоставление' %>
-                        <td style="width: 50px;"></td>
+                        <td style="width: 30px;"></td>
                         <td>
                           <div class="pull-right select-answer">
-                            <%= select_tag( "answers[#{answer.id}][]",options_for_select(['Не выбрано']) + options_from_collection_for_select(@task.associations.shuffle, 'id', 'text'), :class => 'form-control association_select') %>
+                            <%= select_tag( "answers[#{answer.id}][]", options_for_select(['Не выбрано']) + options_from_collection_for_select(@task.associations.shuffle, 'id', 'text'), :class => 'form-control association_select input-sm') %>
                           </div>
+                          <label class="text pull-right" style="margin-right: 10px"><%= ('А'..'Я').to_a[index] %>.</label>
                           <label class="text" style="text-align: left"><%= answer.text%></label>
                         </td>
                     <% elsif @task.task_type == 'Последовательность' %>
-                        <td style="width: 50px;"></td>
+                        <td style="width: 30px;"></td>
                         <td style="text-align: left">
                           <%= answer.text %>
                           <%= hidden_field_tag "answers[#{answer.id}][]", '', :class => 'serial_number' %>
+                        </td>
+                        <td style="width: 30px; cursor: pointer" class="tooltips" title="Переместите ответ на нужную позицию">
+                          <span class="fa fa-bars text-muted"></span>
                         </td>
                     <% elsif @task.task_type == 'Открытый вопрос' %>
                         <td style="width: 50px;"></td>
