@@ -1,9 +1,3 @@
-<%
-   total_count = 0
-   true_count = 0
-   false_count = 0
-%>
-
 <%= content_for :title, 'Статистика' %>
 <div class="mainpanel">
   <div class="pageheader">
@@ -19,7 +13,7 @@
         <div class="breadcrumb-wrapper">
           <ol class="breadcrumb">
             <li class="">
-                  <%= link_to @test.title, @test %>
+              <%= link_to @test.title, @test %>
             </li>
           </ol>
         </div>
@@ -31,21 +25,6 @@
       <div class="col-lg-12">
         <div class="panel panel-default">
           <div class="panel-body panel-profile">
-
-
-            <% @test.tries.each do |try| %>
-                <% try.task_results.each do |tr|%>
-                    <%
-                       total_count = total_count + 1
-                       if tr.status == 'правильно'
-                         true_count = true_count + 1
-                       elsif tr.status == 'не правильно'
-                         false_count = false_count + 1
-                       end
-                    %>
-                <% end%>
-            <% end %>
-
             <!-- Открытие контейнера -->
             <div class="container-fluid">
 
@@ -126,15 +105,23 @@
                       <td title="Не верно" style="width: 120px" class="tooltips">
                         <% if result_count > 0 %>
                         <div class="progress statistic">
-                          <% percent = task.task_results.where(status:'не правильно').count * 100 / result_count %>
+                          <% percent = task.task_results.where(status: 'не правильно').count * 100 / result_count %>
                           <div class="progress-bar progress-bar-danger" style="min-width: 2em; width: <%= percent %>%;"><%= percent %>%</div>
                         </div>
+                        <% end %>
+                      </td>
+                      <td title="Не верно" style="width: 120px" class="tooltips">
+                        <% if result_count > 0 %>
+                            <div class="progress statistic">
+                              <% percent = task.task_results.where(status: 'ответ не дан').count * 100 / result_count %>
+                              <div class="progress-bar progress-bar-info" style="min-width: 2em; width: <%= percent %>%;"><%= percent %>%</div>
+                            </div>
                         <% end %>
                       </td>
                     </tr>
                     <tr style="display: none" class="answers">
                       <td style="width: 30px"></td>
-                      <td colspan="3"  style="background-color: #ffffff">
+                      <td colspan="4"  style="background-color: #ffffff">
                         <% if task.task_type == 'Сопоставление' %>
                             <div class="row">
                               <div class="col-lg-6">
