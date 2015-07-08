@@ -86,6 +86,12 @@ class UsersController < ApplicationController
 
     if params[:roles]
       @user.create_role(params[:roles])
+    elsif params[:user][:role_ids]
+      roles = []
+      Role.find(params[:user][:role_ids].drop(1)).each do |role| # находим по id имена ролей
+        roles << role.name
+      end
+      @user.create_role(roles)
     else
       @user.create_role(['Тестируемый'])
     end
