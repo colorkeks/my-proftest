@@ -76,16 +76,15 @@ class UsersController < ApplicationController
     render 'search', layout: false
   end
 
-  def custom_role_create
-    @user = User.new
-    render 'users/custom_role_create', layout: 'admin'
-  end
-
   def custom_create
     @user = User.create(user_params)
 
-    if params[:roles]
-      @user.create_role(params[:roles])
+    if params[:user][:role_ids]
+      roles = []
+      Role.find(params[:user][:role_ids].drop(1)).each do |role| # находим по id имена ролей
+        roles << role.name
+      end
+      @user.create_role(roles)
     else
       @user.create_role(['Тестируемый'])
     end
@@ -128,10 +127,12 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
-    if params[:roles]
-      @user.create_role(params[:roles])
-    elsif params[:user][:roles]
-      @user.create_role(params[:user][:roles].drop(1))
+    if params[:user][:role_ids]
+      roles = []
+      Role.find(params[:user][:role_ids].drop(1)).each do |role| # находим по id имена ролей
+        roles << role.name
+      end
+      @user.create_role(roles)
     else
       @user.create_role(['Тестируемый'])
     end
