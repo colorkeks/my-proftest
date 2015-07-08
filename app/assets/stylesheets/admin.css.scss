@@ -1379,3 +1379,24 @@ small.media-desc {
   transform: rotate(90deg);
   transform-origin: left top 0;
 }
+
+.task-type-icon{
+  padding: 0 8px;
+  vertical-align: middle;
+  width: 40px;
+  font-size: 20px;
+  color: gray;
+}
+
+.toggle-answer{
+  cursor: pointer
+}
+
+.right_answer{
+  background-color: #009f00;
+}
+
+.slim{
+  width: 5px !important;
+  padding: 0 !important;
+}
