@@ -110,7 +110,7 @@
                         </div>
                         <% end %>
                       </td>
-                      <td title="Не верно" style="width: 120px" class="tooltips">
+                      <td title="Ответ не дан" style="width: 120px" class="tooltips">
                         <% if result_count > 0 %>
                             <div class="progress statistic">
                               <% percent = task.task_results.where(status: 'ответ не дан').count * 100 / result_count %>
