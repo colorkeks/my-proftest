@@ -57,8 +57,18 @@ $(function(){
 });
 
 function statistic(){
-    $('.task-type-icon').click(function(){
+    $('.toggle-answer').click(function(){
         $(this).closest('tr').next('tr.answers').toggle()
+    });
+
+    var toggle_state = true;
+    $('#toggle-btn').click(function(){
+       if (toggle_state)
+           $('.answers').show();
+       else
+           $('.answers').hide();
+
+       toggle_state = !toggle_state
     });
 }
 

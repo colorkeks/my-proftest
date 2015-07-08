@@ -26,13 +26,12 @@ module ApplicationHelper
       when 'Сопоставление'
         options.merge!(class: 'icon-connect tooltips', title: 'Сопоставление')
       when 'Открытый вопрос'
-        options.merge!(class: 'icon-connect open', title: 'Открытый вопрос')
+        options.merge!(class: 'icon-open tooltips', title: 'Открытый вопрос')
       when task.is_a?(Chain)
         options.merge!(class: 'fa fa-link', title: 'Цепочка')
       else
     end
-    p '+++'
-    p tag_name
+
     tag tag_name, options
   end
 
