@@ -107,7 +107,7 @@
                           <%= f.label 'Роли', :class => 'control-label' %>
                         </div>
                         <div class="controls col-md-8">
-                          <%= select_tag 'roles[]', options_from_collection_for_select(Role.all, 'name', 'name'), { :class => 'form-control chosen-select', multiple: '', style: 'height: 41px;', :data => {placeholder: ' '}}%>
+                          <%= select_tag 'roles[]', options_from_collection_for_select(Role.all, 'name', 'name'), { :class => 'form-control chosen-select', multiple: '', :data => {placeholder: ' '}}%>
                         </div>
                       </div>
                     </div>
@@ -121,6 +121,4 @@
       </div>
     </div>
   </div>
-</div>
-</div>
 </div>

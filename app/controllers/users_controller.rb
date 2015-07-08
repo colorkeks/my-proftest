@@ -128,6 +128,13 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
+    if params[:roles]
+      @user.create_role(params[:roles])
+    elsif params[:user][:roles]
+      @user.create_role(params[:user][:roles].drop(1))
+    else
+      @user.create_role(['Тестируемый'])
+    end
     respond_to do |format|
       if @user.update(user_params)
         format.html { redirect_to profile_user_path, notice: 'Пользователь успешно обновлен.' }

@@ -53,6 +53,7 @@ class User < ActiveRecord::Base
   end
 
   def create_role(roles)
+    self.roles.clear
     roles.each do |role|
       self.roles << Role.find_by_name(role)
     end

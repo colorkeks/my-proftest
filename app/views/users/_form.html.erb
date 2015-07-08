@@ -1,4 +1,4 @@
- <%= form_for @user, :html => {:class => 'form-horizontal'} do |f| %>
+ <%= simple_form_for @user, :html => {:class => 'form-horizontal'} do |f| %>
       <br/>
       <div class="row">
         <div class="col-lg-6">
@@ -31,9 +31,17 @@
               <th>ЛПУ</th>
               <td><%= f.text_field :job, :class => 'form-control' %></td>
             </tr>
+            <% if current_user.roles.first.name == 'Администратор'%>
+            <tr>
+              <th>Роли</th>
+              <td><%= f.collection_select :roles, Role.all, :name, :name, {}, multiple: true,  :class => 'form-control chosen-select', :data => {placeholder: ' '} %></td>
+              <!--<td><%#= select_tag 'roles[]', options_from_collection_for_select(Role.all, 'name', 'name'), { :class => 'form-control chosen-select', multiple: '', :data => {placeholder: ' '}}%></td>-->
+            </tr>
+            <% end %>
           </table>
         </div>
       </div>
+
 
 
       <%= f.submit 'Сохранить', :class => 'btn btn-primary' %>
