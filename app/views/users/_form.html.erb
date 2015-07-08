@@ -34,8 +34,7 @@
             <% if current_user.roles.first.name == 'Администратор'%>
             <tr>
               <th>Роли</th>
-              <td><%= f.collection_select :roles, Role.all, :name, :name, {}, multiple: true,  :class => 'form-control chosen-select', :data => {placeholder: ' '} %></td>
-              <!--<td><%#= select_tag 'roles[]', options_from_collection_for_select(Role.all, 'name', 'name'), { :class => 'form-control chosen-select', multiple: '', :data => {placeholder: ' '}}%></td>-->
+              <td><%= f.association :roles, label:false, :input_html => {:class => 'form-control chosen-select'} %></td>
             </tr>
             <% end %>
           </table>
