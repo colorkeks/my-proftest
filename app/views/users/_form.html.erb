@@ -1,59 +1,39 @@
-<%= simple_form_for @user, defaults: {input_html: {class: 'default_class'}} do |f| %>
-    <div class="form-group">
-      <div class="controls col-md-3">
-        <%= f.label 'Фамилия', :class => 'control-label' %>
-      </div>
-      <div class="controls col-md-offset-3">
-        <%= f.text_field :last_name, :class => 'form-control' %>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="controls col-md-3">
-        <%= f.label 'Имя', :class => 'control-label' %>
-      </div>
-      <div class="controls col-md-offset-3">
-        <%= f.text_field :first_name, :class => 'form-control' %>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="controls col-md-3">
-        <%= f.label 'Отчество', :class => 'control-label' %>
-      </div>
-      <div class="controls col-md-offset-3">
-        <%= f.text_field :second_name, :class => 'form-control' %>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="controls col-md-3">
-        <%= f.label 'Дата рождения', :class => 'control-label' %>
-      </div>
-      <div class="controls col-md-offset-3">
-        <div class='input-group date' id='birthday'>
-          <%= f.text_field :birthday, :class => 'form-control' %>
-          <span class="input-group-addon">
+<%= simple_form_for @user do |f| %>
+        <table class="profile table-no-padding-left">
+          <tr>
+            <th>Фамилия</th>
+            <td><%= f.text_field :last_name, :class => 'form-control' %></td>
+          </tr>
+          <tr>
+            <th>Имя</th>
+            <td><%= f.text_field :first_name, :class => 'form-control' %></td>
+          </tr>
+          <tr>
+            <th>Отчество</th>
+            <td><%= f.text_field :second_name, :class => 'form-control' %></td>
+          </tr>
+          <tr>
+            <th style="width: 150px;">Дата рождения</th>
+            <td>
+              <div class='input-group date' id='birthday'>
+                <%= f.text_field :birthday, :class => 'form-control' %>
+                <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                       </span>
-        </div>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="controls col-md-3">
-        <%= f.label 'ЛПУ', :class => 'control-label' %>
-      </div>
-      <div class="controls col-md-offset-3">
-        <%= f.text_field :job, :class => 'form-control' %>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="controls col-md-3">
-        <%= f.label 'Роли', :class => 'control-label' %>
-      </div>
-      <div class="controls col-md-offset-3">
-        <%= f.association :roles, label: false, :input_html => {:class => 'form-control chosen-select'} %>
-      </div>
-    </div>
-
-    <div class="footer">
-      <%= f.submit 'Сохранить', :class => 'btn btn-primary' %>
-    </div>
+              </div>
+              <%#= f.date_select(:birthday, {start_year: 1930}, {:class => 'form-control', :style => 'width:100px; display:inline-block'}) %>
+            </td>
+          </tr>
+          <tr>
+            <th>ЛПУ</th>
+            <td><%= f.text_field :job, :class => 'form-control' %></td>
+          </tr>
+          <% if current_user.roles.first.name == 'Администратор'%>
+              <tr>
+                <th>Роли</th>
+                <td><%= f.association :roles, label:false, :input_html => {:class => 'form-control chosen-select', placeholder: ' '} %></td>
+              </tr>
+          <% end %>
+        </table>
+    <%= f.submit 'Сохранить', :class => 'btn btn-primary' %>
 <% end %>
