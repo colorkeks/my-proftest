@@ -92,7 +92,7 @@
             <% else %>
                 Режима нету
             <% end %>
-            <% if (current_user.roles.first.name == 'Администратор') && (@user.roles.first.name == 'Тестируемый') %>
+            <% if current_user.roles.where(name: 'Администратор').any? && @user.roles.where(name: 'Тестируемый').any? %>
                 <a href="#" class="btn btn-white btn-sm tooltips" data-toggle="modal" data-target="#createMode">Изменить</a>
             <% end %>
           </h3>
@@ -178,7 +178,7 @@
       </ul>
       <div id="myTabContent" class="tab-content" style="padding: 15px 0; background-color: #ffffff">
         <div role="tabpanel" class="tab-pane fade active in" id="home" aria-labelledby="home-tab">
-          <% if current_user.roles.first.name == 'Администратор' %>
+          <% if current_user.roles.where(name: 'Администратор').any? %>
               <div title="Добавить тесты" data-toggle="modal" data-target="#AddAttestationTests" class="btn btn-white btn-sm pull-right tooltips" style="margin-top: -50px">
                 <i class="fa fa-plus"></i></div>
           <% end %>

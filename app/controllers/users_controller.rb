@@ -78,16 +78,7 @@ class UsersController < ApplicationController
 
   def custom_create
     @user = User.create(user_params)
-
-    if params[:user][:role_ids]
-      roles = []
-      Role.find(params[:user][:role_ids].drop(1)).each do |role| # находим по id имена ролей
-        roles << role.name
-      end
-      @user.create_role(roles)
-    else
-      @user.create_role(['Тестируемый'])
-    end
+    @user.create_role(params[:user][:role_ids])
 
     @user.test_modes.build(name: 'Нейтральный', date_beg: Date.today)
     if @user.save
@@ -127,15 +118,7 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
-    if params[:user][:role_ids]
-      roles = []
-      Role.find(params[:user][:role_ids].drop(1)).each do |role| # находим по id имена ролей
-        roles << role.name
-      end
-      @user.create_role(roles)
-    else
-      @user.create_role(['Тестируемый'])
-    end
+    @user.create_role(params[:user][:role_ids])
     respond_to do |format|
       if @user.update(user_params)
         format.html { redirect_to profile_user_path, notice: 'Пользователь успешно обновлен.' }
