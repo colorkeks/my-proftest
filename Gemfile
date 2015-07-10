@@ -39,6 +39,11 @@ group :development, :test do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+  gem 'rspec-rails', '~> 3.0'
+  gem 'capybara', '~> 2.4'
+  gem 'factory_girl_rails', '~> 4.5'
+  gem 'capybara-webkit', '~> 1.6'
+  gem 'database_cleaner'
 end
 
 gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git', branch: 'bootstrap3'

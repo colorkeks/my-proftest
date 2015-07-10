@@ -10,7 +10,7 @@
         <td>
           <%= link_to "#{doctor.surname} #{doctor.name} #{doctor.secname}", doctor_path(doctor.drcode) %>
         </td>
-        <td><%= doctor.current_lpu.title %></td>
+        <td><%= doctor.current_lpu.title if doctor.current_lpu %></td>
     </tr>
   <% end %>
   </tbody>

@@ -48,6 +48,7 @@
                 <div class="form-group" style="margin-top: 5px">
                   <span class="fa fa-search" ></span>
                   <%= text_field_tag :q, params[:q], id: 'qwery_string', autocomplete: 'off', class: 'form-control', placeholder: 'Найти' %>
+                  <%= submit_tag 'Найти', class: 'btn btn-white' %>
                   <span id="spinner"><i class="fa fa-refresh fa-spin"></i></span>
                 </div>
               <% end %>
