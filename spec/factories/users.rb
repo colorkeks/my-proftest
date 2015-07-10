@@ -5,6 +5,7 @@ FactoryGirl.define do
     first_name 'иван'
     last_name 'иванов'
     second_name 'иваноич'
+    roles {[create(:admin), create(:methodolog), create(:tested)]}
   end
 
 end
