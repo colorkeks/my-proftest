@@ -54,8 +54,12 @@ class User < ActiveRecord::Base
 
   def create_role(roles)
     self.roles.clear
-    roles.each do |role|
-      self.roles << Role.find_by_name(role)
+    if roles
+      Role.find(roles.drop(1)).each do |role| # находим по id имена ролей
+          self.roles << role # и добавляем их юзеру
+      end
+    else
+      self.roles << Role.find_by_name('Тестируемый')
     end
   end
 
