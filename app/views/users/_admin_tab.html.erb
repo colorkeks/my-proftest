@@ -53,12 +53,12 @@
                     <tbody>
                     <% if @users %>
                         <% @users.each do |user| %>
-                            <% if user.roles.first.name == 'Тестируемый' %>
+                            <% if user.roles.where(name: 'Тестируемый').any? %>
                                 <tr>
                                   <td><%= user.first_name %></td>
                                   <td><%= user.last_name %></td>
                                   <td><%= user.job %></td>
-                                  <td><%= user.roles.first.name %></td>
+                                  <td>Тестируемый</td>
                                   <td><%= link_to 'Профиль', profile_user_path(user.id), :class => 'btn btn-default btn-xs' %></td>
                                 </tr>
                             <% end %>
