@@ -1,4 +1,4 @@
-<% content_for :title, "Задание ##{@task.id}" %>
+<% content_for :title, params[:action] == 'new' ? "Новое задание - #{params[:task][:task_type]} " : "Задание ##{@task.id}" %>
 <%= simple_form_for @task, :html => {:class => 'form-horizontal'} do |f| %>
 <%= f.hidden_field :test_id %>
 <%= f.hidden_field :section_id %>
