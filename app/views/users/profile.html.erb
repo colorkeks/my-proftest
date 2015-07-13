@@ -42,216 +42,228 @@
 </div>
 
 <div class="col-sm-9 col-lg-10">
-  <div class="panel panel-default">
-    <div class="panel-body panel-profile">
-      <h3 style="margin: 0"><%= @user.last_name %> <%= @user.first_name %> <%= @user.second_name %>
-        <a href="/users/<%= @user.id %>/edit" class="btn btn-white btn-sm tooltips" title="Редактировать карточку">
-          <i class="fa fa-pencil"></i>
-        </a>
-      </h3>
-      <br/>
+<div class="panel panel-default">
+<div class="panel-body panel-profile">
+<h3 style="margin: 0"><%= @user.last_name %> <%= @user.first_name %> <%= @user.second_name %>
+  <a href="/users/<%= @user.id %>/edit" class="btn btn-white btn-sm tooltips" title="Редактировать карточку">
+    <i class="fa fa-pencil"></i>
+  </a>
+</h3>
+<br/>
 
-      <div class="row">
-        <div class="col-lg-5">
-          <table class="profile table-no-padding-left">
-            <tr>
-              <th style="width: 150px">Номер в обл. рег.</th>
-              <td><%= @user.drcode %></td>
-            </tr>
-            <tr>
-              <th>Дата рождения</th>
-              <td><%= @user.birthday %></td>
-            </tr>
-            <tr>
-              <th>ЛПУ</th>
-              <td><%= @user.job %></td>
-            </tr>
-          </table>
-        </div>
-      </div>
-      <hr/>
-      <h3>Авторизационный токен</h3>
-      <% if @user.token.presence && @user.token_expire_at > Time.now %>
-          <strong><%= @user.token %></strong><br/>
-          <div style="padding: 5px 0" class="text-success">Дествителен до <%= @user.token_expire_at.strftime('%d.%m.%Y %H:%M') %></div>
-          <%= link_to 'Удалить токен', clean_token_user_path(@user), method: 'post', class: 'btn btn-white btn-sm' %>
+<div class="row">
+  <div class="col-lg-5">
+    <table class="profile table-no-padding-left">
+      <tr>
+        <th style="width: 150px">Номер в обл. рег.</th>
+        <td><%= @user.drcode %></td>
+      </tr>
+      <tr>
+        <th>Дата рождения</th>
+        <td><%= @user.birthday %></td>
+      </tr>
+      <tr>
+        <th>ЛПУ</th>
+        <td><%= @user.job %></td>
+      </tr>
+    </table>
+  </div>
+</div>
+<hr/>
+<h3>Авторизационный токен</h3>
+<% if @user.token.presence && @user.token_expire_at > Time.now %>
+    <strong><%= @user.token %></strong><br/>
+
+    <div style="padding: 5px 0" class="text-success">Дествителен
+      до <%= @user.token_expire_at.strftime('%d.%m.%Y %H:%M') %></div>
+    <%= link_to 'Удалить токен', clean_token_user_path(@user), method: 'post', class: 'btn btn-white btn-sm' %>
+<% end %>
+<%= link_to 'Сгенерировать токен', generate_token_user_path(@user), method: 'post', class: 'btn btn-white btn-sm' %>
+<hr/>
+<div class="row">
+  <div class="col-lg-6">
+    <h3>
+      <% if @current_mode %>
+          <% if @current_mode.name == 'Аттестация' %>
+              Режим аттестации A-<%= @user.test_modes.where(name: 'Аттестация').count %>
+          <% elsif @current_mode.name == 'Нейтральный' %>
+              Нейтральный режим
+          <% elsif @current_mode.name == 'Тренировка' %>
+              Режим тренировки Т-<%= @user.test_modes.where(name: 'Тренировка').count %>
+          <% end %>
+      <% else %>
+          Режима нету
       <% end %>
-      <%= link_to 'Сгенерировать токен', generate_token_user_path(@user), method: 'post', class: 'btn btn-white btn-sm' %>
-      <hr/>
-      <div class="row">
-        <div class="col-lg-6">
-          <h3>
-            <% if @current_mode %>
-                <% if @current_mode.name == 'Аттестация' %>
-                    Режим аттестации A-<%= @user.test_modes.where(name: 'Аттестация').count %>
-                <% elsif @current_mode.name == 'Нейтральный' %>
-                    Нейтральный режим
-                <% elsif @current_mode.name == 'Тренировка' %>
-                    Режим тренировки Т-<%= @user.test_modes.where(name: 'Тренировка').count %>
+      <% if current_user.roles.where(name: 'Администратор').any? && @user.roles.where(name: 'Тестируемый').any? %>
+          <a href="#" class="btn btn-white btn-sm tooltips" data-toggle="modal" data-target="#createMode">Изменить</a>
+      <% end %>
+    </h3>
+  </div>
+  <div class="col-lg-6">
+    <% if @current_mode && @current_mode.name != 'Нейтральный' %>
+        <h3>Результат
+          <a href="/users/<%= @user.id %>/view_test_results" class="btn btn-white btn-sm tooltips" title="Посмотреть результат">
+            <i class="fa fa-eye  "></i>
+          </a>
+          <a href="/users/<%= @user.id %>/print_test_results" class="btn btn-white btn-sm tooltips" title="Печать результата">
+            <i class="fa fa-print"></i>
+          </a>
+          <a href="/users/<%= @user.id %>/save_pdf.pdf" target="_blank" class="btn btn-white btn-sm tooltips" title="Сохранить PDF">
+            <i class="fa fa-file-pdf-o"></i>
+          </a>
+        </h3>
+    <% end %>
+  </div>
+</div>
+
+<% if @current_mode && @current_mode.name != 'Нейтральный' %>
+    <div class="row">
+      <div class="col-lg-6">
+        <table class="table-no-padding-left" style="width: 300px">
+          <tr>
+            <th style="width: 30px">С:</th>
+            <td><h5><%= @current_mode.date_beg ? @current_mode.date_beg : '-' %></h5></td>
+            <!--<th style="width: 30px">По:</th>-->
+            <!--<td><h5><%#= @current_mode.date_end ? @current_mode.date_end : '-' %></h5></td>-->
+          </tr>
+
+        </table>
+        <table class="profile table-no-padding-left" style="width: 300px">
+          <% count_true = 0
+             count_fail = 0
+             @assigned_tests.each do |assigned_test| %>
+              <% if try = assigned_test.tries.order('rate DESC').first %>
+                  <% if try.rate %>
+                      <% if try.rate > 50 %>
+                          <% count_true = count_true + 1 %>
+                      <% else %>
+                          <% count_fail = count_fail + 1 %>
+                      <% end %>
+                  <% end %>
+              <% end %>
+          <% end %>
+          <tr>
+            <th style="width: 150px">Тесты</th>
+            <td title="Количество тестов" class="tooltips"><%= @assigned_tests.count %></td>
+            <td class="text-success tooltips" title="Зачтено"><%= count_true %></td>
+            <td class="text-danger tooltips" title="Не зачтено"><%= count_fail %></td>
+          </tr>
+          <tr>
+            <th>Попыток</th>
+            <td title="Количество попыток" class="tooltips"><%= @user_tries ? @user_tries.count : '0' %></td>
+            <td class="text-success tooltips" title="Зачтено"><%= @user_tries ? @user_tries.where('rate > ?', 50).count : '0' %></td>
+            <td class="text-danger tooltips" title="Не зачтено"><%= @user_tries ? @user_tries.where('rate <= ?', 50).count : '0' %></td>
+          </tr>
+        </table>
+      </div>
+      <div class="col-lg-6">
+        <% if @current_mode.name == 'Аттестация' %>
+            <% at = 0 %>
+            <% @assigned_tests.each do |assigned_test| %>
+                <% if assigned_test.tries.where('rate <= ?', 50).any? %>
+                    <% at = at + 1 %>
                 <% end %>
+            <% end %>
+            <p>
+            <% if at < 1 %>
+                  <strong class="text-danger">Зачет не получен</strong> <br/>
             <% else %>
-                Режима нету
+                  <strong class="text-success">Зачет получен</strong> <br/>
             <% end %>
-            <% if current_user.roles.where(name: 'Администратор').any? && @user.roles.where(name: 'Тестируемый').any? %>
-                <a href="#" class="btn btn-white btn-sm tooltips" data-toggle="modal" data-target="#createMode">Изменить</a>
-            <% end %>
-          </h3>
-        </div>
-        <div class="col-lg-6">
-          <% if @current_mode && @current_mode.name != 'Нейтральный'%>
-          <h3>Результат
-            <a href="/users/<%= @user.id %>/view_test_results" class="btn btn-white btn-sm tooltips" title="Посмотреть результат">
-              <i class="fa fa-eye  "></i>
-            </a>
-            <a href="/users/<%= @user.id %>/print_test_results" class="btn btn-white btn-sm tooltips" title="Печать результата">
-              <i class="fa fa-print"></i>
-            </a>
-            <a href="/users/<%= @user.id %>/save_pdf.pdf" target="_blank" class="btn btn-white btn-sm tooltips" title="Сохранить PDF">
-              <i class="fa fa-file-pdf-o"></i>
-            </a>
-          </h3>
-          <% end %>
-        </div>
+              <!--<strong>-->
+              Выполнено <%= at %> заданий <br/>
+              Получено ? из ? баллов
+              <!--</strong>-->
+            </p>
+            <!--<div class="btn btn-white"><i class="fa fa-print"></i></div>-->
+        <% end %>
       </div>
-
-      <% if @current_mode && @current_mode.name != 'Нейтральный' %>
-      <div class="row">
-        <div class="col-lg-6">
-          <table class="table-no-padding-left" style="width: 300px">
-            <tr>
-              <th style="width: 30px">С:</th>
-              <td><h5><%= @current_mode.date_beg ? @current_mode.date_beg : '-' %></h5></td>
-              <!--<th style="width: 30px">По:</th>-->
-              <!--<td><h5><%#= @current_mode.date_end ? @current_mode.date_end : '-' %></h5></td>-->
-            </tr>
-
-          </table>
-          <table class="profile table-no-padding-left" style="width: 300px">
-            <% count_true = 0
-               count_fail = 0
-               @assigned_tests.each do |assigned_test| %>
-                <% if try = assigned_test.tries.order('rate DESC').first %>
-                    <% if try.rate %>
-                        <% if try.rate > 50 %>
-                            <% count_true = count_true + 1 %>
-                        <% else %>
-                            <% count_fail = count_fail + 1%>
+    </div>
+    <hr/>
+    <ul id="myTab" class="nav nav-pills" role="tablist">
+      <li role="presentation" class="active">
+        <a href="#home" id="home-tab" role="tab" data-toggle="tab">Тесты</a>
+      </li>
+      <li role="presentation" class="">
+        <a href="#profile" role="tab" id="profile-tab" data-toggle="tab">Попытки</a>
+      </li>
+    </ul>
+    <div id="myTabContent" class="tab-content" style="padding: 15px 0; background-color: #ffffff">
+      <div role="tabpanel" class="tab-pane fade active in" id="home" aria-labelledby="home-tab">
+        <% if current_user.roles.where(name: 'Администратор').any? %>
+            <div title="Добавить тесты" data-toggle="modal" data-target="#AddAttestationTests" class="btn btn-white btn-sm pull-right tooltips" style="margin-top: -50px">
+              <i class="fa fa-plus"></i></div>
+        <% end %>
+        <table class="table table-bordered table-condensed table-striped">
+          <tr>
+            <th>Название</th>
+            <th>Тип</th>
+            <th>Попытки</th>
+            <th>Последняя попытка</th>
+            <th>Процент</th>
+            <th>Результат</th>
+          </tr>
+          <% if @assigned_tests %>
+              <% @assigned_tests.each do |assigned_test| %>
+                  <tr>
+                    <td><%= assigned_test.test.title %></td>
+                    <td><%= assigned_test.test.attestation == true ? 'Аттестационный' : 'Тренировочный' %></td>
+                    <td><%= assigned_test.tries.count %></td>
+                    <% if try = assigned_test.tries.order('rate DESC').first %>
+                        <td><%= try.created_at %></td>
+                        <td><%= try.rate.to_s + '%' %></td>
+                        <% if try.rate %>
+                            <% if try.rate > 50 %>
+                                <td><span class="label label-success">Зачет</span></td>
+                            <% else %>
+                                <td><span class="label label-danger">Не зачет</span></td>
+                            <% end %>
                         <% end %>
+                    <% else %>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                     <% end %>
-                <% end %>
-            <% end %>
-            <tr>
-              <th style="width: 150px">Тесты</th>
-              <td title="Количество тестов" class="tooltips"><%= @assigned_tests.count %></td>
-              <td class="text-success tooltips" title="Зачтено"><%=  count_true %></td>
-              <td class="text-danger tooltips" title="Не зачтено"><%= count_fail %></td>
-            </tr>
-            <tr>
-              <th>Попыток</th>
-              <td title="Количество попыток" class="tooltips"><%= @user_tries ? @user_tries.count : '0' %></td>
-              <td class="text-success tooltips" title="Зачтено"><%= @user_tries ? @user_tries.where('rate > ?', 50).count : '0' %></td>
-              <td class="text-danger tooltips" title="Не зачтено"><%= @user_tries ? @user_tries.where('rate <= ?', 50).count : '0' %></td>
-            </tr>
-          </table>
-        </div>
-        <div class="col-lg-6">
-          <% if @current_mode.name == 'Аттестация'%>
-          <p>
-            <strong class="text-success">Зачет получен</strong> <br/>
-            <!--<strong>-->
-            Выполнено 70% заданий <br/>
-            Получено 75 из 120 баллов
-            <!--</strong>-->
-          </p>
-          <!--<div class="btn btn-white"><i class="fa fa-print"></i></div>-->
+                  </tr>
+              <% end %>
           <% end %>
-        </div>
+
+        </table>
       </div>
-      <hr/>
-      <ul id="myTab" class="nav nav-pills" role="tablist">
-        <li role="presentation" class="active">
-          <a href="#home" id="home-tab" role="tab" data-toggle="tab">Тесты</a>
-        </li>
-        <li role="presentation" class="">
-          <a href="#profile" role="tab" id="profile-tab" data-toggle="tab">Попытки</a>
-        </li>
-      </ul>
-      <div id="myTabContent" class="tab-content" style="padding: 15px 0; background-color: #ffffff">
+      <div role="tabpanel" class="tab-pane fade " id="profile" aria-labelledby="profile-tab">
         <div role="tabpanel" class="tab-pane fade active in" id="home" aria-labelledby="home-tab">
-          <% if current_user.roles.where(name: 'Администратор').any? %>
-              <div title="Добавить тесты" data-toggle="modal" data-target="#AddAttestationTests" class="btn btn-white btn-sm pull-right tooltips" style="margin-top: -50px">
-                <i class="fa fa-plus"></i></div>
-          <% end %>
           <table class="table table-bordered table-condensed table-striped">
             <tr>
-              <th>Название</th>
-              <th>Тип</th>
-              <th>Попытки</th>
-              <th>Последняя попытка</th>
+              <th>Тест</th>
+              <th>Дата и время сдачи</th>
+              <th>Длительность</th>
               <th>Процент</th>
               <th>Результат</th>
             </tr>
-            <% if @assigned_tests %>
-                <% @assigned_tests.each do |assigned_test| %>
-                    <tr>
-                      <td><%= assigned_test.test.title %></td>
-                      <td><%= assigned_test.test.attestation == true ? 'Аттестационный' : 'Тренировочный' %></td>
-                      <td><%= assigned_test.tries.count %></td>
-                      <% if try = assigned_test.tries.order('rate DESC').first %>
-                          <td><%= try.created_at %></td>
-                          <td><%= try.rate.to_s + '%' %></td>
-                          <% if try.rate %>
-                              <% if try.rate > 50 %>
-                                  <td><span class="label label-success">Зачет</span></td>
-                              <% else %>
-                                  <td><span class="label label-danger">Не зачет</span></td>
-                              <% end %>
-                          <% end %>
-                      <% else %>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                      <% end %>
-                    </tr>
-                <% end %>
+            <% @user.tries.where(test_mode_id: @current_mode.id).each do |try| %>
+                <tr>
+                  <td><%= try.test.title %></td>
+                  <td><%= try.created_at %></td>
+                  <td><%= try.timer.strftime('%H:%M') if try.timer %></td>
+                  <td><%= try.rate.to_s + '%' %></td>
+                  <td>
+                    <% if try.rate %>
+                        <% if try.rate > 50 %>
+                            <span class="label label-success">Зачет</span>
+                        <% else %>
+                            <span class="label label-danger">Не зачет</span>
+                        <% end %>
+                    <% end %>
+                  </td>
+                </tr>
             <% end %>
-
           </table>
         </div>
-        <div role="tabpanel" class="tab-pane fade " id="profile" aria-labelledby="profile-tab">
-          <div role="tabpanel" class="tab-pane fade active in" id="home" aria-labelledby="home-tab">
-            <table class="table table-bordered table-condensed table-striped">
-              <tr>
-                <th>Тест</th>
-                <th>Дата и время сдачи</th>
-                <th>Длительность</th>
-                <th>Процент</th>
-                <th>Результат</th>
-              </tr>
-              <% @user.tries.where(test_mode_id: @current_mode.id).each do |try| %>
-                  <tr>
-                    <td><%= try.test.title %></td>
-                    <td><%= try.created_at %></td>
-                    <td><%= try.timer.strftime('%H:%M') if try.timer %></td>
-                    <td><%= try.rate.to_s + '%' %></td>
-                    <td>
-                      <% if try.rate %>
-                          <% if try.rate > 50 %>
-                              <span class="label label-success">Зачет</span>
-                          <% else %>
-                              <span class="label label-danger">Не зачет</span>
-                          <% end %>
-                      <% end %>
-                    </td>
-                  </tr>
-              <% end %>
-            </table>
-          </div>
-        </div>
       </div>
-      <% end %>
     </div>
-  </div>
+<% end %>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -266,13 +278,13 @@
         <h4 class="modal-title" id="myModalLabel">Настройка режима</h4>
 
         <div class="modal-body">
-          <%= form_for @test_mode, :html => { :class => 'form-horizontal' } do |f| %>
+          <%= form_for @test_mode, :html => {:class => 'form-horizontal'} do |f| %>
               <div class="form-group">
-                <%= f.select(:name,[['Нейтральный'],['Аттестация'],['Тренировка']],{}, { :class => 'form-control'})%>
+                <%= f.select(:name, [['Нейтральный'], ['Аттестация'], ['Тренировка']], {}, {:class => 'form-control'}) %>
               </div>
 
               <%= f.hidden_field :user_id, :class => 'form-control', value: @user.id %>
-              <%= f.hidden_field :date_beg, :class => 'form-control', :value => Date.today%>
+              <%= f.hidden_field :date_beg, :class => 'form-control', :value => Date.today %>
               <div class="form-group">
                 <%= f.submit 'Сохранить', :class => 'btn btn-primary pull-right' %>
               </div>
@@ -283,37 +295,37 @@
   </div>
 </div>
 
-<% if @current_mode && @current_mode.name != 'Нейтральный'%>
-<div class="modal fade" id="AddAttestationTests" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog" style="width: 680px;">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span></button>
-        <h3 class="modal-title title" id="myModalLabel"> Поиск Аттестационных тестов:</h3>
+<% if @current_mode && @current_mode.name != 'Нейтральный' %>
+    <div class="modal fade" id="AddAttestationTests" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog" style="width: 680px;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+            <h3 class="modal-title title" id="myModalLabel"> Поиск Аттестационных тестов:</h3>
 
-        <div class="modal-body">
-          <hr/>
-          <%= form_tag search_tests_user_path, remote: true, id: 'search_form', class: 'form-inline' do %>
-              <div class="form-group">
-                <%= text_field_tag :q, params[:q], id: 'qwery_string', :class => 'form-control', autocomplete: 'off', placeholder: 'Найти' %>
-                <%= hidden_field_tag :mode, @current_mode.name %>
-                <%= button_tag(type: 'submit', class: 'btn btn-white') do %>
-                    <span class="glyphicon glyphicon-search"></span>
-                <% end %>
-                <span id="spinner"><i class="fa fa-refresh fa-spin"></i></span>
+            <div class="modal-body">
+              <hr/>
+              <%= form_tag search_tests_user_path, remote: true, id: 'search_form', class: 'form-inline' do %>
+                  <div class="form-group">
+                    <%= text_field_tag :q, params[:q], id: 'qwery_string', :class => 'form-control', autocomplete: 'off', placeholder: 'Найти' %>
+                    <%= hidden_field_tag :mode, @current_mode.name %>
+                    <%= button_tag(type: 'submit', class: 'btn btn-white') do %>
+                        <span class="glyphicon glyphicon-search"></span>
+                    <% end %>
+                    <span id="spinner"><i class="fa fa-refresh fa-spin"></i></span>
+                  </div>
+              <% end %>
+              <br/>
+
+              <div class="table-responsive" id="search-result">
+                <div class="text-center text-info alert alert-info" style="">
+                  <strong>Для поиска тестов введите название или описание теста</strong>
+                </div>
               </div>
-          <% end %>
-          <br/>
-
-          <div class="table-responsive" id="search-result">
-            <div class="text-center text-info alert alert-info" style="">
-              <strong>Для поиска тестов введите название или описание теста</strong>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
 <% end %>
