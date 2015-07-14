@@ -1,3 +1,4 @@
+<%= content_for :title, 'Процесс тестирования '  + @try.test.title %>
 <% task_was = @task_result.task_version.item_version %>
 <div class="container">
 
@@ -84,7 +85,7 @@
           <% if @task_result.try_task_contents.count <= 1 %>
               <div class="col-lg-6">
                 <div id="question-content">
-                  <%= sanitize(@task_result.text.html_safe, attributes: []).gsub(/_(.*)_/, ' <span class="highlight-empty">_______</span> ').html_safe %>
+                  <%= sanitize(task_was.text.html_safe, attributes: []).gsub(/_(.*)_/, ' <span class="highlight-empty">_______</span> ').html_safe %>
 
                 </div>
               </div>
@@ -144,8 +145,8 @@
                 <table class="table answer_table">
                   <thead>
                   </thead>
-                  <tbody <%= @task_result.task_type == 'Последовательность' ? 'id =answer_body' : '' %>>
-                  <% if  @task_result.task_type == 'Открытый вопрос' %>
+                  <tbody <%= task_was.task_type == 'Последовательность' ? 'id =answer_body' : '' %>>
+                  <% if  task_was.task_type == 'Открытый вопрос' %>
                       <tr class="answer">
                         <td style="display: none"></td>
                         <td>
@@ -157,33 +158,35 @@
                       </tr>
                   <% else %>
                       <% @task_result.user_answers.order('RANDOM()').each_with_index do |answer, index| %>
+                          <% answer_was = answer.answer_version.item_version %>
                           <tr class="answer">
-                            <td style="width: 30px; text-align: center; padding-top: 14px; <%= [ 'Последовательность', 'Сопоставление'].include?(@task_result.task_type) ? '' : 'display:none' %>">
+                            <td style="width: 30px; text-align: center; padding-top: 14px; <%= [ 'Последовательность', 'Сопоставление'].include?(task_was.task_type) ? '' : 'display:none' %>">
                               <%= index + 1 %>
                             </td>
                             <td>
-                              <% if @task_result.task_type == 'Множественный выбор' %>
+                              <% if task_was.task_type == 'Множественный выбор' %>
                                   <label>
-                                    <%= check_box_tag 'user_answers[]', answer.id %> <%= answer.text %>
+                                    <%= check_box_tag 'user_answers[]', answer.id %> <%= answer_was.text %>
                                   </label>
-                              <% elsif @task_result.task_type == 'Единичный выбор' %>
+                              <% elsif task_was.task_type == 'Единичный выбор' %>
                                   <label>
-                                    <%= radio_button_tag 'user_answers', answer.id %> <%= answer.text %>
+                                    <%= radio_button_tag 'user_answers', answer.id %> <%= answer_was.text %>
                                   </label>
-                              <% elsif @task_result.task_type == 'Последовательность' %>
+                              <% elsif task_was.task_type == 'Последовательность' %>
                                   <label>
-                                    <%= answer.text %>
+                                    <%= answer_was.text %>
                                   </label>
                                   <%= hidden_field_tag 'user_answers[' + answer.id.to_s + '][]', '', :class => 'serial_number' %>
-                              <% elsif @task_result.task_type == 'Сопоставление' %>
+                              <% elsif task_was.task_type == 'Сопоставление' %>
+                                  <% associations_collection_for_select = @task_result.user_associations.shuffle.map{|ua| [ua.association_version.item_version.text, ua.id]} %>
                                   <div class="pull-right select-answer">
-                                    <%= select_tag('associations[' + answer.id.to_s + '][]', options_for_select(['Не выбрано']) + options_from_collection_for_select(@task_result.user_associations.shuffle, 'id', 'text'), :class => 'form-control association_select') %>
+                                    <%= select_tag('associations[' + answer.id.to_s + '][]', options_for_select(['Не выбрано']) + options_for_select(associations_collection_for_select), :class => 'form-control association_select') %>
                                   </div>
                                   <label class="text pull-right" style="margin-right: 10px"><%= ('А'..'Я').to_a[index] %>.</label>
-                                  <div class="text"><%= answer.text %></div>
+                                  <div class="text"><%= answer_was.text %></div>
                               <% end %>
                             </td>
-                            <% if @task_result.task_type == 'Последовательность' %>
+                            <% if task_was.task_type == 'Последовательность' %>
                                 <td style="width: 50px; height: 50px; text-align: center;" class="sorter tooltips" title="Переместите ответ на нужную позицию">
                                   <!--<span style="font-size: 20px;" class="glyphicon glyphicon-move"></span>-->
                                     <span class="fa fa-bars text-muted"></span>

@@ -71,6 +71,7 @@ class TestsController < ApplicationController
   # POST /tests.json
   def create
     @test = Test.new(test_params)
+    @test.timer = '1:00'
 
     if @test.directory == false
       respond_to do |format|
