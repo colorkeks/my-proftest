@@ -114,7 +114,7 @@
                   <% end %>
                 </div>
                 <div class="btn-group mr10">
-                  <button class="btn btn-white tooltips dropdown-toggle" data-toggle="dropdown" type="button" title="Другое">
+                  <button class="btn btn-white tooltips dropdown-toggle" id="other-btn" data-toggle="dropdown" type="button" title="Другое">
                     <i class="fa fa-ellipsis-v"></i>
                     <span class="caret"></span>
                   </button>
@@ -315,6 +315,7 @@
     }
 
     function editElement() {
+        console.log('editElement');
         $('.element_checkbox:checked').first().closest('tr').find('.element-edit-link').first().click();
     }
 

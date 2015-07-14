@@ -15,7 +15,7 @@
     <ul class="nav nav-pills nav-stacked nav-bracket" style="margin-bottom: 0">
       <li class="tree" style="margin-left: 2px">
         <%= render_tree(TestGroup.root) do |item| %>
-            <span id="destination_group_span" onclick="selectDestinationGroup(this);" data-id="<%= item.id%>">
+            <span id="destination_group_span" class="folder-item" onclick="selectDestinationGroup(this);" data-id="<%= item.id%>">
                 <% if item.children.any? %>
                     <i class="fa fa-caret-right"></i>
                 <% else %>

@@ -105,7 +105,7 @@ class TestsController < ApplicationController
       if @test.directory == false
         if @test.update(test_params)
           format.html {
-            redirect_to(:back)
+            redirect_to(:back, notice: 'Элемент успешно обновлен.')
             #redirect_to @test, notice: 'Тест был успешно обновлен'
           }
           format.json { render :show, status: :ok, location: @test }
