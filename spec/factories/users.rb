@@ -8,4 +8,9 @@ FactoryGirl.define do
     roles {[create(:admin), create(:methodolog), create(:tested)]}
   end
 
+  factory :methodolog_user, class: User, parent: :user do
+    roles {[create(:methodolog)]}
+  end
+
+
 end
