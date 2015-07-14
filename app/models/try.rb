@@ -62,6 +62,7 @@ class Try < ActiveRecord::Base
     result = result && self.save
   end
 
+  #Определяет, можно ли отвечать на этот вопрос
   def can_show_task_result?(task_result)
     if task_result.status == 'ответ не дан'
       if task_result.task.chain
