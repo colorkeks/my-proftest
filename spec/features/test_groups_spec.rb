@@ -36,7 +36,6 @@ RSpec.feature 'TestGroups', type: :feature do
     click_on 'Тест'
 
     fill_in 'Название', with: 'new_test'
-    save_and_open_screenshot
     click_button('Сохранить')
     expect(page).to have_text('new_test')
   end
@@ -47,8 +46,10 @@ RSpec.feature 'TestGroups', type: :feature do
 
     visit "/test_groups/#{@tg.id}"
     click_on 'toggle-checkboxes'
-    click_on 'remove-btn'
-    page.driver.browser.accept_js_confirms # клик на confirm window
+
+    page.accept_confirm do
+      click_on 'remove-btn'
+    end
 
     expect(page).not_to have_text('test_group')
     expect(page).not_to have_text('test')
