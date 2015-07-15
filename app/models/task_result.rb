@@ -72,6 +72,7 @@ class TaskResult < ActiveRecord::Base
         self.user_answers.each do |user_answer|
           selected_serial_number = params[:user_answers][user_answer.id.to_s].first.to_i
           user_answer.serial_number = selected_serial_number
+          user_answer.user_reply = selected_serial_number
           if selected_serial_number == user_answer.answer_version.item_version.serial_number
             user_answer.correct = true
           else
