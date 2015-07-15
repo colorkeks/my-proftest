@@ -1,5 +1,5 @@
 <%= content_for :title, 'Процесс тестирования '  + @try.test.title %>
-<% task_was = @task_result.task_version.item_version %>
+<% task_was = @task_result.task_was %>
 <div class="container">
 
   <div class="row">
@@ -39,12 +39,12 @@
                     <% status = ' ' %>
                 <% end %>
 
-                <% if !task_result.task.chain_id.nil? %>
-                    <% chain_count = task_result.task.chain.tasks.count %>
-                    <% if (task_result.task.chain_position != 1)%>
-                        <% @try.task_results.each do |tr|%>
-                            <% if (tr.task.chain_id == task_result.task.chain_id) && (tr.task.chain_position == task_result.task.chain_position - 1) %>
-                                <% if (tr.status == 'ответ не дан') %>
+                <% if task_was.chain_id.present? %>
+                    <% chain_count = @try.task_results_for_chain_id(task_was.chain_id).count %>
+                    <% if task_was.chain_position != 1 %>
+                        <% @try.task_results_for_chain_id(task_was.chain_id).each do |tr| %>
+                            <% if tr.task_was.chain_position == task_was.chain_position - 1 %>
+                                <% if tr.status == 'ответ не дан' %>
                                     <% status = status + 'disabled '%>
                                 <% end %>
                             <% end %>
@@ -53,9 +53,9 @@
                 <% else %>
                     <% chain_count = 0%>
                 <% end %>
-                <% if task_result.task.chain_position == 1 && task_result.task.chain_id != nil%>
+                <% if task_was.chain_position == 1 && task_was.chain_id != nil%>
                     [<%= link_to  index + 1, {:action => 'show_question', :current_task_index => index}, :class => 'btn btn-default btn-xs ' + status%>
-                <% elsif task_result.task.chain_position == chain_count %>
+                <% elsif task_was.chain_position == chain_count %>
                     <%= link_to  index + 1, {:action => 'show_question', :current_task_index => index}, :class => 'btn btn-default btn-xs ' + status%>]
                 <% else %>
                     <%= link_to  index + 1, {:action => 'show_question', :current_task_index => index}, :class => 'btn btn-default btn-xs ' + status%>
@@ -91,8 +91,7 @@
               </div>
               <div class="col-lg-6" style="text-align: center">
                 <% @task_result.try_task_contents.each do |try_task_content| %>
-                    <% content = try_task_content.task_content_version.item_version %>
-                    <% content.instance_variable_set(:@new_record, false) %>
+                    <% content = try_task_content.task_content_was %>
                     <% if content.file_content_content_type =~ %r(audio) %>
                         <div style="margin: 0 auto;"><%= audio_tag(content.file_content.url(:original), controls: true, style: 'margin-top:0;') %></div>
                     <% elsif content.file_content_content_type =~ %r(image) %>

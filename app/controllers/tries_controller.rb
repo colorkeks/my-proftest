@@ -71,7 +71,7 @@ class TriesController < ApplicationController
     user_points = 0
 
     @try.task_results.each do |task_result|
-      max_points = max_points + task_result.task.point
+      max_points = max_points + task_result.task_was.point
       user_points = user_points + task_result.point
     end
     @max = max_points
@@ -103,7 +103,7 @@ class TriesController < ApplicationController
       respond_to do |format|
         if task_result.save
           # если на цепочку ответили не правильно, то прервать цепочку и отметить как не правильно
-          if task_result.status == 'не правильно' && task_result.task.chain
+          if task_result.status == 'не правильно' && task_result.task_was.chain
             task_result.task.chain.tasks.each do |task|
               curr_task_result = task.task_results.where(try_id: @try.id).first
               if curr_task_result.status == 'ответ не дан'
