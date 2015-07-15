@@ -66,9 +66,13 @@ RSpec.feature 'TestGroups', type: :feature do
     click_on 'move-btn'
 
     page.document.synchronize do
-      folder_item = all(:css, '.folder-item')[1]
-      within(:css, '.modal-body') { folder_item.click  }
-      click_on 'Переместить'
+      folder_item = all(:css, '.modal-body .folder-item')[1]
+      if folder_item
+        folder_item.click
+        click_on 'Переместить'
+      else
+        raise Capybara::ElementNotFound
+      end
     end
 
     expect(page).to have_text('Элементы успешно перемещены.')

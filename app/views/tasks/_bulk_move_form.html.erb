@@ -17,7 +17,7 @@
         <ul class="children" style="display: block">
           <li>
             <% ([Section.new(name: 'Без раздела')]+@test.sections).each do |item| %>
-            <span id="destination_group_span" onclick="selectDestinationGroup(this);" data-id="<%= item.id%>">
+            <span id="destination_group_span" class="section" onclick="selectDestinationGroup(this);" data-id="<%= item.id%>">
                 <%= item.name %>
             </span>
             <% end %>
