@@ -12,34 +12,34 @@ class Try < ActiveRecord::Base
     tasks.each do |task|
       task_result = self.task_results.build(
           task_version: task.versions.last,
-          :point => task.point,
-          :text => task.text,
-          :hint => task.hint,
-          :task_type => task.task_type,
+          #:point => task.point,
+          #:text => task.text,
+          #:hint => task.hint,
+          #:task_type => task.task_type,
           :status => 'ответ не дан',
-          :task_id => task.id
+          #:task_id => task.id
       )
       task.answers.each do |answer|
         task_result.user_answers.build(
             answer_version: answer.versions.last,
             :user_reply => false,
-            :correct => answer.correct,
-            :text => answer.text,
-            :serial_number => answer.serial_number,
-            :point => answer.point,
-            :task_id => task.id,
-            :answer_id => answer.id,
-            :user_association_id => nil
+            #:correct => answer.correct,
+            #:text => answer.text,
+            #:serial_number => answer.serial_number,
+            #:point => answer.point,
+            #:task_id => task.id,
+            #:answer_id => answer.id,
+            #:user_association_id => nil
         )
       end
       task.associations.each do |association|
         task_result.user_associations.build(
             association_version: association.versions.last,
-            :text => association.text,
-            :serial_number => association.serial_number,
-            :task_id => task.id,
-            :association_id => association.id,
-            :user_answer_id => nil
+            #:text => association.text,
+            #:serial_number => association.serial_number,
+            #:task_id => task.id,
+            #:association_id => association.id,
+            #:user_answer_id => nil
         )
       end
       task.task_contents.each do |task_content|
@@ -62,10 +62,12 @@ class Try < ActiveRecord::Base
     result = result && self.save
   end
 
+  #Определяет, можно ли отвечать на этот вопрос
   def can_show_task_result?(task_result)
     if task_result.status == 'ответ не дан'
-      if task_result.task.chain
-        if task_result.task.chain_position == 1
+      task_was = task_result.task_version.item_version
+      if task_was.chain_id
+        if task_was.chain_position == 1
           return true
         else
           #Определяем индекс в очереди
@@ -104,6 +106,10 @@ class Try < ActiveRecord::Base
       end
     end
     return task_result
+  end
+
+  def task_results_for_chain_id(chain_id)
+    self.task_results.all.select{|tr| tr.task_version.item_version.chain_id == chain_id}
   end
 
 end

@@ -134,63 +134,66 @@
 <div class="modal fade" id="AddBirthday" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" style="width: 1020px;">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header" style="border-bottom: none">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span></button>
-        <!--<h4 class="modal-title" id="myModalLabel">Введите дату рождения:</h4>-->
-        <%= form_for(@user, :url => url_for(:action => 'custom_create', :controller => 'users'), :html => {:class => 'form-horizontal'}) do |f| %>
-            <div class="modal-body">
-              <div class="row">
-                <div class="col-lg-6">
-                  <div style="text-align: center; color: #000000"><h4> Карточка испытуемого</h4></div>
-                  <br>
-                  <div class="form-group">
-                    <div class="col-lg-3">
-                      <%= f.label 'Дата рождения:', :class => 'control-label' %>
-                    </div>
-                    <div class="controls col-md-8">
-                      <div class='input-group date' id='birthday'>
-                      <%= f.text_field :birthday, :class => 'form-control'%>
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <!--<h4 class="modal-title" id="myModalLabel">Введите дату рождения:</h4>-->
+      <%= form_for(@user, :url => url_for(:action => 'custom_create', :controller => 'users'), :html => {:class => 'form-horizontal'}) do |f| %>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-lg-6">
+                <div style="text-align: center; color: #000000"><h4> Карточка испытуемого</h4></div>
+                <br>
+
+                <div class="form-group">
+                  <div class="col-lg-3">
+                    <%= f.label 'Дата рождения:', :class => 'control-label' %>
+                  </div>
+                  <div class="controls col-md-8">
+                    <div class='input-group date' id='birthday'>
+                      <%= f.text_field :birthday, :class => 'form-control' %>
                       <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                       </span>
-                      </div>
-                      <%#= f.date_select(:birthday, {start_year: 1930}, {:class => 'form-control', :style => 'width:100px; display:inline-block'}) %>
                     </div>
-                  </div>
-                </div>
-                <div class="col-lg-6" style="border-left: 1px solid #000000">
-                  <div style="text-align: center; color: #000000"><h4> Учетная запись</h4></div>
-                  <br>
-                  <div class="form-group">
-                    <div class="col-lg-3">
-                      <%= f.label 'E-mail:', :class => 'control-label' %>
-                    </div>
-                    <div class="controls col-md-8">
-                      <%= f.email_field :email, :class => 'form-control', autocomplete: :off, value: (2...3).map { ('a'..'z').to_a[rand(26)] }.join + @doctor.drcode.from(1).downcase + '@comsoft.corp.ru' %>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="col-lg-3">
-                      <%= f.label 'Пароль:', :class => 'control-label' %>
-                    </div>
-                    <div class="controls col-md-8">
-                      <%= f.text_field :password, :class => 'form-control', autocomplete: :off, value: rand.to_s[2..9] %>
-                    </div>
+                    <%#= f.date_select(:birthday, {start_year: 1930}, {:class => 'form-control', :style => 'width:100px; display:inline-block'}) %>
                   </div>
                 </div>
               </div>
-              <%= f.hidden_field :first_name, value: @doctor.name %>
-              <%= f.hidden_field :second_name, value: @doctor.secname %>
-              <%= f.hidden_field :last_name, value: @doctor.surname %>
-              <%= f.hidden_field :job, value: @doctor.lpu_dbfs.title %>
-              <%= f.hidden_field :drcode, value: @doctor.drcode %>
+              <div class="col-lg-6" style="border-left: 1px solid #000000">
+                <div style="text-align: center; color: #000000"><h4> Учетная запись</h4></div>
+                <br>
+
+                <div class="form-group">
+                  <div class="col-lg-3">
+                    <%= f.label 'E-mail:', :class => 'control-label' %>
+                  </div>
+                  <div class="controls col-md-8">
+                    <%= f.email_field :email, :class => 'form-control', autocomplete: :off, value: (2...3).map { ('a'..'z').to_a[rand(26)] }.join + @doctor.drcode.from(1).downcase + '@comsoft.corp.ru' %>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-lg-3">
+                    <%= f.label 'Пароль:', :class => 'control-label' %>
+                  </div>
+                  <div class="controls col-md-8">
+                    <%= f.text_field :password, :class => 'form-control', autocomplete: :off, value: rand.to_s[2..9] %>
+                  </div>
+                </div>
+              </div>
             </div>
+            <%= f.hidden_field :first_name, value: @doctor.name %>
+            <%= f.hidden_field :second_name, value: @doctor.secname %>
+            <%= f.hidden_field :last_name, value: @doctor.surname %>
+            <%= f.hidden_field :job, value: @doctor.lpu_dbfs.title %>
+            <%= f.hidden_field :drcode, value: @doctor.drcode %>
             <div class="footer">
               <%= f.submit 'Сохранить', class: 'btn btn-white' %>
             </div>
-        <% end %>
-      </div>
+          </div>
+      <% end %>
     </div>
   </div>
 </div>
