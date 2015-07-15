@@ -16,7 +16,7 @@
             <th style="width: 150px;">Дата рождения</th>
             <td>
               <div class='input-group date' id='birthday'>
-                <%= f.text_field :birthday, :class => 'form-control' %>
+                <%= f.text_field :birthday, :class => 'form-control', value: @user.birthday ? @user.birthday.strftime('%d.%m.%Y') : '' %>
                 <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                       </span>

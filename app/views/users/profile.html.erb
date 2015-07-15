@@ -60,7 +60,7 @@
       </tr>
       <tr>
         <th>Дата рождения</th>
-        <td><%= @user.birthday %></td>
+        <td><%= @user.birthday.strftime('%d.%m.%Y') %></td>
       </tr>
       <tr>
         <th>ЛПУ</th>
@@ -122,7 +122,7 @@
         <table class="table-no-padding-left" style="width: 300px">
           <tr>
             <th style="width: 30px">С:</th>
-            <td><h5><%= @current_mode.date_beg ? @current_mode.date_beg : '-' %></h5></td>
+            <td><h5><%= @current_mode.date_beg ? @current_mode.date_beg.strftime('%d.%m.%Y') : '-' %></h5></td>
             <!--<th style="width: 30px">По:</th>-->
             <!--<td><h5><%#= @current_mode.date_end ? @current_mode.date_end : '-' %></h5></td>-->
           </tr>
