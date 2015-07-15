@@ -22,7 +22,7 @@ class Try < ActiveRecord::Base
       task.answers.each do |answer|
         task_result.user_answers.build(
             answer_version: answer.versions.last,
-            :user_reply => false,
+            #:user_reply => false,
             #:correct => answer.correct,
             #:text => answer.text,
             #:serial_number => answer.serial_number,

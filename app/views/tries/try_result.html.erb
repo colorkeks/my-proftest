@@ -28,7 +28,7 @@
                             <span class="label label-warning">Частично правильно</span>
                         <% end %>
                         <div style="float: right">
-                          <%= task_result.point %> <%= Russian.p(task_result.point, 'балл', 'балла', 'баллов', 'балла') %>
+                          <%= task_result.point.round(2) %> <%= Russian.p(task_result.point, 'балл', 'балла', 'баллов', 'балла') %>
                         </div>
                       </div>
                     </div>
@@ -138,9 +138,9 @@
                                         </tr>
                                     <% end %>
                             <% else %>
-                                <% task_result.user_answers.where(:user_reply => true).each do |reply| %>
+                                <% task_result.user_answers.where(:user_reply => true).each do |ua| %>
                                     <tr>
-                                      <td><h4><%= reply.text.html_safe %></h4></td>
+                                      <td><h4><%= ua.answer_was.text.html_safe %></h4></td>
                                     </tr>
                                 <% end %>
                             <% end %>
