@@ -101,7 +101,7 @@ function update_algorithm_statistic(){
 function date_picker(){
     $('#birthday').datetimepicker({
         locale : 'ru',
-        format: 'YYYY-MM-DD'
+        format: 'DD.MM.YYYY'
     });
     $('#datetimepicker').datetimepicker({
         format: 'LT',
