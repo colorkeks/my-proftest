@@ -175,7 +175,7 @@
 
                 <% if !@trash %>
                 <div class="btn-group ">
-                  <button class="btn btn-white tooltips dropdown-toggle" data-toggle="dropdown" type="button" title="" data-original-title="Другое">
+                  <button class="btn btn-white tooltips dropdown-toggle" id="other-btn" data-toggle="dropdown" type="button" title="" data-original-title="Другое">
                     <i class="fa fa-ellipsis-v"></i>
                     <span class="caret"></span>
                   </button>
@@ -206,7 +206,7 @@
               <div class="btn-group labels mr10">
                 <% if !@selected_chain && !@trash %>
                 <div class="btn-group">
-                  <button data-toggle="dropdown" class="btn btn-white dropdown-toggle tooltips" type="button" title="Изменить эквивалентную группу">
+                  <button data-toggle="dropdown" class="btn btn-white dropdown-toggle tooltips" id="change-eqvgroup" type="button" title="Изменить эквивалентную группу">
                     <span class="label label-info">
                       <strong>
                         <% if @last_eqvgroup %>
