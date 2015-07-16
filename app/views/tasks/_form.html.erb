@@ -89,7 +89,9 @@
                     <!--<span class="btn btn-white btn-sm ml10 mr30 tooltips" title="Добавить вариант ответа">-->
                       <%= link_to_add_fields '<i class="fa fa-plus"></i>', f, :answers, 'answer_table',
                                              class: 'btn btn-white btn-sm ml10 mr30 tooltips',
-                                             title: 'Добавить вариант ответа' if @type != 'Сопоставление' %>
+                                             id: 'add-answer-btn',
+                                             title: 'Добавить вариант ответа' if @type != 'Сопоставление'
+                      %>
                     <!--</span>-->
                     <small style="display: inline-block" class="ml10 ">Баллы <%= f.number_field :point, class: 'form-control input-sm score_count', params[:action] == 'edit' ? nil : :value => 1 %></small></h4>
                 </div>
@@ -119,7 +121,7 @@
               <% if @type == 'Сопоставление' %>
                   <div class="row">
                     <div class="col-lg-6 col-sm-6">
-                      <h4>Ответы: <%= link_to_add_fields '<i class="fa fa-plus"></i>', f, :answers,'answer_table', class: 'btn btn-white btn-sm pull-right tooltips' %></h4>
+                      <h4>Ответы: <%= link_to_add_fields '<i class="fa fa-plus"></i>', f, :answers,'answer_table', id: 'add-answer-btn', class: 'btn btn-white btn-sm pull-right tooltips' %></h4>
                       <table id="answer_table" class="table answer_table table-striped">
                         <tbody id="answer_body">
                         <%= f.fields_for :answers, (params[:action] == 'edit' ? @task.answers.order('id ASC') : nil) do |ff| %>
@@ -129,7 +131,7 @@
                       </table>
                     </div>
                     <div class="col-lg-6 col-sm-6">
-                      <h4>Сопоставления: <%= link_to_add_fields '<i class="fa fa-plus"></i>', f, :associations, 'associate_table', class: 'btn btn-white btn-sm pull-right tooltips' %></h4>
+                      <h4>Сопоставления: <%= link_to_add_fields '<i class="fa fa-plus"></i>', f, :associations, 'associate_table', id: 'add-association-btn', class: 'btn btn-white btn-sm pull-right tooltips' %></h4>
                       <table id="associate_table" class="table associate_table table-striped answer_table">
                         <tbody id="associate_body">
                         <%= f.fields_for :associations, (params[:action] == 'edit' ? @task.associations.order('id ASC') : nil) do |ff| %>
