@@ -9,6 +9,7 @@ FactoryGirl.define do
     # pension  ''
     # datebeg  ''
     # dateend  ''
+    officfun_dbfs []
   end
 
 end

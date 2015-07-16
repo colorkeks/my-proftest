@@ -81,7 +81,7 @@
               </tr>
               <tr>
                 <th>ЛПУ</th>
-                <td><%= @doctor.lpu_dbfs.title %></td>
+                <td><%= @doctor.lpu_dbfs.title if @doctor.lpu_dbfs %></td>
                 <th></th>
                 <td></td>
               </tr>
@@ -187,7 +187,7 @@
             <%= f.hidden_field :first_name, value: @doctor.name %>
             <%= f.hidden_field :second_name, value: @doctor.secname %>
             <%= f.hidden_field :last_name, value: @doctor.surname %>
-            <%= f.hidden_field :job, value: @doctor.lpu_dbfs.title %>
+            <%= f.hidden_field :job, value: @doctor.lpu_dbfs.title if @doctor.lpu_dbfs %>
             <%= f.hidden_field :drcode, value: @doctor.drcode %>
             <div class="footer">
               <%= f.submit 'Сохранить', class: 'btn btn-white' %>
