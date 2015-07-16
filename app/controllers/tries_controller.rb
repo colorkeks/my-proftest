@@ -99,21 +99,11 @@ class TriesController < ApplicationController
     # если на вопрос действительно еще не отвечали
     if @try.can_show_task_result?(task_result)
       task_result.check_user_answer!(params)
+      task_results = @try.process_chain_for_task_result!(task_result)
 
       respond_to do |format|
-        if task_result.save
+        if task_result.save && task_results.all?(&:save)
           # если на цепочку ответили не правильно, то прервать цепочку и отметить как не правильно
-          if task_result.status == 'не правильно' && task_result.task_was.chain
-            task_result.task.chain.tasks.each do |task|
-              curr_task_result = task.task_results.where(try_id: @try.id).first
-              if curr_task_result.status == 'ответ не дан'
-                p '==============='
-                curr_task_result.status = 'не правильно'
-                curr_task_result.point = 0
-                curr_task_result.save!
-              end
-            end
-          end
           format.html { redirect_to show_question_try_path(:current_task_index => params[:current_task_index]) }
         else
           format.json { render json: @try.errors, status: :unprocessable_entity }
@@ -122,7 +112,7 @@ class TriesController < ApplicationController
       # если на вопрос уже ответили
     else
       respond_to do |format|
-        format.html { redirect_to show_question_try_path(:current_task_index => params[:current_task_index]), :alert => 'Вы уже ответили на этот вопрос. Пожалуйста больше не пытайтесь жульничать' }
+        format.html { redirect_to show_question_try_path(:current_task_index => params[:current_task_index]), :alert => 'Вы не можете ответить на данный вопрос' }
       end
     end
   end

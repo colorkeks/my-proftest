@@ -22,7 +22,7 @@ class Try < ActiveRecord::Base
       task.answers.each do |answer|
         task_result.user_answers.build(
             answer_version: answer.versions.last,
-            :user_reply => false,
+            #:user_reply => false,
             #:correct => answer.correct,
             #:text => answer.text,
             #:serial_number => answer.serial_number,
@@ -110,6 +110,20 @@ class Try < ActiveRecord::Base
 
   def task_results_for_chain_id(chain_id)
     self.task_results.all.select{|tr| tr.task_version.item_version.chain_id == chain_id}
+  end
+
+  def process_chain_for_task_result!(task_result)
+    trs = []
+    if task_result.status == 'не правильно' && task_result.task_was.chain_id
+      self.task_results_for_chain_id(task_result.task_was.chain_id).each do |tr|
+        if tr.status == 'ответ не дан'
+          tr.status = 'не правильно'
+          tr.point = 0
+          trs += [tr]
+        end
+      end
+    end
+    return trs
   end
 
 end

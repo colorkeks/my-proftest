@@ -15,28 +15,35 @@ class TaskResult < ActiveRecord::Base
   end
 
   def check_user_answer!(params)
-    task_was = self.task_version.item_version
+    task_was = self.task_was
     earned_points = 0
 
     case task_was.task_type
       when 'Единичный выбор'
-        selected_user_answer = self.user_answers.where(id: params[:user_answers]).first
+        user_answers = self.user_answers
+        selected_user_answer = params[:user_answers] ? user_answers.find{|ua| params[:user_answers].include?(ua.id.to_s)} : nil
         selected_user_answer.user_reply = true if selected_user_answer
-        if selected_user_answer && selected_user_answer.answer_version.item_version.correct
+
+        if (selected_user_answer && selected_user_answer.answer_version.item_version.correct) || (selected_user_answer.nil? && self.user_answers.none?{|ua| ua.answer_was.correct} )
           earned_points = task_was.point.to_f
+          selected_user_answer.correct = true if selected_user_answer
         else
           earned_points = 0
         end
 
       when 'Множественный выбор'
-        selected_user_answers = self.user_answers.where(id: params[:user_answers])
-        answers_was = self.user_answers.map{|ua| ua.answer_version.item_version}
+        user_answers = self.user_answers
+        selected_user_answers = params[:user_answers] ? user_answers.find_all{|ua| params[:user_answers].include?(ua.id.to_s)} : []
+        answers_was = user_answers.map{|ua| ua.answer_version.item_version}
         coefficient_incorrect = task_was.point.to_f / answers_was.find_all{|a| !a.correct}.count
         coefficient_correct   = task_was.point.to_f / answers_was.find_all{|a| a.correct}.count
         correct_selected_user_answers = selected_user_answers.find_all{|ua| ua.answer_version.item_version.correct}
         incorrect_selected_user_answers = selected_user_answers.find_all{|ua| !ua.answer_version.item_version.correct}
         earned_points = (correct_selected_user_answers.size * coefficient_correct) - (incorrect_selected_user_answers.size * coefficient_incorrect)
+
         selected_user_answers.map{|ua| ua.user_reply = true}
+        correct_selected_user_answers.map{|ua| ua.correct = true}
+        incorrect_selected_user_answers.map{|ua| ua.correct = false}
 
       when 'Сопоставление'
         coefficient = task_was.point.to_f / self.user_answers.count
@@ -65,6 +72,7 @@ class TaskResult < ActiveRecord::Base
         self.user_answers.each do |user_answer|
           selected_serial_number = params[:user_answers][user_answer.id.to_s].first.to_i
           user_answer.serial_number = selected_serial_number
+          user_answer.user_reply = selected_serial_number
           if selected_serial_number == user_answer.answer_version.item_version.serial_number
             user_answer.correct = true
           else
@@ -82,8 +90,9 @@ class TaskResult < ActiveRecord::Base
       when 'Открытый вопрос'
         correct = false
         self.user_answers.each do |user_answer|
+          user_answer.user_reply = params[:user_answer]
           if user_answer.answer_version.item_version.text.mb_chars.downcase == params[:user_answer]
-            user_answer.user_reply = params[:user_answer]
+            user_answer.correct = true
             correct = true
           end
         end
@@ -107,7 +116,6 @@ class TaskResult < ActiveRecord::Base
       self.status = 'частично правильно'
       self.point = earned_points
     end
-
 
   end
 
