@@ -4,7 +4,7 @@ RSpec.feature 'TestGroups', type: :feature do
   # include Devise::TestHelpers
 
   before :each do
-    @tg = TestGroup.create!(name: 'Тесты')
+    @test_group = TestGroup.create!(name: 'Тесты')
     TestGroup.create!(name: 'Корзина')
     @user = create(:methodolog_user)
 
@@ -13,10 +13,11 @@ RSpec.feature 'TestGroups', type: :feature do
     fill_in 'user_email', with: @user.email
     fill_in 'user_password', with: @user.password
     click_button 'Войти'
+
   end
 
   scenario 'Create folder', js: true do
-    visit "/test_groups/#{@tg.id}"
+    visit test_groups_path @test_group
     # p page.body
     # p current_url
     # save_and_open_page
@@ -31,7 +32,7 @@ RSpec.feature 'TestGroups', type: :feature do
   end
 
   scenario 'Create test', js: true do
-    visit "/test_groups/#{@tg.id}"
+    visit test_groups_path @test_group
     click_on 'Создать'
     click_on 'Тест'
 
@@ -41,10 +42,10 @@ RSpec.feature 'TestGroups', type: :feature do
   end
 
   scenario 'Remove test and folder', js: true do
-    TestGroup.create!(name: 'test_group', parent_id: @tg.id)
-    Test.create!(title: 'test', test_group_id: @tg.id)
+    TestGroup.create!(name: 'test_group', parent_id: @test_group.id)
+    Test.create!(title: 'test', test_group_id: @test_group.id)
 
-    visit "/test_groups/#{@tg.id}"
+    visit test_groups_path @test_group
     click_on 'toggle-checkboxes'
 
     page.accept_confirm do
@@ -56,11 +57,11 @@ RSpec.feature 'TestGroups', type: :feature do
   end
 
   scenario 'Move test and folder', js: true do
-    tg1 = TestGroup.create!(name: 'test_group', parent_id: @tg.id)
-    tg2 = TestGroup.create!(name: 'test_group1', parent_id: @tg.id)
-    test = Test.create!(title: 'test', test_group_id: @tg.id)
+    tg1 = TestGroup.create!(name: 'test_group', parent_id: @test_group.id)
+    tg2 = TestGroup.create!(name: 'test_group1', parent_id: @test_group.id)
+    test = Test.create!(title: 'test', test_group_id: @test_group.id)
 
-    visit "/test_groups/#{@tg.id}"
+    visit test_groups_path @test_group
     first(:css, 'label[for="cb_1"]').click
     first(:css, 'label[for="cb_2"]').click
     click_on 'move-btn'
@@ -82,8 +83,8 @@ RSpec.feature 'TestGroups', type: :feature do
   end
 
   scenario 'Rename test', js: true do
-    test = Test.create!(title: 'test', test_group_id: @tg.id)
-    visit "/test_groups/#{@tg.id}"
+    test = Test.create!(title: 'test', test_group_id: @test_group.id)
+    visit test_groups_path @test_group
 
     click_on 'toggle-checkboxes'
     click_on 'other-btn'
@@ -100,8 +101,8 @@ RSpec.feature 'TestGroups', type: :feature do
   end
 
   scenario 'Rename folder', js: true do
-    test_group = TestGroup.create!(name: 'test_group', parent_id: @tg.id)
-    visit "/test_groups/#{@tg.id}"
+    test_group = TestGroup.create!(name: 'test_group', parent_id: @test_group.id)
+    visit test_groups_path @test_group
 
     click_on 'toggle-checkboxes'
     click_on 'other-btn'

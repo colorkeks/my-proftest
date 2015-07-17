@@ -20,7 +20,6 @@ RSpec.feature 'Users', type: :feature do
 
   scenario 'Sign in by token', js: true do
     visit profile_user_path(@test_user)
-    save_and_open_screenshot
     click_on 'Сгенерировать токен'
 
     first(:css, '.btn-group').click

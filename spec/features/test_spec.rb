@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.feature 'Test', type: :feature do
 
   before :each do
-    @tg = TestGroup.create!(name: 'Тесты')
-    @test = Test.create!(title: 'test', test_group: @tg)
+    @test_group = TestGroup.create!(name: 'Тесты')
+    @test = Test.create!(title: 'test', test_group: @test_group)
     TestGroup.create!(name: 'Корзина')
     @user = create(:methodolog_user)
 
