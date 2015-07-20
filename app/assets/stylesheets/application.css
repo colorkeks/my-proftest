@@ -125,11 +125,14 @@ body {
 .answer label {
     font-weight: normal;
     cursor: pointer;
-    padding-bottom: 0; }
+    padding-bottom: 0;
+    margin-top: 6px;
+}
 .answer input[type='radio'], .answer input[type='checkbox'] {
-    margin: 10px 10px 0 0;
-    height: 0.9em;
-    width: 0.9em; }
+    margin: 0 10px 0 0;
+    /*height: 0.9em;*/
+    /*width: 0.9em;*/
+}
 .answer input[type='text'] {
     margin-top: 2px; }
 .answer .sequence {
