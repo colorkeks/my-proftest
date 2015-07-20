@@ -269,4 +269,22 @@ class TryTest < ActiveSupport::TestCase
     assert_not_equal true, ua.correct
   end
 
+  test 'process chain for task result' do
+    test = tests(:one)
+    task1 = tasks(:one)
+    task2 = tasks(:two)
+    chain = chains(:one)
+    chain.add_task!(task1)
+    chain.add_task!(task2)
+
+    try = Try.new(test: test)
+    result = try.prepare
+
+    task_result = try.task_results.first
+    task_result.status = 'не правильно'
+    task_results = try.process_chain_for_task_result!(task_result)
+    assert_equal 'не правильно', task_results.last.status
+
+  end
+
 end
