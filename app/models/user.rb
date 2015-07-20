@@ -28,7 +28,7 @@ class User < ActiveRecord::Base
   end
 
   def role?(role)
-    return !!self.roles.find_by_name(role.to_s.camelize)
+    return !!self.roles.where(name: role).any?
   end
 
   def generate_token
@@ -49,18 +49,19 @@ class User < ActiveRecord::Base
   end
 
   def self.check_token(token)
-    Role.find_by(name: 'Тестируемый').users.where('token = ? AND token_expire_at >= ? ', token, Time.now ).first
+    Role.find_by(name: 'Тестируемый').users.where('token = ? AND token_expire_at >= ? ', token, Time.now).first
   end
 
   def create_role(roles)
-    self.roles.clear
     if roles
-      Role.find(roles.drop(1)).each do |role| # находим по id имена ролей
-          self.roles << role # и добавляем их юзеру
+      self.roles.clear
+      Role.find(roles.drop(1)).each do |role|
+        self.roles << role
       end
+    elsif self.roles
+      # если роли уже есть и ничего не изменилось, то ничего не делаем
     else
-      self.roles << Role.find_by_name('Тестируемый')
+      self.roles << Role.find_by_name('Тестируемый') # если ролей нету то добавляем
     end
   end
-
 end
