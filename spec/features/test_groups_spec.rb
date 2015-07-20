@@ -125,7 +125,6 @@ RSpec.feature 'TestGroups', type: :feature do
     click_on 'toggle-checkboxes'
     click_on 'remove-btn'
     click_on 'Корзина'
-    save_and_open_screenshot
 
     expect(page).to have_text('test_group')
     expect(page).to have_text('test')
@@ -142,6 +141,7 @@ RSpec.feature 'TestGroups', type: :feature do
         raise Capybara::ElementNotFound
       end
     end
+
     within(:css, '#test_list') do
       expect(page).not_to have_text('test_group')
       expect(page).not_to have_text('test')
