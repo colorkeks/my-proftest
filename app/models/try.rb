@@ -17,7 +17,7 @@ class Try < ActiveRecord::Base
           #:hint => task.hint,
           #:task_type => task.task_type,
           :status => 'ответ не дан',
-          #:task_id => task.id
+          :task_id => task.id
       )
       task.answers.each do |answer|
         task_result.user_answers.build(
