@@ -1,6 +1,6 @@
 class TaskResult < ActiveRecord::Base
   belongs_to :try
-  belongs_to :task
+  #belongs_to :task
   has_many :user_answers, dependent: :destroy, autosave: true
   has_many :user_associations, dependent: :destroy, autosave: true
   accepts_nested_attributes_for :user_answers

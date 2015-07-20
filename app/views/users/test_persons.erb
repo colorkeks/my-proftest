@@ -24,7 +24,18 @@
 
   <div class="contentpanel panel-email">
     <div class="row">
-      <div class="col-sm-12 col-lg-12">
+      <div class="col-sm-3 col-lg-2">
+        <ul class="nav nav-pills nav-stacked nav-email mb20">
+          <li>
+            <%= link_to 'Испытуемые' , test_persons_users_path, class: 'active' %>
+          </li>
+          <li>
+            <a class="" href="#">Медперсонал</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="col-sm-9 col-lg-10">
         <div class="panel panel-default">
           <div class="panel-body task-panel">
             <div class="pull-right">
