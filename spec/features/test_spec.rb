@@ -188,7 +188,6 @@ RSpec.feature 'Test', type: :feature do
 
   end
 
-
   scenario 'Filter by space', js: true do
     task = Task.create(text: 'task_text', task_type: 'Единичный выбор', test: @test, eqvgroup: Eqvgroup.first)
     section = Section.create!(name: 'section_name', test: @test)
@@ -197,6 +196,37 @@ RSpec.feature 'Test', type: :feature do
     click_on 'section_name'
 
     expect(page).not_to have_text('task_text')
+  end
+
+  scenario 'Remove to trash', js: true do
+    task = Task.create(text: 'task_text', task_type: 'Единичный выбор', test: @test, eqvgroup: Eqvgroup.first)
+    visit test_path @test
+
+    click_on 'toggle-checkboxes'
+    click_on 'remove-btn'
+    click_on 'Корзина'
+
+    expect(page).to have_text('task_text')
+
+    click_on 'toggle-checkboxes'
+    click_on 'move-btn'
+
+    page.document.synchronize do
+      folder_item = first(:css, '.modal-body .section')
+
+      if folder_item
+        folder_item.click
+        click_on 'Переместить'
+      else
+        raise Capybara::ElementNotFound
+      end
+    end
+
+    click_on 'Корзина'
+
+    within(:css, '.table-responsive') do
+      expect(page).not_to have_text('task_text')
+    end
   end
 
 end
