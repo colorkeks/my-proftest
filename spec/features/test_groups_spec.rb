@@ -117,4 +117,35 @@ RSpec.feature 'TestGroups', type: :feature do
     test_group.reload
     expect(test_group.name).to eq('new_test_group')
   end
+
+  scenario 'Remove to trash', js: true do
+    test_group = TestGroup.create!(name: 'test_group', parent_id: @test_group.id)
+    test = Test.create!(title: 'test', test_group_id: @test_group.id)
+    visit test_groups_path @test_group
+    click_on 'toggle-checkboxes'
+    click_on 'remove-btn'
+    click_on 'Корзина'
+    save_and_open_screenshot
+
+    expect(page).to have_text('test_group')
+    expect(page).to have_text('test')
+
+    click_on 'toggle-checkboxes'
+    click_on 'move-btn'
+
+    page.document.synchronize do
+      folder_item = first(:css, '.modal-body .folder-item')
+      if folder_item
+        folder_item.click
+        click_on 'Переместить'
+      else
+        raise Capybara::ElementNotFound
+      end
+    end
+    within(:css, '#test_list') do
+      expect(page).not_to have_text('test_group')
+      expect(page).not_to have_text('test')
+    end
+  end
+
 end
