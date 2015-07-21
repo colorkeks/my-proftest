@@ -1,0 +1,311 @@
+<section>
+  <div class="mainpanel">
+
+    <div class="pageheader">
+      <div class="row">
+        <div class="col-sm-3 col-lg-2">
+          <%= link_to test_group_path(@test.test_group), class: 'btn btn-white back-btn pull-right', title: 'Назад' do %>
+              <i class="fa fa-arrow-left"></i>
+          <% end %>
+          <h2>Настройки</h2>
+        </div>
+        <div class="col-sm-9 col-lg-10">
+          <div class="breadcrumb-wrapper">
+            <ol class="breadcrumb">
+              <li><%= link_to @test.title, @test %></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contentpanel panel-email">
+      <div class="row">
+        <div class="col-sm-3 col-lg-2">
+          <div class="btn-group nomargin">
+            <button class="btn btn-primary create-btn dropdown-toggle" data-toggle="dropdown" title="Создать">
+              Создать
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a href="#" data-toggle="modal" data-target="#createTask"> Задание</a></li>
+              <li><%= link_to 'Раздел', new_section_path(test_id: @test.id), remote: true %></li>
+              <li><%= link_to 'Цепочку', test_chains_path(test_id: @test, chain:{test_id: @test.id, section_id: @selected_section, eqvgroup_id:@last_eqvgroup}), method: 'post' %></li>
+            </ul>
+
+          </div>
+
+          <ul class="nav nav-pills nav-stacked nav-email mb20">
+            <li>
+              <%= link_to test_path(@test, selected_section_id: nil), class: (@selected_section.nil? ? 'active' : '') do %>
+                  <i class="fa fa-list-alt"></i> Задания
+              <% end %>
+            </li>
+
+            <li>
+              <%= link_to test_chains_path(test_id: @test), class: (nil ? 'active' : '') do %>
+                  <i class="fa fa-link"></i> Цепочки
+              <% end %>
+            </li>
+
+            <li>
+              <%= link_to trash_test_path(@test), class: () do %>
+                  <i class="fa fa-trash-o"></i> Корзина
+              <% end %>
+            </li>
+            <li>
+              <%= link_to settings_test_path(@test) do %>
+                  <i class="fa fa-cog"></i> Настройки
+              <% end %>
+            </li>
+            <li>
+              <%= link_to algorithm_test_path(@test) do %>
+                  <i class="fa fa-sitemap"></i> Алгоритм
+              <% end %>
+            </li>
+            <li>
+              <%= link_to statistic_test_path(@test) do %>
+                  <i class="fa fa-area-chart"></i> Статистика
+              <% end %>
+            </li>
+          </ul>
+
+        </div>
+        <div class="col-sm-9 col-lg-10">
+
+          <div class="panel panel-default">
+            <div class="panel-body task-panel">
+              <%= simple_form_for @test, wrapper: :horizontal_form do |f|  %>
+                  <div class="row">
+                    <% if @test.directory == false%>
+                        <div class="col-lg-6">
+                          <div class="form-group">
+                            <div class="controls col-md-4">
+                              <%= f.label 'Заголовок', :class => 'control-label' %>
+                            </div>
+                            <div class="controls col-md-offset-4">
+                              <%= f.text_field :title, :class => 'form-control' %>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <div class="controls col-md-4">
+                              <%= f.label 'Описание', :class => 'control-label' %>
+                            </div>
+                            <div class="controls col-md-offset-4">
+                              <%= f.text_area :description, :class => 'form-control' %>
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                            <div class="controls col-md-4">
+                              <!--<label class="control-label">Аттеста -ционный:</label>-->
+                            </div>
+                            <div class="col-md-offset-4" >
+                              <div class="checkbox">
+                                <label>
+                                  <%= f.check_box :attestation,  :class => ''  %>
+                                  <strong>Аттестационный:</strong>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <div class="controls col-md-4">
+                              <!--<label class="control-label">Треннировачный</label>-->
+                            </div>
+                            <div class="col-md-offset-4" >
+                              <div class="checkbox">
+                                <label>
+                                  <input type="checkbox"/>
+                                  <strong>Тренировочный</strong>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-lg-6">
+                          <div class="form-group">
+                            <div class="controls col-md-4">
+                              <label class="control-label">Каталог</label>
+                            </div>
+                            <div class="controls col-md-offset-4">
+                              <%#= select_tag(:catalog, '<option>Каталога пока нет</option>'.html_safe, {:class => 'form-control'}) %>
+                              <%#= select_tag(:catalog, '<option>Каталога пока нет</option>'.html_safe, {:class => 'form-control'}) %>
+                              <%#= f.select :test_group_id, nested_set_options(TestGroup) {|i| "#{'–' * i.level} #{i.name}"},{}, { :class => 'form-control' } %>
+                              <div class="btn btn-white"><span class="fa fa-folder"></span></div>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <div class="controls col-md-4">
+                              <label class="control-label">Сохранен</label>
+                            </div>
+                            <div class="controls col-md-offset-4">
+                              <div style="padding-top: 7px"><%= Time.now %></div>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <div class="controls col-md-4">
+                              <label class="control-label">Изменен</label>
+                            </div>
+                            <div class="controls col-md-offset-4">
+                              <div style="padding-top: 7px"><%= Time.now %></div>
+                            </div>
+                          </div>
+                          <!--<div class="form-group">-->
+                            <!--<div class="controls col-md-4">-->
+                              <!--<label class="control-label">Алгоритм:</label>-->
+                            <!--</div>-->
+                            <!--<div class="controls col-md-offset-4">-->
+                              <!--<%#= f.select(:algorithm, ['Все задания', 'Ограниченое количество заданий'],{},{:class => 'form-control algorithm'}) %>-->
+                            <!--</div>-->
+                          <!--</div>-->
+                          <div class="form-group  limited_options hide">
+                            <div class="controls col-md-4">
+                              <label class="control-label">Процент:</label>
+                            </div>
+                            <div class="col-md-offset-4">
+                              <%= f.number_field(:percent_tasks, :class => 'form-control', :style => 'width: 75px;') %>
+                            </div>
+                          </div>
+                        </div>
+                    <% elsif @test.directory == true %>
+                        <div class="col-lg-5">
+                          <div class="form-group">
+                            <div class="controls col-md-4">
+                              <%= f.label 'Заголовок', :class => 'control-label' %>
+                            </div>
+                            <div class="controls col-md-offset-4">
+                              <%= f.text_field :title, :class => 'form-control' %>
+                            </div>
+                          </div>
+                        </div>
+                    <% end %>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <hr/>
+                      <h4>Баллы</h4>
+                      <div class="form-group">
+                        <div class="controls col-md-4">
+                          <label class="control-label">По умолчанию</label>
+                        </div>
+                        <div class="controls col-md-offset-4">
+                          <input type="text" class="form-control" value="1" style="width: 80px; display: inline-block"/>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="controls col-md-4">
+                          <!--<label class="control-label">Возможность изменить</label>-->
+                        </div>
+                        <div class=" col-md-offset-4">
+                          <div class="checkbox">
+                            <label>
+                              <input type="checkbox" class=""/>
+                              <strong>Возможность изменить, задание</strong>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <hr/>
+                      <h4>Защита от списывания</h4>
+                      <div class="form-group">
+                        <div class="controls col-md-4">
+                          <!--<label class="control-label">Заданий</label>-->
+                        </div>
+                        <div class=" col-md-offset-4">
+                          <div class="checkbox">
+                            <label>
+                                <input type="checkbox" class=""/>
+                                <strong>Перемешивать задания</strong>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="controls col-md-4">
+                          <!--<label class="control-label">Вариантов</label>-->
+                        </div>
+                        <div class=" col-md-offset-4">
+                          <div class="checkbox">
+                            <label>
+                                <input type="checkbox" class=""/>
+                                <strong>Перемешивать варианты</strong>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <hr/>
+                      <h4>Алогоритм выбора</h4>
+
+                      <div class="form-group">
+                        <div class="controls col-md-offset-4">
+                          <select name="" id="" class="form-control">
+                            <option value="all">Все задания</option>
+                            <option value="eqv" selected>Выбор из эквивалентных групп</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="controls col-md-offset-4">
+                          <a href="#">Настройка алгоритма</a>
+                        </div>
+                      </div>
+                      <hr/>
+                      <h4>Шкала</h4>
+                      <hr/>
+                    </div>
+                    <div class="col-lg-6">
+                      <hr/>
+                      <h4>Время</h4>
+                      <div class="form-group">
+                        <div class="controls col-md-4">
+                          <!--<label class="control-label">Вариантов</label>-->
+                        </div>
+                        <div class=" col-md-offset-4">
+                          <div class="checkbox">
+                            <label>
+                              <input type="checkbox" class=""/>
+                              <strong>Ограничить время прохождения</strong>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="controls col-md-4">
+                          <label class="control-label">Время</label>
+                        </div>
+                        <div class="col-md-offset-3">
+                          <%= f.text_field :timer, :class => 'form-control', :id => 'datetimepicker', style: 'width: 80px; display: inline-block'  %>
+                          <span>мин</span>
+                        </div>
+                      </div>
+
+                    </div>
+                    <div class="col-lg-12">
+                      <% if action_name=='settings'%>
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                          <%= f.button :submit, 'Сохранить', :class => 'btn btn-primary' %>
+                      <% else %>
+                          <%= f.submit 'Редактировать', :class => 'btn btn-primary' %>
+                          <%= link_to 'Назад', current_user, :class => 'btn btn-default'%>
+                      <% end %>
+                    </div>
+                  </div>
+              <% end %>
+
+              <script>
+                  algorithm_selects();
+              </script>
+            </div>
+            <!-- panel-body -->
+          </div>
+          <!-- panel -->
+        </div>
+        <!-- col-sm-9 -->
+      </div>
+      <!-- row -->
+    </div>
+  </div>
+  </div>
+  <!-- mainpanel -->
+</section>
