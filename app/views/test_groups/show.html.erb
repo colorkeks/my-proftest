@@ -97,7 +97,7 @@
                     <i class="fa fa-folder"></i>
                     <% end %>
                   </button>
-                  <button onclick="bulkDestroy();" id="remove-btn" class="btn btn-white tooltips disabled" type="button" title="<%= delete_title %>">
+                  <button onclick="bulkDestroy();" id="remove-btn" class="btn btn-white tooltips disabled <%= 'trash' if (@test_group.deleted? || @test_group.is_trash?) %>" type="button" title="<%= delete_title %>">
                     <% if @test_group.deleted? || @test_group.is_trash? %>
                         <i class="fa fa-trash"></i> <i class="fa fa-exclamation"></i>
                     <% else %>

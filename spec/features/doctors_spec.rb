@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.feature 'Doctors', type: :feature do
 
   before :each do
-    @user = create(:admin_user)
+    @user = create(:registrator_user)
     visit '/'
     click_on 'Войти'
     fill_in 'user_email', with: @user.email

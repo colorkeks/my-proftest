@@ -7,10 +7,15 @@ FactoryGirl.define do
     second_name 'иванович'
     birthday Date.today
     roles {[create(:admin), create(:methodolog), create(:tested)]}
+    test_modes {[create(:attestation)]}
   end
 
   factory :methodolog_user, class: User, parent: :user do
     roles {[create(:methodolog)]}
+  end
+
+  factory :registrator_user, class: User, parent: :user do
+    roles {[create(:registrator)]}
   end
 
   factory :admin_user, class: User, parent: :user do

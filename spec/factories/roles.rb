@@ -3,6 +3,10 @@ FactoryGirl.define do
     name 'Администратор'
   end
 
+  factory :registrator, class: Role do
+    name 'Регистратор'
+  end
+
   factory :methodolog, class: Role do
     name 'Методолог'
   end
