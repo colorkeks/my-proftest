@@ -1,4 +1,4 @@
-<%= content_for :title, 'Личный кабинет ' + @user.last_name + ' ' + @user.first_name + ' ' + @user.second_name %>
+<%= content_for :title, 'Личный кабинет ' + current_user.last_name + ' ' + current_user.first_name + ' ' + current_user.second_name %>
 
 <div class="row">
   <div class="col-lg-12">
@@ -55,7 +55,7 @@
                           <td><%= assigned_test.test.tasks.count %></td>
                           <td><%= assigned_test.test.timer.strftime('%H:%M') if assigned_test.test.timer %></td>
                           <% if assigned_test.test.tasks.count > 0 %>
-                              <td><%= link_to 'Пройти тест', {:controller => :tries, :action => :create, :try => {:test_mode_id => @user.test_modes.order('created_at DESC').first.id, :date => Time.now, :timer => format('%02d:%02d', 0, 0), :user_id => @user.id, :test_id => assigned_test.test.id, :assigned_test_id => assigned_test.id}}, :method => 'POST', :class => 'btn btn-default' %></td>
+                              <td><%= link_to 'Пройти тест', {:controller => :tries, :action => :create, :try => {:test_mode_id => current_user.test_modes.order('created_at DESC').first.id, :date => Time.now, :timer => format('%02d:%02d', 0, 0), :user_id => current_user.id, :test_id => assigned_test.test.id, :assigned_test_id => assigned_test.id}}, :method => 'POST', :class => 'btn btn-default' %></td>
                           <% else %>
                               <td>
                                 <h4>
@@ -86,7 +86,7 @@
                               <td><%= test.tasks.count %></td>
                               <td><%= test.timer.strftime('%H:%M') if test.timer %></td>
                               <% if test.tasks.count > 0 %>
-                                  <td><%= link_to 'Пройти тест', {:controller => :tries, :action => :create, :try => {:test_mode_id => @user.test_modes.order('created_at DESC').first, :date => Time.now, :timer => format('%02d:%02d', 0, 0), :user_id => @user.id, :test_id => test.id}}, :method => 'POST', :class => 'btn btn-default' %></td>
+                                  <td><%= link_to 'Пройти тест', {:controller => :tries, :action => :create, :try => {:test_mode_id => current_user.test_modes.order('created_at DESC').first, :date => Time.now, :timer => format('%02d:%02d', 0, 0), :user_id => current_user.id, :test_id => test.id}}, :method => 'POST', :class => 'btn btn-default' %></td>
                               <% else %>
                                   <td>
                                     <h4>

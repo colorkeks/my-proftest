@@ -83,6 +83,7 @@ Rails.application.routes.draw do
       get 'profile_stub'
       get 'search_stub'
       get 'test_persons'
+      get 'testee_tab'
       post 'check_token'
     end
   end

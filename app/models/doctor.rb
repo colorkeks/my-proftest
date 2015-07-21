@@ -1,4 +1,5 @@
-class DoctorDbf < ActiveRecord::Base
+class Doctor < ActiveRecord::Base
+  self.table_name = 'doctor_dbfs'
   acts_as_copy_target
   has_one :lpu_dbfs, class_name: 'LpuDbf', :foreign_key => :lpucode, primary_key: 'lpuwork'
   has_many :officfun_dbfs, class_name: 'OfficfunDbf', :foreign_key => :drcode, primary_key: 'drcode'
@@ -19,7 +20,7 @@ class DoctorDbf < ActiveRecord::Base
         "(#{fields})"
       end.join(' OR ')
 
-      DoctorDbf.where(query)
+      Doctor.where(query)
     end
   end
 end
