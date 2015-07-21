@@ -156,7 +156,7 @@
                         <td style="width: 30px; cursor: pointer"><span class="fa fa-bars text-muted"></span></td>
                       </tr>
                   <% else %>
-                      <% @task_result.user_answers.order('RANDOM()').each_with_index do |answer, index| %>
+                      <% @task_result.user_answers.order(:id).each_with_index do |answer, index| %>
                           <% answer_was = answer.answer_version.item_version %>
                           <tr class="answer">
                             <td style="width: 30px; text-align: center; padding-top: 14px; <%= [ 'Последовательность', 'Сопоставление'].include?(task_was.task_type) ? '' : 'display:none' %>">
