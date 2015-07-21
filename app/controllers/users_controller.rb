@@ -17,11 +17,11 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-    if current_user && current_user.roles.where(name: 'Методолог').any?
-      redirect_to :test_groups
-      return
-    elsif current_user && current_user.roles.where(name: 'Администратор').any?
+    if current_user && (current_user.roles.where(name: 'Регистратор').any? || current_user.roles.where(name: 'Администратор').any?)
       redirect_to :doctors
+      return
+    elsif current_user && current_user.roles.where(name: 'Методолог').any?
+      redirect_to :test_groups
       return
     elsif current_user && current_user.roles.where(name: 'Тестируемый').any?
       @current_mode = @user.test_modes.order('created_at DESC').first
