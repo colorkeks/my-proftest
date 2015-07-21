@@ -6,7 +6,7 @@
         <%= link_to doctors_path, class: 'btn btn-white back-btn pull-right' do %>
             <i class="fa fa-arrow-left"></i>
         <% end %>
-        <h3>Испытуемые</h3>
+        <h3>ФИО</h3>
       </div>
       <div class="col-sm-9 col-lg-10">
         <div class="breadcrumb-wrapper">
@@ -25,12 +25,17 @@
   <div class="contentpanel panel-email">
     <div class="row">
       <div class="col-sm-3 col-lg-2">
+        <div class="btn-group nomargin">
+          <button class="btn btn-primary create-btn dropdown-toggle" data-toggle="dropdown" title="Создать">
+            Создать
+          </button>
+        </div>
         <ul class="nav nav-pills nav-stacked nav-email mb20">
           <li>
-            <%= link_to 'Испытуемые' , test_persons_users_path, class: 'active' %>
+            <%= link_to 'Медперсонал' , doctors_path, class: 'active' %>
           </li>
           <li>
-            <a class="" href="#">Медперсонал</a>
+            <%= link_to 'Испытуемые' , test_persons_users_path, class: 'active' %>
           </li>
         </ul>
       </div>
