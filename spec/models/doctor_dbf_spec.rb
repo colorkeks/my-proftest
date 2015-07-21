@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Doctor, type: :model do
 
   before :each do
-    @doctor = create(:doctor_dbf)
+    @doctor = create(:doctor)
     @lpu = create(:lpu_dbf)
   end
 

@@ -10,7 +10,7 @@ RSpec.feature 'Doctors', type: :feature do
     fill_in 'user_password', with: @user.password
     click_button 'Войти'
 
-    @doctor = create(:doctor_dbf)
+    @doctor = create(:doctor)
   end
 
   scenario 'Find doctor', js: true do

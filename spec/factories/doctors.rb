@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :doctor_dbf do
+  factory :doctor do
     drcode   'А1234'
     # dbsource ''
     lpuwork  1

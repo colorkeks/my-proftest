@@ -4,7 +4,7 @@ RSpec.describe DoctorsController, type: :controller do
   include Devise::TestHelpers
 
   before :each do
-    @doctor = create(:doctor_dbf)
+    @doctor = create(:doctor)
     @lpu = create(:lpu_dbf)
   end
 

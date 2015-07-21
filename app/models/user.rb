@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   has_many :tests
   has_many :test_modes
   has_many :assigned_tests
-  has_one :doctor_dbf, :foreign_key => :drcode, primary_key: 'drcode'
+  has_one :doctor, :foreign_key => :drcode, primary_key: 'drcode'
   validates :first_name, presence: true
   validates :second_name, presence: true
   validates :last_name, presence: true

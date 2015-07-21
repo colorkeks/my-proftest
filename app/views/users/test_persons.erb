@@ -86,7 +86,7 @@
                     <td>
                       <%= link_to "#{person.last_name} #{person.first_name} #{person.second_name}", profile_user_path(person) %>
                     </td>
-                    <td><%= person.doctor_dbf.current_lpu.title if person.doctor_dbf%></td>
+                    <td><%= person.doctor.current_lpu.title if person.doctor%></td>
                   </tr>
               <% end %>
               </tbody>
