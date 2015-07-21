@@ -63,7 +63,7 @@
                         <li><%= link_to 'Заведение тестируемых', doctors_path %></li>
                     <% end %>
                     <% if current_user.role?('Тестируемый') %>
-                        <li><%= link_to 'Тестирование', user_path(current_user) %></li>
+                        <li><%= link_to 'Тестирование', testee_tab_users_path %></li>
                     <% end %>
                     </ul>
                 </div>
