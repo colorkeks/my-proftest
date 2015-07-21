@@ -17,17 +17,15 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-    if current_user && (current_user.roles.where(name: 'Регистратор').any? || current_user.roles.where(name: 'Администратор').any?)
+    if current_user && current_user.roles.where(name: 'Тестируемый').any?
+      redirect_to testee_tab_users_path
+      return
+    elsif current_user && current_user.roles.where('name = ?  OR name = ?', 'Регистратор', 'Администратор').any?
       redirect_to :doctors
       return
     elsif current_user && current_user.roles.where(name: 'Методолог').any?
       redirect_to :test_groups
       return
-    elsif current_user && current_user.roles.where(name: 'Тестируемый').any?
-      @current_mode = @user.test_modes.order('created_at DESC').first
-      @assigned_tests = AssignedTest.all.where(user_id: @user.id, test_mode_id: @current_mode)
-      @users = User.search(params[:search_users])
-      @tries = Try.all.where(:user_id => params[:id]).paginate(:page => params[:page], :per_page => params[:per_page] || 30)
     end
   end
 
@@ -75,6 +73,14 @@ class UsersController < ApplicationController
   def modes_history
     @test_modes = TestMode.all.where(user_id: @user.id).where.not(name: 'Нейтральный').order('created_at DESC').paginate(:page => params[:page], :per_page => params[:per_page] || 30)
     render 'users/modes_history', layout: 'admin'
+  end
+
+  def testee_tab
+    @tests = Test.all.where(:directory => false)
+    @current_mode = current_user.test_modes.order('created_at DESC').first
+    @assigned_tests = AssignedTest.all.where(user_id: current_user.id, test_mode_id: @current_mode)
+    @users = User.search(params[:search_users])
+    @tries = Try.all.where(:user_id => params[:id]).paginate(:page => params[:page], :per_page => params[:per_page] || 30)
   end
 
   def search_tests

@@ -34,7 +34,7 @@ class DbfLoader
   end
 
   def self.load(path)
-    DbfLoader.new("#{path}/DOCTORS.DBF").load_data(DoctorDbf)
+    DbfLoader.new("#{path}/DOCTORS.DBF").load_data(Doctor)
     DbfLoader.new("#{path}/LPU.DBF").load_data(LpuDbf)
     DbfLoader.new("#{path}/OFFICFUN.DBF").load_data(OfficfunDbf)
     DbfLoader.new("#{path}/POST.DBF").load_data(PostDbf)
