@@ -45,7 +45,7 @@
 <div class="panel panel-default">
 <div class="panel-body panel-profile">
 <h3 style="margin: 0"><%= @user.last_name %> <%= @user.first_name %> <%= @user.second_name %>
-  <% if current_user.id == @user.id || current_user.roles.where(name: 'Супер_Юзер').any? %>
+  <% if current_user.id == @user.id || current_user.roles.where(name: 'Администратор').any? %>
       <a href="/users/<%= @user.id %>/edit" class="btn btn-white btn-sm tooltips" title="Редактировать карточку">
         <i class="fa fa-pencil"></i>
       </a>
@@ -72,7 +72,7 @@
   </div>
 </div>
 <hr/>
-<% if current_user.roles.where(name: 'Администратор').any? && @user.roles.where(name: 'Тестируемый').any? %>
+<% if current_user.roles.where(name: 'Регистратор').any? && @user.roles.where(name: 'Тестируемый').any? %>
     <h3>Авторизационный токен</h3>
     <% if @user.token.presence && @user.token_expire_at > Time.now %>
         <strong><%= @user.token %></strong><br/>
@@ -191,7 +191,7 @@
         </ul>
         <div id="myTabContent" class="tab-content" style="padding: 15px 0; background-color: #ffffff">
           <div role="tabpanel" class="tab-pane fade active in" id="home" aria-labelledby="home-tab">
-            <% if current_user.roles.where(name: 'Администратор').any? %>
+            <% if current_user.roles.where(name: 'Регистратор').any? %>
                 <div title="Добавить тесты" data-toggle="modal" data-target="#AddAttestationTests" class="btn btn-white btn-sm pull-right tooltips" style="margin-top: -50px">
                   <i class="fa fa-plus"></i></div>
             <% end %>
