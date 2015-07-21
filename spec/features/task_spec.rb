@@ -121,13 +121,13 @@ RSpec.feature 'Test', type: :feature do
 
     page.execute_script("tinyMCE.activeEditor.setContent('task text');")
     fill_in 'task_answers_attributes_0_text', with: 'answer 1'
-    fill_in 'task_answers_attributes_1_text', with: 'answer 2'
+    # fill_in 'task_answers_attributes_1_text', with: 'answer 2'
 
     # переходим на предпросмотр
     click_on 'show-preview'
     expect(page).to have_text('task text')
     expect(page).to have_text('answer 1')
-    expect(page).to have_text('answer 2')
+    # expect(page).to have_text('answer 2')
 
     # todo: нет проверки на drag and drop
 
@@ -145,9 +145,9 @@ RSpec.feature 'Test', type: :feature do
 
     # переходим на редактирование
     click_on 'add-answer-btn'
-    expect(page).to have_css('#task_answers_attributes_3_text')
-    all('.remove > a')[2].click
-    expect(page).not_to have_css('#task_answers_attributes_3_text')
+    expect(page).to have_css('#task_answers_attributes_2_text')
+    all('.remove > a')[1].click
+    expect(page).not_to have_css('#task_answers_attributes_2_text')
   end
 
   scenario 'Create connect task', js: true do

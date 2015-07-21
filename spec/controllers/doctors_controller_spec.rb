@@ -4,13 +4,11 @@ RSpec.describe DoctorsController, type: :controller do
   include Devise::TestHelpers
 
   before :each do
+    user = create(:registrator_user)
+    sign_in(user)
+
     @doctor = create(:doctor)
     @lpu = create(:lpu_dbf)
-  end
-
-  def setup
-    user = create(:user)
-    sign_in(user)
   end
 
   describe 'GET #index' do
