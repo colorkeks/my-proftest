@@ -28,7 +28,7 @@
             <th>ЛПУ</th>
             <td><%= f.text_field :job, :class => 'form-control' %></td>
           </tr>
-          <% if current_user.roles.where(name: 'Администратор').any? && !@user.roles.where(name: 'Администратор').any? %>
+          <% if current_user.roles.where('name = ? OR name = ?', 'Супер_Администратор', 'Администратор').any? && @user.roles.where.not(name: 'Супер_Администратор').any? %>
               <tr>
                 <th>Роли</th>
                 <td><%= f.association :roles, label:false, :input_html => {:class => 'form-control chosen-select', placeholder: ' '} %></td>
