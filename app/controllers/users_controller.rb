@@ -20,7 +20,7 @@ class UsersController < ApplicationController
     if current_user && current_user.roles.where(name: 'Тестируемый').any?
       redirect_to testee_tab_users_path
       return
-    elsif current_user && current_user.roles.where('name = ?  OR name = ? Or name = ?', 'Регистратор', 'Администратор', 'Супер_Администратор').any?
+    elsif current_user && current_user.roles.where('name = ?  OR name = ?', 'Регистратор', 'Администратор').any?
       redirect_to :doctors
       return
     elsif current_user && current_user.roles.where(name: 'Методолог').any?

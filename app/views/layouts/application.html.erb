@@ -56,13 +56,13 @@
                     <div class="fa fa-th" style="font-size: 18px; margin-top: 5px"></div>
                   </div>
                   <ul class="dropdown-menu" role="menu">
-                    <% if current_user.role?('Методолог') %>
+                    <% if current_user.role?('Методолог') || current_user.role?('Супер_Администратор') %>
                         <li><%= link_to 'Управление тестами', test_group_path(TestGroup.first) %></li>
                     <% end %>
-                    <% if current_user.role?('Регистратор') %>
+                    <% if current_user.role?('Регистратор') || current_user.role?('Супер_Администратор')  %>
                         <li><%= link_to 'Заведение тестируемых', doctors_path %></li>
                     <% end %>
-                    <% if current_user.role?('Тестируемый') %>
+                    <% if current_user.role?('Тестируемый') || current_user.role?('Супер_Администратор')  %>
                         <li><%= link_to 'Тестирование', testee_tab_users_path %></li>
                     <% end %>
                     </ul>
