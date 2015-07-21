@@ -70,7 +70,9 @@
             </tr>
             <% @test_modes.each do |mode| %>
                 <tr>
-                  <td><%= link_to mode.name, test_mode_path(mode) %></td>
+                  <td><%= link_to mode.name == 'Аттестация' ?
+                             'Режим аттестации A-' + @user.test_modes.where(name: 'Аттестация').count.to_s :
+                             'Режим тренировки Т-' + @user.test_modes.where(name: 'Тренировка').count.to_s , test_mode_path(mode) %></td>
                   <td><%= mode.date_beg %></td>
                   <td><%= mode.date_end %></td>
                   <td><%= mode.assigned_tests.count %></td>
