@@ -9,4 +9,8 @@ class UserAnswer < ActiveRecord::Base
   def answer_was
     @answer_was ||= self.answer_version.item_version
   end
+
+  def correct_user_association
+    self.task_result.user_associations.find{|ua| ua.association_was.serial_number == self.answer_was.serial_number}
+  end
 end

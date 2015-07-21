@@ -135,33 +135,34 @@ class TryTest < ActiveSupport::TestCase
 
   test 'check answer single correct' do
     task_result = prepare_single_task_result
-    params = HashWithIndifferentAccess.new('user_answers' => [task_result.user_answers.first.id.to_s])
+    correct_answer = task_result.user_answers.find{|ua| ua.answer_was.correct}
+    params = HashWithIndifferentAccess.new('user_answers' => [correct_answer.id.to_s])
     task_result.check_user_answer!(params)
-
 
     assert_equal task_result.save, true
     assert_equal task_result.point, 1
     assert_equal task_result.status, 'правильно'
 
-    ua = task_result.user_answers.first
+    ua = correct_answer
     assert_equal ua.user_reply, 't'
     assert_equal ua.correct, true
   end
 
   test 'check answer single incorrect' do
     task_result = prepare_single_task_result
-    params = HashWithIndifferentAccess.new('user_answers' => [task_result.user_answers.last.id.to_s])
+    incorrect_answer = task_result.user_answers.find{|ua| !ua.answer_was.correct}
+    params = HashWithIndifferentAccess.new('user_answers' => [incorrect_answer.id.to_s])
     task_result.check_user_answer!(params)
 
     assert_equal task_result.save, true
     assert_equal task_result.point, 0
     assert_equal task_result.status, 'не правильно'
-
   end
 
   test 'check answer multiple correct' do
     task_result = prepare_multiple_task_result
-    params = HashWithIndifferentAccess.new('user_answers' => [task_result.user_answers[0].id.to_s, task_result.user_answers[1].id.to_s])
+    correct_answers = task_result.user_answers.find_all{|ua| ua.answer_was.correct}
+    params = HashWithIndifferentAccess.new('user_answers' => [correct_answers[0].id.to_s, correct_answers[1].id.to_s])
     task_result.check_user_answer!(params)
 
     assert_equal true, task_result.save
@@ -171,21 +172,24 @@ class TryTest < ActiveSupport::TestCase
 
   test 'check answer multiple partial correct' do
     task_result = prepare_multiple_task_result
-    params = HashWithIndifferentAccess.new('user_answers' => [task_result.user_answers[0].id.to_s])
+    correct_answers = task_result.user_answers.find_all{|ua| ua.answer_was.correct}
+    params = HashWithIndifferentAccess.new('user_answers' => [correct_answers[0].id.to_s])
     task_result.check_user_answer!(params)
 
     assert_equal true, task_result.save
     assert_equal 0.5, task_result.point
     assert_equal 'частично правильно', task_result.status
 
-    ua = task_result.user_answers.first
+    ua = correct_answers.first
     assert_equal ua.user_reply, 't'
     assert_equal ua.correct, true
   end
 
   test 'check answer multiple correct plus incorrect' do
     task_result = prepare_multiple_task_result
-    params = HashWithIndifferentAccess.new('user_answers' => [task_result.user_answers[0].id.to_s, task_result.user_answers[2].id.to_s])
+    correct_answers = task_result.user_answers.find_all{|ua| ua.answer_was.correct}
+    incorrect_answers = task_result.user_answers.find_all{|ua| !ua.answer_was.correct}
+    params = HashWithIndifferentAccess.new('user_answers' => [correct_answers.first.id.to_s, incorrect_answers.first.id.to_s])
     task_result.check_user_answer!(params)
 
     assert_equal true, task_result.save
@@ -196,9 +200,9 @@ class TryTest < ActiveSupport::TestCase
   test 'check associations correct' do
     task_result = prepare_association_task_result
     params = HashWithIndifferentAccess.new('associations' => {}.
-      merge({task_result.user_answers[0].id.to_s => [task_result.user_associations[0].id.to_s]}).
-      merge({task_result.user_answers[1].id.to_s => [task_result.user_associations[1].id.to_s]}).
-      merge({task_result.user_answers[2].id.to_s => ['Не выбрано']})
+      merge({task_result.user_answers[0].id.to_s => [task_result.user_answers[0].correct_user_association ? task_result.user_answers[0].correct_user_association.id.to_s : 'Не выбрано']}).
+      merge({task_result.user_answers[1].id.to_s => [task_result.user_answers[1].correct_user_association ? task_result.user_answers[1].correct_user_association.id.to_s : 'Не выбрано']}).
+      merge({task_result.user_answers[2].id.to_s => [task_result.user_answers[2].correct_user_association ? task_result.user_answers[2].correct_user_association.id.to_s : 'Не выбрано']})
     )
     task_result.check_user_answer!(params)
 
@@ -215,9 +219,9 @@ class TryTest < ActiveSupport::TestCase
   test 'check associations partial correct' do
     task_result = prepare_association_task_result
     params = HashWithIndifferentAccess.new('associations' => {}.
-      merge({task_result.user_answers[0].id.to_s => [task_result.user_associations[0].id.to_s]}).
-      merge({task_result.user_answers[1].id.to_s => ['Не выбрано']}).
-      merge({task_result.user_answers[2].id.to_s => [task_result.user_associations[1].id.to_s]})
+      merge({task_result.user_answers[0].id.to_s => [task_result.user_answers[0].correct_user_association ? task_result.user_answers[0].correct_user_association.id.to_s : 'Не выбрано']}). #Правильный
+      merge({task_result.user_answers[2].id.to_s => [task_result.user_answers[1].correct_user_association ? task_result.user_answers[1].correct_user_association.id.to_s : 'Не выбрано']}). #Неправильный
+      merge({task_result.user_answers[1].id.to_s => [task_result.user_answers[2].correct_user_association ? task_result.user_answers[2].correct_user_association.id.to_s : 'Не выбрано']})  #Неправильный
     )
     task_result.check_user_answer!(params)
 
@@ -226,13 +230,30 @@ class TryTest < ActiveSupport::TestCase
     assert_equal 'частично правильно', task_result.status
   end
 
+  test 'check serial correct' do
+    task_result = prepare_serial_task_result
+    correct_answers_ordered = task_result.user_answers.sort{|a1, a2| a2.answer_was.serial_number <=> a1.answer_was.serial_number}
+    params = HashWithIndifferentAccess.new('user_answers' => {}.
+      merge({correct_answers_ordered[0].id.to_s => '1'}).
+      merge({correct_answers_ordered[1].id.to_s => '2'}).
+      merge({correct_answers_ordered[2].id.to_s => '3'}).
+      merge({correct_answers_ordered[3].id.to_s => '4'})
+    )
+    task_result.check_user_answer!(params)
+
+    assert_equal true, task_result.save
+    assert_equal 0, task_result.point
+    assert_equal 'не правильно', task_result.status
+  end
+
   test 'check serial incorrect' do
     task_result = prepare_serial_task_result
+    correct_answers_ordered = task_result.user_answers.sort{|a1, a2| a2.answer_was.serial_number <=> a1.answer_was.serial_number}
     params = HashWithIndifferentAccess.new('user_answers' => {}.
-      merge({task_result.user_answers[0].id.to_s => '1'}).
-      merge({task_result.user_answers[1].id.to_s => '2'}).
-      merge({task_result.user_answers[2].id.to_s => '4'}).
-      merge({task_result.user_answers[3].id.to_s => '3'})
+      merge({correct_answers_ordered[0].id.to_s => '1'}).
+      merge({correct_answers_ordered[1].id.to_s => '2'}).
+      merge({correct_answers_ordered[2].id.to_s => '4'}). #Неправильно
+      merge({correct_answers_ordered[3].id.to_s => '3'})  #Неправильно
     )
     task_result.check_user_answer!(params)
 
@@ -250,7 +271,8 @@ class TryTest < ActiveSupport::TestCase
     assert_equal 1, task_result.point
     assert_equal 'правильно', task_result.status
 
-    ua = task_result.user_answers.first
+    correct_answer = task_result.user_answers.find{|ua| ua.answer_was.text = 'text'}
+    ua = correct_answer
     assert_equal ua.user_reply, 'text'
     assert_equal ua.correct, true
   end
@@ -264,7 +286,8 @@ class TryTest < ActiveSupport::TestCase
     assert_equal 0, task_result.point
     assert_equal 'не правильно', task_result.status
 
-    ua = task_result.user_answers.first
+    correct_answer = task_result.user_answers.find{|ua| ua.answer_was.text = 'text'}
+    ua = correct_answer
     assert_equal 'incorrect_text', ua.user_reply
     assert_not_equal true, ua.correct
   end
