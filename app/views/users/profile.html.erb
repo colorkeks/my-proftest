@@ -45,7 +45,7 @@
 <div class="panel panel-default">
 <div class="panel-body panel-profile">
 <h3 style="margin: 0"><%= @user.last_name %> <%= @user.first_name %> <%= @user.second_name %>
-  <% if current_user.id == @user.id || current_user.roles.where(name: 'Супер_Администратор').any? %>
+  <% if current_user.id == @user.id || current_user.roles.where('name = ? or name = ?', 'Администратор','Супер_Администратор').any? %>
       <a href="/users/<%= @user.id %>/edit" class="btn btn-white btn-sm tooltips" title="Редактировать карточку">
         <i class="fa fa-pencil"></i>
       </a>

@@ -93,8 +93,8 @@ class UsersController < ApplicationController
   def custom_create
     @user = User.create(user_params)
     @user.create_role(params[:user][:role_ids])
-
     @user.test_modes.build(name: 'Нейтральный', date_beg: Date.today)
+
     if @user.save
       redirect_to profile_user_path(@user), notice: 'Пользователь успешно создан'
     else

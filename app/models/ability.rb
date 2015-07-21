@@ -8,11 +8,12 @@ class Ability
     end
     if user.role? :Супер_Администратор
       can :manage, :all
-    elsif user.role? :Администратор
+    end
+    if user.role? :Администратор
       can :manage, Doctor
-      can [:profile], User
-    elsif user.role? :Регистратор
-      can :manage, :all
+      can [:profile, :edit, :update], User
+    end
+    if user.role? :Регистратор
       can :manage, Doctor
       can :manage, AssignedTest
       can :manage, TestMode
@@ -23,14 +24,14 @@ class Ability
       can :manage, PostDbf
       can [:profile, :view_test_results, :profile, :modes_history,
            :generate_token, :clean_token, :save_pdf, :custom_create, :test_persons], User
-    elsif user.role? :Методолог
-      can :manage, :all
+    end
+    if user.role? :Методолог
+      can :manage, TestGroup
       can :manage, Test
       can :manage, Task
       can :manage, Answer
       can :manage, Association
       can :manage, TaskContent
-      can [:index, :show], TestGroup
       can :manage, Section
       can :manage, Eqvgroup
       can :manage, Chain
@@ -39,13 +40,15 @@ class Ability
       can :manage, UserAnswer
       can :manage, TaskResult
       can [:profile], User
-    elsif user.role? :Тестируемый
+    end
+    if user.role? :Тестируемый
       can :manage, Try
       can :manage, UserAssociation
       can :manage, UserAnswer
       can :manage, TaskResult
       can [:testee_tab], User
-    elsif user.new_record?
+    end
+    if user.new_record?
       can [:token_auth, :check_token], User
     end
   end
