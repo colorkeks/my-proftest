@@ -36,9 +36,11 @@
 
             <%= form_tag set_counts_test_path(@test), id: 'task_chain_counts' do %>
             <div class="row">
-              <div class="col-lg-7">
 
-                <table class="table table-condensed table-bordered">
+              <div class="col-lg-7">
+                <h4>Выборка из эквивалентных групп</h4>
+                <div style="height: 400px; overflow-y: scroll">
+                    <table class="table table-condensed table-bordered">
                   <tr>
                     <th></th>
                     <th class="number"><span class="icon-single tooltips" title="Единичный выбор"></span></th>
@@ -46,14 +48,14 @@
                     <th class="number"><span class="icon-open tooltips" title="Открытый вопрос"></span></th>
                     <th class="number"><span class="icon-connect tooltips" title="Сопоставление"></span></th>
                     <th class="number"><span class="icon-sequence tooltips" title="Последовательность"></span></th>
-                    <th class="number"><span class="fa fa-link tooltips" title="Чейн"></span></th>
                     <th class="number">Сумма</th>
                     <th>Количество вопросов</th>
+                    <th class="number"><span class="fa fa-link tooltips" title="Чейн"></span></th>
                     <th>Количество чейнов</th>
                   </tr>
                   <% ([nil] + @test.sections).each do |section| %>
                       <tr>
-                        <td colspan="9" class="space-name">
+                        <td colspan="9" class="space-name text-muted">
                            <%= section ? "Раздел: #{section.name}" : 'Без раздела'  %>
                         </td>
                       </tr>
@@ -76,11 +78,11 @@
                         <td class="number"><%= eqvgroup.tasks.where(task_type:'Открытый вопрос').count %></td>
                         <td class="number"><%= eqvgroup.tasks.where(task_type:'Сопоставление').count %></td>
                         <td class="number"><%= eqvgroup.tasks.where(task_type:'Последовательность').count %></td>
-                        <td class="number"><%= eqvgroup.chains.count %></td>
                         <td class="number"><%= eqvgroup.tasks.count %></td>
                         <td>
                           <input name="eqvgroup[<%= eqvgroup.id %>][task_count]" autocomplete="off" type="text" class="form-control input-sm task-count" value="<%= eqvgroup.task_count %>"/>
                         </td>
+                        <td class="number"><%= eqvgroup.chains.count %></td>
                         <td>
                           <input name="eqvgroup[<%= eqvgroup.id %>][chain_count]" autocomplete="off" type="text" class="form-control input-sm task-count" value="<%= eqvgroup.chain_count %>"/>
                         </td>
@@ -88,14 +90,16 @@
                     <% end %>
                   <% end %>
                 </table>
-
+                </div>
               </div>
               <div class="col-lg-5" id="algorithm-statistic">
+                <h4>Параметры получаемых попыток</h4>
                 <%= render partial: 'algorithm_statistic_result' %>
               </div>
             </div>
             <!--<div class="btn btn-primary btn-sm pull-right">Сохранить</div>-->
-            <%= submit_tag 'Сохранить', name: 'submit', class: 'btn btn-primary btn-sm pull-right' %>
+            <hr/>
+            <%= submit_tag 'Сохранить', name: 'submit', class: 'btn btn-primary btn-sm' %>
             <% end %>
           </div>
         </div>
