@@ -165,6 +165,7 @@ function button_states(){
 
         if (checked.length > 0){
             $('#move-btn, #remove-btn').removeClass('disabled');
+            $('#remove-btn.trash').addClass('disabled'); //Отключаем удаление из корзины для тестов
         }else{
             $('#move-btn, #remove-btn').addClass('disabled');
         }
