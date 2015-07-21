@@ -50,6 +50,26 @@
         </ul>
         <ul class="nav navbar-nav navbar-right headermenu">
           <li>
+            <% if current_user && current_user.roles.count > 1 %>
+                <div class="btn-group">
+                  <div class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <div class="fa fa-th" style="font-size: 18px; margin-top: 5px"></div>
+                  </div>
+                  <ul class="dropdown-menu" role="menu">
+                    <% if current_user.role?('Методолог') %>
+                        <li><%= link_to 'Управление тестами', test_group_path(TestGroup.first) %></li>
+                    <% end %>
+                    <% if current_user.role?('Регистратор') %>
+                        <li><%= link_to 'Заведение тестируемых', doctors_path %></li>
+                    <% end %>
+                    <% if current_user.role?('Тестируемый') %>
+                        <li><%= link_to 'Тестирование', user_path(current_user) %></li>
+                    <% end %>
+                    </ul>
+                </div>
+            <% end %>
+          </li>
+          <li>
             <% if current_user %>
                 <div class="btn-group">
                   <div class="btn btn-default dropdown-toggle" data-toggle="dropdown">
