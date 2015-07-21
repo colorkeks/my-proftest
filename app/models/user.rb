@@ -58,7 +58,7 @@ class User < ActiveRecord::Base
       Role.find(roles.drop(1)).each do |role|
         self.roles << role
       end
-    elsif self.roles
+    elsif self.roles.exists?
       # если роли уже есть и ничего не изменилось, то ничего не делаем
     else
       self.roles << Role.find_by_name('Тестируемый') # если ролей нету то добавляем
