@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :profile, :modes_history, :pdf, :generate_token, :clean_token]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :profile, :modes_history, :generate_token, :clean_token]
   delegate :can?, :cannot?, :to => :ability
   load_and_authorize_resource
   # GET /users
@@ -17,19 +17,18 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-    if current_user && current_user.role?('Методолог')
+    if current_user && current_user.roles.where(name: 'Методолог').any?
       redirect_to :test_groups
       return
-    elsif current_user && current_user.role?('Администратор')
+    elsif current_user && current_user.roles.where(name: 'Администратор').any?
       redirect_to :doctors
       return
+    elsif current_user && current_user.roles.where(name: 'Тестируемый').any?
+      @current_mode = @user.test_modes.order('created_at DESC').first
+      @assigned_tests = AssignedTest.all.where(user_id: @user.id, test_mode_id: @current_mode)
+      @users = User.search(params[:search_users])
+      @tries = Try.all.where(:user_id => params[:id]).paginate(:page => params[:page], :per_page => params[:per_page] || 30)
     end
-    @current_mode = @user.test_modes.order('created_at DESC').first
-    @assigned_tests = AssignedTest.all.where(user_id: @user.id, test_mode_id: @current_mode)
-    @users = User.search(params[:search_users])
-    @user_id = params[:id]
-    # @attestation_tests = Test.find(@user.attestation_tests)
-    @test = Test.new
   end
 
   def profile
@@ -49,7 +48,13 @@ class UsersController < ApplicationController
   def print_test_results
     @current_mode = @user.test_modes.order('created_at DESC').first
     @assigned_tests = AssignedTest.all.where(user_id: @user.id, test_mode_id: @current_mode)
-    render 'users/print_test_results', layout: 'admin'
+    respond_to do |format|
+      format.pdf do
+        render pdf: @user.drcode + '_' + DateTime.now.strftime('%Y-%m-%d').to_s, # Excluding ".pdf" extension.
+               :page_size => 'A4',
+               formats: :html, encoding: 'utf8'
+      end
+    end
   end
 
   def save_pdf
@@ -57,9 +62,12 @@ class UsersController < ApplicationController
     @assigned_tests = AssignedTest.all.where(user_id: @user.id, test_mode_id: @current_mode)
     respond_to do |format|
       format.pdf do
-        render pdf: @user.drcode + '_' + DateTime.now.strftime('%Y-%m-%d').to_s, # Excluding ".pdf" extension.
+        pdf = render_to_string pdf: @user.drcode + '_' + DateTime.now.strftime('%Y-%m-%d').to_s, # Excluding ".pdf" extension.
                :page_size => 'A4',
-               formats: :html, encoding: 'utf8'
+               template: '/users/save_pdf.erb',
+               formats: :html,
+               encoding: 'utf8'
+        send_data(pdf, filename: @user.drcode + '_' + DateTime.now.strftime('%Y-%m-%d').to_s, :type=> 'application/pdf')
       end
     end
   end

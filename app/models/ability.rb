@@ -15,16 +15,16 @@ class Ability
       cannot [:index,:show, :edit,:update], Answer
       cannot [:index,:show, :edit,:update], Association
       cannot [:index,:show, :edit,:update], TaskContent
-      cannot [:index, :show], User
-      can [:show], User do |current_user|
+      cannot [:index, :show, :edit], User
+      can [:index, :show, :edit], User do |current_user|
         user.id == current_user.id
       end
     elsif user.role? :Методолог
       can :manage, :all
       # cannot :destroy, :all
       cannot :assign_role, User
-      cannot [:custom_create,:index, :show, :edit, :update], User
-      can [:show, :edit, :update], User do |current_user|
+      cannot [:index, :show, :edit, :update], User
+      can [:index, :show, :edit, :update], User do |current_user|
         user.id == current_user.id
       end
     elsif user.role? :Тестируемый
@@ -42,7 +42,7 @@ class Ability
       cannot [:index,:show, :edit,:update], Eqvgroup
       cannot [:index,:show, :edit,:update], Chain
       cannot [:custom_create,:index, :show, :edit, :update], User
-      can [:show, :edit, :update], User do |current_user|
+      can [:show, :edit, :update, :testee_tab], User do |current_user|
         user.id == current_user.id
       end
     elsif user.new_record?

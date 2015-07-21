@@ -5,15 +5,15 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-Role.create!(:name => :Супер_Юзер)
-Role.create!(:name => :Администратор)
-Role.create!(:name => :Методолог)
-Role.create!(:name => :Тестируемый)
-
-User.create(first_name: 'Методолог', last_name: 'Методолог', second_name: 'Методович' ,job: 'Методолог', roles: [Role.find_by_name(:Методолог)], email: 'met@met.ru', password: '1234qwer', password_confirmation: '1234qwer')
-User.create(first_name: 'Админ', last_name: 'Админ', second_name: 'Админович', job: 'Админ', roles: [Role.find_by_name(:Администратор)], email: 'admin@admin.ru', password: '1234qwer', password_confirmation: '1234qwer')
-User.create(first_name: 'Тест', last_name: 'Тестер', second_name: 'Тестович', job: 'Тестируемый', roles: [Role.find_by_name(:Тестируемый)], email: 'test@test.ru', password: '1234qwer', password_confirmation: '1234qwer')
-
+# Role.create!(:name => :Супер_Юзер)
+# Role.create!(:name => :Администратор)
+# Role.create!(:name => :Методолог)
+# Role.create!(:name => :Тестируемый)
+#
+# User.create(first_name: 'Методолог', last_name: 'Методолог', second_name: 'Методович' ,job: 'Методолог', roles: [Role.find_by_name(:Методолог)], email: 'met@met.ru', password: '1234qwer', password_confirmation: '1234qwer')
+# User.create(first_name: 'Админ', last_name: 'Админ', second_name: 'Админович', job: 'Админ', roles: [Role.find_by_name(:Администратор)], email: 'admin@admin.ru', password: '1234qwer', password_confirmation: '1234qwer')
+# User.create(first_name: 'Тест', last_name: 'Тестер', second_name: 'Тестович', job: 'Тестируемый', roles: [Role.find_by_name(:Тестируемый)], email: 'test@test.ru', password: '1234qwer', password_confirmation: '1234qwer')
+User.create(first_name: 'Супер', last_name: 'Юзер', second_name: 'Дуперович', job: 'Супер_Юзер', roles: [Role.find_by_name(:Супер_Юзер)], email: 'super@super.ru', password: '1234qwer', password_confirmation: '1234qwer')
 # load "#{Rails.root}/lib/tasks/dbf_loader.rb"
 # DbfLoader.load('/home/pavel/work/DBFS')
 #

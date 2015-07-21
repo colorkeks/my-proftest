@@ -52,5 +52,239 @@ class TryTest < ActiveSupport::TestCase
 
   end
 
+  def prepare_task
+    attrs = tests(:one).attributes.except('id', 'lft', 'parent_id', 'rgt', 'depth')
+    test = Test.new(attrs)
+    assert_equal test.save, true
+    task = test.tasks.build(eqvgroup: test.eqvgroups.first)
+    task.point = 1
+    return task
+  end
+
+  def prepare_single_task_result
+    task = prepare_task
+    test = task.test
+    task.task_type = 'Единичный выбор'
+    task.answers.build(correct: true).save
+    task.answers.build(correct: false).save
+    task.answers.build(correct: false).save
+    assert_equal task.save, true
+    try = Try.new(test: test)
+    result = try.prepare
+    task_result = try.task_results.first
+    return task_result
+  end
+
+  def prepare_multiple_task_result
+    task = prepare_task
+    test = task.test
+    task.task_type = 'Множественный выбор'
+    task.answers.build(correct: true).save
+    task.answers.build(correct: true).save
+    task.answers.build(correct: false).save
+    task.answers.build(correct: false).save
+    assert_equal task.save, true
+    try = Try.new(test: test)
+    result = try.prepare
+    task_result = try.task_results.first
+    return task_result
+  end
+
+  def prepare_association_task_result
+    task = prepare_task
+    test = task.test
+    task.task_type = 'Сопоставление'
+    task.answers.build(serial_number: 1).save
+    task.answers.build(serial_number: 2).save
+    task.answers.build(serial_number: 3).save
+    task.associations.build(serial_number: 1).save
+    task.associations.build(serial_number: 2).save
+    assert_equal task.save, true
+    try = Try.new(test: test)
+    result = try.prepare
+    task_result = try.task_results.first
+    return task_result
+  end
+
+  def prepare_serial_task_result
+    task = prepare_task
+    test = task.test
+    task.task_type = 'Последовательность'
+    task.answers.build(serial_number: 1).save
+    task.answers.build(serial_number: 2).save
+    task.answers.build(serial_number: 3).save
+    task.answers.build(serial_number: 4).save
+    assert_equal task.save, true
+    try = Try.new(test: test)
+    result = try.prepare
+    task_result = try.task_results.first
+    return task_result
+  end
+
+  def prepare_open_task_result
+    task = prepare_task
+    test = task.test
+    task.task_type = 'Открытый вопрос'
+    task.answers.build(text: 'text').save
+    assert_equal task.save, true
+    try = Try.new(test: test)
+    result = try.prepare
+    task_result = try.task_results.first
+    return task_result
+  end
+
+  test 'check answer single correct' do
+    task_result = prepare_single_task_result
+    params = HashWithIndifferentAccess.new('user_answers' => [task_result.user_answers.first.id.to_s])
+    task_result.check_user_answer!(params)
+
+
+    assert_equal task_result.save, true
+    assert_equal task_result.point, 1
+    assert_equal task_result.status, 'правильно'
+
+    ua = task_result.user_answers.first
+    assert_equal ua.user_reply, 't'
+    assert_equal ua.correct, true
+  end
+
+  test 'check answer single incorrect' do
+    task_result = prepare_single_task_result
+    params = HashWithIndifferentAccess.new('user_answers' => [task_result.user_answers.last.id.to_s])
+    task_result.check_user_answer!(params)
+
+    assert_equal task_result.save, true
+    assert_equal task_result.point, 0
+    assert_equal task_result.status, 'не правильно'
+
+  end
+
+  test 'check answer multiple correct' do
+    task_result = prepare_multiple_task_result
+    params = HashWithIndifferentAccess.new('user_answers' => [task_result.user_answers[0].id.to_s, task_result.user_answers[1].id.to_s])
+    task_result.check_user_answer!(params)
+
+    assert_equal true, task_result.save
+    assert_equal 1, task_result.point
+    assert_equal 'правильно', task_result.status
+  end
+
+  test 'check answer multiple partial correct' do
+    task_result = prepare_multiple_task_result
+    params = HashWithIndifferentAccess.new('user_answers' => [task_result.user_answers[0].id.to_s])
+    task_result.check_user_answer!(params)
+
+    assert_equal true, task_result.save
+    assert_equal 0.5, task_result.point
+    assert_equal 'частично правильно', task_result.status
+
+    ua = task_result.user_answers.first
+    assert_equal ua.user_reply, 't'
+    assert_equal ua.correct, true
+  end
+
+  test 'check answer multiple correct plus incorrect' do
+    task_result = prepare_multiple_task_result
+    params = HashWithIndifferentAccess.new('user_answers' => [task_result.user_answers[0].id.to_s, task_result.user_answers[2].id.to_s])
+    task_result.check_user_answer!(params)
+
+    assert_equal true, task_result.save
+    assert_equal 0, task_result.point
+    assert_equal 'не правильно', task_result.status
+  end
+
+  test 'check associations correct' do
+    task_result = prepare_association_task_result
+    params = HashWithIndifferentAccess.new('associations' => {}.
+      merge({task_result.user_answers[0].id.to_s => [task_result.user_associations[0].id.to_s]}).
+      merge({task_result.user_answers[1].id.to_s => [task_result.user_associations[1].id.to_s]}).
+      merge({task_result.user_answers[2].id.to_s => ['Не выбрано']})
+    )
+    task_result.check_user_answer!(params)
+
+    assert_equal true, task_result.save
+    assert_equal 1, task_result.point
+    assert_equal 'правильно', task_result.status
+
+    task_result.user_answers.each_with_index do |ua, index|
+      #assert_equal index+1, ua.serial_number
+      assert_equal true, ua.correct
+    end
+  end
+
+  test 'check associations partial correct' do
+    task_result = prepare_association_task_result
+    params = HashWithIndifferentAccess.new('associations' => {}.
+      merge({task_result.user_answers[0].id.to_s => [task_result.user_associations[0].id.to_s]}).
+      merge({task_result.user_answers[1].id.to_s => ['Не выбрано']}).
+      merge({task_result.user_answers[2].id.to_s => [task_result.user_associations[1].id.to_s]})
+    )
+    task_result.check_user_answer!(params)
+
+    assert_equal true, task_result.save
+    assert_equal 1.0/3, task_result.point
+    assert_equal 'частично правильно', task_result.status
+  end
+
+  test 'check serial incorrect' do
+    task_result = prepare_serial_task_result
+    params = HashWithIndifferentAccess.new('user_answers' => {}.
+      merge({task_result.user_answers[0].id.to_s => '1'}).
+      merge({task_result.user_answers[1].id.to_s => '2'}).
+      merge({task_result.user_answers[2].id.to_s => '4'}).
+      merge({task_result.user_answers[3].id.to_s => '3'})
+    )
+    task_result.check_user_answer!(params)
+
+    assert_equal true, task_result.save
+    assert_equal 0, task_result.point
+    assert_equal 'не правильно', task_result.status
+  end
+
+  test 'check open correct' do
+    task_result = prepare_open_task_result
+    params = HashWithIndifferentAccess.new('user_answer' => 'text')
+    task_result.check_user_answer!(params)
+
+    assert_equal true, task_result.save
+    assert_equal 1, task_result.point
+    assert_equal 'правильно', task_result.status
+
+    ua = task_result.user_answers.first
+    assert_equal ua.user_reply, 'text'
+    assert_equal ua.correct, true
+  end
+
+  test 'check open incorrect' do
+    task_result = prepare_open_task_result
+    params = HashWithIndifferentAccess.new('user_answer' => 'incorrect_text')
+    task_result.check_user_answer!(params)
+
+    assert_equal true, task_result.save
+    assert_equal 0, task_result.point
+    assert_equal 'не правильно', task_result.status
+
+    ua = task_result.user_answers.first
+    assert_equal 'incorrect_text', ua.user_reply
+    assert_not_equal true, ua.correct
+  end
+
+  test 'process chain for task result' do
+    test = tests(:one)
+    task1 = tasks(:one)
+    task2 = tasks(:two)
+    chain = chains(:one)
+    chain.add_task!(task1)
+    chain.add_task!(task2)
+
+    try = Try.new(test: test)
+    result = try.prepare
+
+    task_result = try.task_results.first
+    task_result.status = 'не правильно'
+    task_results = try.process_chain_for_task_result!(task_result)
+    assert_equal 'не правильно', task_results.last.status
+
+  end
 
 end
