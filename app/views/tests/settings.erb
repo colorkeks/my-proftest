@@ -116,7 +116,7 @@
                             <div class="col-md-offset-4" >
                               <div class="checkbox">
                                 <label>
-                                  <input type="checkbox"/>
+                                  <%= f.check_box :training,  :class => ''  %>
                                   <strong>Тренировочный</strong>
                                 </label>
                               </div>
@@ -140,7 +140,7 @@
                               <label class="control-label">Сохранен</label>
                             </div>
                             <div class="controls col-md-offset-4">
-                              <div style="padding-top: 7px"><%= Time.now.strftime('%d-%m-%Y %T') %></div>
+                              <div style="padding-top: 7px"><%= @test.created_at.strftime('%d-%m-%Y %T') %></div>
                             </div>
                           </div>
                           <div class="form-group">
@@ -148,7 +148,7 @@
                               <label class="control-label">Изменен</label>
                             </div>
                             <div class="controls col-md-offset-4">
-                              <div style="padding-top: 7px"><%= Time.now.strftime('%d-%m-%Y %T') %></div>
+                              <div style="padding-top: 7px"><%= @test.updated_at.strftime('%d-%m-%Y %T') %></div>
                             </div>
                           </div>
                           <!--<div class="form-group">-->
@@ -200,7 +200,7 @@
                         <div class=" col-md-offset-4">
                           <div class="checkbox">
                             <label>
-                              <input type="checkbox" class=""/>
+                              <%= f.check_box :can_change,  :class => ''  %>
                               <strong>Возможность изменить в задании</strong>
                             </label>
                           </div>
@@ -215,8 +215,8 @@
                         <div class=" col-md-offset-4">
                           <div class="checkbox">
                             <label>
-                                <input type="checkbox" class=""/>
-                                <strong>Перемешивать задания</strong>
+                              <%= f.check_box :mix_tasks,  :class => ''  %>
+                              <strong>Перемешивать задания</strong>
                             </label>
                           </div>
                         </div>
@@ -228,8 +228,8 @@
                         <div class=" col-md-offset-4">
                           <div class="checkbox">
                             <label>
-                                <input type="checkbox" class=""/>
-                                <strong>Перемешивать варианты</strong>
+                              <%= f.check_box :mix_answers,  :class => ''  %>
+                              <strong>Перемешивать варианты</strong>
                             </label>
                           </div>
                         </div>
@@ -239,15 +239,16 @@
 
                       <div class="form-group">
                         <div class="controls col-md-offset-4">
-                          <select name="" id="" class="form-control">
-                            <option value="all">Все задания</option>
-                            <option value="eqv" selected>Выбор из эквивалентных групп</option>
-                          </select>
+                          <!--<select name="" id="" class="form-control">-->
+                            <!--<option value="all">Все задания</option>-->
+                            <!--<option value="eqv" selected>Выбор из эквивалентных групп</option>-->
+                          <!--</select>-->
+                          <%= f.select(:algorithm, ['Все задания', 'Ограниченое количество заданий'],{},{:class => 'form-control algorithm'}) %>
                         </div>
                       </div>
                       <div class="form-group">
                         <div class="controls col-md-offset-4">
-                          <a href="#">Настройка алгоритма</a>
+                          <%= link_to 'Настройка алгоритма', algorithm_test_path(@test), id: 'algorithm_link', style: 'display: none' %>
                         </div>
                       </div>
                       <hr/>
@@ -264,7 +265,7 @@
                         <div class=" col-md-offset-4">
                           <div class="checkbox">
                             <label>
-                              <input type="checkbox" class=""/>
+                              <%= f.check_box :limit_time,  :class => ''  %>
                               <strong>Ограничить время прохождения</strong>
                             </label>
                           </div>
@@ -275,7 +276,7 @@
                           <label class="control-label"></label>
                         </div>
                         <div class="col-md-offset-3">
-                          <%= f.text_field :timer, :class => 'form-control', :id => 'datetimepicker', style: 'width: 80px; display: inline-block'  %>
+                          <%= f.text_field :timer, :class => 'form-control', style: 'width: 80px; display: inline-block'  %>
                           <span>мин</span>
                         </div>
                       </div>

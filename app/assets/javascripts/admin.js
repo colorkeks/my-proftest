@@ -38,6 +38,8 @@ $(function(){
     date_picker();
     fill_placeholder_in_open_answer();
     statistic();
+    disable_time_field();
+    change_algirithm_link();
 
     $('.chosen-select').chosen({
         allow_single_deselect: true,
@@ -55,6 +57,46 @@ $(function(){
     });
 
 });
+
+function change_algirithm_link(){
+    var select_algorithm = $('#test_algorithm');
+    var algorithm_link = $('#algorithm_link');
+    var current_value = select_algorithm.find(':selected').val();
+
+    if (current_value == 'Ограниченое количество заданий'){
+        algorithm_link.show()
+    }else{
+        algorithm_link.hide()
+    }
+
+    select_algorithm.change(function(){
+        var current_value = $(this).find(':selected').val();
+        if (current_value == 'Ограниченое количество заданий'){
+            algorithm_link.show()
+        }else{
+            algorithm_link.hide()
+        }
+
+    })
+}
+
+function disable_time_field(){
+    var time_disable_checkbox = $('#test_limit_time');
+    var time_field = $('#test_timer');
+
+    if(time_disable_checkbox.prop("checked")){
+        time_field.prop('disabled', true)
+    }
+
+    time_disable_checkbox.change(function(){
+        if(time_disable_checkbox.prop("checked")){
+            time_field.prop('disabled', true)
+        }else{
+            time_field.prop('disabled', false)
+        }
+    })
+
+}
 
 function statistic(){
     $('.toggle-answer').click(function(){
