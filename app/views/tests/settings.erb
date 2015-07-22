@@ -74,7 +74,7 @@
         <div class="col-sm-9 col-lg-10">
 
           <div class="panel panel-default">
-            <div class="panel-body task-panel">
+            <div class="panel-body task-panel" style="padding: 30px">
               <%= simple_form_for @test, wrapper: :horizontal_form do |f|  %>
                   <div class="row">
                     <% if @test.directory == false%>
@@ -104,7 +104,7 @@
                               <div class="checkbox">
                                 <label>
                                   <%= f.check_box :attestation,  :class => ''  %>
-                                  <strong>Аттестационный:</strong>
+                                  <strong>Аттестационный</strong>
                                 </label>
                               </div>
                             </div>
@@ -124,23 +124,23 @@
                           </div>
                         </div>
                         <div class="col-lg-6">
-                          <div class="form-group">
-                            <div class="controls col-md-4">
-                              <label class="control-label">Каталог</label>
-                            </div>
-                            <div class="controls col-md-offset-4">
-                              <%#= select_tag(:catalog, '<option>Каталога пока нет</option>'.html_safe, {:class => 'form-control'}) %>
-                              <%#= select_tag(:catalog, '<option>Каталога пока нет</option>'.html_safe, {:class => 'form-control'}) %>
-                              <%#= f.select :test_group_id, nested_set_options(TestGroup) {|i| "#{'–' * i.level} #{i.name}"},{}, { :class => 'form-control' } %>
-                              <div class="btn btn-white"><span class="fa fa-folder"></span></div>
-                            </div>
-                          </div>
+                          <!--<div class="form-group">-->
+                            <!--<div class="controls col-md-4">-->
+                              <!--<label class="control-label">Каталог</label>-->
+                            <!--</div>-->
+                            <!--<div class="controls col-md-offset-4">-->
+                              <!--<%#= select_tag(:catalog, '<option>Каталога пока нет</option>'.html_safe, {:class => 'form-control'}) %>-->
+                              <!--<%#= select_tag(:catalog, '<option>Каталога пока нет</option>'.html_safe, {:class => 'form-control'}) %>-->
+                              <!--<%#= f.select :test_group_id, nested_set_options(TestGroup) {|i| "#{'–' * i.level} #{i.name}"},{}, { :class => 'form-control' } %>-->
+                              <!--<div class="btn btn-white"><span class="fa fa-folder"></span></div>-->
+                            <!--</div>-->
+                          <!--</div>-->
                           <div class="form-group">
                             <div class="controls col-md-4">
                               <label class="control-label">Сохранен</label>
                             </div>
                             <div class="controls col-md-offset-4">
-                              <div style="padding-top: 7px"><%= Time.now %></div>
+                              <div style="padding-top: 7px"><%= Time.now.strftime('%d-%m-%Y %T') %></div>
                             </div>
                           </div>
                           <div class="form-group">
@@ -148,7 +148,7 @@
                               <label class="control-label">Изменен</label>
                             </div>
                             <div class="controls col-md-offset-4">
-                              <div style="padding-top: 7px"><%= Time.now %></div>
+                              <div style="padding-top: 7px"><%= Time.now.strftime('%d-%m-%Y %T') %></div>
                             </div>
                           </div>
                           <!--<div class="form-group">-->
@@ -201,7 +201,7 @@
                           <div class="checkbox">
                             <label>
                               <input type="checkbox" class=""/>
-                              <strong>Возможность изменить, задание</strong>
+                              <strong>Возможность изменить в задании</strong>
                             </label>
                           </div>
                         </div>
@@ -235,7 +235,7 @@
                         </div>
                       </div>
                       <hr/>
-                      <h4>Алогоритм выбора</h4>
+                      <h4>Алгоритм выбора</h4>
 
                       <div class="form-group">
                         <div class="controls col-md-offset-4">
@@ -272,7 +272,7 @@
                       </div>
                       <div class="form-group">
                         <div class="controls col-md-4">
-                          <label class="control-label">Время</label>
+                          <label class="control-label"></label>
                         </div>
                         <div class="col-md-offset-3">
                           <%= f.text_field :timer, :class => 'form-control', :id => 'datetimepicker', style: 'width: 80px; display: inline-block'  %>
