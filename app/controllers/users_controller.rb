@@ -17,14 +17,17 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-    if current_user && current_user.roles.where(name: 'Тестируемый').any?
-      redirect_to testee_tab_users_path
-      return
-    elsif current_user && current_user.roles.where('name = ?  OR name = ?', 'Регистратор', 'Администратор').any?
+    if current_user && current_user.roles.find(current_user.priority_role_id).name == 'Администратор'
       redirect_to :doctors
       return
-    elsif current_user && current_user.roles.where(name: 'Методолог').any?
+    elsif current_user && current_user.roles.find(current_user.priority_role_id).name == 'Регистратор'
+      redirect_to :doctors
+      return
+    elsif current_user && current_user.roles.find(current_user.priority_role_id).name == 'Методолог'
       redirect_to :test_groups
+      return
+    elsif current_user && current_user.roles.find(current_user.priority_role_id).name == 'Тестируемый'
+      redirect_to testee_tab_users_path
       return
     end
   end
@@ -48,7 +51,7 @@ class UsersController < ApplicationController
     @assigned_tests = AssignedTest.all.where(user_id: @user.id, test_mode_id: @current_mode)
     respond_to do |format|
       format.pdf do
-        render pdf: @user.drcode + '_' + DateTime.now.strftime('%Y-%m-%d').to_s, # Excluding ".pdf" extension.
+        render pdf: @user.drcode ? @user.drcode + '_' + DateTime.now.strftime('%Y-%m-%d').to_s : @user.last_name + ' ' + DateTime.now.strftime('%Y-%m-%d').to_s , # Excluding ".pdf" extension.
                :page_size => 'A4',
                formats: :html, encoding: 'utf8'
       end
@@ -60,12 +63,12 @@ class UsersController < ApplicationController
     @assigned_tests = AssignedTest.all.where(user_id: @user.id, test_mode_id: @current_mode)
     respond_to do |format|
       format.pdf do
-        pdf = render_to_string pdf: @user.drcode + '_' + DateTime.now.strftime('%Y-%m-%d').to_s, # Excluding ".pdf" extension.
+        pdf = render_to_string pdf: @user.drcode ? @user.drcode + '_' + DateTime.now.strftime('%Y-%m-%d').to_s : @user.last_name + ' ' + DateTime.now.strftime('%Y-%m-%d').to_s  , # Excluding ".pdf" extension.
                :page_size => 'A4',
                template: '/users/save_pdf.erb',
                formats: :html,
                encoding: 'utf8'
-        send_data(pdf, filename: @user.drcode + '_' + DateTime.now.strftime('%Y-%m-%d').to_s, :type=> 'application/pdf')
+        send_data(pdf, filename: @user.drcode ? @user.drcode + '_' + DateTime.now.strftime('%Y-%m-%d').to_s : @user.last_name + ' ' + DateTime.now.strftime('%Y-%m-%d').to_s , :type=> 'application/pdf')
       end
     end
   end
@@ -95,7 +98,6 @@ class UsersController < ApplicationController
     @user.create_role(params[:user][:role_ids])
 
     @user.test_modes.build(name: 'Нейтральный', date_beg: Date.today)
-    @user.priority_role.build(name: @user.roles.first.name)
     if @user.save
       redirect_to profile_user_path(@user), notice: 'Пользователь успешно создан'
     else
@@ -131,9 +133,10 @@ class UsersController < ApplicationController
   end
 
   # PATCH/PUT /users/1
-  # PATCH/PUT /users/1.json
+  # PATCH/PUT /users/1.jsonx
   def update
     @user.create_role(params[:user][:role_ids])
+    @user.priority_role_id = @user.roles.first.id
     respond_to do |format|
       if @user.update(user_params)
         format.html { redirect_to profile_user_path, notice: 'Пользователь успешно обновлен.' }
@@ -208,6 +211,6 @@ class UsersController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def user_params
     params.require(:user).permit(:first_name, :second_name, :last_name, :birthday, :drcode,
-                                 :job, :email, :password, :password_confirmation, :token, :priority_role)
+                                 :job, :email, :password, :password_confirmation, :token, :priority_role_id)
   end
 end

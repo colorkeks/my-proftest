@@ -78,7 +78,15 @@
                     <span class="caret"></span>
                   </div>
                   <ul class="dropdown-menu" role="menu">
-                    <li><%= link_to 'На главную', current_user %></li>
+                   <% if current_user && current_user.roles.find(current_user.priority_role_id).name == 'Администратор' %>
+                        <li><%= link_to 'На главную', :doctors %></li>
+                   <% elsif current_user && current_user.roles.find(current_user.priority_role_id).name == 'Регистратор' %>
+                        <li><%= link_to 'На главную', :doctors %></li>
+                   <% elsif current_user && current_user.roles.find(current_user.priority_role_id).name == 'Методолог' %>
+                        <li><%= link_to 'На главную', :test_groups %></li>
+                   <% elsif current_user && current_user.roles.find(current_user.priority_role_id).name == 'Тестируемый' %>
+                        <li><%= link_to 'На главную', testee_tab_users_path %></li>
+                    <% end %>
                     <li><%= link_to 'Профиль', profile_user_path(current_user.id) %></li>
                     <% if user_signed_in? %>
                         <li><%= link_to 'Выйти', destroy_user_session_path, :method => :delete %></li>
