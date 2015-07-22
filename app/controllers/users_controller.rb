@@ -95,6 +95,7 @@ class UsersController < ApplicationController
     @user.create_role(params[:user][:role_ids])
 
     @user.test_modes.build(name: 'Нейтральный', date_beg: Date.today)
+    @user.priority_role.build(name: @user.roles.first.name)
     if @user.save
       redirect_to profile_user_path(@user), notice: 'Пользователь успешно создан'
     else
@@ -207,6 +208,6 @@ class UsersController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def user_params
     params.require(:user).permit(:first_name, :second_name, :last_name, :birthday, :drcode,
-                                 :job, :email, :password, :password_confirmation, :token)
+                                 :job, :email, :password, :password_confirmation, :token, :priority_role)
   end
 end

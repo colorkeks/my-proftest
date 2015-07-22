@@ -28,7 +28,13 @@
             <th>ЛПУ</th>
             <td><%= f.text_field :job, :class => 'form-control' %></td>
           </tr>
-          <% if current_user.roles.where('name = ? OR name = ?', 'Супер_Администратор', 'Администратор').any? %>
+          <% if current_user.id == @user.id%>
+          <tr>
+            <th>Приоритетная роль</th>
+            <td><%= f.select(:priority_role, @user.roles.collect { |p| p.name}, {}, {:class => 'form-control'}) %></td>
+          </tr>
+          <% end %>
+          <% if current_user.roles.where('name = ? OR name = ?', 'Супер_Администратор', 'Администратор').any? && (current_user.id != @user.id)  %>
               <tr>
                 <th>Роли</th>
                 <td><%= f.association :roles, label:false, :input_html => {:class => 'form-control chosen-select', placeholder: ' '} %></td>
