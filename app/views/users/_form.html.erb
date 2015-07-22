@@ -28,7 +28,7 @@
             <th>ЛПУ</th>
             <td><%= f.text_field :job, :class => 'form-control' %></td>
           </tr>
-          <% if current_user.id == @user.id%>
+          <% if (current_user.id == @user.id) || current_user.roles.where('name = ? OR name = ?', 'Супер_Администратор', 'Администратор').any?%>
           <tr>
             <th>Приоритетная роль</th>
             <td><%= f.select(:priority_role_id, @user.roles.collect { |p| [p.name, p.id ]}, {}, {:class => 'form-control'}) %></td>
