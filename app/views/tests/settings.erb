@@ -159,14 +159,14 @@
                               <!--<%#= f.select(:algorithm, ['Все задания', 'Ограниченое количество заданий'],{},{:class => 'form-control algorithm'}) %>-->
                             <!--</div>-->
                           <!--</div>-->
-                          <div class="form-group  limited_options hide">
-                            <div class="controls col-md-4">
-                              <label class="control-label">Процент:</label>
-                            </div>
-                            <div class="col-md-offset-4">
-                              <%= f.number_field(:percent_tasks, :class => 'form-control', :style => 'width: 75px;') %>
-                            </div>
-                          </div>
+                          <!--<div class="form-group  limited_options">-->
+                            <!--<div class="controls col-md-4">-->
+                              <!--<label class="control-label">Процент:</label>-->
+                            <!--</div>-->
+                            <!--<div class="col-md-offset-4">-->
+                              <!--<%#= f.number_field(:percent_tasks, :class => 'form-control', :style => 'width: 75px;') %>-->
+                            <!--</div>-->
+                          <!--</div>-->
                         </div>
                     <% elsif @test.directory == true %>
                         <div class="col-lg-5">
@@ -251,6 +251,14 @@
                           <%= link_to 'Настройка алгоритма', algorithm_test_path(@test), id: 'algorithm_link', style: 'display: none' %>
                         </div>
                       </div>
+                      <div class="form-group  limited_options hide">
+                        <div class="controls col-md-4">
+                          <label class="control-label">Процент</label>
+                        </div>
+                        <div class="col-md-offset-4">
+                          <%= f.number_field(:percent_tasks, :class => 'form-control', :style => 'width: 75px;') %>
+                        </div>
+                      </div>
                       <hr/>
                       <h4>Шкала</h4>
                       <hr/>
@@ -280,6 +288,7 @@
                           <span>мин</span>
                         </div>
                       </div>
+
 
                     </div>
                     <div class="col-lg-12">
