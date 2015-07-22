@@ -95,7 +95,6 @@ class UsersController < ApplicationController
     @user.create_role(params[:user][:role_ids])
 
     @user.test_modes.build(name: 'Нейтральный', date_beg: Date.today)
-    @user.priority_role_id = @user.roles.first.id
     if @user.save
       redirect_to profile_user_path(@user), notice: 'Пользователь успешно создан'
     else
@@ -134,6 +133,7 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1.json
   def update
     @user.create_role(params[:user][:role_ids])
+    @user.priority_role_id = @user.roles.first.id
     respond_to do |format|
       if @user.update(user_params)
         format.html { redirect_to profile_user_path, notice: 'Пользователь успешно обновлен.' }
