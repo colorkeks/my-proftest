@@ -51,7 +51,7 @@ class UsersController < ApplicationController
     @assigned_tests = AssignedTest.all.where(user_id: @user.id, test_mode_id: @current_mode)
     respond_to do |format|
       format.pdf do
-        render pdf: @user.drcode + '_' + DateTime.now.strftime('%Y-%m-%d').to_s, # Excluding ".pdf" extension.
+        render pdf: @user.drcode ? @user.drcode + '_' + DateTime.now.strftime('%Y-%m-%d').to_s : @user.last_name + ' ' + DateTime.now.strftime('%Y-%m-%d').to_s , # Excluding ".pdf" extension.
                :page_size => 'A4',
                formats: :html, encoding: 'utf8'
       end
@@ -63,12 +63,12 @@ class UsersController < ApplicationController
     @assigned_tests = AssignedTest.all.where(user_id: @user.id, test_mode_id: @current_mode)
     respond_to do |format|
       format.pdf do
-        pdf = render_to_string pdf: @user.drcode + '_' + DateTime.now.strftime('%Y-%m-%d').to_s, # Excluding ".pdf" extension.
+        pdf = render_to_string pdf: @user.drcode ? @user.drcode + '_' + DateTime.now.strftime('%Y-%m-%d').to_s : @user.last_name + ' ' + DateTime.now.strftime('%Y-%m-%d').to_s  , # Excluding ".pdf" extension.
                :page_size => 'A4',
                template: '/users/save_pdf.erb',
                formats: :html,
                encoding: 'utf8'
-        send_data(pdf, filename: @user.drcode + '_' + DateTime.now.strftime('%Y-%m-%d').to_s, :type=> 'application/pdf')
+        send_data(pdf, filename: @user.drcode ? @user.drcode + '_' + DateTime.now.strftime('%Y-%m-%d').to_s : @user.last_name + ' ' + DateTime.now.strftime('%Y-%m-%d').to_s , :type=> 'application/pdf')
       end
     end
   end
