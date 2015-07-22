@@ -63,13 +63,13 @@ class UsersController < ApplicationController
     @assigned_tests = AssignedTest.all.where(user_id: @user.id, test_mode_id: @current_mode)
     respond_to do |format|
       format.pdf do
-        pdf = render_to_string pdf: @user.drcode ? @user.drcode + '_' + DateTime.now.strftime('%Y-%m-%d').to_s : @user.last_name + ' ' + DateTime.now.strftime('%Y-%m-%d').to_s  , # Excluding ".pdf" extension.
+        file_name = @user.drcode ? @user.drcode + '_' + DateTime.now.strftime('%Y-%m-%d').to_s : @user.last_name + ' ' + DateTime.now.strftime('%Y-%m-%d').to_s + '.pdf'
+        pdf = render_to_string pdf: file_name  , # Excluding ".pdf" extension.
                :page_size => 'A4',
                template: '/users/save_pdf.erb',
                formats: :html,
                encoding: 'utf8'
-        send_data(pdf, filename: @user.drcode ? @user.drcode + '_' + DateTime.now.strftime('%Y-%m-%d').to_s : @user.last_name + ' ' + DateTime.now.strftime('%Y-%m-%d').to_s + '.pdf',
-                  :type=> 'application/pdf', :disposition => "attachment; filename=#{@user.drcode ? @user.drcode + '_' + DateTime.now.strftime('%Y-%m-%d').to_s : @user.last_name + ' ' + DateTime.now.strftime('%Y-%m-%d').to_s}.pdf")
+        send_data(pdf, filename: file_name , :type=> 'application/pdf', :disposition => "attachment; filename=#{file_name}.pdf")
       end
     end
   end
