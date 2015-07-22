@@ -17,14 +17,17 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-    if current_user && current_user.roles.where(name: 'Тестируемый').any?
-      redirect_to testee_tab_users_path
-      return
-    elsif current_user && current_user.roles.where('name = ?  OR name = ?', 'Регистратор', 'Администратор').any?
+    if current_user && current_user.roles.find(current_user.priority_role_id).name == 'Администратор'
       redirect_to :doctors
       return
-    elsif current_user && current_user.roles.where(name: 'Методолог').any?
+    elsif current_user && current_user.roles.find(current_user.priority_role_id).name == 'Регистратор'
+      redirect_to :doctors
+      return
+    elsif current_user && current_user.roles.find(current_user.priority_role_id).name == 'Методолог'
       redirect_to :test_groups
+      return
+    elsif current_user && current_user.roles.find(current_user.priority_role_id).name == 'Тестируемый'
+      redirect_to testee_tab_users_path
       return
     end
   end
@@ -130,7 +133,7 @@ class UsersController < ApplicationController
   end
 
   # PATCH/PUT /users/1
-  # PATCH/PUT /users/1.json
+  # PATCH/PUT /users/1.jsonx
   def update
     @user.create_role(params[:user][:role_ids])
     @user.priority_role_id = @user.roles.first.id

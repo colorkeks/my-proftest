@@ -8,11 +8,6 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    if (current_user.first_name.nil? || current_user.first_name.nil? || current_user.first_name.nil?)
-      edit_user_path(current_user.id)
-    else
-      current_user
-    end
   end
 
   def after_sign_out_path_for(resource_or_scope)
