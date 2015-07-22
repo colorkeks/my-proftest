@@ -31,7 +31,7 @@
           <% if current_user.id == @user.id%>
           <tr>
             <th>Приоритетная роль</th>
-            <td><%= f.select(:priority_role_id, @user.roles.collect { |p| p.name p.id}, {}, {:class => 'form-control'}) %></td>
+            <td><%= f.select(:priority_role_id, @user.roles.collect { |p| [p.name, p.id ]}, {}, {:class => 'form-control'}) %></td>
           </tr>
           <% end %>
           <% if current_user.roles.where('name = ? OR name = ?', 'Супер_Администратор', 'Администратор').any? && (current_user.id != @user.id)  %>
