@@ -84,12 +84,12 @@ function disable_time_field(){
     var time_disable_checkbox = $('#test_limit_time');
     var time_field = $('#test_timer');
 
-    if(time_disable_checkbox.prop("checked")){
+    if(!time_disable_checkbox.prop("checked")){
         time_field.prop('disabled', true)
     }
 
     time_disable_checkbox.change(function(){
-        if(time_disable_checkbox.prop("checked")){
+        if(!time_disable_checkbox.prop("checked")){
             time_field.prop('disabled', true)
         }else{
             time_field.prop('disabled', false)
