@@ -165,7 +165,7 @@
                   </button>
                 </div>
 
-                <button onclick="bulkDestroy('<%= item_class %>');" id="remove-btn"  class="btn btn-white tooltips disabled" type="button" data-toggle="tooltip" title="<%= delete_title %>">
+                <button onclick="bulkDestroy('<%= item_class %>');" id="remove-btn"  class="btn btn-white tooltips disabled <%= 'trash' if @trash %>" type="button" data-toggle="tooltip" title="<%= delete_title %>">
                     <% if @trash %>
                       <i class="fa fa-trash"></i> <i class="fa fa-exclamation"></i>
                     <% else %>

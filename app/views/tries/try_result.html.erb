@@ -71,7 +71,7 @@
                             <div class="col-sm-12"><h3>Варианты:</h3></div>
                             <div class="col-sm-6">
                               <table class="table">
-                                <% task_result.user_answers.order('RANDOM()').each do |user_answer| %>
+                                <% task_result.user_answers.order(:id).each do |user_answer| %>
                                     <tr>
                                       <td><h4><%= user_answer.answer_was.text.html_safe %></h4></td>
                                     </tr>
@@ -80,7 +80,7 @@
                             </div>
                             <div class="col-sm-6">
                               <table class="table">
-                                <% task_result.user_associations.order('RANDOM()').each do |user_association| %>
+                                <% task_result.user_associations.order(:id).each do |user_association| %>
                                     <tr>
                                       <td><h4><%= user_association.association_was.text.html_safe %></h4></td>
                                     </tr>
@@ -91,7 +91,7 @@
                             <div class="col-sm-12">
                               <table class="table table-striped">
                                 <th>Варианты:</th>
-                                <% task_result.user_answers.order('RANDOM()').each do |user_answer| %>
+                                <% task_result.user_answers.order(:id).each do |user_answer| %>
                                     <tr>
                                       <td><h4><%= user_answer.answer_was.text.html_safe %></h4></td>
                                     </tr>
@@ -115,7 +115,7 @@
                                 <% task_result.user_answers.order('user_reply ASC').each do |user_answer| %>
                                     <tr>
                                       <td width="30px;"><h4><%= user_answer.user_reply %></h4></td>
-                                      <td><h4><%= user_answer.text %></h4></td>
+                                      <td><h4><%= user_answer.answer_was.text %></h4></td>
                                     </tr>
                                 <% end %>
                             <% elsif task_result.task_was.task_type == 'Сопоставление' %>

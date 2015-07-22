@@ -11,7 +11,7 @@ class Ability
     end
     if user.role? :Администратор
       can :manage, Doctor
-      can [:profile, :edit, :update], User
+      can [:profile, :edit, :update, :test_persons], User
     end
     if user.role? :Регистратор
       can :manage, Doctor
@@ -23,7 +23,7 @@ class Ability
       can :manage, SpeclistDbf
       can :manage, PostDbf
       can [:profile, :view_test_results, :profile, :modes_history,
-           :generate_token, :clean_token, :save_pdf, :custom_create, :test_persons], User
+           :generate_token, :clean_token, :save_pdf, :custom_create, :test_persons, :print_test_results], User
     end
     if user.role? :Методолог
       can :manage, TestGroup
