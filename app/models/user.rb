@@ -32,10 +32,6 @@ class User < ActiveRecord::Base
     return !!self.roles.where(name: role).any?
   end
 
-  def priority_role
-    return !! self.roles.find(self.priority_role_id)
-  end
-
   def generate_token
     while true do
       random_number = Random.rand(99999999)
