@@ -57,9 +57,9 @@ jQuery(document).ready(function() {
    //
    function adjustmainpanelheight() {
       // Adjust mainpanel height
-      var docHeight = jQuery(document).height();
-      if(docHeight > jQuery('.mainpanel').height())
-         jQuery('.mainpanel').height(docHeight);
+      //var docHeight = jQuery(document).height();
+      //if(docHeight > jQuery('.mainpanel').height())
+         //jQuery('.mainpanel').height(docHeight);
    }
    adjustmainpanelheight();
    
