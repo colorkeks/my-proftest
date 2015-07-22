@@ -23,7 +23,8 @@ class Ability
       can :manage, SpeclistDbf
       can :manage, PostDbf
       can [:profile, :view_test_results, :profile, :modes_history,
-           :generate_token, :clean_token, :save_pdf, :custom_create, :test_persons, :print_test_results], User
+           :generate_token, :clean_token, :save_pdf, :custom_create,
+           :test_persons, :print_test_results], User
     end
     if user.role? :Методолог
       can :manage, TestGroup
@@ -46,7 +47,7 @@ class Ability
       can :manage, UserAssociation
       can :manage, UserAnswer
       can :manage, TaskResult
-      can [:testee_tab], User
+      can [:testee_tab, :profile], User
     end
     if user.new_record?
       can [:token_auth, :check_token], User
