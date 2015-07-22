@@ -135,9 +135,9 @@ class Task < ActiveRecord::Base
         end
 
       when 'Сопоставление'
-        coefficient = self.point.to_f /  self.answers.count
+        coefficient = self.point.to_f / self.associations.count
         correct = answers.to_a.select do |a|
-          association = self.associations.where(id: answers_param[a.id.to_s].first.to_i).first
+          association = self.associations.where(id: answers_param[a.id.to_s].to_i).first
           association && a.serial_number == association.serial_number
         end
         points = correct.size.to_f * coefficient
