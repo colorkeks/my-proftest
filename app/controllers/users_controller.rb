@@ -95,7 +95,7 @@ class UsersController < ApplicationController
     @user.create_role(params[:user][:role_ids])
 
     @user.test_modes.build(name: 'Нейтральный', date_beg: Date.today)
-    @user.priority_role.build(name: @user.roles.first.name)
+    @user.priority_role_id = @user.roles.first.id
     if @user.save
       redirect_to profile_user_path(@user), notice: 'Пользователь успешно создан'
     else

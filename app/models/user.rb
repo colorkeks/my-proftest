@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   has_many :test_modes
   has_many :assigned_tests
   has_one :doctor, :foreign_key => :drcode, primary_key: 'drcode'
+  belongs_to :role
   validates :first_name, presence: true
   validates :second_name, presence: true
   validates :last_name, presence: true
@@ -29,6 +30,10 @@ class User < ActiveRecord::Base
 
   def role?(role)
     return !!self.roles.where(name: role).any?
+  end
+
+  def priority_role
+    return !! self.roles.find(self.priority_role_id)
   end
 
   def generate_token
