@@ -68,7 +68,7 @@ class UsersController < ApplicationController
                template: '/users/save_pdf.erb',
                formats: :html,
                encoding: 'utf8'
-        send_data(pdf, filename: @user.drcode ? @user.drcode + '_' + DateTime.now.strftime('%Y-%m-%d').to_s : @user.last_name + ' ' + DateTime.now.strftime('%Y-%m-%d').to_s , :type=> 'application/pdf')
+        send_data(pdf, filename: @user.drcode ? @user.drcode + '_' + DateTime.now.strftime('%Y-%m-%d').to_s : @user.last_name + ' ' + DateTime.now.strftime('%Y-%m-%d').to_s + '.pdf' , :type=> 'application/pdf')
       end
     end
   end
