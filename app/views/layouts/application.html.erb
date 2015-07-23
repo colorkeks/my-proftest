@@ -73,7 +73,7 @@
             <% if current_user %>
                 <div class="btn-group">
                   <div class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                    <%= image_tag((avatar = current_user.avatars.order('updated_at DESC').first) ? avatar.file_content.url(:mini) : 'missing_avatar.png') %>
+                    <%= image_tag((avatar = current_user.avatars.order('updated_at DESC').first) ? avatar.file_content.url(:mini) : 'missing_avatar.png', size:'25x25') %>
                     <%= "#{current_user.first_name} #{current_user.last_name}" %>
                     <span class="caret"></span>
                   </div>
