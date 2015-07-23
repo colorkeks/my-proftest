@@ -76,7 +76,7 @@ class Test < ActiveRecord::Base
   def average_tries_rate
     tries = self.tries.where(:status => 'Выполнен')
     if tries.count > 0
-      total_rate = tries.all.inject(0){|sum, t| sum + (t.rate)}
+      total_rate = tries.all.inject(0){|sum, t| sum + (t.rate||0)}
       average_rate = total_rate.to_f / tries.count
     else
       0
