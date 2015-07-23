@@ -73,6 +73,7 @@ gem 'chosen-rails'
 gem 'compass-rails', github: 'Compass/compass-rails', branch: 'master'
 #gem 'paper_trail', '~> 3.0'
 gem 'paper_trail', '~> 4.0.0.rc'
+gem 'whenever', :require => false
 #gem 'audited-activerecord'
 
 # Use ActiveModel has_secure_password
