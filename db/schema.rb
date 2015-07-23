@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150722073108) do
+ActiveRecord::Schema.define(version: 20150723111957) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,6 +45,16 @@ ActiveRecord::Schema.define(version: 20150722073108) do
     t.text     "text"
     t.integer  "serial_number"
     t.integer  "task_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "avatars", force: :cascade do |t|
+    t.string   "file_content_file_name"
+    t.string   "file_content_content_type"
+    t.integer  "file_content_file_size"
+    t.datetime "file_content_updated_at"
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -283,7 +293,7 @@ ActiveRecord::Schema.define(version: 20150722073108) do
 
   create_table "tests", force: :cascade do |t|
     t.boolean  "directory",     default: false
-    t.boolean  "attestation",   default: false
+    t.boolean  "attestation",   default: true
     t.string   "algorithm"
     t.integer  "percent_tasks"
     t.string   "title"
@@ -297,12 +307,15 @@ ActiveRecord::Schema.define(version: 20150722073108) do
     t.datetime "updated_at"
     t.integer  "test_group_id"
     t.datetime "deleted_at"
-    t.boolean  "training"
+
+    t.integer  "timer",         default: 60
+    t.boolean  "training",      default: true
     t.boolean  "can_change"
     t.boolean  "mix_tasks"
     t.boolean  "mix_answers"
     t.boolean  "limit_time"
     t.integer  "timer"
+    t.integer  "default_point", default: 1
   end
 
   add_index "tests", ["test_group_id"], name: "index_tests_on_test_group_id", using: :btree

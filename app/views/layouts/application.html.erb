@@ -73,7 +73,7 @@
             <% if current_user %>
                 <div class="btn-group">
                   <div class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                    <%= image_tag 'loggeduser.png' %>
+                    <%= image_tag((avatar = current_user.avatars.order('updated_at DESC').first) ? avatar.file_content.url(:mini) : 'missing_avatar.png', size:'25x25') %>
                     <%= "#{current_user.first_name} #{current_user.last_name}" %>
                     <span class="caret"></span>
                   </div>
@@ -87,7 +87,8 @@
                    <% elsif current_user && current_user.roles.find(current_user.priority_role_id).name == 'Тестируемый' %>
                         <li><%= link_to 'На главную', testee_tab_users_path %></li>
                     <% end %>
-                    <li><%= link_to 'Профиль', profile_user_path(current_user.id) %></li>
+                    <li><%= link_to 'Карточка испытуемого', profile_user_path(current_user.id) %></li>
+                    <li><%= link_to 'Персональные данные', personal_info_user_path(current_user.id) %></li>
                     <% if user_signed_in? %>
                         <li><%= link_to 'Выйти', destroy_user_session_path, :method => :delete %></li>
                     <% end %>
