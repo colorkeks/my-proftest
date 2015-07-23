@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150723061811) do
+ActiveRecord::Schema.define(version: 20150723111957) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -299,7 +299,7 @@ ActiveRecord::Schema.define(version: 20150723061811) do
 
   create_table "tests", force: :cascade do |t|
     t.boolean  "directory",     default: false
-    t.boolean  "attestation",   default: false
+    t.boolean  "attestation",   default: true
     t.string   "algorithm"
     t.integer  "percent_tasks"
     t.string   "title"
@@ -314,7 +314,7 @@ ActiveRecord::Schema.define(version: 20150723061811) do
     t.integer  "test_group_id"
     t.datetime "deleted_at"
     t.integer  "timer",         default: 60
-    t.boolean  "training"
+    t.boolean  "training",      default: true
     t.boolean  "can_change"
     t.boolean  "mix_tasks"
     t.boolean  "mix_answers"
