@@ -93,7 +93,15 @@
                                              title: 'Добавить вариант ответа' if @type != 'Сопоставление'
                       %>
                     <!--</span>-->
-                    <small style="display: inline-block" class="ml10 ">Баллы <%= f.number_field :point, class: 'form-control input-sm score_count', params[:action] == 'edit' ? nil : :value => 1 %></small></h4>
+                    <small style="display: inline-block" class="ml10 ">
+                      Баллы
+                      <%= f.number_field :point,
+                                         class: 'form-control input-sm score_count',
+                                         params[:action] == 'edit' ? nil : :value => @task.test.default_point,
+                                         disabled: !@task.test.can_change
+                      %>
+                    </small>
+                  </h4>
                 </div>
               </div>
               <div class="row">

@@ -53,6 +53,14 @@ class TasksController < ApplicationController
   def create
     @task = Task.new(task_params)
     @test_id = @task.test_id
+    test = @task.test
+    unless test.can_change
+      @task.point = test.default_point
+    end
+
+    if @task.point.presence && @task.point.to_i == 0
+      @task.point = test.default_point
+    end
 
     respond_to do |format|
       if @task.save
@@ -85,6 +93,15 @@ class TasksController < ApplicationController
   def update
     respond_to do |format|
       if @task.update(task_params)
+        test = @task.test
+        unless test.can_change
+          @task.point = test.default_point
+        end
+
+        if @task.point.presence && @task.point.to_i == 0
+          @task.point = test.default_point
+        end
+        @task.save
         format.html {
           if params[:preview_flag] == 'true'
             redirect_to preview_task_path(@task)

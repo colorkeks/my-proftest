@@ -191,6 +191,6 @@ class TestsController < ApplicationController
     def test_params
       params.require(:test).permit(:title, :directory, :timer, :algorithm, :attestation, :count_tries, :percent_tasks,
                                    :description, :user_id, :test_group_id, :training, :can_change, :mix_tasks,
-                                   :mix_answers, :limit_time )
+                                   :mix_answers, :limit_time, :default_point )
     end
 end
