@@ -126,4 +126,21 @@ class Try < ActiveRecord::Base
     return trs
   end
 
+  def self.finish_by_timer
+    tries = Try.where('status = ? AND created_at < ? ', 'Не выполнен', Time.now - CLOSE_TRIES_TIME.hours ).to_a
+    p "[#{Time.now}] finish #{tries.length} tries"
+    tries.each do |try|
+      try.task_results.where(:status => 'ответ не дан').each do |task_result|
+        begin
+          task_result.point = 0
+          task_result.save!
+        rescue ActiveRecord::RecordInvalid
+          p "invalid task_result: #{task_result}"
+        end
+      end
+      try.status = 'Выполнен'
+      try.save!
+    end
+  end
+
 end

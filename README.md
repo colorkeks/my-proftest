@@ -13,3 +13,8 @@ sudo apt-get install libqt4-dev
 
 В initializers добавить файл со строкой WickedPdf.config = { exe_path: '/usr/local/bin/wkhtmltopdf' }
 
+
+Запуск задачи по закрытию попыток
+
+whenever -w
+
