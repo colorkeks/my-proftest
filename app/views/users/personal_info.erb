@@ -31,7 +31,7 @@
         <div class="panel panel-default">
           <div class="panel-body panel-profile">
             <div class="col-lg-3" style="text-align: center">
-              <%= image_tag((image = @avatars.order('updated_at DESC').first.file_content) ? image.url(:medium) : 'missing_avatar.png', size: '230x230') %>
+              <%= image_tag((avatar = @avatars.order('updated_at DESC').first) ? avatar.file_content.url(:medium) : 'missing_avatar.png', size: '230x230') %>
               <div class="btn btn-white" style="margin: 10px;" data-toggle="modal" data-target="#change_avatar">Поменять аватар</div>
             </div>
             <div class="col-lg-9">
@@ -85,17 +85,12 @@
                   <button type="button" class="close" data-dismiss="alert">×</button>
                   <a href="#" class="alert-link">Невозможно загрузить файл с таким типом</a>
                 </div>
-                <!--<div style="border: 2px dashed black; margin-bottom: 15px; position: relative">-->
-                    <%#= form_for(Avatar.new,  html: { multipart: false, class: "dropzone"}) do |f|  %>
-                          <%#= f.hidden_field :user_id, value: @user.id%>
-                    <%# end %>
                     <%= form_for Avatar.new do |f| %>
                         <%= f.file_field(:file_content) %>
                         <%= f.hidden_field :user_id, value: @user.id %>
                     <hr/>
                     <%= f.submit 'Сохранить', class: 'btn btn-white'%>
                     <% end %>
-                <!--</div>-->
               </div>
             <div class="tab-pane" id="two">
               <%= render partial: 'avatars'  %>
