@@ -63,4 +63,24 @@ class Test < ActiveRecord::Base
     task_queue
   end
 
+  def average_tries_time
+    tries = self.tries.where(:status => 'Выполнен')
+    if tries.count > 0
+      total_time = tries.all.inject(0){|sum, t| sum + (t.updated_at-t.created_at).to_i}  #seconds
+      average_time = total_time / tries.count
+    else
+      0
+    end
+  end
+
+  def average_tries_rate
+    tries = self.tries.where(:status => 'Выполнен')
+    if tries.count > 0
+      total_rate = tries.all.inject(0){|sum, t| sum + (t.rate)}
+      average_rate = total_rate.to_f / tries.count
+    else
+      0
+    end
+  end
+
 end

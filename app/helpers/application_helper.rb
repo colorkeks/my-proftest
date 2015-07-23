@@ -35,4 +35,18 @@ module ApplicationHelper
     tag tag_name, options
   end
 
+  def human_time_from_seconds(total_seconds)
+    seconds = total_seconds % 60
+    minutes = (total_seconds / 60) % 60
+    hours = total_seconds / (60 * 60)
+
+    #format("%02d:%02d:%02d", hours, minutes, seconds) #=> "01:00:00"
+    "#{hours} часов, #{minutes} минут"
+  end
+
+  def duration_strftime(duration, format)
+    #duration in seconds
+    Time.at(duration).utc.strftime(format)
+  end
+
 end

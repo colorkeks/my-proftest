@@ -41,7 +41,8 @@ class TriesController < ApplicationController
 
       #таймер
       duration = (Time.now - @try.created_at.to_time).to_f
-      remaining_time = @try.test.timer - Time.utc(2000, 01, 01) - duration
+      #remaining_time = @try.test.timer - Time.utc(2000, 01, 01) - duration
+      remaining_time = @try.test.timer*60  - duration
       @timer = remaining_time
       @hours = (@timer/3600).to_i
       @minutes = (@timer/60).to_i - @hours*60
