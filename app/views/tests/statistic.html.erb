@@ -49,18 +49,18 @@
                       <th class=" ">Среднее время, потраченное на тест:</th>
                     </tr>
                     <tr>
-                      <td><%= @test.tasks.count %></td>
+                      <td><%= @test.tasks.existing.count %></td>
                       <td><%= @test.tries.count %></td>
                       <td>
                         <%=
-                          if (tries = @test.tries.where(:status => 'Выполнен')) && tries.count > 0
-                            tries.sum(:rate) / tries.count
+                          if @test.tries.where(:status => 'Выполнен').any?
+                            "#{@test.average_tries_rate.round(2)} %"
                           else
                             'не определена'
                           end
                         %>
                       </td>
-                      <td><%= (@hours && @minutes).nil? ? 'N/A' : (@hours.to_s + ' часов ' + @minutes.to_s + ' минут') %></td>
+                      <td><%= human_time_from_seconds(@test.average_tries_time) %></td>
                     </tr>
                   </table>
                 </div>
@@ -80,7 +80,7 @@
               </div>
               <table class="table table-bordered">
                 <tbody>
-                  <% @test.tasks.each do |task| %>
+                  <% @test.tasks.existing.order(:id).each do |task| %>
                     <% result_count = task.task_results.count %>
                     <tr>
                       <td class="task-type-icon toggle-answer">

@@ -53,7 +53,7 @@
                         <tr>
                           <td><%= assigned_test.test.title %></td>
                           <td><%= assigned_test.test.tasks.count %></td>
-                          <td><%= assigned_test.test.timer.strftime('%H:%M') if assigned_test.test.timer %></td>
+                          <td><%= human_time_from_seconds(assigned_test.test.timer*60) if assigned_test.test.timer %></td>
                           <% if assigned_test.test.tasks.count > 0 %>
                               <td><%= link_to 'Пройти тест', {:controller => :tries, :action => :create, :try => {:test_mode_id => current_user.test_modes.order('created_at DESC').first.id, :date => Time.now, :timer => format('%02d:%02d', 0, 0), :user_id => current_user.id, :test_id => assigned_test.test.id, :assigned_test_id => assigned_test.id}}, :method => 'POST', :class => 'btn btn-default' %></td>
                           <% else %>
@@ -84,7 +84,7 @@
                             <tr>
                               <td><%= test.title %></td>
                               <td><%= test.tasks.count %></td>
-                              <td><%= test.timer.strftime('%H:%M') if test.timer %></td>
+                              <td><%= duration_strftime(test.timer*60, '%H:%M') if test.timer %></td>
                               <% if test.tasks.count > 0 %>
                                   <td><%= link_to 'Пройти тест', {:controller => :tries, :action => :create, :try => {:test_mode_id => current_user.test_modes.order('created_at DESC').first, :date => Time.now, :timer => format('%02d:%02d', 0, 0), :user_id => current_user.id, :test_id => test.id}}, :method => 'POST', :class => 'btn btn-default' %></td>
                               <% else %>

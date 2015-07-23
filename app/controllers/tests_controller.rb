@@ -169,15 +169,6 @@ class TestsController < ApplicationController
 
   def statistic
     @test = Test.find(params[:id])
-    if @test.tries.any?
-      time = 0
-      @test.tries.where(:status => 'Выполнен').each do |try|
-        time = time + try.timer.min*60 + try.timer.hour*3600
-      end
-      @timer = time/@test.tries.count
-      @hours = (@timer/3600).to_i
-      @minutes = (@timer/60).to_i - @hours*60
-    end
   end
 
   private
@@ -191,6 +182,6 @@ class TestsController < ApplicationController
     def test_params
       params.require(:test).permit(:title, :directory, :timer, :algorithm, :attestation, :count_tries, :percent_tasks,
                                    :description, :user_id, :test_group_id, :training, :can_change, :mix_tasks,
-                                   :mix_answers, :limit_time )
+                                   :mix_answers, :limit_time, :default_point )
     end
 end
