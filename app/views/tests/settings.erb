@@ -244,7 +244,12 @@
                             <!--<option value="all">Все задания</option>-->
                             <!--<option value="eqv" selected>Выбор из эквивалентных групп</option>-->
                           <!--</select>-->
-                          <%= f.select(:algorithm, ['Все задания', 'Ограниченое количество заданий'],{},{:class => 'form-control algorithm'}) %>
+                          <%= f.select(:algorithm, [
+                                                         'Все задания',
+                                                         'Ограниченое количество заданий',
+                                                         'Настройка эквивалентных групп'
+
+                                                   ],{},{:class => 'form-control algorithm'}) %>
                         </div>
                       </div>
                       <div class="form-group">

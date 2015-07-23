@@ -63,7 +63,7 @@ function change_algirithm_link(){
     var algorithm_link = $('#algorithm_link');
     var current_value = select_algorithm.find(':selected').val();
 
-    if (current_value == 'Ограниченое количество заданий'){
+    if (current_value == 'Настройка эквивалентных групп'){
         algorithm_link.show()
     }else{
         algorithm_link.hide()
@@ -71,7 +71,7 @@ function change_algirithm_link(){
 
     select_algorithm.change(function(){
         var current_value = $(this).find(':selected').val();
-        if (current_value == 'Ограниченое количество заданий'){
+        if (current_value == 'Настройка эквивалентных групп'){
             algorithm_link.show()
         }else{
             algorithm_link.hide()
