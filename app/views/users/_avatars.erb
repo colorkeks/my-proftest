@@ -1,0 +1,21 @@
+<table class="table table-bordered table-condensed">
+  <% @avatars.order('updated_at DESC').each do |avatar| %>
+      <tr>
+        <div class="bg-preview" style="margin-left: 6px; margin-right: 6px">
+          <td><%= image_tag avatar.file_content.url(:thumb), alt: avatar.file_content.url(:medium) %></td>
+          <td>
+            <%= link_to 'Обновить',   avatar_path(avatar.id, avatar:{user_id: avatar.user_id}),
+                        method: 'put',
+                        class: 'btn btn-white',
+                        style:'display: block; margin: 5px;'%>
+             <%= link_to 'Удалить',   avatar_path(avatar.id),
+                         method: 'delete',
+                         data: { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Вы уверены?')) },
+                         class: 'btn btn-danger',
+                         style:'display: block; margin: 5px;'%>
+          </td>
+          <%#= не пашет немного link_to '', admin_background_image_path(image.id), method: :delete, data: { confirm: 'Are you sure?' } , class: 'btn-destroy glyphicon glyphicon-remove'%>
+        </div>
+      </tr>
+  <% end if @avatars %>
+</table>
