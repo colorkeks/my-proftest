@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :profile, :modes_history, :generate_token, :clean_token]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :profile, :modes_history, :generate_token, :clean_token, :personal_info]
   delegate :can?, :cannot?, :to => :ability
   load_and_authorize_resource
   # GET /users
@@ -38,6 +38,11 @@ class UsersController < ApplicationController
     @assigned_tests = AssignedTest.all.where(user_id: @user.id, test_mode_id: @current_mode)
     @user_tries = Try.all.where(user_id: @user.id, test_mode_id: @current_mode.id) if @current_mode
     render 'users/profile', layout: 'admin'
+  end
+
+  def personal_info
+    @avatars = Avatar.all.where(user_id: @user.id)
+    render 'users/personal_info', layout: 'admin'
   end
 
   def view_test_results

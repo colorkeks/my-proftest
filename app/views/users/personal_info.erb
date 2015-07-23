@@ -1,0 +1,109 @@
+<%= content_for :title, 'Персональные данные' + @user.last_name + ' ' + @user.first_name + ' ' + @user.second_name %>
+<div class="mainpanel">
+
+  <div class="pageheader">
+    <div class="row">
+      <div class="col-sm-3 col-lg-2">
+        <a class="btn btn-white back-btn pull-right" title="Назад" href="<%= user_path(@user) %>">
+          <i class="fa fa-arrow-left"></i>
+        </a>
+
+        <h3>Профиль</h3>
+      </div>
+      <div class="col-sm-9 col-lg-9">
+        <div class="breadcrumb-wrapper">
+          <ol class="breadcrumb">
+            <li class="active">
+              <div class="btn-group nomargin">
+                <span class="dropdown-toggle" data-toggle="dropdown">Персональные данные <%= @user.last_name %> <%= @user.first_name %> <%= @user.second_name %></span>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contentpanel ">
+    <div class="row">
+
+      <div class="col-sm-12 col-lg-12">
+        <div class="panel panel-default">
+          <div class="panel-body panel-profile">
+            <div class="col-lg-3" style="text-align: center">
+              <%= image_tag((image = @avatars.order('updated_at DESC').first.file_content) ? image.url(:medium) : 'missing_avatar.png', size: '230x230') %>
+              <div class="btn btn-white" style="margin: 10px;" data-toggle="modal" data-target="#change_avatar">Поменять аватар</div>
+            </div>
+            <div class="col-lg-9">
+              <table class="table table-bordered table-condensed" style="margin-left: 30px;">
+                <tr>
+                  <th style="width: 150px"><h4>Фамилия:</h4></th>
+                  <td><h4><%= @user.last_name %></h4></td>
+                </tr>
+                <tr>
+                  <th><h4>Имя:</h4></th>
+                  <td><h4><%= @user.first_name %></h4></td>
+                </tr>
+                <tr>
+                  <th><h4>Отчество:</h4></th>
+                  <td><h4><%= @user.second_name %></h4></td>
+                </tr>
+                <tr>
+                  <th><h4>Email:</h4></th>
+                  <td><h4><%= @user.email %></h4></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="change_avatar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="padding-top: 80px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <div><h4>Выберите аватар</h4></div>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <!-- tabs -->
+          <div class="tabbable">
+            <ul class="nav nav-tabs" id="mytabs">
+              <li class="active"><a href="#one" data-toggle="tab">Загрузка</a></li>
+              <li><a href="#two" data-toggle="tab">Загруженные</a></li>
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane active" id="one">
+                <div class="alert alert-dismissable alert-danger" style="display: none">
+                  <button type="button" class="close" data-dismiss="alert">×</button>
+                  <a href="#" class="alert-link">Невозможно загрузить файл с таким типом</a>
+                </div>
+                <!--<div style="border: 2px dashed black; margin-bottom: 15px; position: relative">-->
+                    <%#= form_for(Avatar.new,  html: { multipart: false, class: "dropzone"}) do |f|  %>
+                          <%#= f.hidden_field :user_id, value: @user.id%>
+                    <%# end %>
+                    <%= form_for Avatar.new do |f| %>
+                        <%= f.file_field(:file_content) %>
+                        <%= f.hidden_field :user_id, value: @user.id %>
+                    <hr/>
+                    <%= f.submit 'Сохранить', class: 'btn btn-white'%>
+                    <% end %>
+                <!--</div>-->
+              </div>
+            <div class="tab-pane" id="two">
+              <%= render partial: 'avatars'  %>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

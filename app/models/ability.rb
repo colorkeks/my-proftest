@@ -3,7 +3,9 @@ class Ability
 
   def initialize(user)
     user ||= User.new # guest user (not logged in)
-    can [:show, :edit, :update], User do |current_user|
+    can [:profile], User
+    can :manage, Avatar
+    can [:show, :edit, :update, :personal_info], User do |current_user|
       user.id == current_user.id
     end
     if user.role? :Супер_Администратор
@@ -11,7 +13,7 @@ class Ability
     end
     if user.role? :Администратор
       can :manage, Doctor
-      can [:profile, :edit, :update, :test_persons], User
+      can [:edit, :update, :test_persons], User
     end
     if user.role? :Регистратор
       can :manage, Doctor
@@ -22,7 +24,7 @@ class Ability
       can :manage, OfficfunDbf
       can :manage, SpeclistDbf
       can :manage, PostDbf
-      can [:profile, :view_test_results, :profile, :modes_history,
+      can [:view_test_results, :profile, :modes_history,
            :generate_token, :clean_token, :save_pdf, :custom_create,
            :test_persons, :print_test_results], User
     end
@@ -40,14 +42,13 @@ class Ability
       can :manage, UserAssociation
       can :manage, UserAnswer
       can :manage, TaskResult
-      can [:profile], User
     end
     if user.role? :Тестируемый
       can :manage, Try
       can :manage, UserAssociation
       can :manage, UserAnswer
       can :manage, TaskResult
-      can [:testee_tab, :profile], User
+      can [:testee_tab], User
     end
     if user.new_record?
       can [:token_auth, :check_token], User

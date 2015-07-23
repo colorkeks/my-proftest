@@ -67,6 +67,7 @@ Rails.application.routes.draw do
       get 'create_try'
       get 'create_test'
       get 'profile'
+      get 'personal_info'
       get 'modes_history'
       get 'add_attestation_tests'
       get 'print_test_results'
@@ -85,6 +86,7 @@ Rails.application.routes.draw do
       get 'test_persons'
       get 'testee_tab'
       post 'check_token'
+      post 'avatars'
     end
   end
 
@@ -120,6 +122,8 @@ Rails.application.routes.draw do
   resources :assigned_tests
 
   resources :statistics
+
+  resources :avatars
 
 
 
