@@ -62,10 +62,10 @@ class TestsController < ApplicationController
 
   # GET /tests/1/edit
   def edit
-    @test.timer = 60 unless @test.timer
   end
 
   def settings
+    @test.timer = 60 unless @test.timer
   end
 
   # POST /tests
