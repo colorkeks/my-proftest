@@ -9,6 +9,8 @@ class TaskResult < ActiveRecord::Base
   validates :task_version_id, presence: true
   has_many :try_task_contents, dependent: :destroy
   accepts_nested_attributes_for :try_task_contents
+  STATUSES = ['правильно', 'не правильно', 'частично правильно', 'ответ не дан']
+  validates :status, inclusion: STATUSES
 
   def task_was
     @task_was ||= self.task_version.item_version

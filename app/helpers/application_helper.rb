@@ -41,7 +41,7 @@ module ApplicationHelper
     hours = total_seconds / (60 * 60)
 
     #format("%02d:%02d:%02d", hours, minutes, seconds) #=> "01:00:00"
-    "#{hours} часов, #{minutes} минут"
+    "#{hours} часов #{minutes} минут"
   end
 
   def duration_strftime(duration, format)

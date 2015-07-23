@@ -83,4 +83,15 @@ class Test < ActiveRecord::Base
     end
   end
 
+  def average_tries_point
+    tries = self.tries.where(:status => 'Выполнен')
+    if tries.count > 0
+      total_points = tries.all.inject(0){|sum, t| sum + (t.task_results.sum(:point))}
+      average_point = total_points.to_f / tries.count
+    else
+      0
+    end
+  end
+
+
 end

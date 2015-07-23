@@ -43,18 +43,18 @@
                 <div class="col-lg-12">
                   <table class="table table-bordered">
                     <tr>
-                      <th class=" ">Кол-во заданий в тесте:</th>
-                      <th class=" ">Кол-во попыток:</th>
-                      <th class="">Средняя оценка за тест:</th>
-                      <th class=" ">Среднее время, потраченное на тест:</th>
+                      <th class="">Кол-во заданий в тесте</th>
+                      <th class="">Кол-во попыток</th>
+                      <th class="">Средняя оценка за тест</th>
+                      <th class="">Среднее время, потраченное на тест</th>
                     </tr>
                     <tr>
                       <td><%= @test.tasks.existing.count %></td>
-                      <td><%= @test.tries.count %></td>
+                      <td><%= @test.tries.where(:status => 'Выполнен').count %></td>
                       <td>
                         <%=
                           if @test.tries.where(:status => 'Выполнен').any?
-                            "#{@test.average_tries_rate.round(2)} %"
+                            "#{@test.average_tries_point.round(2)} || #{@test.average_tries_rate.round(2)} %"
                           else
                             'не определена'
                           end
@@ -81,18 +81,24 @@
               <table class="table table-bordered">
                 <tbody>
                   <% @test.tasks.existing.order(:id).each do |task| %>
-                    <% result_count = task.task_results.count %>
+                    <% result_count = task.statistic['count'] %>
                     <tr>
                       <td class="task-type-icon toggle-answer">
                         <%= task_type_icon_class(task, 'div') %>
                       </td>
+                      <td style="width: 30px" class="tooltips">
+                        <%=task.id %>
+                      </td>
                       <td class="toggle-answer">
                         <%= strip_tags(task.text.squish) %>
+                      </td>
+                      <td style="width: 120px" class="tooltips">
+                        <%=task.statistic['count'] %> || <%=task.statistic['percent'].round(0) %>%
                       </td>
                       <td title="Верно" style="width: 120px" class="tooltips">
                         <% if result_count > 0 %>
                             <div class="progress statistic">
-                              <% percent = task.task_results.where(status:'правильно').count * 100 / result_count %>
+                              <% percent = task.statistic['statuses']['правильно']['percent'].to_i %>
                               <div class="progress-bar progress-bar-success" style="min-width: 2em; width: <%= percent %>%;"><%= percent %>%</div>
                             </div>
                         <% end %>
@@ -105,15 +111,23 @@
                       <td title="Не верно" style="width: 120px" class="tooltips">
                         <% if result_count > 0 %>
                         <div class="progress statistic">
-                          <% percent = task.task_results.where(status: 'не правильно').count * 100 / result_count %>
+                          <% percent = task.statistic['statuses']['не правильно']['percent'].to_i %>
                           <div class="progress-bar progress-bar-danger" style="min-width: 2em; width: <%= percent %>%;"><%= percent %>%</div>
                         </div>
+                        <% end %>
+                      </td>
+                      <td title="Частично правильно" style="width: 120px" class="tooltips">
+                        <% if result_count > 0 %>
+                            <div class="progress statistic">
+                              <% percent = task.statistic['statuses']['частично правильно']['percent'].to_i %>
+                              <div class="progress-bar progress-bar-warning" style="min-width: 2em; width: <%= percent %>%;"><%= percent %>%</div>
+                            </div>
                         <% end %>
                       </td>
                       <td title="Ответ не дан" style="width: 120px" class="tooltips">
                         <% if result_count > 0 %>
                             <div class="progress statistic">
-                              <% percent = task.task_results.where(status: 'ответ не дан').count * 100 / result_count %>
+                              <% percent = task.statistic['statuses']['ответ не дан']['percent'].to_i %>
                               <div class="progress-bar progress-bar-info" style="min-width: 2em; width: <%= percent %>%;"><%= percent %>%</div>
                             </div>
                         <% end %>
@@ -121,7 +135,7 @@
                     </tr>
                     <tr style="display: none" class="answers">
                       <td style="width: 30px"></td>
-                      <td colspan="4"  style="background-color: #ffffff">
+                      <td colspan="7"  style="background-color: #ffffff">
                         <% if task.task_type == 'Сопоставление' %>
                             <div class="row">
                               <div class="col-lg-6">
@@ -149,6 +163,29 @@
                                 </table>
                               </div>
                             </div>
+                        <% elsif ['Множественный выбор', 'Единичный выбор'].include?(task.task_type) %>
+                            <table class="table" style="margin-bottom: 5px">
+                              <tbody>
+                              <%# all_answers = task.user_answers.count %>
+                              <% task.answers.each do |answer| %>
+                                  <tr>
+                                    <% right_answer = (answer.correct? ? 'right_answer' : '') %>
+                                    <td class="slim <%= right_answer %>"></td>
+                                    <td><%= answer.text %></td>
+                                    <td><%= task.statistic['answers'][answer.id]['count'] %> || <%= task.statistic['answers'][answer.id]['percent'].round(2) %>%</td>
+                                    <!--<td style="width: 180px">-->
+                                    <%# if all_answers > 0 %>
+                                    <!--<div class="progress statistic">-->
+                                    <%# percent = (answer.user_answers.count * 100) / all_answers  %>
+                                    <!--<div class="progress-bar" style="width: <%#= percent %>%;"><%#= percent %></div>-->
+                                    <!--</div>-->
+                                    <%# end %>
+                                    <!--</td>-->
+                                  </tr>
+                              <% end %>
+                              </tbody>
+                            </table>
+
                         <% else %>
                             <table class="table" style="margin-bottom: 5px">
                               <tbody>
