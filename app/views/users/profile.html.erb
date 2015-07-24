@@ -303,10 +303,8 @@
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span></button>
-            <h3 class="modal-title title" id="myModalLabel"> Поиск Аттестационных тестов:</h3>
-
+            <h3 class="modal-title title" id="myModalLabel"> Поиск Аттестационных тестов</h3>
             <div class="modal-body">
-              <hr/>
               <%= form_tag search_tests_user_path, remote: true, id: 'search_form', class: 'form-inline' do %>
                   <div class="form-group">
                     <%= text_field_tag :q, params[:q], id: 'qwery_string', :class => 'form-control', autocomplete: 'off', placeholder: 'Найти' %>
@@ -318,12 +316,32 @@
                   </div>
               <% end %>
               <br/>
-
               <div class="table-responsive" id="search-result">
                 <div class="text-center text-info alert alert-info" style="">
                   <strong>Для поиска тестов введите название или описание теста</strong>
                 </div>
               </div>
+              <hr/>
+              <%= form_tag create_batch_assigned_tests_path do %>
+                  <%= hidden_field_tag 'assigned_test[user_id]', @user.id %>
+                  <%= hidden_field_tag 'assigned_test[test_mode_id]',@user.test_modes.order('created_at DESC').first.id %>
+                  <select name="assigned_test[test_ids][]" id="" multiple size="8" style="width: 100%; padding: 10px; border: 1px solid #e2e2e2">
+                    <%= render_tree(TestGroup.root) do |item| %>
+                        <% if item.tests.attestation.existing.any? %>
+                            <optgroup label="<%= item.name %>">
+                              <% item.tests.attestation.existing.each do |test| %>
+                                  <option value="<%= test.id %>">
+                                    <%= test.title %>
+                                  </option>
+                              <% end %>
+                            </optgroup>
+                        <% end %>
+                    <% end %>
+                  </select>
+                  <hr/>
+                  <%= submit_tag 'Добавить', class: 'btn btn-primary' %>
+              <% end %>
+
             </div>
           </div>
         </div>

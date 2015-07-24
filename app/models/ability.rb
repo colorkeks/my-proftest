@@ -26,7 +26,7 @@ class Ability
       can :manage, PostDbf
       can [:view_test_results, :profile, :modes_history,
            :generate_token, :clean_token, :save_pdf, :custom_create,
-           :test_persons, :print_test_results], User
+           :test_persons, :print_test_results, :search_tests], User
     end
     if user.role? :Методолог
       can :manage, TestGroup
