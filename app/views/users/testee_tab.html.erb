@@ -80,7 +80,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                        <% @tests.where(attestation: false).each do |test| %>
+                        <% @tests.training.each do |test| %>
                             <tr>
                               <td><%= test.title %></td>
                               <td><%= test.tasks.count %></td>
