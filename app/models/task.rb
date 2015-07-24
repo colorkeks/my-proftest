@@ -21,6 +21,7 @@ class Task < ActiveRecord::Base
   has_paper_trail
   before_save :nullify_task_contents
 
+
   def eqvgroup_and_section_valid
     if !(self.section == self.eqvgroup.section)
       errors.add(:eqvgroup, "Невозможно назначить данную группу")
@@ -176,4 +177,75 @@ class Task < ActiveRecord::Base
     end
   end
 
+  def statistic
+    @statistic ||= calculate_statistic
+  end
+
+  def calculate_statistic
+    result = {}
+    task_results_completed = self.task_results.includes(:try).where(tries: {status: 'Выполнен'})
+    tries_count = self.test.tries.where(status: 'Выполнен').count
+    result['count'] = task_results_completed.count
+    result['percent'] = tries_count != 0 ? (100.0 * result['count'] / tries_count) : 0
+
+    result['statuses'] = {}
+    TaskResult::STATUSES.each do |status|
+      hash = {}
+      if result['count'] > 0
+        hash['percent'] = 100.0 * task_results_completed.where(status: status).count / result['count']
+      else
+        hash['percent'] = 0
+      end
+
+      result['statuses'][status] = hash
+    end
+
+    answers_array = {}
+    if self.task_type == 'Единичный выбор' || self.task_type == 'Множественный выбор'
+      self.answers.each do |answer|
+        answers_array[answer.id] = {}
+        answers_array[answer.id]['count'] = 0
+      end
+      ids = self.answers.map(&:id)
+      total_answered = 0
+      task_results_completed.each do |task_result|
+        task_result.user_answers.where(user_reply: 't').each do |user_answer|
+          answer_id = user_answer.answer_was.id
+          if ids.include?(answer_id)
+            answers_array[answer_id]['count'] += 1
+            total_answered += 1
+          end
+        end
+      end
+      #Вычисляем процент
+      self.answers.each do |answer|
+        if total_answered > 0
+          answers_array[answer.id]['percent'] = 100.0 * answers_array[answer.id]['count'] / total_answered
+        else
+          answers_array[answer.id]['percent'] = 0
+        end
+      end
+    elsif self.task_type == 'Открытый вопрос'
+=begin
+      self.answers.each do |answer|
+        answers_array[answer.id] = {}
+        answers_array[answer.id]['count'] = 0
+      end
+      ids = self.answers.map(&:id)
+      total_answered = 0
+      task_results_completed.each do |task_result|
+        task_result.user_answers.where(correct: true).each do |user_answer|
+          answer_id = user_answer.answer_was.id
+          if ids.include?(answer_id)
+            answers_array[answer_id]['count'] += 1
+            total_answered += 1
+          end
+        end
+      end
+=end
+    end
+
+    result['answers'] = answers_array
+    return result
+  end
 end
