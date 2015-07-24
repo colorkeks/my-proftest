@@ -307,14 +307,12 @@ ActiveRecord::Schema.define(version: 20150723111957) do
     t.datetime "updated_at"
     t.integer  "test_group_id"
     t.datetime "deleted_at"
-
-    t.integer  "timer",         default: 60
     t.boolean  "training",      default: true
     t.boolean  "can_change"
     t.boolean  "mix_tasks"
     t.boolean  "mix_answers"
     t.boolean  "limit_time"
-    t.integer  "timer"
+    t.integer  "timer",         default: 60
     t.integer  "default_point", default: 1
   end
 

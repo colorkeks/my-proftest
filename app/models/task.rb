@@ -191,7 +191,12 @@ class Task < ActiveRecord::Base
     result['statuses'] = {}
     TaskResult::STATUSES.each do |status|
       hash = {}
-      hash['percent'] = 100.0 * task_results_completed.where(status: status).count / result['count']
+      if result['count'] > 0
+        hash['percent'] = 100.0 * task_results_completed.where(status: status).count / result['count']
+      else
+        hash['percent'] = 0
+      end
+
       result['statuses'][status] = hash
     end
 
@@ -214,9 +219,32 @@ class Task < ActiveRecord::Base
       end
       #Вычисляем процент
       self.answers.each do |answer|
-        answers_array[answer.id]['percent'] = 100.0 * answers_array[answer.id]['count'] / total_answered
+        if total_answered > 0
+          answers_array[answer.id]['percent'] = 100.0 * answers_array[answer.id]['count'] / total_answered
+        else
+          answers_array[answer.id]['percent'] = 0
+        end
       end
+    elsif self.task_type == 'Открытый вопрос'
+=begin
+      self.answers.each do |answer|
+        answers_array[answer.id] = {}
+        answers_array[answer.id]['count'] = 0
+      end
+      ids = self.answers.map(&:id)
+      total_answered = 0
+      task_results_completed.each do |task_result|
+        task_result.user_answers.where(correct: true).each do |user_answer|
+          answer_id = user_answer.answer_was.id
+          if ids.include?(answer_id)
+            answers_array[answer_id]['count'] += 1
+            total_answered += 1
+          end
+        end
+      end
+=end
     end
+
     result['answers'] = answers_array
     return result
   end
