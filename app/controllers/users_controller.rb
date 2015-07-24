@@ -10,7 +10,7 @@ class UsersController < ApplicationController
   end
 
   def test_persons
-    @test_persons = Role.find_by(name: 'Тестируемый').users.order(:id).paginate(:page => params[:page], :per_page => params[:per_page] || 30)
+    @test_persons = User.includes(:roles).where(roles:{name: 'Тестируемый'}).order(:id).paginate(:page => params[:page], :per_page => params[:per_page] || 30)
     render 'test_persons', layout: 'admin'
   end
 
