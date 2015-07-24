@@ -10,7 +10,13 @@
           <h3 class="text-center test-title"><%= @test.title.html_safe %></h3>
 
           <div style="color: #5f5f5f; height: 22px">
-            <i class="pull-left"><span class="glyphicon glyphicon-time"></span> <div style="display: inline" class="hours_timer"><%= @hours %></div> часов <div style="display: inline" class="minutes_timer"><%= @minutes %></div> минут <div style="display: inline" class="seconds_timer"><%= ((@timer%60)).to_i%></div> секунд </i>
+            <%= if @test.limit_time %>
+                <i class="pull-left">
+                  <span class="glyphicon glyphicon-time"></span>
+                  <div style="display: inline" class="hours_timer"><%= @hours %></div> часов <div style="display: inline" class="minutes_timer"><%= @minutes %></div> минут <div style="display: inline" class="seconds_timer">
+                  <%= ((@timer%60)).to_i%></div> секунд
+                </i>
+            <% end %>
             <i class="pull-right">Задание <%= @current_task + 1 %> из <%= @tasks_count %></i>
           </div>
 
@@ -228,6 +234,6 @@
     upper_downer();
     disable_select();
     tasks_list();
-    timer();
+    <%= 'timer();' if @test.limit_time %>
 </script>
 
