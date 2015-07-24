@@ -119,7 +119,7 @@
                     <% content = try_task_content.task_content_version.item_was %>
                     <% content.instance_variable_set(:@new_record, false) %>
                     <div class="col-lg-4">
-                      <% if content.file_content_content_type =~ %r(audio) %>
+                      <% if %w(audio application/octet-stream).include? content.file_content_content_type %>
                           <div style=""><%= audio_tag(content.file_content.url(:original), controls: true, style: 'margin-top:0;') %></div>
                       <% elsif content.file_content_content_type =~ %r(image) %>
                           <div style=""><%= image_tag content.file_content.url(:small), alt: content.file_content.url(:medium), style: 'margin-top:0;' %></div>
