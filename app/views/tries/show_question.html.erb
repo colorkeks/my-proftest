@@ -116,7 +116,7 @@
               </div>
               <div class="row">
                 <% @task_result.try_task_contents.each do |try_task_content| %>
-                    <% content = try_task_content.task_content_version.item_was %>
+                    <% content = try_task_content.task_content_was %>
                     <% content.instance_variable_set(:@new_record, false) %>
                     <div class="col-lg-4">
                       <% if %w(audio application/octet-stream).include? content.file_content_content_type %>
