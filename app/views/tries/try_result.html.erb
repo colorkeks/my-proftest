@@ -3,7 +3,7 @@
 <div class="container">
   <div class="row">
     <div class="col-lg-12 answer-content">
-      <h3>Поздравляем ! вы решили <%= @percent.round(2) %>% теста (<%= @current.to_f.round(2) %> из <%= @max %>
+      <h3>Вы решили <%= @percent.round(2) %>% теста (<%= @current.to_f.round(2) %> из <%= @max %>
         возможных баллов)</h3>
       <hr>
     </div>
@@ -28,7 +28,13 @@
                             <span class="label label-warning">Частично правильно</span>
                         <% end %>
                         <div style="float: right">
-                          <%= task_result.point.round(2) %> <%= Russian.p(task_result.point, 'балл', 'балла', 'баллов', 'балла') %>
+                          <% points = task_result.point %>
+                          <% if (points % 1) == 0 %>
+                              <%= points = points.to_i %>
+                          <% else %>
+                              <%= points = task_result.point.round(2) %>
+                          <% end %>
+                          <%= Russian.p(points, 'балл', 'балла', 'баллов', 'балла') %>
                         </div>
                       </div>
                     </div>
