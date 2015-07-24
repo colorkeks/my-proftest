@@ -10,11 +10,11 @@
           <h3 class="text-center test-title"><%= @test.title.html_safe %></h3>
 
           <div style="color: #5f5f5f; height: 22px">
-            <%= if @test.limit_time %>
+            <% if @test.limit_time %>
                 <i class="pull-left">
                   <span class="glyphicon glyphicon-time"></span>
                   <div style="display: inline" class="hours_timer"><%= @hours %></div> часов <div style="display: inline" class="minutes_timer"><%= @minutes %></div> минут <div style="display: inline" class="seconds_timer">
-                  <%= ((@timer%60)).to_i%></div> секунд
+                  <%= ((@timer%60)).to_i %></div> секунд
                 </i>
             <% end %>
             <i class="pull-right">Задание <%= @current_task + 1 %> из <%= @tasks_count %></i>
