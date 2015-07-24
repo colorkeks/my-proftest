@@ -87,7 +87,7 @@
                    <% elsif current_user && current_user.roles.find(current_user.priority_role_id).name == 'Тестируемый' %>
                         <li><%= link_to 'На главную', testee_tab_users_path %></li>
                     <% end %>
-                    <li><%= link_to 'Карточка испытуемого', profile_user_path(current_user.id) %></li>
+                    <!--<li><%#= link_to 'Карточка испытуемого', profile_user_path(current_user.id) %></li>-->
                     <li><%= link_to 'Персональные данные', personal_info_user_path(current_user.id) %></li>
                     <% if user_signed_in? %>
                         <li><%= link_to 'Выйти', destroy_user_session_path, :method => :delete %></li>

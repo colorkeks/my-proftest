@@ -4,9 +4,9 @@
       <thead>
       <tr>
         <th>Название:</th>
-        <th>Описание:</th>
-        <th>Тип:</th>
-        <th>Алгоритм:</th>
+        <!--<th>Описание:</th>-->
+        <!--<th>Тип:</th>-->
+        <!--<th>Алгоритм:</th>-->
         <th>Задания:</th>
         <th>Добавить:</th>
       </tr>
@@ -15,12 +15,12 @@
       <% @tests.each do |test| %>
           <tr>
             <td><%= test.title %></td>
-            <td><%= test.description %></td>
-            <td><%= test.attestation == true ? 'Аттестационный' : 'Тренировочный' %></td>
-            <td><%= test.algorithm %></td>
+            <!--<td><%#= test.description %></td>-->
+            <!--<td><%#= test.attestation == true ? 'Аттестационный' : 'Тренировочный' %></td>-->
+            <!--<td><%#= test.algorithm %></td>-->
             <td><%= test.tasks.count %></td>
             <td>
-                <%= link_to 'Добавить', {:controller => 'assigned_tests', :action => 'create',:assigned_test => {user_id: @user.id, test_id: test.id, test_mode_id: @user.test_modes.order('created_at DESC').first.id}}, :method => 'POST', :class => 'btn btn-default btn-xs' %>
+                <%= link_to 'Добавить', {:controller => 'assigned_tests', :action => 'create',:assigned_test => {user_id: @user.id, test_id: test.id, test_mode_id: @user.test_modes.order('created_at DESC').first.id}}, :method => 'POST', :class => 'btn btn-white btn-xs' %>
             </td>
           </tr>
           </tr>

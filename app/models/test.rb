@@ -13,18 +13,21 @@ class Test < ActiveRecord::Base
   include SoftDeletion
   has_paper_trail
 
+  scope :attestation, -> {where(attestation: true)}
+  scope :training, -> {where(training: true)}
+
   def self.search_test(q,mode)
     if mode == 'Аттестация'
       if q.empty?
-        Test.all
+        Test.attestation.existing.all
       else
-        Test.where("description LIKE ? OR title LIKE ?", "#{q}%", "%#{q}%")
+        Test.attestation.existing.where("description LIKE ? OR title LIKE ?", "#{q}%", "%#{q}%")
       end
     elsif mode == 'Тренировка'
       if q.empty?
-        Test.all.where(attestation: false)
+        Test.training.existing.all
       else
-        Test.where("description LIKE ? OR title LIKE ? AND attestation = false", "#{q}%", "%#{q}%")
+        Test.training.existing.where("description LIKE ? OR title LIKE ? AND attestation = false", "#{q}%", "%#{q}%")
       end
     end
   end
