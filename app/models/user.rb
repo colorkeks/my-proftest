@@ -50,6 +50,12 @@ class User < ActiveRecord::Base
     self.save
   end
 
+  def capitalize_name
+    self.first_name = self.first_name.mb_chars.capitalize
+    self.second_name = self.second_name.mb_chars.capitalize
+    self.last_name = self.last_name.mb_chars.capitalize
+  end
+
   def self.check_token(token)
     Role.find_by(name: 'Тестируемый').users.where('token = ? AND token_expire_at >= ? ', token, Time.now).first
   end
