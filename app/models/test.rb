@@ -46,7 +46,7 @@ class Test < ActiveRecord::Base
 
   def get_tasks_all_random
     task_queue = []
-    self.tasks.existing.order('RANDOM()').each do |task|
+    self.tasks.existing.order(self.mix_tasks ? 'RANDOM()' : 'id ASC').each do |task|
       if task.chain.present?
         if task.chain_position == 1
           task_queue += self.tasks.existing.where(chain: task.chain).order(:chain_position).all

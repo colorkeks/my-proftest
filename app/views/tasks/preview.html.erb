@@ -119,7 +119,7 @@
                 </td>
               </tr>
           <% else %>
-              <% @task.answers.order('id ASC').shuffle.each_with_index do |answer, index| %>
+              <% @task.answers.order(@task.test.mix_answers ? 'RANDOM()' : 'id ASC').each_with_index do |answer, index| %>
                   <tr class="answer">
                     <% if @task.task_type == 'Множественный выбор' %>
                         <td style="display: none;"></td>
