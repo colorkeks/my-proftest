@@ -101,6 +101,7 @@ class UsersController < ApplicationController
 
   def custom_create
     @user = User.create(user_params)
+    @user.capitalize_name
     @user.create_role(params[:user][:role_ids])
 
     @user.test_modes.build(name: 'Нейтральный', date_beg: Date.today)
