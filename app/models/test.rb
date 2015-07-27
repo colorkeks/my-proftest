@@ -70,8 +70,8 @@ class Test < ActiveRecord::Base
     elsif self.algorithm == 'Настройка эквивалентных групп'
       self.eqvgroups.order(:number).each do |eg|
         #
-        task_queue += eg.tasks.existing.where(chain_id: nil).order('RANDOM()').take(eg.task_count)
-        chained_first_tasks = eg.tasks.existing.where(chain_position: 1).order('RANDOM()').take(eg.chain_count)
+        task_queue += eg.tasks.existing.where(chain_id: nil).order(self.mix_tasks ? 'RANDOM()' : 'id ASC').take(eg.task_count)
+        chained_first_tasks = eg.tasks.existing.where(chain_position: 1).order(self.mix_tasks ? 'RANDOM()' : 'id ASC').take(eg.chain_count)
         chained_first_tasks.each do |cft|
           task_queue += eg.tasks.existing.where(chain: cft.chain).order(:chain_position).all
         end
