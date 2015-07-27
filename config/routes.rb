@@ -119,7 +119,9 @@ Rails.application.routes.draw do
 
   resources :test_modes
 
-  resources :assigned_tests
+  resources :assigned_tests do
+    post 'create_batch', on: :collection
+  end
 
   resources :statistics
 

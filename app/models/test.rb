@@ -13,18 +13,21 @@ class Test < ActiveRecord::Base
   include SoftDeletion
   has_paper_trail
 
+  scope :attestation, -> {where(attestation: true)}
+  scope :training, -> {where(training: true)}
+
   def self.search_test(q,mode)
     if mode == 'Аттестация'
       if q.empty?
-        Test.all
+        Test.attestation.existing.all
       else
-        Test.where("description LIKE ? OR title LIKE ?", "#{q}%", "%#{q}%")
+        Test.attestation.existing.where("description LIKE ? OR title LIKE ?", "#{q}%", "%#{q}%")
       end
     elsif mode == 'Тренировка'
       if q.empty?
-        Test.all.where(attestation: false)
+        Test.training.existing.all
       else
-        Test.where("description LIKE ? OR title LIKE ? AND attestation = false", "#{q}%", "%#{q}%")
+        Test.training.existing.where("description LIKE ? OR title LIKE ? AND attestation = false", "#{q}%", "%#{q}%")
       end
     end
   end
@@ -76,11 +79,22 @@ class Test < ActiveRecord::Base
   def average_tries_rate
     tries = self.tries.where(:status => 'Выполнен')
     if tries.count > 0
-      total_rate = tries.all.inject(0){|sum, t| sum + (t.rate)}
+      total_rate = tries.all.inject(0){|sum, t| sum + (t.rate||0)}
       average_rate = total_rate.to_f / tries.count
     else
       0
     end
   end
+
+  def average_tries_point
+    tries = self.tries.where(:status => 'Выполнен')
+    if tries.count > 0
+      total_points = tries.all.inject(0){|sum, t| sum + (t.task_results.sum(:point))}
+      average_point = total_points.to_f / tries.count
+    else
+      0
+    end
+  end
+
 
 end
