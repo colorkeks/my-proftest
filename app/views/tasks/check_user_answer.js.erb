@@ -1,5 +1,5 @@
 var correct = '<%= @result[:correct] %>';
-var points = <%= @result[:point] %>;
+var points = <%= @result[:point].round(2) %>;
 var modal  = $('#result-modal');
 modal.find('.text-success, .text-danger,.text-warning').hide();
 if (correct == 'correct') modal.find('.text-success').show();
