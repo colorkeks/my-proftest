@@ -49,7 +49,7 @@ class TriesController < ApplicationController
       @seconds = (@timer%60).to_i
 
       # если таймер дошел до ограниченного времени
-      if remaining_time <= 0 #@hours >= @try.test.timer.strftime('%H').to_i && @minutes >= @try.test.timer.strftime('%M').to_i
+      if remaining_time <= 0 && @test.limit_time #@hours >= @try.test.timer.strftime('%H').to_i && @minutes >= @try.test.timer.strftime('%M').to_i
         @try.task_results.where(:status => 'ответ не дан').each do |task_result|
           task_result.status = 'не правильно'
           task_result.point = 0
