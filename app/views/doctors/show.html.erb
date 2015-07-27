@@ -1,0 +1,199 @@
+<%= content_for :title, "Карточка медперсонала #{@doctor.drcode}" %>
+<div class="mainpanel">
+
+  <div class="pageheader">
+    <div class="row">
+      <div class="col-sm-3 col-lg-2">
+        <a class="btn btn-white back-btn pull-right" title="Назад" href="/doctors">
+          <i class="fa fa-arrow-left"></i>
+        </a>
+
+        <h2>Персонал</h2>
+      </div>
+      <div class="col-sm-9 col-lg-10">
+        <div class="breadcrumb-wrapper">
+          <ol class="breadcrumb">
+            <li class="active">
+              <div class="btn-group nomargin">
+                <span class="dropdown-toggle" data-toggle="dropdown">Карточка медперсонала <%= @doctor.drcode %></span>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contentpanel ">
+    <div class="row">
+      <div class="col-sm-3 col-lg-2">
+        <% if !@users.exists?(['drcode LIKE ?', "%#{@doctor.drcode}%"]) %>
+            <div class="panel panel-default">
+              <div class="panel-body panel-profile text-center">
+                <p>Отсутствует карточка испытуемого</p>
+                <a href="#" class="btn btn-white btn-sm tooltips" data-toggle="modal" data-target="#AddBirthday">Создать</a>
+                <%#= link_to t('.Создать', :default => t("helpers.links.Создать")),
+                        {:controller => :users, :action => :custom_create,
+                         :user => {first_name: @doctor.name, second_name: @doctor.secname,
+                                   last_name: @doctor.surname, job: @doctor.lpu_dbfs.title, drcode: @doctor.drcode}}, method: 'POST', :class => 'btn btn-white' %>
+              </div>
+            </div>
+        <% else %>
+            <div class="panel panel-default">
+              <div class="panel-body panel-profile text-center">
+                <%= link_to 'Карточка тестируемого', profile_user_path(@users.where(drcode: @doctor.drcode).first) %>
+              </div>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="col-sm-9 col-lg-10">
+        <div class="panel panel-default">
+          <div class="panel-body panel-profile">
+            <h3 style="margin: 0"><%= @doctor.surname.mb_chars.capitalize + ' ' + @doctor.name.mb_chars.capitalize + ' ' + @doctor.secname.mb_chars.capitalize %>
+              <small>
+                <% if @doctor.dbsource == 'D' %>
+                    Врач
+                <% elsif  @doctor.dbsource == 'P' %>
+                    Провизор
+                <% elsif  @doctor.dbsource == 'S' %>
+                    Средний медицинский персонал
+                <% elsif  @doctor.dbsource == 'F' %>
+                    Фармацевт
+                <% elsif  @doctor.dbsource == 'N' %>
+                    Специалист с высшим профессиональным (не медицинским) образованием
+                <% end %>
+              </small>
+            </h3>
+            <br/>
+            <table class=" profile">
+              <tr>
+                <th style="width: 150px">Номер в обл. рег.</th>
+                <td><%= @doctor.drcode %></td>
+                <th style="width: 120px">Действует с:</th>
+                <td style="width: 100px"><%= @doctor.datebeg %></td>
+              </tr>
+              <tr>
+                <th>СНИЛС</th>
+                <td><%= @doctor.pension %></td>
+                <th>Действует по:</th>
+                <td><%= @doctor.dateend %></td>
+              </tr>
+              <tr>
+                <th>ЛПУ</th>
+                <td><%= @doctor.lpu_dbfs.title if @doctor.lpu_dbfs %></td>
+                <th></th>
+                <td></td>
+              </tr>
+            </table>
+            <p><strong>Специальности</strong></p>
+            <table class="table table-bordered table-condensed table-striped">
+              <thead>
+              <tr>
+                <th>ЛПУ</th>
+                <th>Специльность</th>
+                <th>Должность</th>
+                <th>Категория</th>
+                <th>С</th>
+                <th>По</th>
+
+              </tr>
+              </thead>
+              <tbody>
+              <% @doctor.officfun_dbfs.each do |offic| %>
+                  <tr>
+                    <td><%= offic.lpu_dbfs.first.name_s.empty? ? offic.lpu_dbfs.first.name : offic.lpu_dbfs.first.name_s %></td>
+                    <td><%= offic.speclist_dbfs.where.not(:deleted => 1).first.name if offic.speclist_dbfs.where.not(:deleted => 1).first %></td>
+                    <td><%= offic.post_dbfs.where.not(:deleted => 1).first.name if offic.post_dbfs.where.not(:deleted => 1).first %></td>
+                    <td>
+                      <% if offic.category == 1 %>
+                          Высшая категория
+                      <% elsif offic.category == 2 %>
+                          Первая категория
+                      <% elsif offic.category == 3 %>
+                          Вторая категория
+                      <% elsif offic.category == 4 %>
+                          Без категории
+                      <% end %>
+                    </td>
+                    <td><%= offic.d_start %></td>
+                    <td><%= offic.d_fin %></td>
+                  </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal fade" id="AddBirthday" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="width: 1020px;">
+    <div class="modal-content">
+      <div class="modal-header" style="border-bottom: none">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <!--<h4 class="modal-title" id="myModalLabel">Введите дату рождения:</h4>-->
+      <%= form_for(@user, :url => url_for(:action => 'custom_create', :controller => 'users'), :html => {:class => 'form-horizontal'}) do |f| %>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-lg-6">
+                <div style="text-align: center; color: #000000"><h4> Карточка испытуемого</h4></div>
+                <br>
+
+                <div class="form-group">
+                  <div class="col-lg-3">
+                    <%= f.label 'Дата рождения:', :class => 'control-label' %>
+                  </div>
+                  <div class="controls col-md-8">
+                    <div class='input-group date' id='birthday'>
+                      <%= f.text_field :birthday, :class => 'form-control' %>
+                      <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                      </span>
+                    </div>
+                    <%#= f.date_select(:birthday, {start_year: 1930}, {:class => 'form-control', :style => 'width:100px; display:inline-block'}) %>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6" style="border-left: 1px solid #000000">
+                <div style="text-align: center; color: #000000"><h4> Учетная запись</h4></div>
+                <br>
+
+                <div class="form-group">
+                  <div class="col-lg-3">
+                    <%= f.label 'E-mail:', :class => 'control-label' %>
+                  </div>
+                  <div class="controls col-md-8">
+                    <%= f.email_field :email, :class => 'form-control', autocomplete: :off, value: (2...3).map { ('a'..'z').to_a[rand(26)] }.join + @doctor.drcode.from(1).downcase + '@comsoft.corp.ru' %>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-lg-3">
+                    <%= f.label 'Пароль:', :class => 'control-label' %>
+                  </div>
+                  <div class="controls col-md-8">
+                    <%= f.text_field :password, :class => 'form-control', autocomplete: :off, value: rand.to_s[2..9] %>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <%= f.hidden_field :first_name, value: @doctor.name %>
+            <%= f.hidden_field :second_name, value: @doctor.secname %>
+            <%= f.hidden_field :last_name, value: @doctor.surname %>
+            <%= f.hidden_field :job, value: @doctor.lpu_dbfs.title if @doctor.lpu_dbfs %>
+            <%= f.hidden_field :drcode, value: @doctor.drcode %>
+            <div class="footer">
+              <%= f.submit 'Сохранить', class: 'btn btn-white' %>
+            </div>
+          </div>
+      <% end %>
+    </div>
+  </div>
+</div>

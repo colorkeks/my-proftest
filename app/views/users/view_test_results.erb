@@ -1,0 +1,109 @@
+<%= content_for :title, 'Результаты тестов испытуемого ' + @user.last_name + ' ' + @user.first_name + ' ' + @user.second_name %>
+
+
+<div class="pageheader">
+  <div class="row">
+    <div class="col-sm-3 col-lg-2">
+      <a class="btn btn-white back-btn pull-right" title="Назад" href="/users/<%= @user.id %>/profile">
+        <i class="fa fa-arrow-left"></i>
+      </a>
+
+      <h2>Результаты</h2>
+    </div>
+    <div class="col-sm-9 col-lg-10">
+      <div class="breadcrumb-wrapper">
+        <ol class="breadcrumb">
+          <li class="active">
+            <div class="btn-group nomargin">
+              <span class="dropdown-toggle" data-toggle="dropdown">Результаты тестов испытуемого <%= @user.last_name %> <%= @user.first_name %> <%= @user.second_name %></span>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="contentpanel ">
+  <div class="row">
+    <div class="col-sm-12 col-lg-12">
+      <div class="panel panel-default">
+        <div class="panel-body panel-profile">
+          <div class="col-lg-12">
+            <div style="text-align: right; border-bottom: 1px solid #000000">
+              <h5>Самарский</h5>
+              <h5>областной</h5>
+              <h5>информационно-аналитический</h5>
+              <h5>центр</h5>
+            </div>
+          </div>
+          <div class="col-lg-12">
+            <div style="text-align: center;"><h4>Результаты проверки знаний</h4></div>
+            <div style="text-align: center">
+              <h4>C <%= Russian::strftime(@current_mode.date_beg, '%d %B %Y') %></h4>
+            </div>
+            <br/>
+            <h5><%= @user.last_name + ' ' + @user.first_name + ' ' + @user.second_name %></h5>
+            <h5>Место работы: <%= @user.job %></h5>
+            <br/>
+            <table class="table table-bordered table-condensed table-striped">
+              <thead>
+                  <tr>
+                    <th>Курс</th>
+                    <th>Последняя попытка</th>
+                    <th>Правильные ответы</th>
+                    <th>Не правильные ответы</th>
+                    <th>Частично правильные ответы</th>
+                    <th>Сумма баллов</th>
+                    <th>Оценка</th>
+                  </tr>
+              </thead>
+              <% @assigned_tests.each do |assigned_test| %>
+                  <% if assigned_test.test.attestation %>
+                      <% correct = []
+                         not_correct = []
+                         partly_correct = []
+                      %>
+                      <% if try = assigned_test.tries.order('created_at DESC').first %>
+                          <% try.task_results_queue.each_with_index do |id, index| %>
+                              <% try.task_results.where(id: id, status: 'правильно').each do %>
+                                  <% correct << index + 1 %>
+                              <% end %>
+                              <% try.task_results.where(id: id, status: 'не правильно').each do %>
+                                  <% not_correct << index + 1 %>
+                              <% end %>
+                              <% try.task_results.where(id: id, status: 'частично правильно').each do %>
+                                  <% partly_correct << index + 1 %>
+                              <% end %>
+                          <% end %>
+                      <tbody>
+                          <tr>
+                            <td><%= assigned_test.test.title %></td>
+                            <td><%= Russian::strftime(try.created_at, '%d %B %Y') if try %></td>
+                            <td><%= correct.empty? ? 'Нет' : correct.join(', ') %></td>
+                            <td> <%= not_correct.empty? ? 'Нет' : not_correct.join(', ') %></td>
+                            <td><%= partly_correct.empty? ? 'Нет' : partly_correct.join(', ') %></td>
+                            <td><%= try.task_results.inject(0) { |sum, i| sum + i.point } if try %> </td>
+                            <td>
+                              <% if assigned_test.tries.where('rate > ?', 70).any? && try %>
+                                  Отлично
+                              <% elsif assigned_test.tries.where('rate > ?', 50).any? && try %>
+                                  Хорошо
+                              <% elsif assigned_test.tries.where('rate <= ?', 50).any? && try %>
+                                  Неуд.
+                              <% else %>
+                                  Тест не пройден
+                              <% end %>
+                            </td>
+                          </tr>
+                      </tbody>
+                      <% end %>
+                  <% end %>
+              <% end %>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

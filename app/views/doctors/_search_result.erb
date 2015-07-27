@@ -1,0 +1,22 @@
+<% if @doctors.any? %>
+<span class="text-muted">Найдено <%= @doctors.length %> из <%= @count %></span>
+<table class="table table-hover">
+  <tbody>
+  <% @doctors.each do |doctor| %>
+    <tr>
+        <td>
+          <%= link_to doctor.drcode, doctor_path(doctor.drcode) %>
+        </td>
+        <td>
+          <%= link_to "#{doctor.surname} #{doctor.name} #{doctor.secname}", doctor_path(doctor.drcode) %>
+        </td>
+        <td><%= doctor.current_lpu.title if doctor.current_lpu %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+<% else %>
+<div class="text-center text-info alert alert-info" >
+  <strong>По Вашему запросу ничего не найдено.</strong>
+</div>
+<% end %>

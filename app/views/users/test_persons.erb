@@ -1,0 +1,96 @@
+<%= content_for :title, 'Испытуемые' %>
+<div class="mainpanel" >
+  <div class="pageheader">
+    <div class="row">
+      <div class="col-sm-3 col-lg-2">
+        <h2>ФИО</h2>
+      </div>
+      <div class="col-sm-9 col-lg-10">
+        <div class="breadcrumb-wrapper">
+          <ol class="breadcrumb">
+            <li class="active">
+              <div class="btn-group nomargin">
+                <span class="dropdown-toggle" data-toggle="dropdown">Список испытуемых</span>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contentpanel panel-email">
+    <div class="row">
+      <div class="col-sm-3 col-lg-2">
+        <div class="btn-group nomargin">
+          <button class="btn btn-primary create-btn dropdown-toggle" data-toggle="dropdown" title="Создать">
+            Создать
+          </button>
+        </div>
+        <ul class="nav nav-pills nav-stacked nav-email mb20">
+          <li>
+            <%= link_to 'Медперсонал' , doctors_path, class: 'active' %>
+          </li>
+          <li>
+            <%= link_to 'Испытуемые' , test_persons_users_path, class: 'active' %>
+          </li>
+        </ul>
+      </div>
+
+      <div class="col-sm-9 col-lg-10">
+        <div class="panel panel-default">
+          <div class="panel-body task-panel">
+            <div class="pull-right">
+                <span class="mr10 italic text-muted">
+                  <%= [@test_persons.per_page * (@test_persons.current_page-1) + 1, @test_persons.total_entries].min %>
+                  - <%= [@test_persons.per_page * (@test_persons.current_page), @test_persons.total_entries].min %>
+                  из <%=@test_persons.total_entries %>
+                </span>
+              <div class="btn-group mr10">
+                <% wp = will_paginate @test_persons, renderer: BootstrapPagination::Rails, :page_links => false,
+                                      next_label: '<i class="fa fa-chevron-right"></i>',
+                                      previous_label: '<i class="fa fa-chevron-left"></i>'  %>
+                <% if wp %>
+                    <%= wp %>
+                <% else %>
+                    <ul class="pagination pagination">
+                      <li class="prev disabled">
+                        <span><i class="fa fa-chevron-left"></i></span>
+                      </li>
+                      <li class="next disabled">
+                        <span><i class="fa fa-chevron-right "></i></span>
+                      </li>
+                    </ul>
+                <% end %>
+              </div>
+            </div>
+
+            <table class="table table-hover table-condensed">
+              <!--<thead>-->
+              <!--<tr>-->
+                <!--<th>#</th>-->
+                <!--<th>ФИО</th>-->
+                <!--<th>ЛПУ</th>-->
+              <!--</tr>-->
+              <!--</thead>-->
+              <tbody>
+              <% @test_persons.each do |person| %>
+                  <tr>
+                    <td>
+                      <%#= link_to person.drcode, doctor_path(person.drcode) %>
+                      <%= link_to person.id, profile_user_path(person)  %>
+                    </td>
+                    <td>
+                      <%= link_to "#{person.last_name} #{person.first_name} #{person.second_name}", profile_user_path(person) %>
+                    </td>
+                    <td><%= person.doctor.current_lpu.title if person.doctor%></td>
+                  </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

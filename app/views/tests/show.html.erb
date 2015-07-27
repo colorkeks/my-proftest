@@ -1,0 +1,600 @@
+<% if @chains_mode %>
+    <% title = "Цепочки #{@test.title}" %>
+<% elsif @selected_chain %>
+    <% title = "Цепочка C##{@selected_chain.id}" %>
+<% elsif @trash %>
+    <% title = "Корзина #{@test.title}" %>
+<% elsif @selected_section %>
+    <% title = "#{@selected_section.title} #{@test.title}" %>
+<% else %>
+    <% title = "#{@test.title}" %>
+<% end %>
+<%= content_for :title, title %>
+<section>
+  <div class="mainpanel">
+
+    <div class="pageheader">
+      <div class="row">
+        <div class="col-sm-3 col-lg-2">
+          <%= link_to test_group_path(@test.test_group), class: 'btn btn-white back-btn pull-right', title: 'Назад' do %>
+            <i class="fa fa-arrow-left"></i>
+          <% end %>
+          <h2> Тест</h2>
+        </div>
+        <div class="col-sm-9 col-lg-10">
+          <div class="breadcrumb-wrapper">
+            <ol class="breadcrumb">
+              <% if @selected_section || @selected_chain || @chains_mode %>
+                  <li><%= link_to @test.title, @test %></li>
+              <% end %>
+              <li class="active">
+                <div class="btn-group nomargin">
+                 <% element = @selected_section ? @selected_section : @test %>
+                 <% element = Struct.new(:title).new('Корзина') if @trash %>
+                 <% element = @selected_chain if @selected_chain %>
+                 <% element = Struct.new(:title).new('Цепочки') if @chains_mode %>
+                  <span class="dropdown-toggle"  data-toggle="dropdown"><%= element.title %>
+                    <% if !@trash && !@chains_mode %>
+                        <span class="caret"></span>
+                    <% end %>
+                  </span>
+                  <ul class="dropdown-menu right">
+                    <li>
+                      <% if element.is_a?(Test) %>
+                        <%= link_to 'Переименовать', edit_test_path(@test), remote: true %>
+                        <%= link_to 'Удалить', test_path(@test), method: :delete, data: {confirm: 'Вы уверены?'} %>
+                      <% elsif element.is_a?(Section)  %>
+                        <%= link_to 'Переименовать', edit_section_path(@selected_section), remote: true %>
+                        <%= link_to 'Удалить', section_path(@selected_section), method: :delete, data: {confirm: 'Вы уверены?'} %>
+                      <% elsif element.is_a?(Chain)  %>
+                          <%#= link_to 'Переименовать', edit_section_path(@selected_section), remote: true %>
+                          <%= link_to 'Удалить', chain_path(@selected_chain, test_id: @test), method: :delete, data: {confirm: 'Вы уверены?'} %>
+                      <% else %>
+                      <% end %>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contentpanel panel-email">
+      <div class="row">
+        <div class="col-sm-3 col-lg-2">
+          <div class="btn-group nomargin">
+            <button class="btn btn-primary create-btn dropdown-toggle" data-toggle="dropdown" title="Создать">
+              Создать
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a href="#" data-toggle="modal" data-target="#createTask"> Задание</a></li>
+              <li><%= link_to 'Раздел', new_section_path(test_id: @test.id), remote: true %></li>
+              <li><%= link_to 'Цепочку', test_chains_path(test_id: @test, chain:{test_id: @test.id, section_id: @selected_section, eqvgroup_id:@last_eqvgroup}), method: 'post' %></li>
+            </ul>
+
+          </div>
+
+          <ul class="nav nav-pills nav-stacked nav-email mb20">
+            <li>
+                <%= link_to test_path(@test, selected_section_id: nil), class: (@selected_section.nil? ? 'active' : '') do %>
+                    <i class="fa fa-list-alt"></i> Задания
+                <% end %>
+            </li>
+
+            <li>
+              <%= link_to test_chains_path(test_id: @test), class: (nil ? 'active' : '') do %>
+                  <i class="fa fa-link"></i> Цепочки
+              <% end %>
+            </li>
+
+            <li>
+                <%= link_to trash_test_path(@test), class: () do %>
+                    <i class="fa fa-trash-o"></i> Корзина
+                <% end %>
+            </li>
+            <li>
+              <%= link_to settings_test_path(@test) do %>
+                  <i class="fa fa-cog"></i> Настройки
+              <% end %>
+            </li>
+            <li>
+              <%= link_to statistic_test_path(@test) do %>
+                  <i class="fa fa-area-chart"></i> Статистика
+              <% end %>
+            </li>
+          </ul>
+
+          <h5 class="sidebartitle">Разделы</h5>
+          <ul class="nav nav-pills nav-stacked nav-bracket">
+            <li class="tree">
+              <ul class="children" style="display: block">
+                <% @test.sections.order(:id).each do |section|%>
+                <li title="<%= section.name %>" class="tooltips">
+                    <%= link_to test_path(@test, selected_section_id: section.id), class: (@selected_section == section ? 'active' : '') do %>
+                        <i class="fa fa-caret-down trnsp"></i><%= truncate(section.name, length: 27, omission: '' ) %>
+                    <% end %>
+                </li>
+                <% end %>
+              </ul>
+            </li>
+          </ul>
+
+        </div>
+        <div class="col-sm-9 col-lg-10">
+
+          <div class="panel panel-default">
+            <div class="panel-body task-panel">
+
+              <div class="btn-group mr10 ml5">
+                <div class="btn-group ">
+                  <button id="toggle-checkboxes" class="btn btn-white tooltips" type="button" title="Выбрать">
+                    <div class="ckbox ckbox-default">
+                      <input type="checkbox" id="checkbox0">
+                      <label for="checkbox0"></label>
+                    </div>
+                  </button>
+
+                  <% if @trash %>
+                      <% move_title = 'Восстановить' %>
+                      <% delete_title = 'Удалить навсегда' %>
+                  <% else %>
+                      <% move_title = 'Переместить' %>
+                      <% delete_title = 'Удалить в корзину' %>
+                  <% end %>
+
+                  <% if @chains %>
+                    <% item_class = 'Chain' %>
+                  <% else %>
+                    <% item_class = 'Task' %>
+                  <% end %>
+
+                  <button onclick="bulkMoveFormOpen('<%= item_class %>');" id="move-btn" class="btn btn-white tooltips disabled" type="button" title="<%= move_title %>">
+                    <% if @trash %>
+                        <i class="fa fa-undo"></i>
+                    <% else %>
+                        <i class="fa fa-folder"></i>
+                    <% end %>
+                  </button>
+                </div>
+
+                <button onclick="bulkDestroy('<%= item_class %>');" id="remove-btn"  class="btn btn-white tooltips disabled <%= 'trash' if @trash %>" type="button" data-toggle="tooltip" title="<%= delete_title %>">
+                    <% if @trash %>
+                      <i class="fa fa-trash"></i> <i class="fa fa-exclamation"></i>
+                    <% else %>
+                      <i class="fa fa-trash"></i>
+                    <% end %>
+                </button>
+
+                <% if !@trash %>
+                <div class="btn-group ">
+                  <button class="btn btn-white tooltips dropdown-toggle" id="other-btn" data-toggle="dropdown" type="button" title="" data-original-title="Другое">
+                    <i class="fa fa-ellipsis-v"></i>
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu">
+
+                      <% if @chains_mode  %>
+                        <li id="split-chain-li" class="disabled"><a href="#" onclick="return false;" data-onclick="bulkSplitChain();">Разъединить</a></li>
+                      <% end %>
+
+                      <% if !@chains_mode && !@selected_chain %>
+                        <li id="join-chain-li" class="disabled"><a href="#" onclick="return false;" data-onclick="bulkJoinChain('');">Объединить в цепочку</a></li>
+                      <% end %>
+
+                      <% if !@chains_mode && !@selected_chain %>
+                        <li id="move-to-chain-li" class="disabled"><a href="#" onclick="return false;" data-onclick="bulkJoinChainFormOpen('');">Переместить в цепочку</a></li>
+                      <% end %>
+
+                      <% if !@chains_mode  %>
+                        <li id="remove-chain-li" class="disabled"><a href="#" onclick="return false;" data-onclick="bulkRemoveChain('');">Убрать из цепочки</a></li>
+                      <% end %>
+
+                  </ul>
+
+                </div>
+                <% end %>
+              </div>
+
+              <div class="btn-group labels mr10">
+                <% if !@selected_chain && !@trash %>
+                <div class="btn-group">
+                  <button data-toggle="dropdown" class="btn btn-white dropdown-toggle tooltips" id="change-eqvgroup" type="button" title="Изменить эквивалентную группу">
+                    <span class="label label-info">
+                      <strong>
+                        <% if @last_eqvgroup %>
+                        <%= @last_eqvgroup.number %>
+                        <% else %>
+                        g
+                        <% end %>
+                      </strong>
+                    </span>
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu">
+                    <% @eqvgroups.each do |eq|%>
+                     <li class="change-eqvgroup-li" data-id="<%= eq.id %>" data-section-id="<%= eq.section.id if eq.section %>">
+                        <a href="#" onclick="" data-onclick="bulkChangeEqvgroup('<%=eq.id %>', '<%= item_class %>');">
+                            <span class="group-number label label-info equal-width">
+                                <strong><%= eq.number %></strong>
+                            </span>
+                            <span class="small italic text-muted"> <%= eq.section.name if eq.section %></span>
+                        </a>
+                    </li>
+                    <% end %>
+                    <li><%= link_to 'Добавить', eqvgroups_path(eqvgroup:{test_id: @test.id, section_id: @selected_section}), method: 'post' %></li>
+                  </ul>
+                </div>
+                <% end %>
+
+                <% if @selected_chain %>
+                    <div class="btn-group">
+                      <button data-toggle="dropdown" class="btn btn-white dropdown-toggle tooltips disabled" type="button" title="Изменить позицию" id="change-position">
+                    <span class="label label-default">
+                      <strong>№</strong>
+                    </span>
+                        <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu">
+                        <% (1..@selected_chain.tasks.count).each do |n|%>
+                            <li>
+                                <a href="#" onclick="bulkChangePosition('<%=n %>');">
+                                <span class="label label-default equal-width">
+                                <strong><%= n %></strong>
+                                </span>
+                                </a>
+                            </li>
+                        <% end %>
+                       </ul>
+                    </div>
+                <% end %>
+
+
+                <%= form_tag bulk_move_tasks_path, id: 'bulk_move_form', method: 'get', remote: true do %>
+                    <%= hidden_field_tag 'trash', @trash %>
+                    <%= hidden_field_tag 'test_id', @test.id %>
+                    <%= hidden_field_tag 'task_ids' %>
+                <% end %>
+                <%= form_tag bulk_move_test_chains_path(test_id: @test), id: 'bulk_move_chains_form', method: 'get', remote: true do %>
+                    <%= hidden_field_tag 'trash', @trash %>
+                    <%#= hidden_field_tag 'test_id', @test.id %>
+                    <%= hidden_field_tag 'chain_ids' %>
+                <% end %>
+
+                <%= form_tag bulk_destroy_tasks_path, id: 'bulk_destroy_form', remote: false do %>
+                    <%= hidden_field_tag 'trash', @trash %>
+                    <%= hidden_field_tag 'test_id', @test.id %>
+                    <%= hidden_field_tag 'task_ids' %>
+                <% end %>
+                <%= form_tag bulk_destroy_test_chains_path(test_id: @test), id: 'bulk_destroy_chains_form', remote: false do %>
+                    <%= hidden_field_tag 'trash', @trash %>
+                    <%#= hidden_field_tag 'test_id', @test.id %>
+                    <%= hidden_field_tag 'chain_ids' %>
+                <% end %>
+                <%= form_tag bulk_split_test_chains_path(test_id: @test), id: 'bulk_split_chains_form', remote: false do %>
+                    <%= hidden_field_tag 'trash', @trash %>
+                    <%#= hidden_field_tag 'test_id', @test.id %>
+                    <%= hidden_field_tag 'chain_ids' %>
+                <% end %>
+                <%= form_tag bulk_change_eqvgroup_tasks_path, id: 'bulk_change_eqvgroup_form', remote: false do %>
+                    <%= hidden_field_tag 'test_id', @test.id %>
+                    <%= hidden_field_tag 'task_ids' %>
+                    <%= hidden_field_tag 'eqvgroup_id' %>
+                <% end %>
+                <%= form_tag bulk_change_eqvgroup_test_chains_path(test_id: @test), id: 'bulk_change_eqvgroup_chains_form', remote: false do %>
+                    <%#= hidden_field_tag 'test_id', @test.id %>
+                    <%= hidden_field_tag 'chain_ids' %>
+                    <%= hidden_field_tag 'eqvgroup_id' %>
+                <% end %>
+
+                <%= form_tag bulk_join_chain_tasks_path, id: 'bulk_join_chain_form', remote: false do %>
+                    <%= hidden_field_tag 'test_id', @test.id %>
+                    <%= hidden_field_tag 'task_ids' %>
+                    <%= hidden_field_tag 'chain_id' %>
+                <% end %>
+                <%= form_tag bulk_remove_chain_tasks_path, id: 'bulk_remove_chain_form', remote: false do %>
+                    <%= hidden_field_tag 'test_id', @test.id %>
+                    <%= hidden_field_tag 'task_ids' %>
+                <% end %>
+                <%= form_tag bulk_join_chain_select_tasks_path, id: 'bulk_join_chain_select_form', method: 'get', remote: true do %>
+                    <%= hidden_field_tag 'trash', @trash %>
+                    <%= hidden_field_tag 'test_id', @test.id %>
+                    <%= hidden_field_tag 'task_ids' %>
+                <% end %>
+                <%= form_tag bulk_change_position_tasks_path, id: 'bulk_change_position_form', remote: false do %>
+                    <%= hidden_field_tag 'test_id', @test.id %>
+                    <%= hidden_field_tag 'task_ids' %>
+                    <%= hidden_field_tag 'position' %>
+                <% end %>
+              </div>
+
+              <div class="pull-right">
+                <span class="mr10 italic text-muted">
+                  <%= [@tasks.per_page * (@tasks.current_page-1) + 1, @tasks.total_entries].min %>
+                  - <%= [@tasks.per_page * (@tasks.current_page), @tasks.total_entries].min %>
+                  из <%=@tasks.total_entries %>                
+                </span>
+                <div class="btn-group mr10">
+                  <% wp = will_paginate @tasks, renderer: BootstrapPagination::Rails, :page_links => false,
+                                    next_label: '<i class="fa fa-chevron-right"></i>',
+                                    previous_label: '<i class="fa fa-chevron-left"></i>'  %>
+                  <% if wp %>
+                        <%= wp %>
+                  <% else %>
+                      <ul class="pagination pagination">
+                        <li class="prev disabled">
+                          <span><i class="fa fa-chevron-left"></i></span>
+                        </li>
+                        <li class="next disabled">
+                          <span><i class="fa fa-chevron-right "></i></span>
+                        </li>
+                      </ul>
+                  <% end %>
+                </div>
+              </div>
+              <!-- pull-right -->
+
+              <div class="table-responsive">
+                <table class="table table-email tasks table-hover">
+                  <tbody>
+                  <% @tasks.each_with_index do |task, index| %>
+                      <tr class="unread" data-class="<%= task.class %>" data-id="<%= task.id %>" data-eqvgroup-id="<%= task.eqvgroup.id if task.eqvgroup %>"
+                          data-section-id="<%= task.section.id if task.section %>" data-chain-id="<%= task.chain.id if task.is_a?(Task) && task.chain %>"
+                          data-chain-tasks-count="<%= task.chain.tasks.count if task.is_a?(Task) && task.chain %>">
+                        <td>
+                          <% if task.is_a?(Task) && task.chain %>
+                            <% if task.chain.tasks.count == 1 %>
+                                <div class="chain-start chain-stop"></div>
+                            <% elsif task.chain_position == 1 %>
+                                <div class="chain-start"></div>
+                            <% elsif task.chain_position == task.chain.tasks.count %>
+                                <div class="chain-stop"></div>
+                            <% else %>
+                                <div class="chain-item"></div>
+                            <% end  %>
+                          <% end %>
+                        </td>
+                        <td>
+                          <div class="ckbox ckbox-default">
+                            <%= check_box_tag 'check', 1, false, class: 'element_checkbox', id: "cb_#{index}" %>
+                            <label for="<%= "cb_#{index}" %>"></label>
+                          </div>
+                        <% if !@trash && !@selected_chain %>
+                        <td>
+                            <span class="label label-info"><strong><%= task.eqvgroup.number if task.eqvgroup %></strong></span>
+                        </td>
+                        <% else %>
+                        <td style="width: 0px; padding: 0px;"></td>
+                        <% end %>
+
+                        <% if !@trash && @selected_chain %>
+                        <td style="width: 10px;">
+                            <span class=""><strong><%= task.chain_position %></strong></span>
+                        </td>
+                        <% end %>
+                        <td style="width: 20px; font-size: 16px; line-height: 18px; padding: 0">
+                          <%= task_type_icon_class(task) %>
+                        </td>
+                        <td class="link">
+                          <% if task.is_a?(Task) %>
+                            <% link = edit_task_path(task) %>
+                          <% elsif task.is_a?(Chain) %>
+                            <% link = test_path(task.test, selected_chain_id: task.id) %>
+                          <% end %>
+                          <!--<h4>-->
+                          <%# if task.is_a?(Task) && task.chain && !@selected_chain %>
+                          <!--[<%#= task.chain_position %> / <%#= task.chain.tasks.count %>]-->
+                          <%# end %>
+                          <!--</h4>-->
+                          <%= link_to link do %>
+                            <%= truncate(strip_tags(task.text.squish), length: 75, omission: '') if task.text%>
+                          <% end %>
+                        </td>
+                        <td style="width: 150px">
+                          <span class="media-meta ">
+                              <% if task.section %>
+                                  <%= "#{truncate(task.section.name, length: 20, omission: '')}" %>
+                              <% end %>
+                          </span>
+                        </td>
+                        <td style="width: 45px">
+                          <span class="media-meta">
+                            <%= task.task_count_label if task.is_a?(Chain)%>
+                          </span>
+                        </td>
+                        <td style="width: 30px">
+                          <span class="media-meta">
+                            <% if task.is_a?(Task) %>
+                                <%= "##{task.id}" %>
+                            <% else %>
+                                <%= "C##{task.id}" %>
+                            <% end %>
+                          </span>
+                        </td>
+                        <td style="width: 60px">
+                          <span class="media-meta pull-right">
+                              <% if Date.today.day == task.created_at.day %>
+                                  <%= task.created_at.strftime('%H:%M') %>
+                              <% elsif Date.today.year == task.created_at.year %>
+                                  <%= Russian::strftime(task.created_at, "%d %b") %>
+                              <% else %>
+                                  <%= task.created_at.strftime('%d.%m.%Y') %>
+                              <% end %>
+                          </span>
+                        </td>
+
+                      </tr>
+                  <% end %>
+                  </tbody>
+                </table>
+              </div>
+              <!-- table-responsive -->
+
+
+            </div>
+            <!-- panel-body -->
+          </div>
+          <!-- panel -->
+        </div>
+        <!-- col-sm-9 -->
+      </div>
+      <!-- row -->
+    </div>
+  </div>
+  <!-- mainpanel -->
+</section>
+
+<!-- Modal -->
+<div class="modal fade" id="createTask" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Выберите тип задания:</h4>
+      </div>
+      <%= render partial: 'tests/task_form' %>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body" id="new-form">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+    window.trash = <%= @trash || false %>;
+    window.chains_mode = <%= @chains_mode || false %>;
+    window.selected_section = <%= @selected_section ? @selected_section.id : false %>;
+    window.selected_chain = <%= @selected_chain ? @selected_chain.id : false %>;
+</script>
+
+<script type="text/javascript">
+
+    function getSelectedIds() {
+        var checked_checkboxes = $('.element_checkbox:checked');
+        var trs = checked_checkboxes.closest('tr');
+        var ids = [];
+        trs.each(function( index, element ){
+            id = $(element).attr('data-id');
+            ids.push(id);
+        });
+        return ids;
+    }
+
+    function bulkDestroy(itemClass) {
+        if (typeof itemClass === 'undefined') itemClass="Task";
+        var answer = confirm('Вы уверены?');
+        if (answer) {
+            var ids = getSelectedIds();
+            if(itemClass == "Task") {
+                var form = $('#bulk_destroy_form');
+                form.children("[name='task_ids']").val(ids.join());
+            } else if (itemClass == "Chain") {
+                var form = $('#bulk_destroy_chains_form');
+                form.children("[name='chain_ids']").val(ids.join());
+            } else {
+                alert('Неизвестный класс!')
+            }
+            form.submit();
+        }
+    }
+
+    function bulkMoveFormOpen(itemClass) {
+        if (typeof itemClass === 'undefined') itemClass="Task";
+        var ids = getSelectedIds();
+        if(itemClass == "Task") {
+            var form = $('#bulk_move_form');
+            form.children("[name='task_ids']").val(ids.join());
+        } else if (itemClass == "Chain") {
+            var form = $('#bulk_move_chains_form');
+            form.children("[name='chain_ids']").val(ids.join());
+        } else {
+            alert('Неизвестный класс!')
+        }
+        form.submit();
+    }
+
+    function selectDestinationGroup(selected) {
+        var form = $(selected).closest('form');
+        form.find('.active').removeClass('active');
+        $(selected).addClass('active');
+        form.find("[name='destination_section_id']").val($(selected).attr('data-id'));
+    }
+
+    function selectDestinationChain(selected) {
+        var form = $(selected).closest('form');
+        form.find('.active').removeClass('active');
+        $(selected).addClass('active');
+        form.find("[name='destination_chain_id']").val($(selected).attr('data-id'));
+    }
+
+    function bulkChangeEqvgroup(eqvgroup_id, itemClass) {
+        if (typeof itemClass === 'undefined') itemClass="Task";
+        var ids = getSelectedIds();
+        if(itemClass == "Task") {
+            var form = $('#bulk_change_eqvgroup_form');
+            form.children("[name='task_ids']").val(ids.join());
+        } else if (itemClass == "Chain") {
+            var form = $('#bulk_change_eqvgroup_chains_form');
+            form.children("[name='chain_ids']").val(ids.join());
+        } else {
+            alert('Неизвестный класс!')
+        }
+        form.children("[name='eqvgroup_id']").val(eqvgroup_id);
+        form.submit();
+    }
+    function bulkJoinChain(chain_id) {
+        var ids = getSelectedIds();
+        var form = $('#bulk_join_chain_form');
+        form.children("[name='task_ids']").val(ids.join());
+        //form.children("[name='eqvgroup_id']").val(eqvgroup_id);
+        form.submit();
+    }
+    function bulkRemoveChain() {
+        var ids = getSelectedIds();
+        var form = $('#bulk_remove_chain_form');
+        form.children("[name='task_ids']").val(ids.join());
+        //form.children("[name='eqvgroup_id']").val(eqvgroup_id);
+        form.submit();
+    }
+
+    function bulkJoinChainFormOpen() {
+        var ids = getSelectedIds();
+        var form = $('#bulk_join_chain_select_form');
+        form.children("[name='task_ids']").val(ids.join());
+        form.submit();
+    }
+
+    function bulkSplitChain() {
+        var ids = getSelectedIds();
+        var form = $('#bulk_split_chains_form');
+        form.children("[name='chain_ids']").val(ids.join());
+        //form.children("[name='eqvgroup_id']").val(eqvgroup_id);
+        form.submit();
+    }
+
+    function bulkChangePosition(n) {
+        var ids = getSelectedIds();
+        var form = $('#bulk_change_position_form');
+        form.children("[name='task_ids']").val(ids.join());
+        form.children("[name='position']").val(n);
+        form.submit();
+    }
+
+</script>

@@ -1,0 +1,127 @@
+<%= content_for :title, 'История режима - ' + @user.last_name + ' ' + @user.first_name + ' ' + @user.second_name  %>
+
+
+<div class="pageheader">
+  <div class="row">
+    <div class="col-sm-3 col-lg-2">
+      <a class="btn btn-white back-btn pull-right" title="Назад" href="/users/<%= @test_mode.user_id %>/modes_history">
+        <i class="fa fa-arrow-left"></i>
+      </a>
+
+      <h2>Режим</h2>
+    </div>
+    <div class="col-sm-9 col-lg-10">
+      <div class="breadcrumb-wrapper">
+        <ol class="breadcrumb">
+          <li class="active">
+            <div class="btn-group nomargin">
+              <span class="dropdown-toggle" data-toggle="dropdown">История режима <%= @user.last_name %> <%= @user.first_name %> <%= @user.second_name %></span>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="contentpanel ">
+  <div class="row">
+
+    <div class="col-sm-12 col-lg-12">
+      <div class="panel panel-default">
+        <div class="panel-body panel-profile">
+          <div class="pull-left">
+            <h3 style="margin: 0">Режим - <%= @test_mode.name %>
+            </h3>
+          </div>
+          <div class="pull-right">
+                <span class="mr10 italic text-muted">
+                  <%= [@mode_tries.per_page * (@mode_tries.current_page-1) + 1, @mode_tries.total_entries].min %>
+                  - <%= [@mode_tries.per_page * (@mode_tries.current_page), @mode_tries.total_entries].min %>
+                  из <%= @mode_tries.total_entries %>
+                </span>
+
+            <div class="btn-group mr10">
+              <% wp = will_paginate @mode_tries, renderer: BootstrapPagination::Rails, :page_links => false,
+                                    next_label: '<i class="fa fa-chevron-right"></i>',
+                                    previous_label: '<i class="fa fa-chevron-left"></i>' %>
+              <% if wp %>
+                  <%= wp %>
+              <% else %>
+                  <ul class="pagination pagination">
+                    <li class="prev disabled">
+                      <span><i class="fa fa-chevron-left"></i></span>
+                    </li>
+                    <li class="next disabled">
+                      <span><i class="fa fa-chevron-right "></i></span>
+                    </li>
+                  </ul>
+              <% end %>
+            </div>
+          </div>
+          <br>
+          <!--<table class="table table-bordered table-condensed table-striped">-->
+            <!--<tr>-->
+              <!--<th colspan="6" style="text-align: center"> Тесты</th>-->
+            <!--</tr>-->
+            <!--<tr>-->
+              <!--<th>Название</th>-->
+              <!--<th>Тип</th>-->
+              <!--<th>Попытки</th>-->
+              <!--<th>Последняя попытка</th>-->
+              <!--<th>Процент</th>-->
+              <!--<th>Результат</th>-->
+            <!--</tr>-->
+            <!--<%# @test_mode.assigned_tests.each do |assigned_test|%>-->
+                <!--<tr>-->
+                  <!--<td><%#= assigned_test.test.title %></td>-->
+                  <!--<td><%#= assigned_test.test.attestation == true ? 'Аттестационный' : 'Тренировочный' %></td>-->
+                  <!--<td><%#= assigned_test.test.tries.where(user_id: @user.id).count %></td>-->
+                  <!--<%# if assigned_test.test.tries.where(user_id: @user.id).order('rate DESC').first %>-->
+                      <!--<td><%#= assigned_test.test.tries.where(user_id: @user.id).order('rate DESC').first.created_at %></td>-->
+                      <!--<td><%#= assigned_test.test.tries.where(user_id: @user.id).order('rate DESC').first.rate.to_s + '%' %></td>-->
+                      <!--<%# if assigned_test.test.tries.where(user_id: @user.id).order('created_at DESC').first.rate %>-->
+                          <!--<%# if assigned_test.test.tries.where(user_id: @user.id).order('created_at DESC').first.rate > 50 %>-->
+                              <!--<td><span class="label label-success">Зачет</span></td>-->
+                          <!--<%# else %>-->
+                              <!--<td><span class="label label-danger">Не зачет</span></td>-->
+                          <!--<%# end %>-->
+                      <!--<%# end %>-->
+                  <!--<%# else %>-->
+                      <!--<td></td>-->
+                      <!--<td></td>-->
+                      <!--<td></td>-->
+                  <!--<%# end %>-->
+                <!--</tr>-->
+          <!--<%# end %>-->
+            </table>
+          <table class="table table-bordered table-condensed table-striped">
+            <tr>
+              <th>Тест</th>
+              <th>Дата и время сдачи</th>
+              <th>Длительность</th>
+              <th>Процент</th>
+              <th>Результат</th>
+            </tr>
+            <% @mode_tries.each do |try|%>
+                <td><%= try.test.title%></td>
+                <td><%= try.created_at%></td>
+                <td><%= try.timer.strftime('%H:%M') if try.timer %></td>
+                <td><%= try.rate.to_s + '%' %></td>
+                <td>
+                  <% if try.rate %>
+                      <% if try.rate > 50 %>
+                          <span class="label label-success">Зачет</span>
+                      <% else %>
+                          <span class="label label-danger">Не зачет</span>
+                      <% end %>
+                  <% end %>
+                </td>
+            <% end %>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

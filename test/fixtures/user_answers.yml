@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+#one:
+#  correct: false
+#  text: MyText
+#  point: 1
+#  task_id: 1
+#  task_result_id: 1
+#
+#two:
+#  correct: false
+#  text: MyText
+#  point: 1
+#  task_id: 1
+#  task_result_id: 1

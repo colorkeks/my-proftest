@@ -1,0 +1,109 @@
+<%= content_for :title, 'Алгоритм' %>
+<div class="mainpanel" >
+
+  <div class="pageheader">
+    <div class="row">
+      <div class="col-sm-3 col-lg-2">
+        <%= link_to @test, class: 'btn btn-white back-btn pull-right', title: 'Назад' do %>
+          <i class="fa fa-arrow-left"></i>
+        <% end %>
+        <h2>Алгоритм</h2>
+      </div>
+      <div class="col-sm-9 col-lg-10">
+        <div class="breadcrumb-wrapper">
+          <ol class="breadcrumb">
+            <li><%= link_to @test.title, @test %></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contentpanel ">
+    <div class="row">
+      <div class="col-sm-12 col-lg-12">
+        <div class="panel panel-default">
+          <div class="panel-body panel-profile">
+            <!--<h3 style="margin: 0">Иванов Иван Иванович</h3>-->
+            <%= form_tag set_counts_test_path(@test), id: 'ajax_submit', remote: true do %>
+                <% ([nil] + @test.sections).each do |section| %>
+                    <% @test.eqvgroups.where(section: section).each do |eqvgroup| %>
+                        <input name="eqvgroup[<%= eqvgroup.id %>][task_count]"  type="hidden" value="<%= eqvgroup.task_count %>"/>
+                        <input name="eqvgroup[<%= eqvgroup.id %>][chain_count]" type="hidden" value="<%= eqvgroup.chain_count %>"/>
+                    <% end %>
+                <% end %>
+            <% end %>
+
+            <%= form_tag set_counts_test_path(@test), id: 'task_chain_counts' do %>
+            <div class="row">
+
+              <div class="col-lg-7">
+                <h4>Выборка из эквивалентных групп</h4>
+                <div style="height: 400px; overflow-y: auto">
+                    <table class="table table-condensed table-bordered">
+                  <tr>
+                    <th></th>
+                    <th class="number"><span class="icon-single tooltips" title="Единичный выбор"></span></th>
+                    <th class="number"><span class="icon-mutli tooltips" title="Множественный выбор"></span></th>
+                    <th class="number"><span class="icon-open tooltips" title="Открытый вопрос"></span></th>
+                    <th class="number"><span class="icon-connect tooltips" title="Сопоставление"></span></th>
+                    <th class="number"><span class="icon-sequence tooltips" title="Последовательность"></span></th>
+                    <th class="number">Сумма</th>
+                    <th>Количество вопросов</th>
+                    <th class="number"><span class="fa fa-link tooltips" title="Чейн"></span></th>
+                    <th>Количество чейнов</th>
+                  </tr>
+                  <% ([nil] + @test.sections).each do |section| %>
+                      <tr>
+                        <td colspan="9" class="space-name text-muted">
+                           <%= section ? "Раздел: #{section.name}" : 'Без раздела'  %>
+                        </td>
+                      </tr>
+                    <% @test.eqvgroups.where(section: section).each do |eqvgroup| %>
+                      <tr>
+                        <td class="eql-group">
+                          <span class="label label-info"><strong><%= eqvgroup.number %></strong></span>
+                          <!--<span class="">-->
+                            <!--[<span class="icon-single tooltips" title="Единичный выбор"></span> <%= eqvgroup.tasks.where(task_type:'Единичный выбор').count %>] +-->
+                            <!--[<span class="icon-mutli tooltips" title="Множественный выбор"></span> <%= eqvgroup.tasks.where(task_type:'Множественный выбор').count %>] +-->
+                            <!--[<span class="icon-open tooltips" title="Открытый вопрос"></span> <%= eqvgroup.tasks.where(task_type:'Открытый вопрос').count %>] +-->
+                            <!--[<span class="icon-connect tooltips" title="Сопоставление"></span> <%= eqvgroup.tasks.where(task_type:'Сопоставление').count %>] +-->
+                            <!--[<span class="icon-sequence tooltips" title="Последовательность"></span> <%= eqvgroup.tasks.where(task_type:'Последовательность').count %>] +-->
+                            <!--[<span class="fa fa-link tooltips" title="Чейн"></span> <%= eqvgroup.chains.count %>]-->
+                            <!--= <%= eqvgroup.tasks.count %>-->
+                          <!--</span>-->
+                        </td>
+                        <td class="number"><%= eqvgroup.tasks.where(task_type:'Единичный выбор').count %></td>
+                        <td class="number"><%= eqvgroup.tasks.where(task_type:'Множественный выбор').count %></td>
+                        <td class="number"><%= eqvgroup.tasks.where(task_type:'Открытый вопрос').count %></td>
+                        <td class="number"><%= eqvgroup.tasks.where(task_type:'Сопоставление').count %></td>
+                        <td class="number"><%= eqvgroup.tasks.where(task_type:'Последовательность').count %></td>
+                        <td class="number"><%= eqvgroup.tasks.count %></td>
+                        <td>
+                          <input name="eqvgroup[<%= eqvgroup.id %>][task_count]" autocomplete="off" type="text" class="form-control input-sm task-count" value="<%= eqvgroup.task_count %>"/>
+                        </td>
+                        <td class="number"><%= eqvgroup.chains.count %></td>
+                        <td>
+                          <input name="eqvgroup[<%= eqvgroup.id %>][chain_count]" autocomplete="off" type="text" class="form-control input-sm task-count" value="<%= eqvgroup.chain_count %>"/>
+                        </td>
+                      </tr>
+                    <% end %>
+                  <% end %>
+                </table>
+                </div>
+              </div>
+              <div class="col-lg-5" id="algorithm-statistic">
+                <h4>Параметры получаемых попыток</h4>
+                <%= render partial: 'algorithm_statistic_result' %>
+              </div>
+            </div>
+            <!--<div class="btn btn-primary btn-sm pull-right">Сохранить</div>-->
+            <hr/>
+            <%= submit_tag 'Сохранить', name: 'submit', class: 'btn btn-primary btn-sm' %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
