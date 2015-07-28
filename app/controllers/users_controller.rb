@@ -161,8 +161,8 @@ class UsersController < ApplicationController
     @user.priority_role_id = @user.roles.order('created_at DESC').first.id
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to personal_info_user_path(@user), notice: 'Пользователь успешно обновлен.' }
-        format.json { render :show, status: :ok, location: @user }
+          format.html { redirect_to params[:user][:back_url] || profile_user_path(@user), notice: 'Пользователь успешно обновлен.' }
+          format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit }
         format.json { render json: @user.errors, status: :unprocessable_entity }

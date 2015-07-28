@@ -77,17 +77,15 @@ class User < ActiveRecord::Base
   end
 
   def create_role(roles)
-    if roles.drop(1).any?
+    if roles && roles.drop(1).any?
       self.roles.clear
       Role.find(roles.drop(1)).each do |role|
         self.roles << role
       end
     elsif self.roles.exists?
-      p '11111'
       # если роли уже есть и ничего не изменилось, то ничего не делаем
     else
       self.roles << Role.find_by_name('Тестируемый') # если ролей нету то добавляем
-      p '============='
     end
   end
 end

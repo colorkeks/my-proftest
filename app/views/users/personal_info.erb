@@ -33,18 +33,13 @@
             <div class="col-lg-3" style="text-align: center">
               <%= image_tag((avatar = @avatars.order('updated_at DESC').first) ? avatar.file_content.url(:medium) : 'missing_avatar.png', size: '230x230') %>
               <% if current_user.id == @user.id %>
-              <div class="btn btn-white" style="margin-top: 10px;" data-toggle="modal" data-target="#change_avatar">
-                Поменять аватар
-              </div>
-              <% end %>
-              <% if (current_user.id == @user.id) || current_user.roles.where('name = ? OR name = ?', 'Супер_Администратор', 'Администратор').any? %>
-                  <div class="btn btn-white" style="margin-top: 10px;" data-toggle="modal" data-target="#options">
-                    Опции
+                  <div class="btn btn-white" style="margin-top: 10px;" data-toggle="modal" data-target="#change_avatar">
+                    Поменять аватар
                   </div>
               <% end %>
             </div>
             <div class="col-lg-4">
-              <table class="table table-bordered table-condensed" style="margin-left: 30px;">
+              <table class="table table-bordered table-condensed">
                 <tr>
                   <th style="width: 150px"><h4>Фамилия:</h4></th>
                   <td><h4><%= @user.last_name %></h4></td>
@@ -58,11 +53,32 @@
                   <td><h4><%= @user.second_name %></h4></td>
                 </tr>
                 <tr>
+                  <th><h4>Дата рождения:</h4></th>
+                  <td><h4><%= @user.birthday %></h4></td>
+                </tr>
+              </table>
+            </div>
+            <div class="col-lg-4">
+              <table class="table table-bordered table-condensed">
+                <tr>
+                  <th style="width: 200px"><h4>Роли:</h4></th>
+                  <td><h4><%= @user.roles.map { |i| i.name }.join(', ') %></h4></td>
+                </tr>
+                <tr>
+                  <th><h4>Приоритетная роль:</h4></th>
+                  <td><h4><%= @user.roles.where(id: @user.priority_role_id).first.name %></h4></td>
+                </tr>
+                <tr>
                   <th><h4>Email:</h4></th>
                   <td><h4><%= @user.email %></h4></td>
                 </tr>
               </table>
             </div>
+            <% if current_user.id == @user.id || current_user.roles.where('name = ? or name = ?', 'Администратор', 'Супер_Администратор').any? %>
+                <div class="col-lg-1">
+                  <%= link_to '<i class="fa fa-pencil"></i>'.html_safe, {controller: 'users', action: 'edit', back_url: personal_info_user_path(@user)}, :class => 'btn btn-white btn-sm tooltips', title: 'Редактировать профиль'%>
+                </div>
+            <% end %>
           </div>
         </div>
       </div>
@@ -103,46 +119,6 @@
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="options" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" style="margin: 15px;" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <h4>Опции:</h4>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <%= simple_form_for @user, url: {action: 'update'}, class: 'form-control' do |f| %>
-              <div class="form-group">
-                <div class="col-lg-4">
-                  <%= f.label 'Приоритетная роль:', :class => 'control-label' %>
-                </div>
-                <div class="controls col-md-8">
-                  <%= f.select(:priority_role_id, @user.roles.collect { |p| [p.name, p.id] }, {}, {:class => 'form-control'}) %>
-                </div>
-              </div>
-              <% if (@user.id != current_user.id) && current_user.roles.where('name = ? OR name = ?', 'Супер_Администратор', 'Администратор').any? %>
-              <div class="form-group">
-                <div class="col-lg-4">
-                  <%= f.label 'Роли:', :class => 'control-label' %>
-                </div>
-                <div class="controls col-md-8">
-                  <%= f.association :roles, label:false, :input_html => {:class => 'form-control chosen-select', placeholder: ' '} %>
-                </div>
-              </div>
-              <% end %>
-              <div class="pull-left">
-                <%= f.submit 'Обновить', class: 'btn btn-white' %>
-              </div>
-          <% end %>
         </div>
       </div>
     </div>
