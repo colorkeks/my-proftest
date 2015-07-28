@@ -13,6 +13,13 @@ class Test < ActiveRecord::Base
   include SoftDeletion
   has_paper_trail
 
+  ALGORITHMS = [
+      'Все задания',
+      'Ограниченое количество заданий',
+      'Настройка эквивалентных групп'
+  ]
+  #validates :algorithm, inclusion: ALGORITHMS
+
   scope :attestation, -> {where(attestation: true)}
   scope :training, -> {where(training: true)}
 
@@ -39,7 +46,7 @@ class Test < ActiveRecord::Base
 
   def get_tasks_all_random
     task_queue = []
-    self.tasks.existing.order('RANDOM()').each do |task|
+    self.tasks.existing.order(self.mix_tasks ? 'RANDOM()' : 'id ASC').each do |task|
       if task.chain.present?
         if task.chain_position == 1
           task_queue += self.tasks.existing.where(chain: task.chain).order(:chain_position).all
@@ -60,6 +67,15 @@ class Test < ActiveRecord::Base
     elsif self.algorithm == 'Ограниченое количество заданий'
       task_required_count = ((self.tasks.existing.count.to_f / 100.0) * self.percent_tasks).round
       task_queue = self.get_tasks_all_random.take(task_required_count)
+    elsif self.algorithm == 'Настройка эквивалентных групп'
+      self.eqvgroups.order(:number).each do |eg|
+        #
+        task_queue += eg.tasks.existing.where(chain_id: nil).order(self.mix_tasks ? 'RANDOM()' : 'id ASC').take(eg.task_count)
+        chained_first_tasks = eg.tasks.existing.where(chain_position: 1).order(self.mix_tasks ? 'RANDOM()' : 'id ASC').take(eg.chain_count)
+        chained_first_tasks.each do |cft|
+          task_queue += eg.tasks.existing.where(chain: cft.chain).order(:chain_position).all
+        end
+      end
     else
       raise 'Неизвестный алгоритм выбора заданий'
     end

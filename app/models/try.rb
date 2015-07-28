@@ -19,7 +19,7 @@ class Try < ActiveRecord::Base
           :status => 'ответ не дан',
           :task_id => task.id
       )
-      task.answers.order('RANDOM()').each do |answer|
+      task.answers.order(task.test.mix_answers ? 'RANDOM()' : 'id ASC').each do |answer|
         task_result.user_answers.build(
             answer_version: answer.versions.last,
             #:user_reply => false,
@@ -32,7 +32,7 @@ class Try < ActiveRecord::Base
             #:user_association_id => nil
         )
       end
-      task.associations.order('RANDOM()').each do |association|
+      task.associations.order(self.test.mix_answers ? 'RANDOM()' : 'id ASC').each do |association|
         task_result.user_associations.build(
             association_version: association.versions.last,
             #:text => association.text,

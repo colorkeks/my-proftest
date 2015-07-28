@@ -36,7 +36,7 @@ class TriesController < ApplicationController
     else
       @test = Test.find_by_id(@try.test_id)
       @current_task = @try.task_results.where(:status => 'правильно').count + @try.task_results.where(:status => 'не правильно').count + @try.task_results.where(:status => 'частично правильно').count
-      @tasks_count =@try.task_results.count
+      @tasks_count = @try.task_results.count
       @current_task_index = params[:current_task_index].nil? ? 0 : params[:current_task_index].to_i
 
       #таймер
@@ -67,7 +67,7 @@ class TriesController < ApplicationController
   end
 
   def try_result
-    @task_result = TaskResult.where(:status => 'ответ не дан', :try_id => params[:id]).order('RANDOM()').first
+    @task_result = TaskResult.where(:status => 'ответ не дан', :try_id => params[:id]).order(@try.test.mix_answers ? 'RANDOM()' : 'id ASC').first
     max_points = 0
     user_points = 0
 
