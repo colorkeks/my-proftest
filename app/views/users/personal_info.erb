@@ -4,7 +4,7 @@
   <div class="pageheader">
     <div class="row">
       <div class="col-sm-3 col-lg-2">
-        <a class="btn btn-white back-btn pull-right" title="Назад" href="<%= user_path(@user) %>">
+        <a class="btn btn-white back-btn pull-right" title="Назад" href="<%= (current_user.id == @user.id) ? user_path(@user) : user_path(current_user.id) %>">
           <i class="fa fa-arrow-left"></i>
         </a>
 
@@ -32,9 +32,11 @@
           <div class="panel-body panel-profile">
             <div class="col-lg-3" style="text-align: center">
               <%= image_tag((avatar = @avatars.order('updated_at DESC').first) ? avatar.file_content.url(:medium) : 'missing_avatar.png', size: '230x230') %>
+              <% if current_user.id == @user.id %>
               <div class="btn btn-white" style="margin-top: 10px;" data-toggle="modal" data-target="#change_avatar">
                 Поменять аватар
               </div>
+              <% end %>
               <% if (current_user.id == @user.id) || current_user.roles.where('name = ? OR name = ?', 'Супер_Администратор', 'Администратор').any? %>
                   <div class="btn btn-white" style="margin-top: 10px;" data-toggle="modal" data-target="#options">
                     Опции
@@ -118,7 +120,7 @@
       </div>
       <div class="modal-body">
         <div class="row">
-          <%= simple_form_for @user, url: {action: 'update'} do |f| %>
+          <%= simple_form_for @user, url: {action: 'update'}, class: 'form-control' do |f| %>
               <div class="form-group">
                 <div class="col-lg-4">
                   <%= f.label 'Приоритетная роль:', :class => 'control-label' %>
@@ -127,7 +129,17 @@
                   <%= f.select(:priority_role_id, @user.roles.collect { |p| [p.name, p.id] }, {}, {:class => 'form-control'}) %>
                 </div>
               </div>
-              <div class="pull-right">
+              <% if current_user.roles.where('name = ? OR name = ?', 'Супер_Администратор', 'Администратор').any? %>
+              <div class="form-group">
+                <div class="col-lg-4">
+                  <%= f.label 'Роли:', :class => 'control-label' %>
+                </div>
+                <div class="controls col-md-8">
+                  <%= f.association :roles, label:false, :input_html => {:class => 'form-control chosen-select', placeholder: ' '} %>
+                </div>
+              </div>
+              <% end %>
+              <div class="pull-left">
                 <%= f.submit 'Обновить', class: 'btn btn-white' %>
               </div>
           <% end %>

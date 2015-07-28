@@ -33,6 +33,22 @@ class User < ActiveRecord::Base
     return !!self.roles.where(name: role).any?
   end
 
+
+  def self.search_user(q)
+    q = q.strip.mb_chars.upcase.to_s
+    if q.empty?
+      User.all
+    else
+      qs = q.split(' ').map{|i| i+'%'}
+      query = %w(first_name last_name second_name drcode).permutation(qs[0..3].length).map do|p|
+        fields = p.each_with_index.map{|f,i| "#{f} LIKE(#{self.sanitize(qs[i])})"}.join(' AND ')
+        "(#{fields})"
+      end.join(' OR ')
+
+      User.where(query)
+    end
+  end
+
   def generate_token
     while true do
       random_number = Random.rand(99999999)
@@ -61,15 +77,17 @@ class User < ActiveRecord::Base
   end
 
   def create_role(roles)
-    if roles
+    if roles.drop(1).any?
       self.roles.clear
       Role.find(roles.drop(1)).each do |role|
         self.roles << role
       end
     elsif self.roles.exists?
+      p '11111'
       # если роли уже есть и ничего не изменилось, то ничего не делаем
     else
       self.roles << Role.find_by_name('Тестируемый') # если ролей нету то добавляем
+      p '============='
     end
   end
 end

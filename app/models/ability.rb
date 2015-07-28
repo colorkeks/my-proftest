@@ -13,7 +13,7 @@ class Ability
     end
     if user.role? :Администратор
       can :manage, Doctor
-      can [:edit, :update, :test_persons], User
+      can [:edit, :update, :test_persons, :admin_tab, :search_users, :personal_info], User
     end
     if user.role? :Регистратор
       can :manage, Doctor
