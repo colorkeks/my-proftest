@@ -32,9 +32,16 @@
           <div class="panel-body panel-profile">
             <div class="col-lg-3" style="text-align: center">
               <%= image_tag((avatar = @avatars.order('updated_at DESC').first) ? avatar.file_content.url(:medium) : 'missing_avatar.png', size: '230x230') %>
-              <div class="btn btn-white" style="margin: 10px;" data-toggle="modal" data-target="#change_avatar">Поменять аватар</div>
+              <div class="btn btn-white" style="margin-top: 10px;" data-toggle="modal" data-target="#change_avatar">
+                Поменять аватар
+              </div>
+              <% if (current_user.id == @user.id) || current_user.roles.where('name = ? OR name = ?', 'Супер_Администратор', 'Администратор').any? %>
+                  <div class="btn btn-white" style="margin-top: 10px;" data-toggle="modal" data-target="#options">
+                    Опции
+                  </div>
+              <% end %>
             </div>
-            <div class="col-lg-9">
+            <div class="col-lg-4">
               <table class="table table-bordered table-condensed" style="margin-left: 30px;">
                 <tr>
                   <th style="width: 150px"><h4>Фамилия:</h4></th>
@@ -67,9 +74,9 @@
     <div class="modal-content">
       <div class="modal-body">
         <div class="row">
-        <button type="button" class="close" style="margin: 15px;" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+          <button type="button" class="close" style="margin: 15px;" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
           <!-- tabs -->
           <div class="tabbable">
             <ul class="nav nav-tabs" id="mytabs">
@@ -82,18 +89,48 @@
                   <button type="button" class="close" data-dismiss="alert">×</button>
                   <a href="#" class="alert-link">Невозможно загрузить файл с таким типом</a>
                 </div>
-                    <%= form_for Avatar.new do |f| %>
-                        <%= f.file_field(:file_content) %>
-                        <%= f.hidden_field :user_id, value: @user.id %>
+                <%= form_for Avatar.new do |f| %>
+                    <%= f.file_field(:file_content) %>
+                    <%= f.hidden_field :user_id, value: @user.id %>
                     <hr/>
-                    <%= f.submit 'Загрузить', class: 'btn btn-white'%>
-                    <% end %>
+                    <%= f.submit 'Загрузить', class: 'btn btn-white' %>
+                <% end %>
               </div>
-            <div class="tab-pane" id="two">
-              <%= render partial: 'avatars'  %>
-            </div>
+              <div class="tab-pane" id="two">
+                <%= render partial: 'avatars' %>
+              </div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="options" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" style="margin: 15px;" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4>Опции:</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <%= simple_form_for @user, url: {action: 'update'} do |f| %>
+              <div class="form-group">
+                <div class="col-lg-4">
+                  <%= f.label 'Приоритетная роль:', :class => 'control-label' %>
+                </div>
+                <div class="controls col-md-8">
+                  <%= f.select(:priority_role_id, @user.roles.collect { |p| [p.name, p.id] }, {}, {:class => 'form-control'}) %>
+                </div>
+              </div>
+              <div class="pull-right">
+                <%= f.submit 'Обновить', class: 'btn btn-white' %>
+              </div>
+          <% end %>
         </div>
       </div>
     </div>

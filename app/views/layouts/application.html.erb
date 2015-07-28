@@ -78,7 +78,7 @@
                     <span class="caret"></span>
                   </div>
                   <ul class="dropdown-menu" role="menu">
-                   <% if current_user && current_user.roles.find(current_user.priority_role_id).name == 'Администратор' %>
+                   <% if current_user &&  current_user.roles.find(current_user.priority_role_id).name == 'Администратор' %>
                         <li><%= link_to 'На главную', :doctors %></li>
                    <% elsif current_user && current_user.roles.find(current_user.priority_role_id).name == 'Регистратор' %>
                         <li><%= link_to 'На главную', :doctors %></li>
