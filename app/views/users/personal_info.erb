@@ -129,7 +129,7 @@
                   <%= f.select(:priority_role_id, @user.roles.collect { |p| [p.name, p.id] }, {}, {:class => 'form-control'}) %>
                 </div>
               </div>
-              <% if current_user.roles.where('name = ? OR name = ?', 'Супер_Администратор', 'Администратор').any? %>
+              <% if (@user.id != current_user.id) && current_user.roles.where('name = ? OR name = ?', 'Супер_Администратор', 'Администратор').any? %>
               <div class="form-group">
                 <div class="col-lg-4">
                   <%= f.label 'Роли:', :class => 'control-label' %>

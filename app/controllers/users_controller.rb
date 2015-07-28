@@ -96,7 +96,6 @@ class UsersController < ApplicationController
   end
 
   def admin_tab
-    @users = User.all
     render 'users/admin_tab', layout: 'admin'
   end
 
