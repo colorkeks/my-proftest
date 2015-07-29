@@ -10,7 +10,7 @@ class UsersController < ApplicationController
   end
 
   def test_persons
-    @test_persons = User.includes(:roles).where(roles:{name: 'Тестируемый'}).order(:id).paginate(:page => params[:page], :per_page => params[:per_page] || 30)
+    @test_persons = User.includes(:roles).where(roles: {name: 'Тестируемый'}).order(:id).paginate(:page => params[:page], :per_page => params[:per_page] || 30)
     render 'test_persons', layout: 'admin'
   end
 
@@ -59,7 +59,7 @@ class UsersController < ApplicationController
     @assigned_tests = AssignedTest.all.where(user_id: @user.id, test_mode_id: @current_mode)
     respond_to do |format|
       format.pdf do
-        render pdf: @user.drcode ? @user.drcode + '_' + DateTime.now.strftime('%Y-%m-%d').to_s : @user.last_name + ' ' + DateTime.now.strftime('%Y-%m-%d').to_s , # Excluding ".pdf" extension.
+        render pdf: @user.drcode ? @user.drcode + '_' + DateTime.now.strftime('%Y-%m-%d').to_s : @user.last_name + ' ' + DateTime.now.strftime('%Y-%m-%d').to_s, # Excluding ".pdf" extension.
                :page_size => 'A4',
                formats: :html, encoding: 'utf8'
       end
@@ -72,12 +72,12 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.pdf do
         file_name = @user.drcode ? @user.drcode + '_' + DateTime.now.strftime('%Y-%m-%d').to_s : @user.last_name + ' ' + DateTime.now.strftime('%Y-%m-%d').to_s + '.pdf'
-        pdf = render_to_string pdf: file_name  , # Excluding ".pdf" extension.
-               :page_size => 'A4',
-               template: '/users/save_pdf.erb',
-               formats: :html,
-               encoding: 'utf8'
-        send_data(pdf, filename: file_name , :type=> 'application/pdf', :disposition => "attachment; filename=#{file_name}.pdf")
+        pdf = render_to_string pdf: file_name, # Excluding ".pdf" extension.
+                               :page_size => 'A4',
+                               template: '/users/save_pdf.erb',
+                               formats: :html,
+                               encoding: 'utf8'
+        send_data(pdf, filename: file_name, :type => 'application/pdf', :disposition => "attachment; filename=#{file_name}.pdf")
       end
     end
   end
@@ -131,7 +131,7 @@ class UsersController < ApplicationController
     @doctor = Doctor.find_by(drcode: params[:drcode])
     @update = true
     if @doctor
-       render 'create_test_person', layout: false
+      render 'create_test_person', layout: false
     else
       @drcode_not_found = true
       render 'check_drcode', layout: false
@@ -140,26 +140,26 @@ class UsersController < ApplicationController
 
   def show_check_drcode_modal
     respond_to do |format|
-      format.js{ render 'check_drcode' }
+      format.js { render 'check_drcode' }
     end
   end
 
   def show_create_test_person_modal
     respond_to do |format|
-      format.js{ render 'create_test_person' }
+      format.js { render 'create_test_person' }
     end
   end
 
   def create_test_person
     user = User.new(
-      first_name: params[:first_name],
-      second_name: params[:second_name],
-      last_name: params[:last_name],
-      job: params[:lpu],
-      email: params[:email],
-      birthday: params[:birthday],
-      password: params[:password],
-      drcode: params[:drcode]
+        first_name: params[:first_name],
+        second_name: params[:second_name],
+        last_name: params[:last_name],
+        job: params[:lpu],
+        email: params[:email],
+        birthday: params[:birthday],
+        password: params[:password],
+        drcode: params[:drcode]
     )
 
     if user.save
@@ -202,11 +202,12 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1.jsonx
   def update
     @user.create_role(params[:user][:role_ids])
-    @user.priority_role_id = @user.roles.order('created_at DESC').first.id
     respond_to do |format|
       if @user.update(user_params)
-          format.html { redirect_to params[:user][:back_url] || profile_user_path(@user), notice: 'Пользователь успешно обновлен.' }
-          format.json { render :show, status: :ok, location: @user }
+        @user.priority_role_id = @user.roles.order('created_at DESC').first.id
+        @user.save!
+        format.html { redirect_to params[:user][:back_url] || profile_user_path(@user), notice: 'Пользователь успешно обновлен.' }
+        format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit }
         format.json { render json: @user.errors, status: :unprocessable_entity }
@@ -222,7 +223,7 @@ class UsersController < ApplicationController
       sign_in :user, @user, bypass: true
       redirect_to personal_info_user_path(@user)
     else
-      redirect_to personal_info_user_path(@user), alert: 'Не удалось изменить пароль'
+      redirect_to personal_info_user_path(@user), alert: 'Не удалось изменить пароль/email'
     end
   end
 
