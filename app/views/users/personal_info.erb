@@ -76,7 +76,10 @@
             </div>
             <% if current_user.id == @user.id || current_user.roles.where('name = ? or name = ?', 'Администратор', 'Супер_Администратор').any? %>
                 <div class="col-lg-1">
-                  <%= link_to '<i class="fa fa-pencil"></i>'.html_safe, {controller: 'users', action: 'edit', back_url: personal_info_user_path(@user)}, :class => 'btn btn-white btn-sm tooltips', title: 'Редактировать профиль'%>
+                  <%= link_to '<i class="fa fa-pencil"></i>'.html_safe, {controller: 'users', action: 'edit', back_url: personal_info_user_path(@user)}, :class => 'btn btn-white btn-sm tooltips', title: 'Редактировать профиль' %>
+                  <div class="btn btn-white tooltips" title="Изменить Email и пароль" data-toggle="modal" data-target="#update_password">
+                    <i class="fa fa-lock"></i>
+                  </div>
                 </div>
             <% end %>
           </div>
@@ -120,6 +123,49 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="update_password" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="padding-top: 80px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" style="margin: 15px;" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4>Смена Email и пароля</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_for(@user, url: update_password_user_path) do |f| %>
+            <div class="form-group">
+              <div class="col-lg-3">
+                <%= f.label 'Email', :class => 'control-label' %>
+              </div>
+              <div class="controls col-md-5">
+                <%= f.email_field :email, :class => 'form-control', :autocomplete => :off %>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-lg-3">
+                <%= f.label 'Новый пароль', :class => 'control-label' %>
+              </div>
+              <div class="controls col-md-5">
+                <%= f.text_field :password, :class => 'form-control', :autocomplete => :off %>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-lg-3">
+                <%= f.label 'Подтверждение', :class => 'control-label' %>
+              </div>
+              <div class="controls col-md-5">
+                <%= f.text_field :password_confirmation, :class => 'form-control', :autocomplete => :off %>
+              </div>
+            </div>
+            <%= f.submit 'Сохранить', class: 'btn btn-white' %>
+        <% end %>
       </div>
     </div>
   </div>

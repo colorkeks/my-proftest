@@ -170,6 +170,18 @@ class UsersController < ApplicationController
     end
   end
 
+
+  def update_password
+    @user = User.find(params[:id])
+    if @user.update(user_params)
+      # Sign in the user by passing validation in case their password changed
+      sign_in :user, @user, bypass: true
+      redirect_to personal_info_user_path(@user)
+    else
+      redirect_to personal_info_user_path(@user), alert: 'Не удалось изменить пароль'
+    end
+  end
+
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
