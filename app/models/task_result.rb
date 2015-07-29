@@ -93,7 +93,7 @@ class TaskResult < ActiveRecord::Base
         correct = false
         self.user_answers.each do |user_answer|
           user_answer.user_reply = params[:user_answer]
-          if user_answer.answer_version.item_version.text.mb_chars.downcase == params[:user_answer]
+          if user_answer.answer_version.item_version.text.mb_chars.downcase == params[:user_answer].mb_chars.downcase
             user_answer.correct = true
             correct = true
           end
