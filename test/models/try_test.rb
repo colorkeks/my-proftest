@@ -283,6 +283,7 @@ class TryTest < ActiveSupport::TestCase
     task_result.check_user_answer!(params)
 
     assert_equal true, task_result.save
+    task_result.reload
     assert_equal 0, task_result.point
     assert_equal 'не правильно', task_result.status
 

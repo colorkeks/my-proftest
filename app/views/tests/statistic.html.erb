@@ -163,13 +163,13 @@
                                 </table>
                               </div>
                             </div>
-                        <% elsif ['Множественный выбор', 'Единичный выбор'].include?(task.task_type) %>
+                        <% elsif ['Множественный выбор', 'Единичный выбор', 'Открытый вопрос'].include?(task.task_type) %>
                             <table class="table" style="margin-bottom: 5px">
                               <tbody>
                               <%# all_answers = task.user_answers.count %>
                               <% task.answers.each do |answer| %>
                                   <tr>
-                                    <% right_answer = (answer.correct? ? 'right_answer' : '') %>
+                                    <% right_answer = (answer.correct? || ['Открытый вопрос'].include?(task.task_type)) ? 'right_answer' : '' %>
                                     <td class="slim <%= right_answer %>"></td>
                                     <td><%= answer.text %></td>
                                     <td><%= task.statistic['answers'][answer.id]['count'] %> || <%= task.statistic['answers'][answer.id]['percent'].round(2) %>%</td>
@@ -183,6 +183,21 @@
                                     <!--</td>-->
                                   </tr>
                               <% end %>
+                              <%# Неправильные ответы для открытого вопроса %>
+                              <% if task.task_type == 'Открытый вопрос' %>
+                                  <tr>
+                                    <td class="slim"></td>
+                                    <td><%= 'Неверные ответы' %></td>
+                                    <td>
+                                        <%= task.statistic['answers']['other']['count'] %> || <%= task.statistic['answers']['other']['percent'].round(2) %>%
+                                        <% incorrect_max_count = 3 %>
+                                        (
+                                        <%= task.statistic['answers']['incorrect_answers'].sort_by{|key, value| value['count']}.reverse.map{|key, value| "'#{key}': #{value['count']}"}.take(incorrect_max_count).join(', ') %>
+                                        <%= " ..." if (task.statistic['answers']['incorrect_answers'].count > incorrect_max_count) %>
+                                        )
+                                    </td>
+                                  </tr>
+                               <% end %>
                               </tbody>
                             </table>
 
