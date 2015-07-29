@@ -3,17 +3,17 @@ class Ability
 
   def initialize(user)
     user ||= User.new # guest user (not logged in)
-    can [:profile], User
-    can :manage, Avatar
-    can [:show, :edit, :update, :personal_info], User do |current_user|
-      user.id == current_user.id
-    end
     if user.role? :Супер_Администратор
       can :manage, :all
     end
     if user.role? :Администратор
       can :manage, Doctor
       can [:edit, :update, :test_persons, :admin_tab, :search_users, :personal_info], User
+      can [:profile], User
+      can :manage, Avatar
+      can [:show, :edit, :update, :personal_info, :update_password], User do |current_user|
+        user.id == current_user.id
+      end
     end
     if user.role? :Регистратор
       can :manage, Doctor
@@ -24,10 +24,14 @@ class Ability
       can :manage, OfficfunDbf
       can :manage, SpeclistDbf
       can :manage, PostDbf
+      can :manage, Avatar
       can [:view_test_results, :profile, :modes_history, :generate_token, :clean_token, :save_pdf, :custom_create,
            :test_persons, :print_test_results, :search_tests, :check_drcode, :create_test_person,
-           :show_check_drcode_modal, :show_create_test_person_modal
+           :show_check_drcode_modal, :show_create_test_person_modal, :profile
           ], User
+      can [:show, :edit, :update, :personal_info, :update_password], User do |current_user|
+        user.id == current_user.id
+      end
     end
     if user.role? :Методолог
       can :manage, TestGroup
@@ -43,6 +47,11 @@ class Ability
       can :manage, UserAssociation
       can :manage, UserAnswer
       can :manage, TaskResult
+      can [:profile], User
+      can :manage, Avatar
+      can [:show, :edit, :update, :personal_info, :update_password], User do |current_user|
+        user.id == current_user.id
+      end
     end
     if user.role? :Тестируемый
       can :manage, Try
@@ -50,6 +59,11 @@ class Ability
       can :manage, UserAnswer
       can :manage, TaskResult
       can [:testee_tab], User
+      can [:profile], User
+      can :manage, Avatar
+      can [:show, :edit, :update, :personal_info, :update_password], User do |current_user|
+        user.id == current_user.id
+      end
     end
     if user.new_record?
       can [:token_auth, :check_token], User

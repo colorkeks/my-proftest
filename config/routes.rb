@@ -73,6 +73,7 @@ Rails.application.routes.draw do
       get 'print_test_results'
       get 'view_test_results'
       get 'save_pdf'
+      patch 'update_password'
       post 'search_tests'
       post 'generate_token'
       post 'clean_token'

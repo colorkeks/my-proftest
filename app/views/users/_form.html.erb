@@ -2,15 +2,15 @@
         <table class="profile table-no-padding-left">
           <tr>
             <th>Фамилия</th>
-            <td><%= f.text_field :last_name, :class => 'form-control' %></td>
+            <td><%= f.text_field :last_name, :class => 'form-control', :autocomplete => :off  %></td>
           </tr>
           <tr>
             <th>Имя</th>
-            <td><%= f.text_field :first_name, :class => 'form-control' %></td>
+            <td><%= f.text_field :first_name, :class => 'form-control', :autocomplete => :off  %></td>
           </tr>
           <tr>
             <th>Отчество</th>
-            <td><%= f.text_field :second_name, :class => 'form-control' %></td>
+            <td><%= f.text_field :second_name, :class => 'form-control', :autocomplete => :off  %></td>
           </tr>
           <tr>
             <th style="width: 150px;">Дата рождения</th>
