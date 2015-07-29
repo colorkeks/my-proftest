@@ -23,7 +23,7 @@ class Test < ActiveRecord::Base
   scope :attestation, -> {where(attestation: true)}
   scope :training, -> {where(training: true)}
 
-  def self.search_test(q,mode)
+  def self.search_test(q, mode)
     if mode == 'Аттестация'
       if q.empty?
         Test.attestation.existing.all
@@ -34,7 +34,7 @@ class Test < ActiveRecord::Base
       if q.empty?
         Test.training.existing.all
       else
-        Test.training.existing.where("description LIKE ? OR title LIKE ? AND attestation = false", "#{q}%", "%#{q}%")
+        Test.training.existing.where("description LIKE ? OR title LIKE ?", "#{q}%", "%#{q}%")
       end
     end
   end

@@ -323,9 +323,16 @@
                   <%= hidden_field_tag 'assigned_test[test_mode_id]',@user.test_modes.order('created_at DESC').first.id %>
                   <select name="assigned_test[test_ids][]" id="" multiple size="8" style="width: 100%; padding: 10px; border: 1px solid #e2e2e2">
                     <%= render_tree(TestGroup.root) do |item| %>
-                        <% if item.tests.attestation.existing.any? %>
+                        <%
+                           if @current_mode.name == 'Аттестация'
+                             tests = item.tests.attestation.existing
+                           else
+                             tests = item.tests.training.existing
+                           end
+                        %>
+                        <% if tests.any? %>
                             <optgroup label="<%= item.name %>">
-                              <% item.tests.attestation.existing.each do |test| %>
+                              <% tests.each do |test| %>
                                   <option value="<%= test.id %>">
                                     <%= test.title %>
                                   </option>
