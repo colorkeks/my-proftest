@@ -24,21 +24,14 @@ class Ability
       can :manage, OfficfunDbf
       can :manage, SpeclistDbf
       can :manage, PostDbf
-<<<<<<< HEAD
-      can [:view_test_results, :profile, :modes_history,
-           :generate_token, :clean_token, :save_pdf, :custom_create,
-           :test_persons, :print_test_results, :search_tests], User
-      can [:profile], User
       can :manage, Avatar
+      can [:view_test_results, :profile, :modes_history, :generate_token, :clean_token, :save_pdf, :custom_create,
+           :test_persons, :print_test_results, :search_tests, :check_drcode, :create_test_person,
+           :show_check_drcode_modal, :show_create_test_person_modal, :profile
+          ], User
       can [:show, :edit, :update, :personal_info, :update_password], User do |current_user|
         user.id == current_user.id
       end
-=======
-      can [:view_test_results, :profile, :modes_history, :generate_token, :clean_token, :save_pdf, :custom_create,
-           :test_persons, :print_test_results, :search_tests, :check_drcode, :create_test_person,
-           :show_check_drcode_modal, :show_create_test_person_modal
-          ], User
->>>>>>> 7ae871a77e7e36e1fdfbcd6d1eeeb3963c667f43
     end
     if user.role? :Методолог
       can :manage, TestGroup
