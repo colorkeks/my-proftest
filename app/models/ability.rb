@@ -24,9 +24,10 @@ class Ability
       can :manage, OfficfunDbf
       can :manage, SpeclistDbf
       can :manage, PostDbf
-      can [:view_test_results, :profile, :modes_history,
-           :generate_token, :clean_token, :save_pdf, :custom_create,
-           :test_persons, :print_test_results, :search_tests], User
+      can [:view_test_results, :profile, :modes_history, :generate_token, :clean_token, :save_pdf, :custom_create,
+           :test_persons, :print_test_results, :search_tests, :check_drcode, :create_test_person,
+           :show_check_drcode_modal, :show_create_test_person_modal
+          ], User
     end
     if user.role? :Методолог
       can :manage, TestGroup

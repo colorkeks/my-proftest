@@ -23,9 +23,7 @@
     <div class="row">
       <div class="col-sm-3 col-lg-2">
         <div class="btn-group nomargin">
-          <button class="btn btn-primary create-btn dropdown-toggle" data-toggle="dropdown" title="Создать">
-            Создать
-          </button>
+          <%= link_to 'Создать', show_check_drcode_modal_users_path, class: 'btn btn-primary create-btn dropdown-toggle', title: 'Создать', remote: true %>
         </div>
         <ul class="nav nav-pills nav-stacked nav-email mb20">
           <li>
@@ -94,3 +92,17 @@
     </div>
   </div>
 </div>
+
+<div class="modal" id="check-drcode-modal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Создание испытуемого</h4>
+      </div>
+      <div id="modal-place">
+
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

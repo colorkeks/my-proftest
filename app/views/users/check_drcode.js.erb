@@ -1,0 +1,6 @@
+var tests_html = '<%= escape_javascript(render partial: 'check_drcode_modal', locals: {drcode_not_found: @drcode_not_found}) %>';
+$('#modal-place').html(tests_html);
+<% if !@update %>
+$('#check-drcode-modal').modal('show');
+<% end %>
+

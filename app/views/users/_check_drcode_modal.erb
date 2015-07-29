@@ -1,0 +1,18 @@
+<%= form_tag check_drcode_users_path, class: 'form-horizontal', remote: true do %>
+  <div class="modal-body">
+    <% if drcode_not_found %>
+      <div class="alert alert-danger">Регистрационный номер не найден</div>
+      <hr/>
+    <% end %>
+    <div class="form-group">
+      <label for="inputEmail3" class="col-sm-4 control-label">Номер в обл рег.</label>
+      <div class="col-sm-8">
+        <%= text_field_tag :drcode, nil, class: 'form-control' %>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <%= submit_tag 'Создать', class: 'btn btn-primary' %>
+    <%= link_to 'Пропустить', show_create_test_person_modal_users_path, class: 'btn btn-default', remote: true %>
+  </div>
+<% end %>
