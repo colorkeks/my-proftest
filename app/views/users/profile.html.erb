@@ -46,9 +46,7 @@
 <div class="panel-body panel-profile">
 <h3 style="margin: 0"><%= @user.last_name %> <%= @user.first_name %> <%= @user.second_name %>
   <% if current_user.id == @user.id || current_user.roles.where('name = ? or name = ?', 'Администратор','Супер_Администратор').any? %>
-      <a href="/users/<%= @user.id %>/edit" class="btn btn-white btn-sm tooltips" title="Редактировать карточку">
-        <i class="fa fa-pencil"></i>
-      </a>
+      <%= link_to '<i class="fa fa-pencil"></i>'.html_safe, {controller: 'users', action: 'edit', back_url: profile_user_path(@user)}, :class => 'btn btn-white btn-sm tooltips', title: 'Редактировать профиль'%>
   <% end %>
 </h3>
 <br/>
@@ -124,8 +122,6 @@
               <tr>
                 <th style="width: 30px">С:</th>
                 <td><h5><%= @current_mode.date_beg ? @current_mode.date_beg.strftime('%d.%m.%Y') : '-' %></h5></td>
-                <!--<th style="width: 30px">По:</th>-->
-                <!--<td><h5><%#= @current_mode.date_end ? @current_mode.date_end : '-' %></h5></td>-->
               </tr>
 
             </table>

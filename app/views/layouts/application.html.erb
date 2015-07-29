@@ -50,7 +50,7 @@
         </ul>
         <ul class="nav navbar-nav navbar-right headermenu">
           <li>
-            <% if current_user && current_user.roles.count > 1 %>
+            <% if current_user && current_user.roles.count > 1 || current_user && current_user.role?('Супер_Администратор') %>
                 <div class="btn-group">
                   <div class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     <div class="fa fa-th" style="font-size: 18px; margin-top: 5px"></div>
@@ -65,6 +65,9 @@
                     <% if current_user.role?('Тестируемый') || current_user.role?('Супер_Администратор')  %>
                         <li><%= link_to 'Тестирование', testee_tab_users_path %></li>
                     <% end %>
+                    <% if current_user.role?('Супер_Администратор') || current_user.role?('Администратор') %>
+                        <li><%= link_to 'Админка', admin_tab_users_path %></li>
+                    <% end %>
                     </ul>
                 </div>
             <% end %>
@@ -78,14 +81,16 @@
                     <span class="caret"></span>
                   </div>
                   <ul class="dropdown-menu" role="menu">
-                   <% if current_user && current_user.roles.find(current_user.priority_role_id).name == 'Администратор' %>
-                        <li><%= link_to 'На главную', :doctors %></li>
+                   <% if current_user &&  current_user.roles.find(current_user.priority_role_id).name == 'Администратор' %>
+                        <li><%= link_to 'На главную', admin_tab_users_path %></li>
                    <% elsif current_user && current_user.roles.find(current_user.priority_role_id).name == 'Регистратор' %>
                         <li><%= link_to 'На главную', :doctors %></li>
                    <% elsif current_user && current_user.roles.find(current_user.priority_role_id).name == 'Методолог' %>
                         <li><%= link_to 'На главную', :test_groups %></li>
                    <% elsif current_user && current_user.roles.find(current_user.priority_role_id).name == 'Тестируемый' %>
                         <li><%= link_to 'На главную', testee_tab_users_path %></li>
+                    <% elsif current_user.role?('Супер_Администратор')%>
+                        <li><%= link_to 'На главную', admin_tab_users_path %></li>
                     <% end %>
                     <!--<li><%#= link_to 'Карточка испытуемого', profile_user_path(current_user.id) %></li>-->
                     <li><%= link_to 'Персональные данные', personal_info_user_path(current_user.id) %></li>

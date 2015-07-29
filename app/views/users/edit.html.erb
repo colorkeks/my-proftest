@@ -4,11 +4,11 @@
   <div class="pageheader">
     <div class="row">
       <div class="col-sm-3 col-lg-2">
-        <a class="btn btn-white back-btn pull-right" title="Назад" href="/users/<%= @user.id %>/profile">
+        <a class="btn btn-white back-btn pull-right" title="Назад" href=<%= params[:back_url] || "/users/#{@user.id}/profile" %>>
           <i class="fa fa-arrow-left"></i>
         </a>
 
-        <h2>Профиль</h2>
+        <h2>Обновление</h2>
       </div>
       <div class="col-sm-9 col-lg-10">
         <div class="breadcrumb-wrapper">

@@ -18,7 +18,7 @@ class UsersController < ApplicationController
   # GET /users/1.json
   def show
     if current_user && current_user.roles.find(current_user.priority_role_id).name == 'Администратор'
-      redirect_to :doctors
+      redirect_to admin_tab_users_path
       return
     elsif current_user && current_user.roles.find(current_user.priority_role_id).name == 'Регистратор'
       redirect_to :doctors
@@ -28,6 +28,9 @@ class UsersController < ApplicationController
       return
     elsif current_user && current_user.roles.find(current_user.priority_role_id).name == 'Тестируемый'
       redirect_to testee_tab_users_path
+      return
+    elsif current_user && current_user.roles.find(current_user.priority_role_id).name == 'Супер_Администратор'
+      redirect_to admin_tab_users_path
       return
     end
   end
@@ -92,11 +95,22 @@ class UsersController < ApplicationController
     @tries = Try.all.where(:user_id => params[:id]).paginate(:page => params[:page], :per_page => params[:per_page] || 30)
   end
 
+  def admin_tab
+    render 'users/admin_tab', layout: 'admin'
+  end
+
   def search_tests
     query = Test.search_test(params[:q], params[:mode])
     @tests = query.limit(5)
     @count = query.count
     render 'search', layout: false
+  end
+
+  def search_users
+    query = User.search_user(params[:q])
+    @users = query.limit(10)
+    @count = query.count
+    render 'search_user', layout: false
   end
 
   def custom_create
@@ -191,8 +205,8 @@ class UsersController < ApplicationController
     @user.priority_role_id = @user.roles.order('created_at DESC').first.id
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to profile_user_path, notice: 'Пользователь успешно обновлен.' }
-        format.json { render :show, status: :ok, location: @user }
+          format.html { redirect_to params[:user][:back_url] || profile_user_path(@user), notice: 'Пользователь успешно обновлен.' }
+          format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit }
         format.json { render json: @user.errors, status: :unprocessable_entity }

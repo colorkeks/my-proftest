@@ -1,0 +1,54 @@
+<%= content_for :title, 'Админка' %>
+<div class="mainpanel">
+
+  <div class="pageheader">
+    <div class="row">
+      <div class="col-sm-3 col-lg-2">
+
+        <h3>Админка</h3>
+      </div>
+      <div class="col-sm-9 col-lg-9">
+        <div class="breadcrumb-wrapper">
+          <ol class="breadcrumb">
+            <li class="active">
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contentpanel ">
+    <div class="row">
+      <div class="col-sm-3 col-lg-2">
+        <div class="panel panel-default">
+          <div class="panel-body panel-profile text-center">
+            Пользователи
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-9 col-lg-10">
+        <div class="panel panel-default">
+          <div class="panel-body panel-profile">
+            <div class="btn-group labels mr10">
+              <%= form_tag({controller: 'users', action: 'search_users'}, remote: true, id: 'search_form') do %>
+                  <div class="form-group" style="margin-top: 5px">
+                    <span class="fa fa-search" ></span>
+                    <%= text_field_tag :q, params[:q], id: 'qwery_string', autocomplete: 'off', class: 'form-control', placeholder: 'Найти' %>
+                    <%= submit_tag 'Найти', class: 'btn btn-white' %>
+                    <span id="spinner"><i class="fa fa-refresh fa-spin"></i></span>
+                  </div>
+                  <div class="table-responsive" id="search-result">
+                    <div class="text-center text-info alert alert-info" style="">
+                      <strong>Для поиска пользователей введите код или ФИО</strong>
+                    </div>
+                  </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -4,7 +4,7 @@
   <div class="pageheader">
     <div class="row">
       <div class="col-sm-3 col-lg-2">
-        <a class="btn btn-white back-btn pull-right" title="Назад" href="<%= user_path(@user) %>">
+        <a class="btn btn-white back-btn pull-right" title="Назад" href="<%= (current_user.id == @user.id) ? user_path(@user) : user_path(current_user.id) %>">
           <i class="fa fa-arrow-left"></i>
         </a>
 
@@ -32,10 +32,14 @@
           <div class="panel-body panel-profile">
             <div class="col-lg-3" style="text-align: center">
               <%= image_tag((avatar = @avatars.order('updated_at DESC').first) ? avatar.file_content.url(:medium) : 'missing_avatar.png', size: '230x230') %>
-              <div class="btn btn-white" style="margin: 10px;" data-toggle="modal" data-target="#change_avatar">Поменять аватар</div>
+              <% if current_user.id == @user.id %>
+                  <div class="btn btn-white" style="margin-top: 10px;" data-toggle="modal" data-target="#change_avatar">
+                    Поменять аватар
+                  </div>
+              <% end %>
             </div>
-            <div class="col-lg-9">
-              <table class="table table-bordered table-condensed" style="margin-left: 30px;">
+            <div class="col-lg-4">
+              <table class="table table-bordered table-condensed">
                 <tr>
                   <th style="width: 150px"><h4>Фамилия:</h4></th>
                   <td><h4><%= @user.last_name %></h4></td>
@@ -49,11 +53,32 @@
                   <td><h4><%= @user.second_name %></h4></td>
                 </tr>
                 <tr>
+                  <th><h4>Дата рождения:</h4></th>
+                  <td><h4><%= @user.birthday %></h4></td>
+                </tr>
+              </table>
+            </div>
+            <div class="col-lg-4">
+              <table class="table table-bordered table-condensed">
+                <tr>
+                  <th style="width: 200px"><h4>Роли:</h4></th>
+                  <td><h4><%= @user.roles.map { |i| i.name }.join(', ') %></h4></td>
+                </tr>
+                <tr>
+                  <th><h4>Приоритетная роль:</h4></th>
+                  <td><h4><%= @user.roles.where(id: @user.priority_role_id).first.name %></h4></td>
+                </tr>
+                <tr>
                   <th><h4>Email:</h4></th>
                   <td><h4><%= @user.email %></h4></td>
                 </tr>
               </table>
             </div>
+            <% if current_user.id == @user.id || current_user.roles.where('name = ? or name = ?', 'Администратор', 'Супер_Администратор').any? %>
+                <div class="col-lg-1">
+                  <%= link_to '<i class="fa fa-pencil"></i>'.html_safe, {controller: 'users', action: 'edit', back_url: personal_info_user_path(@user)}, :class => 'btn btn-white btn-sm tooltips', title: 'Редактировать профиль'%>
+                </div>
+            <% end %>
           </div>
         </div>
       </div>
@@ -67,9 +92,9 @@
     <div class="modal-content">
       <div class="modal-body">
         <div class="row">
-        <button type="button" class="close" style="margin: 15px;" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+          <button type="button" class="close" style="margin: 15px;" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
           <!-- tabs -->
           <div class="tabbable">
             <ul class="nav nav-tabs" id="mytabs">
@@ -82,16 +107,16 @@
                   <button type="button" class="close" data-dismiss="alert">×</button>
                   <a href="#" class="alert-link">Невозможно загрузить файл с таким типом</a>
                 </div>
-                    <%= form_for Avatar.new do |f| %>
-                        <%= f.file_field(:file_content) %>
-                        <%= f.hidden_field :user_id, value: @user.id %>
+                <%= form_for Avatar.new do |f| %>
+                    <%= f.file_field(:file_content) %>
+                    <%= f.hidden_field :user_id, value: @user.id %>
                     <hr/>
-                    <%= f.submit 'Загрузить', class: 'btn btn-white'%>
-                    <% end %>
+                    <%= f.submit 'Загрузить', class: 'btn btn-white' %>
+                <% end %>
               </div>
-            <div class="tab-pane" id="two">
-              <%= render partial: 'avatars'  %>
-            </div>
+              <div class="tab-pane" id="two">
+                <%= render partial: 'avatars' %>
+              </div>
             </div>
           </div>
         </div>

@@ -41,5 +41,6 @@
               </tr>
           <% end %>
         </table>
+    <%= f.hidden_field :back_url, value: params[:back_url] %>
     <%= f.submit 'Сохранить', :class => 'btn btn-primary' %>
 <% end %>
