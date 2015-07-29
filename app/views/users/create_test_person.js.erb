@@ -1,0 +1,5 @@
+var tests_html = '<%= escape_javascript(render partial: 'create_test_person_modal') %>';
+$('#modal-place').html(tests_html);
+<%# if !@update %>
+$('#check-drcode-modal').modal('show');
+<%# end %>

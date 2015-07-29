@@ -90,6 +90,10 @@ Rails.application.routes.draw do
       post 'check_token'
       post 'search_users'
       post 'avatars'
+      post 'check_drcode'
+      post 'create_test_person'
+      get 'show_check_drcode_modal'
+      get 'show_create_test_person_modal'
     end
   end
 

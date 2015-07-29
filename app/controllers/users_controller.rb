@@ -127,6 +127,50 @@ class UsersController < ApplicationController
     end
   end
 
+  def check_drcode
+    @doctor = Doctor.find_by(drcode: params[:drcode])
+    @update = true
+    if @doctor
+       render 'create_test_person', layout: false
+    else
+      @drcode_not_found = true
+      render 'check_drcode', layout: false
+    end
+  end
+
+  def show_check_drcode_modal
+    respond_to do |format|
+      format.js{ render 'check_drcode' }
+    end
+  end
+
+  def show_create_test_person_modal
+    respond_to do |format|
+      format.js{ render 'create_test_person' }
+    end
+  end
+
+  def create_test_person
+    user = User.new(
+      first_name: params[:first_name],
+      second_name: params[:second_name],
+      last_name: params[:last_name],
+      job: params[:lpu],
+      email: params[:email],
+      birthday: params[:birthday],
+      password: params[:password],
+      drcode: params[:drcode]
+    )
+
+    if user.save
+      user.roles << Role.find_by(name: 'Тестируемый')
+      redirect_to test_persons_users_path, notice: 'Испытуемый успешно создан'
+    else
+      redirect_to test_persons_users_path, alert: 'Испытуемый не создан'
+    end
+
+  end
+
   # GET /users/new
   def new
     @user = User.new
