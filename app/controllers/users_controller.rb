@@ -88,7 +88,7 @@ class UsersController < ApplicationController
   end
 
   def testee_tab
-    @tests = Test.all.where(:directory => false)
+    @tests = Test.all.where(:directory => false).training.existing.paginate(:page => params[:page], :per_page => params[:per_page] || 30)
     @current_mode = current_user.test_modes.order('created_at DESC').first
     @assigned_tests = AssignedTest.all.where(user_id: current_user.id, test_mode_id: @current_mode)
     @users = User.search(params[:search_users])

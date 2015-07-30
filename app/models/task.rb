@@ -226,23 +226,56 @@ class Task < ActiveRecord::Base
         end
       end
     elsif self.task_type == 'Открытый вопрос'
-=begin
       self.answers.each do |answer|
         answers_array[answer.id] = {}
         answers_array[answer.id]['count'] = 0
       end
+      answers_array['other'] = {}
+      answers_array['other']['count'] = 0
+      answers_array['incorrect_answers'] = {}
       ids = self.answers.map(&:id)
       total_answered = 0
       task_results_completed.each do |task_result|
+        correct = false
+        user_reply = nil
         task_result.user_answers.where(correct: true).each do |user_answer|
+          next if correct
           answer_id = user_answer.answer_was.id
+          correct = true
           if ids.include?(answer_id)
             answers_array[answer_id]['count'] += 1
             total_answered += 1
           end
         end
+        if !correct
+          user_reply = task_result.user_answers.first.user_reply
+          answers_array['other']['count'] += 1
+          ia = answers_array['incorrect_answers'][user_reply]
+          if ia
+            ia['count'] += 1
+          else
+            answers_array['incorrect_answers'][user_reply] = {'count' => 1}
+          end
+          total_answered += 1
+        end
       end
-=end
+
+      #Вычисляем процент
+      self.answers.each do |answer|
+        if total_answered > 0
+          answers_array[answer.id]['percent'] = 100.0 * answers_array[answer.id]['count'] / total_answered
+        else
+          answers_array[answer.id]['percent'] = 0
+        end
+      end
+      answers_array['incorrect_answers'].each do |ia_key, ia_value|
+        ia_value['percent'] = 100.0 * ia_value['count'] / total_answered
+      end
+      if total_answered > 0
+        answers_array['other']['percent'] = 100.0 * answers_array['other']['count'] / total_answered
+      else
+        answers_array['other']['percent'] = 0
+      end
     end
 
     result['answers'] = answers_array
