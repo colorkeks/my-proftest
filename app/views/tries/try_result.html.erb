@@ -51,10 +51,10 @@
                       <div class="col-lg-6">
                         <table class="table" style="margin-bottom: 5px">
                           <tbody>
-                          <% task.answers.order(:id).each do |answer| %>
+                          <% task_result.user_answers.order(:serial_number).each do |user_answer| %>
                               <tr>
-                                <td class="slim right_answer"></td>
-                                <td><%= answer.text %></td>
+                                <td class="slim"></td>
+                                <td><%= user_answer.answer_was.text %></td>
                               </tr>
                           <% end %>
                           </tbody>
@@ -63,10 +63,14 @@
                       <div class="col-lg-6">
                         <table class="table" style="margin-bottom: 5px">
                           <tbody>
-                          <% task.associations.order(:id).each do |answer| %>
+                          <% task_result.user_answers.order(:serial_number).each do |user_answer| %>
                               <tr>
                                 <td class="slim right_answer"></td>
-                                <td><%= answer.text %></td>
+                                <% if user_answer.user_association %>
+                                    <td><%= user_answer.user_association.association_was.text %></td>
+                                <% else %>
+                                    <td>Не выбрано</td>
+                                <% end %>
                               </tr>
                           <% end %>
                           </tbody>
@@ -76,16 +80,15 @@
                 <% elsif ['Множественный выбор', 'Единичный выбор'].include?(task.task_type) %>
                     <table class="table" style="margin-bottom: 5px">
                       <tbody>
-                      <% task.answers.each do |answer| %>
+                      <% task_result.user_answers.order(:id).each do |ua| %>
                           <tr>
-                            <% right_answer = (answer.correct? ? 'right_answer' : '') %>
+                            <% right_answer = (ua.user_reply ? 'right_answer' : '') %>
                             <td class="slim <%= right_answer %>"></td>
-                            <td><%= answer.text %></td>
+                            <td><%= ua.answer_was.text.html_safe %></td>
                           </tr>
                       <% end %>
                       </tbody>
                     </table>
-
                 <% elsif task.task_type == 'Открытый вопрос' %>
                     <table class="table" style="margin-bottom: 5px">
                       <tbody>
@@ -95,14 +98,14 @@
                       </tr>
                       </tbody>
                     </table>
-                <% else %>
+                <% elsif task.task_type == 'Последовательность' %>
                     <table class="table" style="margin-bottom: 5px">
                       <tbody>
-                      <% task.answers.each do |answer| %>
+                      <% task_result.user_answers.order(:user_reply).each do |ua| %>
                           <tr>
-                            <% right_answer = (answer.correct? || ['Последовательность'].include?(task.task_type)) ? 'right_answer' : '' %>
+                            <% right_answer = (ua.user_reply ? 'right_answer' : '') %>
                             <td class="slim <%= right_answer %>"></td>
-                            <td><%= answer.text %></td>
+                            <td><%= ua.answer_was.text.html_safe %></td>
                           </tr>
                       <% end %>
                       </tbody>
