@@ -491,3 +491,24 @@ table td.sorter {
 .highlight-empty{
     background-color: yellow;
 }
+
+.task-type-icon{
+    padding: 0 8px;
+    vertical-align: middle;
+    width: 40px;
+    font-size: 20px;
+    color: gray;
+}
+
+.toggle-answer{
+    cursor: pointer
+}
+
+.right_answer{
+    background-color: #2d95da;
+}
+
+.slim{
+    width: 5px !important;
+    padding: 0 !important;
+}

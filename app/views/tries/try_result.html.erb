@@ -1,161 +1,121 @@
 <%= content_for :title, 'Результат тестирования ' + @try.test.title %>
 
 <div class="container">
-  <div class="row">
-    <div class="col-lg-12 answer-content">
-      <h3>Вы решили <%= @percent.round(2) %>% теста (<%= @current.to_f.round(2) %> из <%= @max %>
-        возможных баллов)</h3>
+  <div class="panel panel-default ">
+    <div class="panel-heading question-header">
+      <h4>Вы решили <%= @percent.round(2) %>% теста (<%= @current.to_f.round(2) %> из <%= @max %>
+        возможных баллов)</h4>
       <hr>
-    </div>
-  </div>
-
-
-  <div class="row">
-    <div class="col-lg-12 answer-content">
-      <% i=1 %>
-      <% @try.task_results_queue.each do |id| %>
-          <% @try.task_results.where(:id => id).each do |task_result| %>
-              <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                <div class="panel panel-default">
-                  <div class="panel-heading question-header" role="tab" id="heading_<%= i %>">
-                    <div data-toggle="collapse" data-parent="#accordion" href="#collapse_<%= i %>" aria-expanded="true" aria-controls="collapse_<%= i %>">
-                      <div class="question-number">Задание №<%= i %> -
-                        <% if task_result.status == 'правильно' %>
-                            <span class="label label-success">Правильно</span>
-                        <% elsif task_result.status == 'не правильно' %>
-                            <span class="label label-danger">Не правильно</span>
-                        <% elsif task_result.status == 'частично правильно' %>
-                            <span class="label label-warning">Частично правильно</span>
-                        <% end %>
-                        <div style="float: right">
-                          <% points = task_result.point %>
-                          <% if (points % 1) == 0 %>
-                              <%= points = points.to_i %>
-                          <% else %>
-                              <%= points = task_result.point.round(2) %>
+      <div class="btn btn-default btn-sm mb10" id="toggle-btn" style="margin-bottom: 10px" onclick="$('.answers').toggle()">
+        <span class=" fa fa-bars"></span>
+      </div>
+      <table class="table table-bordered">
+        <tbody>
+        <% @try.task_results_queue.each_with_index do |id, index| %>
+            <% task_result = @try.task_results.find_by(id: id) %>
+            <% task = task_result.task_was %>
+            <tr style="background-color: #FCFCFC">
+              <td style="width: 30px" class="tooltips" onclick="$(this).parent().next('.answers').toggle()">
+                <%= index + 1 %>
+              </td>
+              <td style="width: 30px" class="task-type-icon toggle-answer" onclick="$(this).parent().next('.answers').toggle()">
+                <%= task_type_icon_class(task, 'div') %>
+              </td>
+              <td class="toggle-answer" onclick="$(this).parent().next('.answers').toggle()">
+                <%= strip_tags(task.text.squish) %>
+              </td>
+              <td title="Статус" style="width: 120px" class="tooltips">
+                <% if task_result.status == 'правильно' %>
+                    <span class="label label-success">Правильно</span>
+                <% elsif task_result.status == 'не правильно' %>
+                    <span class="label label-danger">Не правильно</span>
+                <% elsif task_result.status == 'частично правильно' %>
+                    <span class="label label-warning">Частично правильно</span>
+                <% end %>
+              </td>
+              <td title="Баллы" style="width: 120px" class="tooltips">
+                <% points = task_result.point %>
+                <% if (points % 1) == 0 %>
+                    <%= points = points.to_i %>
+                <% else %>
+                    <%= points = task_result.point.round(2) %>
+                <% end %>
+                <%= Russian.p(points, 'балл', 'балла', 'баллов', 'балла') %>
+              </td>
+            </tr>
+            <tr style="display: none" class="answers">
+              <td style="width: 30px"></td>
+              <td colspan="5" style="background-color: #ffffff">
+                <% if task.task_type == 'Сопоставление' %>
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <table class="table" style="margin-bottom: 5px">
+                          <tbody>
+                          <% task_result.user_answers.order(:serial_number).each do |user_answer| %>
+                              <tr>
+                                <td class="slim"></td>
+                                <td><%= user_answer.answer_was.text %></td>
+                              </tr>
                           <% end %>
-                          <%= Russian.p(points, 'балл', 'балла', 'баллов', 'балла') %>
-                        </div>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="col-lg-6">
+                        <table class="table" style="margin-bottom: 5px">
+                          <tbody>
+                          <% task_result.user_answers.order(:serial_number).each do |user_answer| %>
+                              <tr>
+                                <td class="slim right_answer"></td>
+                                <% if user_answer.user_association %>
+                                    <td><%= user_answer.user_association.association_was.text %></td>
+                                <% else %>
+                                    <td>Не выбрано</td>
+                                <% end %>
+                              </tr>
+                          <% end %>
+                          </tbody>
+                        </table>
                       </div>
                     </div>
-                  </div>
-                  <div id="collapse_<%= i %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading_<%= i %>">
-                    <div class="question-content">
-                      <div class="row">
-                        <% if task_result.try_task_contents.detect { |ttc| ttc.task_content_was.file_content_content_type }.nil? %>
-                            <div class="col-lg-12">
-                              <h4><%= task_result.task_was.text.html_safe %></h4>
-                              <hr>
-                            </div>
-                        <% else %>
-                            <div class="col-lg-6">
-                              <h4><%= task_result.task_was.text.html_safe %></h4>
-                              <hr>
-                            </div>
-                            <div class="col-lg-6" style="text-align: center">
-                              <% task_result.try_task_contents.each do |try_task_content| %>
-                                  <% content = try_task_content.task_content_was %>
-                                  <% if content.file_content_content_type =~ %r(audio) %>
-                                      <div style="margin: 0 auto;"><%= audio_tag(content.file_content.url(:original), controls: true, style: 'margin-top:0;') %></div>
-                                  <% elsif content.file_content_content_type =~ %r(image) %>
-                                      <div style="margin: 0 auto;"><%= image_tag content.file_content.url(:small), alt: content.file_content.url(:medium), style: 'margin-top:0;' %></div>
-                                  <% elsif content.file_content_content_type =~ %r(video) %>
-                                      <div style="margin: 0 auto;"><%= video_tag(content.file_content.url(:original), size: '100%x100%', controls: true, autobuffer: true, style: 'margin:0;') %></div>
-                                  <% else %>
-                                  <% end %>
-                              <% end %>
-                            </div>
-                        <% end %>
-                      </div>
-                      <div class="row">
-                        <div class="col-sm-12">
-                          <h3><%= (task_result.task_was.hint.html_safe) if task_result.task_was.task_type != 'Открытый вопрос' %></h3>
-                        </div>
-                        <% if task_result.task_was.task_type == 'Последовательность' %>
-                        <% elsif task_result.task_was.task_type == 'Открытый вопрос' %>
-                        <% elsif task_result.task_was.task_type == 'Сопоставление' %>
-                            <div class="col-sm-12"><h3>Варианты:</h3></div>
-                            <div class="col-sm-6">
-                              <table class="table">
-                                <% task_result.user_answers.order(:id).each do |user_answer| %>
-                                    <tr>
-                                      <td><h4><%= user_answer.answer_was.text.html_safe %></h4></td>
-                                    </tr>
-                                <% end %>
-                              </table>
-                            </div>
-                            <div class="col-sm-6">
-                              <table class="table">
-                                <% task_result.user_associations.order(:id).each do |user_association| %>
-                                    <tr>
-                                      <td><h4><%= user_association.association_was.text.html_safe %></h4></td>
-                                    </tr>
-                                <% end %>
-                              </table>
-                            </div>
-                        <% else %>
-                            <div class="col-sm-12">
-                              <table class="table table-striped">
-                                <th>Варианты:</th>
-                                <% task_result.user_answers.order(:id).each do |user_answer| %>
-                                    <tr>
-                                      <td><h4><%= user_answer.answer_was.text.html_safe %></h4></td>
-                                    </tr>
-                                <% end %>
-                              </table>
-                            </div>
-                        <% end %>
-                      </div>
-                      <div class="row">
-                        <div class="col-sm-12">
-                          <h3>Ваш ответ:</h3>
-                        </div>
-
-                        <div class="col-lg-12">
-                          <table class="table">
-                            <% if task_result.task_was.task_type == 'Открытый вопрос' %>
-                                <tr>
-                                  <td><h4><%= task_result.user_answers.first.user_reply %></h4></td>
-                                </tr>
-                            <% elsif task_result.task_was.task_type == 'Последовательность' %>
-                                <% task_result.user_answers.order('user_reply ASC').each do |user_answer| %>
-                                    <tr>
-                                      <td width="30px;"><h4><%= user_answer.user_reply %></h4></td>
-                                      <td><h4><%= user_answer.answer_was.text %></h4></td>
-                                    </tr>
-                                <% end %>
-                            <% elsif task_result.task_was.task_type == 'Сопоставление' %>
-                                <% task_result.user_answers.order('serial_number ASC').each do |user_answer| %>
-                                    <tr>
-                                      <td><h4><%= user_answer.answer_was.text %></h4></td>
-                                      <% if user_answer.user_association %>
-                                          <td><h4><%= user_answer.user_association.association_was.text %></h4></td>
-                                      <% else %>
-                                          <td><h4>Не выбрано</h4></td>
-                                      <% end %>
-                                    </tr>
-                                <% end %>
-                                </table>
-                                </div>
-                                <div class="col-sm-6">
-                                  <table class="table">
-                            <% else %>
-                                <% task_result.user_answers.where(:user_reply => true).each do |ua| %>
-                                    <tr>
-                                      <td><h4><%= ua.answer_was.text.html_safe %></h4></td>
-                                    </tr>
-                                <% end %>
-                            <% end %>
-                            </table>
-                            </div>
-                            </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <% i=i+1 %>
-          <% end %>
-      <% end %>
+                <% elsif ['Множественный выбор', 'Единичный выбор'].include?(task.task_type) %>
+                    <table class="table" style="margin-bottom: 5px">
+                      <tbody>
+                      <% task_result.user_answers.order(:id).each do |ua| %>
+                          <tr>
+                            <% right_answer = (ua.user_reply ? 'right_answer' : '') %>
+                            <td class="slim <%= right_answer %>"></td>
+                            <td><%= ua.answer_was.text.html_safe %></td>
+                          </tr>
+                      <% end %>
+                      </tbody>
+                    </table>
+                <% elsif task.task_type == 'Открытый вопрос' %>
+                    <table class="table" style="margin-bottom: 5px">
+                      <tbody>
+                      <tr>
+                        <td class="slim right_answer"></td>
+                        <td><%= task_result.user_answers.first.user_reply %></td>
+                      </tr>
+                      </tbody>
+                    </table>
+                <% elsif task.task_type == 'Последовательность' %>
+                    <table class="table" style="margin-bottom: 5px">
+                      <tbody>
+                      <% task_result.user_answers.order(:user_reply).each do |ua| %>
+                          <tr>
+                            <% right_answer = (ua.user_reply ? 'right_answer' : '') %>
+                            <td class="slim <%= right_answer %>"></td>
+                            <td><%= ua.answer_was.text.html_safe %></td>
+                          </tr>
+                      <% end %>
+                      </tbody>
+                    </table>
+                <% end %>
+              </td>
+            </tr>
+        <% end %>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

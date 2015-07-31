@@ -84,25 +84,16 @@ function tab_selected(){
 }
 
 function algorithm_selects(){
-    $('.algorithm').change(function () {
-        var str = "";
-        $(".algorithm option:selected").each(function () {
-            if ($(this).text() == 'Адаптивный выбор') {
-                $('.adaptive_options').removeClass('hide')
-            }
-            else {
-                $('.adaptive_options').addClass('hide')
-            }
-        });
-        $(".algorithm option:selected").each(function () {
-            if ($(this).text() == 'Ограниченое количество заданий') {
-                $('.limited_options').removeClass('hide')
-            }
-            else {
-                $('.limited_options').addClass('hide')
-            }
-        });
-    });
+    function a(element) {
+        if ($(element).val() == 'Ограниченое количество заданий') {
+            $('.limited_options').removeClass('hide')
+        }
+        else {
+            $('.limited_options').addClass('hide')
+        }
+    };
+    $('.algorithm').change(function(){a(this);});
+    a($('.algorithm'));
 }
 
 function fill_placeholder_in_open_answer(){
