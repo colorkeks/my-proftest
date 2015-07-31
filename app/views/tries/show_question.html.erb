@@ -96,8 +96,7 @@
     <div class="question-number">Задание № <%= @current_task_index + 1 %>
       <div class="pull-right">
       <% if task_was.chain_id.present? %>
-          Цепочка -
-            <%= task_was.chain_position %> из <%= task_was.chain.tasks.count %>
+          Цепочка <%= task_was.chain_position %> из <%= task_was.chain.tasks.count %>
       <% end %>
       </div>
     </div>
