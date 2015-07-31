@@ -63,7 +63,7 @@
                         <li><%= link_to 'Заведение тестируемых', doctors_path %></li>
                     <% end %>
                     <% if current_user.role?('Тестируемый') || current_user.role?('Супер_Администратор')  %>
-                        <li><%= link_to 'Тестирование', testee_tab_users_path %></li>
+                        <li><%= link_to 'Тестирование', testee_tab_user_path(current_user.id) %></li>
                     <% end %>
                     <% if current_user.role?('Супер_Администратор') || current_user.role?('Администратор') %>
                         <li><%= link_to 'Админка', admin_tab_users_path %></li>
@@ -88,7 +88,7 @@
                    <% elsif current_user && current_user.roles.find(current_user.priority_role_id).name == 'Методолог' %>
                         <li><%= link_to 'На главную', :test_groups %></li>
                    <% elsif current_user && current_user.roles.find(current_user.priority_role_id).name == 'Тестируемый' %>
-                        <li><%= link_to 'На главную', testee_tab_users_path %></li>
+                        <li><%= link_to 'На главную', testee_tab_user_path(current_user.id) %></li>
                     <% elsif current_user.role?('Супер_Администратор')%>
                         <li><%= link_to 'На главную', admin_tab_users_path %></li>
                     <% end %>

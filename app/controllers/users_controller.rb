@@ -27,7 +27,7 @@ class UsersController < ApplicationController
       redirect_to :test_groups
       return
     elsif current_user && current_user.roles.find(current_user.priority_role_id).name == 'Тестируемый'
-      redirect_to testee_tab_users_path
+      redirect_to testee_tab_user_path(current_user.id)
       return
     elsif current_user && current_user.roles.find(current_user.priority_role_id).name == 'Супер_Администратор'
       redirect_to admin_tab_users_path
