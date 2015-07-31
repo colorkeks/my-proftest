@@ -1,218 +1,234 @@
-<%= content_for :title, 'Процесс тестирования '  + @try.test.title %>
+<%= content_for :title, 'Процесс тестирования ' + @try.test.title %>
 <% task_was = @task_result.task_was %>
 <div class="container">
 
+<div class="row">
+<div class="col-lg-12">
+  <!-- Блок навигации по тесту с отметкой правильности выполненных тестовых заданий -->
   <div class="row">
     <div class="col-lg-12">
-      <!-- Блок навигации по тесту с отметкой правильности выполненных тестовых заданий -->
-      <div class="row">
-        <div class="col-lg-12">
-          <h3 class="text-center test-title"><%= @test.title.html_safe %></h3>
+      <h3 class="text-center test-title"><%= @test.title.html_safe %></h3>
 
-          <div style="color: #5f5f5f; height: 22px">
-            <% if @test.limit_time %>
-                <i class="pull-left">
-                  <span class="glyphicon glyphicon-time"></span>
-                  <div style="display: inline" class="hours_timer"><%= @hours %></div> часов <div style="display: inline" class="minutes_timer"><%= @minutes %></div> минут <div style="display: inline" class="seconds_timer">
-                  <%= ((@timer%60)).to_i %></div> секунд
-                </i>
+      <div style="color: #5f5f5f; height: 22px">
+        <% if @test.limit_time %>
+            <i class="pull-left">
+              <span class="glyphicon glyphicon-time"></span>
+
+              <div style="display: inline" class="hours_timer"><%= @hours %></div>
+              часов
+              <div style="display: inline" class="minutes_timer"><%= @minutes %></div>
+              минут
+              <div style="display: inline" class="seconds_timer">
+                <%= ((@timer%60)).to_i %></div>
+              секунд
+            </i>
+        <% end %>
+        <i class="pull-right">Задание <%= @current_task + 1 %> из <%= @tasks_count %></i>
+      </div>
+
+      <div class="progress" title="<%= @current_task + 1 %>/<%= @tasks_count %>">
+        <div class="progress-bar progress-bar-success"
+             role="progressbar" aria-valuenow="<%= (@current_task/@tasks_count)*100 %>" aria-valuemin="0" aria-valuemax="100"
+             style="width:<%=(@current_task.to_f/@tasks_count)*100 %>%;">
+          <span class="sr-only">40% Complete (success)</span>
+        </div>
+      </div>
+
+      <div class='text-center' id="show-q-btns" style="color: #5f5f5f">
+        Список вопросов
+      </div>
+      <div id="q-btns" class="hide">
+        <% @try.task_results_queue.each_with_index do |id, index| %>
+            <% task_result = @try.task_results.find(id) %>
+
+            <% if task_result.status == 'правильно' %>
+                <% status = 'right-answer disabled ' %>
+            <% elsif task_result.status == 'не правильно' %>
+                <% status = 'wrong-answer disabled ' %>
+            <% elsif task_result.status == 'частично правильно' %>
+                <% status = 'partly-right disabled ' %>
+            <% else %>
+                <% status = ' ' %>
             <% end %>
-            <i class="pull-right">Задание <%= @current_task + 1 %> из <%= @tasks_count %></i>
-          </div>
 
-          <div class="progress" title="<%= @current_task + 1 %>/<%= @tasks_count %>">
-            <div class="progress-bar progress-bar-success"
-                 role="progressbar" aria-valuenow="<%= (@current_task/@tasks_count)*100 %>" aria-valuemin="0" aria-valuemax="100"
-                 style="width:<%=(@current_task.to_f/@tasks_count)*100 %>%;">
-              <span class="sr-only">40% Complete (success)</span>
-            </div>
-          </div>
-
-          <div class='text-center' id="show-q-btns" style="color: #5f5f5f">
-            Список вопросов
-          </div>
-          <div id="q-btns" class="hide">
-            <% @try.task_results_queue.each_with_index do |id, index| %>
-                <% task_result = @try.task_results.find(id)%>
-
-                <% if task_result.status == 'правильно' %>
-                    <% status = 'right-answer disabled ' %>
-                <% elsif task_result.status == 'не правильно' %>
-                    <% status = 'wrong-answer disabled ' %>
-                <% elsif task_result.status == 'частично правильно' %>
-                    <% status = 'partly-right disabled ' %>
-                <% else %>
-                    <% status = ' ' %>
-                <% end %>
-
-                <% if task_was.chain_id.present? %>
-                    <% chain_count = @try.task_results_for_chain_id(task_was.chain_id).count %>
-                    <% if task_was.chain_position != 1 %>
-                        <% @try.task_results_for_chain_id(task_was.chain_id).each do |tr| %>
-                            <% if tr.task_was.chain_position == task_was.chain_position - 1 %>
-                                <% if tr.status == 'ответ не дан' %>
-                                    <% status = status + 'disabled '%>
-                                <% end %>
+            <% if  task_result.task_was.chain_id.present? %>
+                <% chain_count = @try.task_results_for_chain_id(task_result.task_was.chain_id).count %>
+                <% if  task_result.task_was.chain_position != 1 %>
+                    <% @try.task_results_for_chain_id(task_result.task_was.chain_id).each do |tr| %>
+                        <% if tr.task_was.chain_position == task_result.task_was.chain_position - 1 %>
+                            <% if tr.status == 'ответ не дан' %>
+                                <% status = status + 'disabled ' %>
                             <% end %>
                         <% end %>
                     <% end %>
-                <% else %>
-                    <% chain_count = 0%>
                 <% end %>
-                <% if task_was.chain_position == 1 && task_was.chain_id != nil%>
-                    [<%= link_to  index + 1, {:action => 'show_question', :current_task_index => index}, :class => 'btn btn-default btn-xs ' + status%>
-                <% elsif task_was.chain_position == chain_count %>
-                    <%= link_to  index + 1, {:action => 'show_question', :current_task_index => index}, :class => 'btn btn-default btn-xs ' + status%>]
-                <% else %>
-                    <%= link_to  index + 1, {:action => 'show_question', :current_task_index => index}, :class => 'btn btn-default btn-xs ' + status%>
-                <% end %>
+            <% else %>
+                <% chain_count = 0 %>
             <% end %>
+            <% if  task_result.task_was.chain_position == 1 && task_result.task_was.chain_id != nil %>
+                [<%= link_to index + 1, {:action => 'show_question', :current_task_index => index}, :class => 'btn btn-default btn-xs ' + status %>
+            <% elsif  task_result.task_was.chain_position == chain_count %>
+                <%= link_to index + 1, {:action => 'show_question', :current_task_index => index}, :class => 'btn btn-default btn-xs ' + status %>
+                ]
+            <% else %>
+                <%= link_to index + 1, {:action => 'show_question', :current_task_index => index}, :class => 'btn btn-default btn-xs ' + status %>
+            <% end %>
+        <% end %>
 
-            <div class="legend pull-right">
-              <div class="btn btn-default btn-xs right-answer disabled">&nbsp;</div>
-              - Верный ответ
-              <div class="btn btn-default btn-xs wrong-answer disabled">&nbsp;</div>
-              - Неверный ответ
-              <div class="btn btn-default btn-xs partly-right disabled">&nbsp;</div>
-              - Частично верный ответ
-            </div>
-          </div>
-
-
+        <div class="legend pull-right">
+          <div class="btn btn-default btn-xs right-answer disabled">&nbsp;</div>
+          - Верный ответ
+          <div class="btn btn-default btn-xs wrong-answer disabled">&nbsp;</div>
+          - Неверный ответ
+          <div class="btn btn-default btn-xs partly-right disabled">&nbsp;</div>
+          - Частично верный ответ
         </div>
       </div>
-    </div>
 
 
-    <div class="row">
-      <div class="col-lg-12 question-content">
-        <div class="question-number">Задание № <%= @current_task_index + 1 %></div>
-        <div class="row">
-          <% if @task_result.try_task_contents.count <= 1 %>
-              <div class="col-lg-6">
-                <div id="question-content">
-                  <%= sanitize(task_was.text.html_safe, attributes: []).gsub(/_(.*)_/, ' <span class="highlight-empty">_______</span> ').html_safe %>
-
-                </div>
-              </div>
-              <div class="col-lg-6" style="text-align: center">
-                <% @task_result.try_task_contents.each do |try_task_content| %>
-                    <% content = try_task_content.task_content_was %>
-                    <% if %w(audio application/octet-stream).include? content.file_content_content_type %>
-                        <div style="margin: 0 auto;"><%= audio_tag(content.file_content.url(:original), controls: true, style: 'margin-top:0;') %></div>
-                    <% elsif content.file_content_content_type =~ %r(image) %>
-                        <div style="margin: 0 auto;"><%= image_tag content.file_content.url(:small), alt: content.file_content.url(:medium), style: 'margin-top:0;' %></div>
-                    <% elsif content.file_content_content_type =~ %r(video) %>
-                        <div style="margin: 0 auto;"><%= video_tag(content.file_content.url(:original), size: '100%x100%', controls: true, autobuffer: true, style: 'margin:0;') %></div>
-                    <% else %>
-                    <% end %>
-                <% end %>
-              </div>
-          <% else %>
-              <div class="col-lg-12">
-                <div style="text-align: center; width: 100%; min-height: 200px;">
-                  <h4><%= sanitize task_was.text.html_safe, attributes: [] %></h4>
-                </div>
-              </div>
-              <div class="row">
-                <% @task_result.try_task_contents.each do |try_task_content| %>
-                    <% content = try_task_content.task_content_was %>
-                    <% content.instance_variable_set(:@new_record, false) %>
-                    <div class="col-lg-4">
-                      <% if %w(audio application/octet-stream).include? content.file_content_content_type %>
-                          <div style=""><%= audio_tag(content.file_content.url(:original), controls: true, style: 'margin-top:0;') %></div>
-                      <% elsif content.file_content_content_type =~ %r(image) %>
-                          <div style=""><%= image_tag content.file_content.url(:small), alt: content.file_content.url(:medium), style: 'margin-top:0;' %></div>
-                      <% elsif content.file_content_content_type =~ %r(video) %>
-                          <div style=""><%= video_tag(content.file_content.url(:original), size: '100%x100%', controls: true, autobuffer: true, style: 'margin:0;') %></div>
-                      <% end %>
-                    </div>
-                <% end %>
-              </div>
-          <% end %>
-        </div>
-
-        <!-- Блок вариантов ответа на тестовое задание -->
-        <div class="row">
-          <div class="col-lg-12 answer-content">
-            <div class="question-description">
-              <%= task_was.hint.html_safe %>
-            </div>
-          </div>
-        </div>
-
-
-        <br>
-
-        <div class="row">
-          <%= form_tag({controller: 'tries', action: 'check_user_answer'}, method: 'POST') do %>
-              <div class="col-lg-12 answer-content">
-                <table class="table answer_table">
-                  <thead>
-                  </thead>
-                  <tbody <%= task_was.task_type == 'Последовательность' ? 'id =answer_body' : '' %>>
-                  <% if  task_was.task_type == 'Открытый вопрос' %>
-                      <tr class="answer">
-                        <td style="display: none"></td>
-                        <td>
-                          <label>
-                            <%= text_field_tag 'user_answer', nil, :autocomplete => :off, :class => 'form-control' %>
-                          </label>
-                        </td>
-                        <td style="width: 30px; cursor: pointer"><span class="fa fa-bars text-muted"></span></td>
-                      </tr>
-                  <% else %>
-                      <% @task_result.user_answers.order(@try.test.mix_answers ? 'RANDOM()' : 'id ASC').each_with_index do |answer, index| %>
-                          <% answer_was = answer.answer_version.item_version %>
-                          <tr class="answer">
-                            <td style="width: 30px; text-align: center; padding-top: 14px; <%= [ 'Последовательность', 'Сопоставление'].include?(task_was.task_type) ? '' : 'display:none' %>">
-                              <%= index + 1 %>
-                            </td>
-                            <td>
-                              <% if task_was.task_type == 'Множественный выбор' %>
-                                  <label>
-                                    <%= check_box_tag 'user_answers[]', answer.id %> <%= answer_was.text %>
-                                  </label>
-                              <% elsif task_was.task_type == 'Единичный выбор' %>
-                                  <label>
-                                    <%= radio_button_tag 'user_answers', answer.id %> <%= answer_was.text %>
-                                  </label>
-                              <% elsif task_was.task_type == 'Последовательность' %>
-                                  <label>
-                                    <%= answer_was.text %>
-                                  </label>
-                                  <%= hidden_field_tag 'user_answers[' + answer.id.to_s + '][]', '', :class => 'serial_number' %>
-                              <% elsif task_was.task_type == 'Сопоставление' %>
-                                  <% associations_collection_for_select = @task_result.user_associations.shuffle.map{|ua| [ua.association_version.item_version.text, ua.id]} %>
-                                  <div class="pull-right select-answer">
-                                    <%= select_tag('associations[' + answer.id.to_s + '][]', options_for_select(['Не выбрано']) + options_for_select(associations_collection_for_select), :class => 'form-control association_select') %>
-                                  </div>
-                                  <label class="text pull-right" style="margin-right: 10px"><%= ('А'..'Я').to_a[index] %>.</label>
-                                  <div class="text"><%= answer_was.text %></div>
-                              <% end %>
-                            </td>
-                            <% if task_was.task_type == 'Последовательность' %>
-                                <td style="width: 50px; height: 50px; text-align: center;" class="sorter tooltips" title="Переместите ответ на нужную позицию">
-                                  <!--<span style="font-size: 20px;" class="glyphicon glyphicon-move"></span>-->
-                                    <span class="fa fa-bars text-muted"></span>
-                                </td>
-                            <% end %>
-                          </tr>
-                      <% end %>
-                  <% end %>
-                  </tbody>
-                </table>
-              </div>
-              <br>
-              <%= hidden_field_tag 'task_result_id', @task_result.id %>
-              <%= hidden_field_tag 'current_task_index', @current_task_index + 1 %>
-              <%= submit_tag('Ответить', :class => 'btn btn-primary', data: {disable_with: 'Ответить'}) %>
-              <%= link_to  'Отложить', {:action => 'show_question', :current_task_index => @current_task_index + 1}, :class => 'btn btn-default'%>
-          <% end %>
-        </div>
-      </div>
     </div>
   </div>
+</div>
+
+
+<div class="row">
+  <div class="col-lg-12 question-content">
+    <div class="question-number">Задание № <%= @current_task_index + 1 %>
+      <div class="pull-right">
+      <% if task_was.chain_id.present? %>
+          Цепочка -
+            <%= task_was.chain_position %> из <%= task_was.chain.tasks.count %>
+      <% end %>
+      </div>
+    </div>
+    <div class="row">
+      <% if @task_result.try_task_contents.count <= 1 %>
+          <div class="col-lg-6">
+            <div id="question-content">
+              <%= sanitize(task_was.text.html_safe, attributes: []).gsub(/_(.*)_/, ' <span class="highlight-empty">_______</span> ').html_safe %>
+
+            </div>
+          </div>
+          <div class="col-lg-6" style="text-align: center">
+            <% @task_result.try_task_contents.each do |try_task_content| %>
+                <% content = try_task_content.task_content_was %>
+                <% if %w(audio application/octet-stream).include? content.file_content_content_type %>
+                    <div style="margin: 0 auto;"><%= audio_tag(content.file_content.url(:original), controls: true, style: 'margin-top:0;') %></div>
+                <% elsif content.file_content_content_type =~ %r(image) %>
+                    <div style="margin: 0 auto;"><%= image_tag content.file_content.url(:small), alt: content.file_content.url(:medium), style: 'margin-top:0;' %></div>
+                <% elsif content.file_content_content_type =~ %r(video) %>
+                    <div style="margin: 0 auto;"><%= video_tag(content.file_content.url(:original), size: '100%x100%', controls: true, autobuffer: true, style: 'margin:0;') %></div>
+                <% else %>
+                <% end %>
+            <% end %>
+          </div>
+      <% else %>
+          <div class="col-lg-12">
+            <div style="text-align: center; width: 100%; min-height: 200px;">
+              <h4><%= sanitize task_was.text.html_safe, attributes: [] %></h4>
+            </div>
+          </div>
+          <div class="row">
+            <% @task_result.try_task_contents.each do |try_task_content| %>
+                <% content = try_task_content.task_content_was %>
+                <% content.instance_variable_set(:@new_record, false) %>
+                <div class="col-lg-4">
+                  <% if %w(audio application/octet-stream).include? content.file_content_content_type %>
+                      <div style=""><%= audio_tag(content.file_content.url(:original), controls: true, style: 'margin-top:0;') %></div>
+                  <% elsif content.file_content_content_type =~ %r(image) %>
+                      <div style=""><%= image_tag content.file_content.url(:small), alt: content.file_content.url(:medium), style: 'margin-top:0;' %></div>
+                  <% elsif content.file_content_content_type =~ %r(video) %>
+                      <div style=""><%= video_tag(content.file_content.url(:original), size: '100%x100%', controls: true, autobuffer: true, style: 'margin:0;') %></div>
+                  <% end %>
+                </div>
+            <% end %>
+          </div>
+      <% end %>
+    </div>
+
+    <!-- Блок вариантов ответа на тестовое задание -->
+    <div class="row">
+      <div class="col-lg-12 answer-content">
+        <div class="question-description">
+          <%= task_was.hint.html_safe %>
+        </div>
+      </div>
+    </div>
+
+
+    <br>
+
+    <div class="row">
+      <%= form_tag({controller: 'tries', action: 'check_user_answer'}, method: 'POST') do %>
+          <div class="col-lg-12 answer-content">
+            <table class="table answer_table">
+              <thead>
+              </thead>
+              <tbody <%= task_was.task_type == 'Последовательность' ? 'id =answer_body' : '' %>>
+              <% if  task_was.task_type == 'Открытый вопрос' %>
+                  <tr class="answer">
+                    <td style="display: none"></td>
+                    <td>
+                      <label>
+                        <%= text_field_tag 'user_answer', nil, :autocomplete => :off, :class => 'form-control' %>
+                      </label>
+                    </td>
+                    <td style="width: 30px; cursor: pointer"><span class="fa fa-bars text-muted"></span></td>
+                  </tr>
+              <% else %>
+                  <% @task_result.user_answers.order(@try.test.mix_answers ? 'RANDOM()' : 'id ASC').each_with_index do |answer, index| %>
+                      <% answer_was = answer.answer_version.item_version %>
+                      <tr class="answer">
+                        <td style="width: 30px; text-align: center; padding-top: 14px; <%= ['Последовательность', 'Сопоставление'].include?(task_was.task_type) ? '' : 'display:none' %>">
+                          <%= index + 1 %>
+                        </td>
+                        <td>
+                          <% if task_was.task_type == 'Множественный выбор' %>
+                              <label>
+                                <%= check_box_tag 'user_answers[]', answer.id %> <%= answer_was.text %>
+                              </label>
+                          <% elsif task_was.task_type == 'Единичный выбор' %>
+                              <label>
+                                <%= radio_button_tag 'user_answers', answer.id %> <%= answer_was.text %>
+                              </label>
+                          <% elsif task_was.task_type == 'Последовательность' %>
+                              <label>
+                                <%= answer_was.text %>
+                              </label>
+                              <%= hidden_field_tag 'user_answers[' + answer.id.to_s + '][]', '', :class => 'serial_number' %>
+                          <% elsif task_was.task_type == 'Сопоставление' %>
+                              <% associations_collection_for_select = @task_result.user_associations.shuffle.map { |ua| [ua.association_version.item_version.text, ua.id] } %>
+                              <div class="pull-right select-answer">
+                                <%= select_tag('associations[' + answer.id.to_s + '][]', options_for_select(['Не выбрано']) + options_for_select(associations_collection_for_select), :class => 'form-control association_select') %>
+                              </div>
+                              <label class="text pull-right" style="margin-right: 10px"><%= ('А'..'Я').to_a[index] %>
+                                .</label>
+
+                              <div class="text"><%= answer_was.text %></div>
+                          <% end %>
+                        </td>
+                        <% if task_was.task_type == 'Последовательность' %>
+                            <td style="width: 50px; height: 50px; text-align: center;" class="sorter tooltips" title="Переместите ответ на нужную позицию">
+                              <!--<span style="font-size: 20px;" class="glyphicon glyphicon-move"></span>-->
+                              <span class="fa fa-bars text-muted"></span>
+                            </td>
+                        <% end %>
+                      </tr>
+                  <% end %>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+          <br>
+          <%= hidden_field_tag 'task_result_id', @task_result.id %>
+          <%= hidden_field_tag 'current_task_index', @current_task_index + 1 %>
+          <%= submit_tag('Ответить', :class => 'btn btn-primary', data: {disable_with: 'Ответить'}) %>
+          <%= link_to 'Отложить', {:action => 'show_question', :current_task_index => @current_task_index + 1}, :class => 'btn btn-default' %>
+      <% end %>
+    </div>
+  </div>
+</div>
+</div>
 </div>
 
 <span id="imageLayout">
