@@ -10,7 +10,7 @@ class Ability
       can :manage, Doctor
       can [:edit, :update, :test_persons, :admin_tab, :search_users, :personal_info], User
       can [:profile], User
-      can :manage, Avatar
+      can [:create, :update, :destroy], Avatar
       can [:show, :edit, :update, :personal_info, :update_password], User do |current_user|
         user.id == current_user.id
       end
@@ -24,7 +24,7 @@ class Ability
       can :manage, OfficfunDbf
       can :manage, SpeclistDbf
       can :manage, PostDbf
-      can :manage, Avatar
+      can [:create, :update, :destroy], Avatar
       can [:view_test_results, :profile, :modes_history, :generate_token, :clean_token, :save_pdf, :custom_create,
            :test_persons, :print_test_results, :search_tests, :check_drcode, :create_test_person,
            :show_check_drcode_modal, :show_create_test_person_modal, :profile
@@ -43,25 +43,24 @@ class Ability
       can :manage, Section
       can :manage, Eqvgroup
       can :manage, Chain
-      can :manage, Try
-      can :manage, UserAssociation
-      can :manage, UserAnswer
-      can :manage, TaskResult
+      can [:show_question, :try_result, :check_user_answer, :create, :update], Try
+      can [:create, :update], UserAssociation
+      can [:create, :update], UserAnswer
+      can [:create, :update], TaskResult
+      can [:create, :update, :destroy], Avatar
       can [:profile], User
-      can :manage, Avatar
       can [:show, :edit, :update, :personal_info, :update_password], User do |current_user|
         user.id == current_user.id
       end
     end
     if user.role? :Тестируемый
-      can :manage, Try
-      can :manage, UserAssociation
-      can :manage, UserAnswer
-      can :manage, TaskResult
-      can [:testee_tab], User
+      can [:show_question, :try_result, :check_user_answer, :create, :update], Try
+      can [:create, :update], UserAssociation
+      can [:create, :update], UserAnswer
+      can [:create, :update], TaskResult
+      can [:create, :update, :destroy], Avatar
       can [:profile], User
-      can :manage, Avatar
-      can [:show, :edit, :update, :personal_info, :update_password], User do |current_user|
+      can [:show, :edit, :update, :personal_info, :update_password, :testee_tab], User do |current_user|
         user.id == current_user.id
       end
     end
