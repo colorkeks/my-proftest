@@ -54,7 +54,7 @@ class Ability
       end
     end
     if user.role? :Тестируемый
-      can [:show_question, :try_result, :check_user_answer, :create, :update], Try
+      can [:show_question, :try_result, :check_user_answer, :create, :update, :time_over], Try
       can [:create, :update], UserAssociation
       can [:create, :update], UserAnswer
       can [:create, :update], TaskResult
