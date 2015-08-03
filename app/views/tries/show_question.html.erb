@@ -11,11 +11,11 @@
 
           <div style="color: #5f5f5f; height: 22px">
             <% if @test.limit_time %>
-                <i class="pull-left">
-                  <span class="glyphicon glyphicon-time"></span>
-                  <div style="display: inline" class="hours_timer"><%= @hours %></div> часов <div style="display: inline" class="minutes_timer"><%= @minutes %></div> минут <div style="display: inline" class="seconds_timer">
-                  <%= ((@timer%60)).to_i %></div> секунд
-                </i>
+                <i class="pull-left"></i>
+                <span class="glyphicon glyphicon-time"></span>
+                <div style="display: inline; font-style: italic" class="hours_timer"><%= @hours %></div> часов
+                <div style="display: inline; font-style: italic" class="minutes_timer"><%= @minutes %></div> минут
+                <div style="display: inline; font-style: italic" class="seconds_timer"><%= (@timer % 60).to_i %></div> секунд
             <% end %>
             <i class="pull-right">Задание <%= @current_task + 1 %> из <%= @tasks_count %></i>
           </div>
@@ -159,7 +159,6 @@
                             <%= text_field_tag 'user_answer', nil, :autocomplete => :off, :class => 'form-control' %>
                           </label>
                         </td>
-                        <td style="width: 30px; cursor: pointer"><span class="fa fa-bars text-muted"></span></td>
                       </tr>
                   <% else %>
                       <% @task_result.user_answers.order(@try.test.mix_answers ? 'RANDOM()' : 'id ASC').each_with_index do |answer, index| %>
@@ -234,6 +233,6 @@
     upper_downer();
     disable_select();
     tasks_list();
-    <%= 'timer();' if @test.limit_time %>
+    <%= raw "timer(#{@timer.to_i}, '#{time_over_try_path(@try)}');" if @test.limit_time %>
 </script>
 

@@ -25,20 +25,30 @@ function date_picker(){
         format: 'LT',
         locale: 'ru'
     });
-};
+}
 
-function timer(){
-    $(".seconds_timer").everyTime(1000, function() {
-        if (parseInt($('.seconds_timer').text()) <= 0) {
-            $('.seconds_timer').text(59);
-            if  (parseInt($('.minutes_timer').text()) <= 0) {
-                $('.minutes_timer').text(59);
-                $('.hours_timer').text(parseInt($('.hours_timer').text()) - 1);
-            }
-            else { $('.minutes_timer').text(parseInt($('.minutes_timer').text()) - 1) }
+function timer(raw_time, redirect_url){
+    var SEC_IN_MINUTE = 60;
+    var SEC_IN_HOUR   = 60 * SEC_IN_MINUTE;
+    var seconds_element = $('.seconds_timer');
+    var minutes_element = $('.minutes_timer');
+    var hours_element   = $('.hours_timer');
+
+    var interval = setInterval(function() {
+        raw_time -= 1;
+        if (raw_time < 1){
+            clearInterval(interval);
+            window.location = redirect_url;
+            // todo редирект на страницу с сообщением о том что время вышло
         }
-        else { $('.seconds_timer').text(parseInt($('.seconds_timer').text()) - 1) }
-    });
+        var hours   = parseInt(raw_time / SEC_IN_HOUR);
+        var minutes = parseInt((raw_time - (hours * SEC_IN_HOUR)) / SEC_IN_MINUTE);
+        var seconds = parseInt(raw_time - (hours * SEC_IN_HOUR + minutes * SEC_IN_MINUTE));
+
+        hours_element.text(hours);
+        minutes_element.text(minutes);
+        seconds_element.text(seconds);
+    }, 1000);
 }
 
 function row_index(table_name, index) {

@@ -1,6 +1,6 @@
 class TriesController < ApplicationController
   include ActionView::Helpers::TextHelper
-  before_action :set_try, only: [:show, :edit, :update, :destroy, :try_result, :show_question]
+  before_action :set_try, only: [:show, :edit, :update, :destroy, :try_result, :show_question, :time_over]
   load_and_authorize_resource
   # GET /tries
   # GET /tries.json
@@ -23,6 +23,7 @@ class TriesController < ApplicationController
   end
 
   def show_question
+    clear_cash
     # если все задания пройдены
     if @try.task_results.where(:status => 'ответ не дан').count == 0
       respond_to do |format|
@@ -42,11 +43,11 @@ class TriesController < ApplicationController
       #таймер
       duration = (Time.now - @try.created_at.to_time).to_f
       #remaining_time = @try.test.timer - Time.utc(2000, 01, 01) - duration
-      remaining_time = @try.test.timer*60  - duration
-      @timer = remaining_time
-      @hours = (@timer/3600).to_i
-      @minutes = (@timer/60).to_i - @hours*60
-      @seconds = (@timer%60).to_i
+      remaining_time = @try.test.timer * 60  - duration
+      @timer   = remaining_time
+      @hours   = (@timer / 3600).to_i
+      @minutes = (@timer / 60).to_i - @hours * 60
+      @seconds = (@timer % 60).to_i
 
       # если таймер дошел до ограниченного времени
       if remaining_time <= 0 && @test.limit_time #@hours >= @try.test.timer.strftime('%H').to_i && @minutes >= @try.test.timer.strftime('%M').to_i
@@ -68,28 +69,29 @@ class TriesController < ApplicationController
 
   def try_result
     @task_result = TaskResult.where(:status => 'ответ не дан', :try_id => params[:id]).order(@try.test.mix_answers ? 'RANDOM()' : 'id ASC').first
-    max_points = 0
+    max_points  = 0
     user_points = 0
 
     @try.task_results.each do |task_result|
-      max_points = max_points + task_result.task_was.point
-      user_points = user_points + task_result.point
+      max_points  = max_points  + (task_result.task_was.point || 0)
+      user_points = user_points + (task_result.point || 0)
     end
+
     @max = max_points
     @current = user_points
-    @percent = user_points*100/max_points
+    @percent = user_points * 100 / max_points
 
     if @task_result != nil
       redirect_to show_question_try_path
     else
       if @try.status == 'Не выполнен'
-        @timer = (Time.now - @try.created_at.to_time).to_f
-        @hours = (@timer/3600).to_i
-        @minutes = (@timer/60).to_i - @hours*60
+        @timer   = (Time.now - @try.created_at.to_time).to_f
+        @hours   = (@timer / 3600).to_i
+        @minutes = (@timer / 60).to_i - @hours * 60
 
         @try.status = 'Выполнен'
-        @try.rate = @percent
-        @try.timer = format('%02d:%02d', @hours, @minutes)
+        @try.rate   = @percent
+        @try.timer  = format('%02d:%02d', @hours, @minutes)
         @try.save!
       end
     end
@@ -162,6 +164,14 @@ class TriesController < ApplicationController
     end
   end
 
+  def time_over
+    @try.task_results.where(:status => 'ответ не дан').each do |task_result|
+      task_result.status = 'не правильно'
+      task_result.point = 0
+      task_result.save!
+    end
+  end
+
   private
 # Use callbacks to share common setup or constraints between actions.
   def set_try
@@ -171,6 +181,13 @@ class TriesController < ApplicationController
 # Never trust parameters from the scary internet, only allow the white list through.
   def try_params
     params.require(:try).permit(:date, :status, :timer, :rate, :task_results_queue, :user_id, :test_id, :test_mode_id, :assigned_test_id)
+  end
+
+  def clear_cash
+    expires_now
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate" # HTTP 1.1.
+    response.headers["Pragma"] = "no-cache" # HTTP 1.0.
+    response.headers["Expires"] = "0" # Proxies.
   end
 
 end

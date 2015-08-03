@@ -105,6 +105,7 @@ Rails.application.routes.draw do
       get 'show_question'
       get 'try_result'
       post 'check_user_answer'
+      get 'time_over'
     end
   end
 
