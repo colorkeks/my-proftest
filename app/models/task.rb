@@ -20,7 +20,7 @@ class Task < ActiveRecord::Base
   acts_as_list scope: :chain, column: :chain_position
   has_paper_trail
   before_save :nullify_task_contents
-
+  scope :default_sort_order, -> {joins(:eqvgroup).order('section_id ASC NULLS FIRST, eqvgroups.number ASC, chain_id ASC NULLS FIRST, chain_position ASC, id ASC')}
 
   def eqvgroup_and_section_valid
     if !(self.section == self.eqvgroup.section)
