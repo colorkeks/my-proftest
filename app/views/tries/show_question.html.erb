@@ -48,7 +48,7 @@
                 <% if task_result.task_was.chain_id.present? %>
                     <% chain_count = @try.task_results_for_chain_id(task_result.task_was.chain_id).count %>
                     <% if task_result.task_was.chain_position != 1 %>
-                        <% @try.task_results_for_chain_id(task_was.chain_id).each do |tr| %>
+                        <% @try.task_results_for_chain_id(task_result.task_was.chain_id).each do |tr| %>
                             <% if tr.task_was.chain_position == task_result.task_was.chain_position - 1 %>
                                 <% if tr.status == 'ответ не дан' %>
                                     <% status = status + 'disabled '%>
