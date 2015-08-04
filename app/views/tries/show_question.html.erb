@@ -59,7 +59,7 @@
                 <% else %>
                     <% chain_count = 0%>
                 <% end %>
-                <% if task_result.task_was.chain_position == 1 && task_was.chain_id != nil%>
+                <% if task_result.task_was.chain_position == 1 && task_result.task_was.chain_id != nil%>
                     [<%= link_to  index + 1, {:action => 'show_question', :current_task_index => index}, :class => 'btn btn-default btn-xs ' + status%>
                 <% elsif task_result.task_was.chain_position == chain_count %>
                     <%= link_to  index + 1, {:action => 'show_question', :current_task_index => index}, :class => 'btn btn-default btn-xs ' + status%>]
