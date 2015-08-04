@@ -45,11 +45,11 @@
                     <% status = ' ' %>
                 <% end %>
 
-                <% if task_was.chain_id.present? %>
-                    <% chain_count = @try.task_results_for_chain_id(task_was.chain_id).count %>
-                    <% if task_was.chain_position != 1 %>
+                <% if task_result.task_was.chain_id.present? %>
+                    <% chain_count = @try.task_results_for_chain_id(task_result.task_was.chain_id).count %>
+                    <% if task_result.task_was.chain_position != 1 %>
                         <% @try.task_results_for_chain_id(task_was.chain_id).each do |tr| %>
-                            <% if tr.task_was.chain_position == task_was.chain_position - 1 %>
+                            <% if tr.task_was.chain_position == task_result.task_was.chain_position - 1 %>
                                 <% if tr.status == 'ответ не дан' %>
                                     <% status = status + 'disabled '%>
                                 <% end %>
@@ -59,9 +59,9 @@
                 <% else %>
                     <% chain_count = 0%>
                 <% end %>
-                <% if task_was.chain_position == 1 && task_was.chain_id != nil%>
+                <% if task_result.task_was.chain_position == 1 && task_was.chain_id != nil%>
                     [<%= link_to  index + 1, {:action => 'show_question', :current_task_index => index}, :class => 'btn btn-default btn-xs ' + status%>
-                <% elsif task_was.chain_position == chain_count %>
+                <% elsif task_result.task_was.chain_position == chain_count %>
                     <%= link_to  index + 1, {:action => 'show_question', :current_task_index => index}, :class => 'btn btn-default btn-xs ' + status%>]
                 <% else %>
                     <%= link_to  index + 1, {:action => 'show_question', :current_task_index => index}, :class => 'btn btn-default btn-xs ' + status%>
